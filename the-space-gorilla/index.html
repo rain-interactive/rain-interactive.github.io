@@ -84,11 +84,7 @@ button,summary{font:inherit}
 .timeline{list-style:none;margin:0;padding:0 0 15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px}
 .timeline li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:15px;border-top:1px solid var(--rule);padding:18px 0}
 .timeline>li.event-wide{grid-column:1/-1}
-.event-collaborators{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:16px 0 0}
-.event-collaborators>div{padding:10px 0;border-top:1px dashed var(--rule);min-width:0}
-.event-collaborators dt{font-size:14px;line-height:1.5;font-weight:700}
-.event-collaborators dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:#5c5548}
-@media(max-width:560px){.event-collaborators{grid-template-columns:1fr}}
+.timeline .event-collaborators{margin-top:10px;font-weight:400}
 .timeline time{font:700 12px/1.4 var(--mono);color:#1747a1}
 .timeline h3{font-size:16px;line-height:1.35;margin:0 0 7px}
 .timeline p{font-size:14px;line-height:1.6;margin:0;color:#5c5548}
@@ -276,15 +272,7 @@ footer a{min-height:36px;display:inline-flex;align-items:center}
   <li><time datetime="2024">2024</time><div><h3>Un taller en la prensa</h3><p>La Opinión A Coruña documenta el mural participativo y el encuentro con visitantes en Estudios Abertos.<a class="ref" href="#fuente-15" aria-label="Fuente 15">[15]</a> En septiembre, G24/TVG y La Opinión recogen el presunto robo de una escultura del taller.<a class="ref" href="#fuente-04" aria-label="Fuente 4">[04]</a><a class="ref" href="#fuente-21" aria-label="Fuente 21">[21]</a></p></div></li>
   <li><time datetime="2025-05-10">2025</time><div><h3>The Graeae · Elis Prostotak</h3><p>El 10 de mayo, O Raposo Púrpura programa la proyección del cortometraje <em>The Graeae</em> (2023), de la artista <strong>Elis Prostotak</strong>, en Estudios Abertos.<a class="ref" href="#fuente-05" aria-label="Fuente 5: programación municipal de la proyección">[05]</a></p></div></li>
   <li class="event-wide" id="estudios-abiertos-2026"><time datetime="2026-06-06">2026</time><div><h3>O Raposo Púrpura / Estudios Abertos</h3><p>Los días 6 y 7 de junio, Nacho Martínez abre O Raposo Púrpura a una colaboración entre disciplinas artísticas. El programa incluye pintura, escultura y un DJ set, junto con las aportaciones de siete artistas invitados.<a class="ref" href="#fuente-06" aria-label="Fuente 6: programa oficial y colaboradores de Estudios Abertos 2026">[06]</a></p>
-   <dl class="event-collaborators" aria-label="Colaboradores de Estudios Abertos 2026 en O Raposo Púrpura">
-    <div><dt>Antía Warncke</dt><dd>Cerámica y fotografía</dd></div>
-    <div><dt>Laura Reimúndez</dt><dd>Pintura</dd></div>
-    <div><dt>Blanca Cortijo</dt><dd>Mural y pintura</dd></div>
-    <div><dt>Navia Coimbra</dt><dd>Pintura</dd></div>
-    <div><dt>Abel García Pantín</dt><dd>Instalación</dd></div>
-    <div><dt>Ara Romero</dt><dd>Collage</dd></div>
-    <div><dt>Paloma Rodríguez</dt><dd>Ilustración</dd></div>
-   </dl>
+   <p class="event-collaborators">Con la colaboración de Antía Warncke, Laura Reimúndez, Blanca Cortijo, Navia Coimbra, Abel García Pantín, Ara Romero y Paloma Rodríguez.</p>
   </div></li>
  </ol></details>
 </div></section>
