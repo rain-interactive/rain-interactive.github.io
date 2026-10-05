@@ -1,7 +1,8 @@
 (()=>{
 const audio=new Audio('/sdj-commandos/soundtrack-poker-face.mp3?v=20261005-07');
 audio.loop=true;audio.volume=.45;audio.preload='none';
-let wanted=false;
+let wanted=false,duckTimer;
+document.addEventListener('commandos-level-cry',e=>{clearTimeout(duckTimer);audio.volume=.12;duckTimer=setTimeout(()=>{audio.volume=.45},Math.max(0,e.detail?.duration||1.25)*1000+100)});
 const button=document.createElement('button');
 button.type='button';button.textContent='♫ Música: apagada';button.setAttribute('aria-pressed','false');
 button.style.cssText='position:fixed;right:10px;top:10px;z-index:2147483647;width:auto;margin:0;padding:9px 12px;background:#111;color:#fff;border:1px solid #aaa;font:12px monospace;cursor:pointer';
