@@ -18,7 +18,7 @@ function schedule(){if(!enabled||!score||document.hidden)return;const end=ctx.cu
  }scheduled=end;
 }
 async function enable(){ctx ||= new(window.AudioContext||window.webkitAudioContext)();await ctx.resume();
- if(!score){const r=await fetch('/sdj-commandos/soundtrack-notes.json?v=20261005-04');if(!r.ok)throw Error('score');score=await r.json()}
+ if(!score){const r=await fetch('/sdj-commandos/soundtrack-notes.json?v=20261005-05');if(!r.ok)throw Error('score');score=await r.json()}
  enabled=true;button.textContent='♫ Música: encendida';button.setAttribute('aria-pressed','true');origin=ctx.currentTime+.05;scheduled=origin;schedule();timer=setInterval(schedule,100)
 }
 function toggle(){if(enabled){enabled=false;stop();button.textContent='♫ Música: apagada';button.setAttribute('aria-pressed','false')}else enable().catch(()=>{enabled=false;stop();button.textContent='♫ Reintentar música'})}
