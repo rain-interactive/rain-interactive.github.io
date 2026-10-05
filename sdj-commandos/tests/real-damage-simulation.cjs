@@ -57,6 +57,6 @@ function simulateRun(policy,weapon,seed){
  return {policy,weapon:weapons[weapon].name,seed,result:state,seconds:+clock.toFixed(1),zone:phase+1,level:lv,kills,hits,hurt,heal,medkits:collected,expired,lastCause,maxFoes:peaks,evolutions:runEvolutions.length,upgrades:upgradeCount};
 }
 `);
-const results=[];for(const policy of ['stationary','medical','tactical'])for(const weapon of [0,4,11,13,16])for(const seed of (policy==='tactical'?[17,43,101,211,307,419,523,631,743,853,967,1087,1201]:[17,43,101])){const r=sim.run(`simulateRun('${policy}',${weapon},${seed})`);results.push(r);}
+const results=[];for(const policy of (process.argv.includes('--tactical')?['tactical']:['stationary','medical','tactical']))for(const weapon of [0,4,11,13,16])for(const seed of (policy==='tactical'?[17,43,101,211,307,419,523,631,743,853,967,1087,1201,1307,1423,1549,1667,1783,1901,2027]:[17,43,101])){const r=sim.run(`simulateRun('${policy}',${weapon},${seed})`);results.push(r);}
 for(const weapon of [0,4,11,13,16]){const a=results.filter(r=>r.policy==='tactical'&&r.weapon===sim.run(`weapons[${weapon}].name`)),times=a.map(r=>r.seconds).sort((a,b)=>a-b);console.log(JSON.stringify({weapon:a[0].weapon,runs:a.length,medianSeconds:times[Math.floor(times.length/2)],maximumZone:Math.max(...a.map(r=>r.zone)),wins:a.filter(r=>r.result==='win').length}));}
 if(process.argv[3])fs.writeFileSync(process.argv[3],JSON.stringify(results,null,2));

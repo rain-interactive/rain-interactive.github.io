@@ -10,10 +10,13 @@ function setup(saved=false){
  return {run:c=>vm.runInContext(c,env),env,canvas,doc,memory,events,screen:doc.querySelector('#screen')};
 }
 
-const t=setup();t.run('start();muted=true');assert.equal(t.run('wavePressure().cap'),8);assert.equal(t.run('wavePressure().batch'),1);t.run('clock=50');assert.equal(t.run('wavePressure().cap'),12);t.run('clock=100');assert.equal(t.run('wavePressure().cap'),18);
-t.run('phase=1');assert.equal(t.run('wavePressure().cap'),20);t.run('phase=2');assert.equal(t.run('wavePressure().interval'),1);
+const t=setup();t.run('start();muted=true');assert.equal(t.run('wavePressure().cap'),6);assert.equal(t.run('wavePressure().batch'),1);t.run('clock=50');assert.equal(t.run('wavePressure().cap'),8);t.run('clock=100');assert.equal(t.run('wavePressure().cap'),12);
+t.run('phase=1');assert.equal(t.run('wavePressure().cap'),16);t.run('phase=2');assert.equal(t.run('wavePressure().interval'),1.35);
 for(let zone=0;zone<5;zone++){t.run(`start();muted=true;phase=${zone};addEnemy(true)`);assert.equal(t.run('wavePressure().cap'),6+zone*2);assert.equal(t.run('wavePressure().batch'),1);assert(t.run('wavePressure().interval>1'))}
 t.run('start();muted=true;clock=1;lastWave=0;foes=[];spawn=0;nextElite=999;nextBoss=999;updateWaveDirector(.01)');assert.equal(t.run('foes.length'),1,'Intro wave must spawn one enemy');assert(t.run('spawn>1.5'));t.run('clock=16;spawn=0;foes=[];updateWaveDirector(.01)');assert.equal(t.run('foes.length'),1,'Early rush must not create a double batch');
-assert.equal(t.run('weapons[0].damage'),3);assert(t.run('weapons[11].range<weapons[4].range'));assert(t.run('weapons[16].rate>weapons[4].rate*4'));
+assert.equal(t.run('weapons[0].damage'),3.5);assert(t.run('weapons[11].range<weapons[4].range'));assert(t.run('weapons[16].rate>weapons[4].rate*4'));
 t.run('start();muted=true;phase=1');assert.equal(t.run('weaponRankCap()'),3);assert(!t.run("survivorUpgradePool().some(u=>u.id.startsWith('component:'))"));assert.equal(t.run('p.hp'),6);assert.equal(t.run('target'),24);
-console.log('Passed gradual early pressure, unchanged late-zone pace, boss reinforcement caps, stronger starter weapons and preserved health/progression restrictions.');
+t.run("start();muted=true;shots=[{life:1},{life:1},{life:1}];foes=[{kind:'soldier',look:2,hp:10,x:p.x+250,cd:0}];");assert(!t.run('canEnemyFire(foes[0])'));t.run('shots[0].life=0');assert(t.run('canEnemyFire(foes[0])'));t.run('foes[0].look=12');assert(!t.run('canEnemyFire(foes[0])'));
+t.run("start();muted=true;foes=[];spawn=999;nextElite=999;nextBoss=999;scenery=[];p.inv=0;shots=[{x:p.x,y:p.y-30,vx:0,vy:0,life:1,heavy:true}];update(.01)");assert.equal(t.run('p.hp'),5,'Direct heavy impacts must cost one life');
+t.run("foes=[{x:p.x-250,y:G,hp:10,max:10,kind:'soldier',look:2,age:1,speed:0,cd:0,touch:99,hit:0,rearReadyAt:clock-.5}];shots=[{x:0,y:0,vx:0,vy:0,life:1},{x:1,y:0,vx:0,vy:0,life:1},{x:2,y:0,vx:0,vy:0,life:1}];update(.01)");assert(t.run('foes[0].cd>0&&foes[0].rearReadyAt>clock'),'A blocked rear attack must renew its warning before firing');
+console.log('Passed gradual early pressure, controlled late-zone pace, boss reinforcement caps, stronger starter weapons and preserved health/progression restrictions.');
