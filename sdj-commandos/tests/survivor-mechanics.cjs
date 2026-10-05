@@ -54,7 +54,7 @@ for(let zone=0;zone<5;zone++){
 
 // Exercise a full run, resolving all actual upgrade and chest screens.
 run("Math.random=(()=>{let seed=123456789;return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}})();startingWeapon=0;start();muted=true;p.inv=999;");
-for(let i=0;i<24000;i++){
+for(let i=0;i<60000;i++){
  if(run("state==='upgrade'"))run("{const chosen=choices.find(u=>u.id.startsWith('rank:'))||choices.find(u=>u.id.startsWith('equip:'))||choices[0];chosen.apply();syncArsenal();state='playing';O.style.display='none'}");
  if(run("state==='chest'"))resume();
  // Stage transitions reset invulnerability; this progression fixture excludes death deliberately.
