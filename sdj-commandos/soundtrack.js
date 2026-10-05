@@ -1,5 +1,5 @@
 (()=>{
-let ctx,score,timer,enabled=false,origin=0,scheduled=0;
+let ctx,score,timer,enabled=false,loading=false,origin=0,scheduled=0;
 const active=new Set();
 const button=document.createElement('button');
 button.type='button';button.textContent='♫ Música: apagada';button.setAttribute('aria-pressed','false');
@@ -17,10 +17,11 @@ function schedule(){if(!enabled||!score||document.hidden)return;const end=ctx.cu
   for(const [events,type,gain] of [[score.lead,'square',.055],[score.bass,'triangle',.11]])for(const n of events){const at=start+n[0];if(at>=scheduled&&at<end)note(n,type,gain,start)}
  }scheduled=end;
 }
-async function enable(){ctx ||= new(window.AudioContext||window.webkitAudioContext)();await ctx.resume();
- if(!score){const r=await fetch('/sdj-commandos/soundtrack-notes.json?v=20261005-05');if(!r.ok)throw Error('score');score=await r.json()}
+async function enable(){if(loading||enabled)return;loading=true;button.textContent='♫ Cargando música…';try{ctx ||= new(window.AudioContext||window.webkitAudioContext)();await ctx.resume();
+ if(!score){const r=await fetch('/sdj-commandos/soundtrack-notes.json?v=20261005-06',{cache:'no-store'});if(!r.ok)throw Error('score');score=await r.json()}
  enabled=true;button.textContent='♫ Música: encendida';button.setAttribute('aria-pressed','true');origin=ctx.currentTime+.05;scheduled=origin;schedule();timer=setInterval(schedule,100)
-}
+}finally{loading=false}}
+
 function toggle(){if(enabled){enabled=false;stop();button.textContent='♫ Música: apagada';button.setAttribute('aria-pressed','false')}else enable().catch(()=>{enabled=false;stop();button.textContent='♫ Reintentar música'})}
 button.addEventListener('click',toggle);
 document.addEventListener('click',e=>{if(e.target.closest('button')?.textContent.trim()==='JUGAR AL JUEGO'&&!enabled)toggle()});
