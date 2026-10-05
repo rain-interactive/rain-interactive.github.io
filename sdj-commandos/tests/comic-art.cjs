@@ -20,7 +20,7 @@ for(let zone=0;zone<5;zone++){
 }
 vm.runInContext(`start();muted=true;p.inv=999;for(let i=0;i<900;i++){update(1/60);if(i%15===0)draw()}if(!Number.isFinite(p.x)||!Number.isFinite(clock))throw Error('Invalid simulation');`,env);
 const assert=require('assert');
-vm.runInContext("start();muted=true;spawn=999;nextBoss=999;nextElite=999;foes=[{x:p.x+50,y:G,kind:'soldier',look:2,hp:3,max:3,dir:-1,age:1,cd:1,speed:45,hit:0,touch:1}];update(.01)",env);
+vm.runInContext("start();muted=true;spawn=999;nextBoss=999;nextElite=999;foes=[{x:p.x+50,y:G,kind:'soldier',look:2,hp:30,max:30,dir:-1,age:1,cd:1,speed:45,hit:0,touch:1}];update(.01)",env);
 assert(vm.runInContext('foes[0].moving===false&&foes[0].walk===0',env),'Stationary troops must hold their gait');
 vm.runInContext('foes[0].x=p.x+250;update(.01)',env);
 assert(vm.runInContext('foes[0].moving&&foes[0].walk>0',env),'Gait must follow actual displacement');
