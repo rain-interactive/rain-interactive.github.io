@@ -40,3 +40,20 @@ vm.runInContext("shots=[{x:1100,y:215,vx:-150,vy:50,life:1,heavy:true}];gems=[{x
 fs.writeFileSync('/tmp/commandos-readable-combat.png',canvas.toBuffer('image/png'));
 vm.runInContext("p=null;state='title';draw()",env);
 console.log('Hostile fire and health pickup survive smoke occlusion; title rider renders without a player.');
+
+assert(!html.includes('SpeechSynthesisUtterance')&&!html.includes('synth.speak'),'Enemy speech synthesis must be removed');
+let speechCalls=0;env.window.speechSynthesis={speak(){speechCalls++}};
+vm.runInContext("start();muted=true;clock=5;cam=550;p.x=850;foes=[{x:1050,y:G,kind:'soldier',hp:3,max:3,look:2,age:1,dir:-1,cd:1}];soldierBubbleCooldown=0;soldierBubbles(.01)",env);
+assert(vm.runInContext('foes[0].bubbleUntil>clock',env),'Muted combat must still show speech bubbles');
+assert.equal(speechCalls,0);
+vm.runInContext('floats=[];draw()',env);fs.writeFileSync('/tmp/commandos-bubble-preview.png',canvas.toBuffer('image/png'));
+vm.runInContext('stopSoldierBubbles()',env);assert(vm.runInContext('foes[0].bubbleUntil===0',env));
+assert.equal(vm.runInContext('wavePlans.length',env),10);assert.equal(vm.runInContext('stageDuration()',env),150);
+for(let i=0;i<10;i++){vm.runInContext(`clock=${i}*15+.1;stageStarted=0`,env);assert.equal(vm.runInContext('waveIndex()',env),i)}
+vm.runInContext('start();muted=true;clock=149.9;spawn=999;nextElite=999;foes=[];updateWaveDirector(0)',env);
+assert(!vm.runInContext('foes.some(e=>e.boss)',env),'Boss must not skip the ten waves');
+vm.runInContext('clock=150;updateWaveDirector(0)',env);assert(vm.runInContext('foes.some(e=>e.boss)',env));
+vm.runInContext('start();muted=true;clock=45;spawn=999;nextElite=999;updateWaveDirector(0)',env);
+assert.equal(vm.runInContext('pickups.length',env),2);vm.runInContext('updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),2,'Supplies must spawn once per wave');
+vm.runInContext('clock=105;updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),4,'Second supply wave must refresh supplies');
+console.log('Silent bubbles, pause cleanup, ten waves, 150-second boss gate and two supply waves passed.');
