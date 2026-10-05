@@ -56,7 +56,7 @@ button.style.cssText='position:fixed;right:10px;top:10px;z-index:2147483647;widt
 function mark(){button.textContent=wanted?'♫ Música: encendida':'♫ Música: apagada';button.setAttribute('aria-pressed',String(wanted))}
 function start(){if(videoOpen)return;wanted=true;mark();play()}
 button.addEventListener('click',()=>{if(wanted){wanted=false;pause();mark()}else start()});
-document.addEventListener('click',e=>{if(e.target.closest('button')?.textContent.trim()==='JUGAR AL JUEGO'&&!wanted)start()},true);
+document.addEventListener('click',e=>{if(e.target.closest('#commandos-cover-start button')&&!wanted)start()},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();else if(wanted)play()});
 window.addEventListener('pagehide',()=>pause());
 })();
