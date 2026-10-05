@@ -57,3 +57,16 @@ vm.runInContext('start();muted=true;clock=45;spawn=999;nextElite=999;updateWaveD
 assert.equal(vm.runInContext('pickups.length',env),2);vm.runInContext('updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),2,'Supplies must spawn once per wave');
 vm.runInContext('clock=105;updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),4,'Second supply wave must refresh supplies');
 console.log('Silent bubbles, pause cleanup, ten waves, 150-second boss gate and two supply waves passed.');
+
+vm.runInContext("start();muted=true;p.inv=0;fx=[];arcadeImpact(p.x,G-25,'metal');arcadeImpact(p.x,G-25,'wood');arcadeImpact(p.x,G-25,'cloth')",env);
+assert(vm.runInContext("fx.some(a=>a.shard==='metal')&&fx.some(a=>a.shard==='wood')&&fx.some(a=>a.shard==='cloth')&&fx.some(a=>a.impactFlash)",env),'Impact materials must be distinct');
+vm.runInContext("for(let i=0;i<12;i++)kill({x:p.x+100,y:G,kind:'ustank',hp:0,max:25,dir:-1,boss:false})",env);
+assert.equal(vm.runInContext('arcadeWrecks.length',env),8,'Wrecks must remain bounded');
+vm.runInContext('clock+=13;drawArcadeWrecks()',env);assert.equal(vm.runInContext('arcadeWrecks.length',env),0,'Wrecks must expire');
+vm.runInContext("kill({x:p.x+100,y:G,kind:'helicopter',hp:0,max:14,dir:-1,boss:false});start()",env);assert.equal(vm.runInContext('arcadeWrecks.length',env),0,'Restart must clear wrecks');
+vm.runInContext("kill({x:p.x+100,y:G,kind:'ustank',hp:0,max:22,dir:-1,boss:false});gems=[];chests=[];xp=0;stageCleared=true;advanceStage()",env);assert.equal(vm.runInContext('arcadeWrecks.length',env),0,'Stage change must clear wrecks');
+for(let zone=0;zone<5;zone++){
+ vm.runInContext(`start();muted=true;phase=${zone};clock=10;cam=550;p.x=850;p.inv=0;floats=[];scenery=makeScenery(phase);foes=[{x:1100,y:G,kind:'ustank',boss:true,hp:20,max:80,dir:-1,age:1,cd:1,walk:3,moving:true},{x:1280,y:160,kind:'helicopter',hp:7,max:14,dir:-1,age:1,cd:1}];arcadeWrecks=[{x:700,born:clock-.4,kind:'ustank',dir:1}];arcadeImpact(1075,G-26,'metal');draw()`,env);
+ fs.writeFileSync('/tmp/commandos-armored-zone-'+zone+'.png',canvas.toBuffer('image/png'));
+}
+console.log('Metal/wood/cloth impacts, wreck bounds, expiry, restart and stage cleanup passed; five boss silhouettes rendered.');
