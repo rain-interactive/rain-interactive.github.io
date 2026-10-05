@@ -30,3 +30,13 @@ assert(vm.runInContext('arcadeBlasts.length<=16',env),'Blast debris must stay bo
 console.log('Stationary/moving gait, real shot pulse, recoil decay and blast cap passed.');
 console.log('Rendered five zones and all 20 troop variants; 900 simulation frames passed.');
 
+
+// Smoke may cover the whole area: hostile fire and rewards must remain legible.
+vm.runInContext("start();muted=true;W=800;C.width=W;cam=550;shake=0;p.x=850;p.inv=0;foes=[];scenery=[];arcadeBlasts=[];shots=[{x:1000,y:180,vx:150,vy:0,life:1,heavy:false}];fx=[{x:1000,y:180,s:30,c:'#777568',life:1,smoke:true}];floats=[];gems=[];pickups=[];chests=[];draw()",env);
+assert.deepEqual([...canvas.getContext('2d').getImageData(450,180,1,1).data].slice(0,3),[237,86,105],'Hostile bullet body must remain visible above smoke');
+vm.runInContext("shots=[];pickups=[{x:1000,y:180,kind:'health'}];draw()",env);
+assert.deepEqual([...canvas.getContext('2d').getImageData(450,180,1,1).data].slice(0,3),[183,61,67],'Health symbol must remain visible above smoke');
+vm.runInContext("shots=[{x:1100,y:215,vx:-150,vy:50,life:1,heavy:true}];gems=[{x:930,y:G-12,value:12,age:1}];chests=[{x:1080,age:1}];draw()",env);
+fs.writeFileSync('/tmp/commandos-readable-combat.png',canvas.toBuffer('image/png'));
+vm.runInContext("p=null;state='title';draw()",env);
+console.log('Hostile fire and health pickup survive smoke occlusion; title rider renders without a player.');
