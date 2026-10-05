@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10100f">
+<title>The Residents — Archivo de lo desconocido · Rain Interactive</title>
+<meta name="description" content="Diez obras de The Residents, de Santa Dog a The Bunny Boy. Un archivo interactivo con hechos documentados, fuentes consultables e interpretaciones diferenciadas.">
+<link rel="canonical" href="https://rain-interactive.github.io/the-residents/">
+<meta property="og:title" content="The Residents — Archivo de lo desconocido">
+<meta property="og:description" content="Sonido, identidad y mundos. Diez obras con fuentes históricas y una lectura de Rain.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rain-interactive.github.io/the-residents/">
+<meta property="og:image" content="https://f4.bcbits.com/img/a0430605238_5.jpg">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="styles.css">
+<script src="data.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#work">Ir a la obra</a>
+<header class="topbar">
+<a class="brand" href="/#read">RAIN<span> / READ</span></a>
+<div class="top-actions"><button id="sound-toggle" aria-pressed="false">Sonido: no</button><button id="sources-open">Fuentes <span aria-hidden="true">↗</span></button></div>
+</header>
+<main>
+<section class="intro" aria-labelledby="archive-title">
+<div class="eyebrow"><span>Archivo de lo desconocido</span><span>1972 — 2008 / 10 obras</span></div>
+<h1 id="archive-title">THE RESIDENTS<span class="title-dot" aria-hidden="true">.</span></h1>
+<div class="intro-bottom"><p>El sonido inventa una identidad.<br>La identidad abre un mundo.</p><p class="intro-note">Un recorrido por diez obras.<br>Hechos con fuentes. Interpretaciones señaladas.</p></div>
+</section>
+<nav class="filters" aria-label="Recorridos por el archivo">
+<button class="active" data-filter="all" aria-pressed="true">Archivo <span>10</span></button>
+<button data-filter="sonido" aria-pressed="false">Sonido</button>
+<button data-filter="identidad" aria-pressed="false">Identidad</button>
+<button data-filter="mundos" aria-pressed="false">Mundos</button>
+</nav>
+<div class="archive-layout">
+<aside class="index-panel" aria-label="Índice de obras"><div class="index-label">Selecciona una obra <span aria-hidden="true">↓</span></div><nav id="work-index" aria-label="Obras de The Residents"></nav></aside>
+<article id="work" tabindex="-1" aria-labelledby="work-title"></article>
+</div>
+<noscript><p class="noscript">Este recorrido usa JavaScript. Puedes leer el <a href="guion-documentado.md">guion documentado completo</a>, con las diez fichas y sus fuentes.</p></noscript>
+</main>
+<footer class="site-footer">
+<div><a href="/#read">← Volver a Rain</a><span>Archivo creado por nachommmartinez.</span></div>
+<p>Obras e imágenes: sus autores y titulares. La atmósfera sonora de este archivo es original de Rain; no reproduce música de The Residents.</p>
+<div><a href="https://www.reddit.com/r/The_Residents/" target="_blank" rel="noopener noreferrer">Comunidad · r/The_Residents ↗</a><button id="method-open">Criterio editorial y créditos</button></div>
+</footer>
+<dialog id="sources-dialog" aria-labelledby="dialog-title">
+<div class="dialog-top"><span class="eyebrow">Rain / documentación</span><button id="sources-close" aria-label="Cerrar fuentes">Cerrar ×</button></div>
+<h2 id="dialog-title">Lo que sabemos.<br>De dónde sale.</h2>
+<p class="dialog-lead">Cada afirmación histórica de las fichas lleva una referencia. Los recuerdos de los participantes aparecen atribuidos. La lectura de Rain es interpretación editorial.</p>
+<div class="methodology">
+<h3>Criterio de selección</h3>
+<p>Priorizamos documentación de los sellos y del grupo, obras catalogadas por el MoMA y entrevistas identificadas. Contrastamos fechas de grabación, publicación y versiones; una reedición o una subida a Bandcamp no cambia la fecha de la obra original.</p>
+<p>Los relatos del grupo sobre su propia historia se identifican como tales. No presentamos a N. Senada como una biografía histórica comprobada. La anécdota de llamadas a emergencias vinculadas a The Bunny Boy se ha excluido por falta de una fuente fiable que la confirme.</p>
+<p>En Freak Show se distinguen el álbum de 1990 y el CD-ROM de 1994. La entrevista de WIRED ofrece información de época sobre los juegos, pero su referencia al año del disco no se adopta frente a la documentación del sello.</p>
+<p>Las explicaciones de periodistas y comisarios se atribuyen a sus autores. Se distinguen de las respuestas de los entrevistados. Algunas páginas del archivo histórico del grupo pueden activar una comprobación de acceso.</p>
+<a class="document-link" href="guion-documentado.md" download>Descargar el guion documentado ↓</a>
+<p class="checked">Fuentes contrastadas: <span id="checked-date"></span>.</p>
+</div>
+<h3 class="sources-heading">Bibliografía del recorrido</h3><ol id="all-sources" class="source-list"></ol>
+<h3 class="sources-heading">Imágenes y créditos</h3>
+<p class="credit-note">Portadas, fotogramas y material promocional se muestran a escala documental para comentar las obras, con su procedencia junto a cada imagen. Sus derechos pertenecen a sus titulares.</p>
+<ul id="image-credits" class="image-credits"></ul>
+<p class="credit-note">Fotografía de la entrada en READ: Steffen 962, The Residents en Frankfurt, 20 de febrero de 2023. <a href="https://commons.wikimedia.org/wiki/File:20230220_Mousonturm_Frankfurt_058_The_Residents.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.</p>
+</dialog>
+</body>
+</html>
