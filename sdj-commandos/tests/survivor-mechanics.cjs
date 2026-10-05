@@ -53,15 +53,16 @@ for(let zone=0;zone<5;zone++){
 }
 
 // Exercise a full run, resolving all actual upgrade and chest screens.
-run("startingWeapon=0;start();muted=true;p.inv=999;");
+run("Math.random=(()=>{let seed=123456789;return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}})();startingWeapon=0;start();muted=true;p.inv=999;");
 for(let i=0;i<24000;i++){
  if(run("state==='upgrade'"))run("{const chosen=choices.find(u=>u.id.startsWith('rank:'))||choices.find(u=>u.id.startsWith('equip:'))||choices[0];chosen.apply();syncArsenal();state='playing';O.style.display='none'}");
  if(run("state==='chest'"))resume();
- run('update(1/60)');if(i%120===0)run('draw()');
+ // Stage transitions reset invulnerability; this progression fixture excludes death deliberately.
+ run('p.inv=999;update(1/60)');if(i%120===0)run('draw()');
  if(run("state==='win'"))break;
 }
 assert(run('Number.isFinite(p.x)&&Number.isFinite(clock)'));
-assert(run('phase===4&&state===\'win\''),'Full simulation must reach victory');
+assert(run('phase===4&&state===\'win\''),'Full simulation must reach victory: '+JSON.stringify(run('({phase,state,clock,stageCleared,foes:foes.map(e=>({kind:e.kind,hp:e.hp,boss:e.boss,x:e.x})),arsenal})')));
 assert(run('arsenal.length===3'));assert(run('chestCount>=10'));assert(run('runEvolutions.length>0'));
 console.log('Passed: 29 weapons, 3 slots, independent cooldowns, 5 evolution families, napalm, chained/remote mines, chest pause, XP transfer, caps and full five-zone victory.');
 console.log(JSON.stringify(run('({time:clock,level:lv,chests:chestCount,evolutions:runEvolutions,arsenal:arsenal.map(attackName)})')));
