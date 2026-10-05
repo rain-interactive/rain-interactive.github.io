@@ -22,7 +22,7 @@ for(const dir of [-1,1]){
 }
 t.run('start();muted=true;p.vx=100;input.left=true;input.right=false;update(.001)');assert.equal(t.run('p.dir'),-1,'Input must immediately switch facing despite inertia');
 t.run('start();muted=true;p.dir=1;foes=[];spawn=999;nextBoss=999;nextElite=999');
-t.run(`foes=[${enemy(850,290)}];foes[0].cd=0;update(.01)`);assert(t.run('shots.length>0'),'Rear enemies must still fire');assert.equal(t.run('p.dir'),1);
+t.run(`foes=[${enemy(850,290)}];foes[0].cd=0;update(.01);update(.7)`);assert(t.run('shots.length>0'),'Rear enemies must still fire');assert.equal(t.run('p.dir'),1);
 for(let phase=0;phase<5;phase++){
  t.run(`start();muted=true;phase=${phase}`);const cap=Math.min(5,phase+2);
  for(let rank=1;rank<cap;rank++)t.run("survivorUpgradePool().find(u=>u.id==='rank:gun:0').apply()");
