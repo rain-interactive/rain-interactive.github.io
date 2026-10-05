@@ -53,9 +53,9 @@ for(let i=0;i<10;i++){vm.runInContext(`clock=${i}*15+.1;stageStarted=0`,env);ass
 vm.runInContext('start();muted=true;clock=149.9;spawn=999;nextElite=999;foes=[];updateWaveDirector(0)',env);
 assert(!vm.runInContext('foes.some(e=>e.boss)',env),'Boss must not skip the ten waves');
 vm.runInContext('clock=150;updateWaveDirector(0)',env);assert(vm.runInContext('foes.some(e=>e.boss)',env));
-vm.runInContext('start();muted=true;clock=45;spawn=999;nextElite=999;updateWaveDirector(0)',env);
+vm.runInContext('start();muted=true;clock=45;spawn=999;nextElite=999;nextMedical=999;updateWaveDirector(0)',env);
 assert.equal(vm.runInContext('pickups.length',env),2);vm.runInContext('updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),2,'Supplies must spawn once per wave');
-vm.runInContext('clock=105;updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),4,'Second supply wave must refresh supplies');
+vm.runInContext('clock=105;updateWaveDirector(0)',env);assert.equal(vm.runInContext('pickups.length',env),3,'Second supply wave must replace expired medicine and add a grenade');
 console.log('Silent bubbles, pause cleanup, ten waves, 150-second boss gate and two supply waves passed.');
 
 vm.runInContext("start();muted=true;p.inv=0;fx=[];arcadeImpact(p.x,G-25,'metal');arcadeImpact(p.x,G-25,'wood');arcadeImpact(p.x,G-25,'cloth')",env);
