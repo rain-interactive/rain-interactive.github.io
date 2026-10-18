@@ -313,5 +313,25 @@ footer{padding:38px 0 60px}
     </div>
   </div>
 </footer>
-<style id="rain-lang-style">#rain-lang{position:fixed;top:14px;right:14px;z-index:99999;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);padding:5px 8px;font:11px Arial,sans-serif;letter-spacing:.08em}#rain-lang button{appearance:none;border:0;background:transparent;color:#aaa;padding:5px;cursor:pointer}#rain-lang button.active{color:#fff;text-decoration:underline;text-underline-offset:3px}#google_translate_element{position:fixed;left:-9999px;top:-9999px}.goog-te-banner-frame.skiptranslate{display:none!important}body{top:0!important}</style><div id="rain-lang"><button data-lang="es">ES</button><span>/</span><button data-lang="en">EN</button></div><div id="google_translate_element" aria-hidden="true"></div><script id="rain-lang-js">(function(){const K="rain-site-lang";function mark(l){document.querySelectorAll("#rain-lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));document.documentElement.lang=l}function apply(l){localStorage.setItem(K,l);mark(l);const go=()=>{const s=document.querySelector(".goog-te-combo");if(!s)return false;s.value=l==="es"?"":l;s.dispatchEvent(new Event("change",{bubbles:true}));return true};if(!go()){let n=0,t=setInterval(()=>{if(go()||++n>40)clearInterval(t)},250)}}window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:"es",includedLanguages:"es,en",autoDisplay:false},"google_translate_element");setTimeout(()=>apply(localStorage.getItem(K)||"es"),300)};document.querySelectorAll("#rain-lang button").forEach(b=>b.onclick=()=>apply(b.dataset.lang));mark(localStorage.getItem(K)||"es")})();</script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script></body>
+<style id="rain-lang-style">#rain-lang{position:fixed;top:14px;right:14px;z-index:99999;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);padding:5px 8px;font:11px Arial,sans-serif;letter-spacing:.08em}#rain-lang button{appearance:none;border:0;background:transparent;color:#aaa;padding:5px;cursor:pointer}#rain-lang button.active{color:#fff;text-decoration:underline;text-underline-offset:3px}#google_translate_element{position:fixed;left:-9999px;top:-9999px}.goog-te-banner-frame.skiptranslate{display:none!important}body{top:0!important}</style><div id="rain-lang"><button data-lang="es">ES</button><span>/</span><button data-lang="en">EN</button></div><div id="google_translate_element" aria-hidden="true"></div><script id="rain-lang-js">(function(){const K="rain-site-lang";function mark(l){document.querySelectorAll("#rain-lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));document.documentElement.lang=l}function apply(l){localStorage.setItem(K,l);mark(l);const go=()=>{const s=document.querySelector(".goog-te-combo");if(!s)return false;s.value=l==="es"?"":l;s.dispatchEvent(new Event("change",{bubbles:true}));return true};if(!go()){let n=0,t=setInterval(()=>{if(go()||++n>40)clearInterval(t)},250)}}window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:"es",includedLanguages:"es,en",autoDisplay:false},"google_translate_element");setTimeout(()=>apply(localStorage.getItem(K)||"es"),300)};document.querySelectorAll("#rain-lang button").forEach(b=>b.onclick=()=>apply(b.dataset.lang));mark(localStorage.getItem(K)||"es")})();</script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script><script>
+/* Keep broken remote artwork from showing as an empty image icon. */
+document.querySelectorAll('img').forEach(function(img){
+  img.addEventListener('error',function(){
+    if(img.dataset.fallbackApplied) return;
+    img.dataset.fallbackApplied='1';
+    img.style.display='none';
+    var parent=img.parentElement;
+    if(parent){
+      parent.style.position='relative';
+      var label=document.createElement('span');
+      label.textContent=img.getAttribute('alt') || 'Rain Interactive';
+      label.setAttribute('aria-label',label.textContent);
+      label.style.cssText='display:grid;place-items:center;width:100%;min-height:140px;padding:20px;text-align:center;font-weight:700;letter-spacing:.08em;background:linear-gradient(135deg,#101a1c,#182d30);color:#d6eded;box-sizing:border-box';
+      parent.appendChild(label);
+    }
+  });
+  if(img.complete && img.naturalWidth===0) img.dispatchEvent(new Event('error'));
+});
+</script>
+</body>
 </html>
