@@ -1,0 +1,29 @@
+name: Publish Black Spring V15
+on:
+  push:
+    branches: [main]
+    paths:
+      - assets/rain-black-spring-v15-cycle.mp4
+      - .github/workflows/black-spring-v15.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Render one hour
+        run: |
+          ffmpeg -y -v error -i assets/rain-black-spring-v15-cycle.mp4 -map 0:a -af 'apad,atrim=end_sample=735000' -c:a pcm_s16le /tmp/cycle.wav
+          ffmpeg -y -v error -stream_loop -1 -i assets/rain-black-spring-v15-cycle.mp4 -stream_loop -1 -i /tmp/cycle.wav -map 0:v -map 1:a -frames:v 216000 -t 3600 -c:v copy -c:a aac -b:a 160k -movflags +faststart Rain_Black_Spring_V15_1080p_1_Hora.mp4
+          ffprobe -v error -show_entries format=duration,size -of json Rain_Black_Spring_V15_1080p_1_Hora.mp4
+      - name: Publish media
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view black-spring-v15 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create black-spring-v15 --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Rain Black Spring V15 · 1080p · 1 hora" --notes "Fuente Zen experimental. 1920×1080, 60 FPS, una hora, sonido original con transiciones suaves."
+          gh release upload black-spring-v15 Rain_Black_Spring_V15_1080p_1_Hora.mp4 --clobber --repo "$GITHUB_REPOSITORY"
