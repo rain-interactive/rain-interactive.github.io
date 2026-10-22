@@ -124,6 +124,16 @@ footer{padding:38px 0 60px}
 #experiment .rain-feature-art strong{font:900 clamp(20px,2.5vw,33px)/.95 Arial,sans-serif;letter-spacing:-.055em}
 #experiment .rain-feature-art small{font:700 8px/1.5 monospace;letter-spacing:.05em;color:#9eead5}
 @media(max-width:520px){#experiment #rain-media,#experiment #rain-arcade{grid-template-columns:45% 55%}#experiment .rain-feature-art{padding:30px 5px 10px}#experiment .rain-feature-art strong{font-size:clamp(18px,5vw,26px)}}
+
+/* Rain Media / Arcade mobile layout repair: keep artwork above copy, never overlap */
+#experiment #rain-media,#experiment #rain-arcade{display:flex!important;flex-direction:column!important;min-height:0!important;overflow:hidden}
+#experiment #rain-media .thumb,#experiment #rain-arcade .thumb{width:100%!important;height:260px!important;min-height:0!important;max-height:260px!important;aspect-ratio:auto!important;flex:0 0 260px!important;display:flex!important;align-items:stretch!important}
+#experiment #rain-media .rain-feature-art,#experiment #rain-arcade .rain-feature-art{width:100%!important;min-height:0!important;height:100%!important;padding:24px 12px 16px!important;gap:10px!important}
+#experiment #rain-media .rain-feature-symbol,#experiment #rain-arcade .rain-feature-symbol{width:60px;height:60px;font-size:37px;flex-shrink:0}
+#experiment #rain-media .rain-feature-art strong,#experiment #rain-arcade .rain-feature-art strong{font-size:30px!important;line-height:.92}
+#experiment #rain-media .copy,#experiment #rain-arcade .copy{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;padding:20px!important;gap:22px!important;overflow-wrap:anywhere}
+#experiment #rain-media .copy p,#experiment #rain-arcade .copy p{max-width:100%;overflow-wrap:break-word}
+@media(min-width:801px){#experiment #rain-media,#experiment #rain-arcade{flex-direction:row!important}#experiment #rain-media .thumb,#experiment #rain-arcade .thumb{width:220px!important;height:auto!important;max-height:none!important;flex:0 0 220px!important}#experiment #rain-media .copy,#experiment #rain-arcade .copy{flex:1!important}}
 </style>
 <!-- BUILD 20261003-DEPOSITO-THUMBNAIL-V26 -->
 
