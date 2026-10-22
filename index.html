@@ -217,106 +217,60 @@ footer{padding:38px 0 60px}
 <meta name="twitter:description" content="Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez.">
 <meta property="og:image" content="https://rain-interactive.github.io/rain-interactive/assets/rain-logo.webp">
 <meta name="twitter:image" content="https://rain-interactive.github.io/rain-interactive/assets/rain-logo.webp">
-<!-- Barrio: relación contextual entre espacios independientes, sin servicios compartidos --><script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Rain Interactive — espacios de A Coruña","mentions":[{"@type":"SportsActivityLocation","name":"Azteca Box","url":"https://aztecabox.com/"},{"@type":"LocalBusiness","name":"O Raposo Púrpura","url":"https://oraposopurpura.com/","description":"Clases de pintura y cerámica para niños y adultos"}]}</script></head>
+<!-- Barrio: relación contextual entre espacios independientes, sin servicios compartidos --><script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Rain Interactive — espacios de A Coruña","mentions":[{"@type":"SportsActivityLocation","name":"Azteca Box","url":"https://aztecabox.com/"},{"@type":"LocalBusiness","name":"O Raposo Púrpura","url":"https://oraposopurpura.com/","description":"Clases de pintura y cerámica para niños y adultos"}]}</script><style id="rain-home-catalog-2026">
+header{min-height:52vh;padding-bottom:34px}
+header .hero p{max-width:790px}
+section{padding:48px 0}
+.home-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.home-grid .card{min-width:0;display:flex!important;flex-direction:column!important}
+.home-grid .card .artwork-original,.home-grid .card .thumb{width:100%;height:auto;aspect-ratio:16/10;min-height:0;overflow:hidden}
+.home-grid .card .artwork-original img,.home-grid .card .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.home-grid .card .copy{padding:18px!important;min-height:160px!important;display:flex;flex-direction:column;justify-content:space-between}
+.home-grid .card h3{font-size:clamp(26px,3vw,43px)}
+.directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:24px}
+.directory-tile{min-width:0;display:flex;flex-direction:column;gap:18px;justify-content:space-between;padding:22px;border:1px solid #303030;background:#090909;text-decoration:none;min-height:160px;scroll-margin-top:20px}
+.directory-tile span{font:700 10px/1.5 "Courier New",monospace;color:#9d9992;text-transform:uppercase}
+.directory-tile strong{font-size:clamp(23px,3vw,41px);line-height:.92;letter-spacing:-.04em}
+.directory-tile em{color:var(--mint);font:700 10px/1 monospace;font-style:normal;letter-spacing:.06em}
+.directory-tile:hover{border-color:var(--mint)}
+.catalog-primary{display:flex;justify-content:space-between;gap:20px;align-items:center;text-decoration:none;border:1px solid var(--mint);margin-top:18px;padding:18px 20px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.catalog-primary span{font:11px/1.4 monospace;color:#bbb;text-transform:none;letter-spacing:0}
+.catalog-primary:hover{background:#10251e}
+@media(max-width:800px){header{min-height:0}.directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){section{padding:36px 0}.home-grid{grid-template-columns:1fr}.home-grid .card .artwork-original,.home-grid .card .thumb{aspect-ratio:16/9}.home-grid .card .copy{min-height:0!important}.directory-tile{padding:15px;min-height:135px;gap:14px}.directory-tile strong{font-size:26px}.catalog-primary{flex-direction:column;align-items:flex-start}.hero h1{font-size:clamp(55px,15vw,110px)}}
+</style></head>
 <body>
 <header>
   <div class="wrap top">
     <div class="brand">RAIN INTERACTIVE</div>
-    <nav class="nav">
-      <a href="#play">Play</a>
-      <a href="#read">Read</a>
-      <a href="#listen">Listen</a>
-      <a href="#experiment">Experiment</a>
-      <a href="#development">Development</a>
-      <a href="#coruna">A Coruña</a>
-    </nav>
+    <nav class="nav" aria-label="Navegación principal"><a href="#featured">Destacados</a><a href="#catalog">Secciones</a><a href="/catalogo.html">Catálogo completo</a></nav>
   </div>
   <div class="wrap hero">
     <div class="kicker">Laboratorio digital independiente · 2026</div>
     <h1>RAIN<br>INTERACTIVE</h1>
     <p>Un laboratorio de juegos, archivos, sonido y experimentos digitales. Algunas cosas funcionan. Otras mutan. Todas forman parte del proceso.</p>
-    <div class="modebar">
-      <div class="mode"><strong>PLAY</strong> · games / worlds</div>
-      <div class="mode"><strong>READ</strong> · archives / philosophy</div>
-      <div class="mode"><strong>LISTEN</strong> · playlist / sound</div>
-      <div class="mode"><strong>EXPERIMENT</strong> · web / systems</div>
-    </div>
-    <div class="manifest">NO HAY UN FORMATO ÚNICO. CADA PROYECTO ES UNA PRUEBA: PUEDE FUNCIONAR, ROMPERSE, MUTAR O CONVERTIRSE EN OTRA COSA.</div>
+    <div class="modebar"><div class="mode"><strong>ARCADE</strong> · juegos</div><div class="mode"><strong>EXPERIMENTS</strong> · sistemas</div><div class="mode"><strong>MEDIA</strong> · audiovisual</div><div class="mode"><strong>ARCHIVE</strong> · ideas</div></div><div class="manifest">NO HAY UN FORMATO ÚNICO. CADA PROYECTO ES UNA PRUEBA: PUEDE FUNCIONAR, ROMPERSE, MUTAR O CONVERTIRSE EN OTRA COSA.</div>
   </div>
 </header>
 
-<main>
-<section id="play">
-  <div class="wrap">
-    <div class="section-head"><h2>Play</h2><span>Games / interactive worlds</span></div>
-    <div class="grid">
-      <a class="card card-art card-deposit" href="https://el-deposito.mmmartineznacho.chatgpt.site/"><div class="artwork-original"><span class="n">R-013</span><img src="/assets/el-deposito-cover-20261003.webp?v=20261003-11" width="1536" height="1024" alt="El Depósito — creado por nachommmartinez"></div><div class="copy"><div><div class="type">Game · Gratis · Terror / Rave</div><h3>El Depósito</h3><p>150 engendros en una ciudad apocalíptica. Encuentra a tus colegas, llena la rave y explora la Engendroteca. Juega gratis en móvil.</p></div><span class="cta">Jugar gratis ↗</span></div></a>
-
-      <a class="card card-art card-boxer" href="/boxer-life/"><div class="artwork-original"><span class="n">R-001</span><img src="/assets/boxer-life-cover.webp?v=v12" alt="Boxer Life"></div><div class="copy"><div><div class="type">Game · Boxing</div><h3>Boxer Life</h3><p>Tres decisiones al mes. Una carrera dentro y fuera del ring.</p></div><span class="cta">Play ↗</span></div></a>
-      <a class="card card-art card-marea" href="/marea/"><div class="artwork-original"><span class="n">R-002</span><img src="/rain-interactive/assets/marea-caratula.webp?v=v12" alt="Marea"></div><div class="copy"><div><div class="type">Game · Surf · Versión 3.32</div><h3>Marea</h3><p>Surf, olas, fauna y movimiento. Versión 3.32 para Android.</p></div><span class="cta">Enter ↗</span></div></a>
-
-      <a class="card card-art card-dracula" href="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/"><div class="artwork-original"><span class="n">R-015</span><img src="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/dracula-rain-v32.svg?v=32" width="1024" height="1280" alt="Drácula — Sangre y eternidad. Creado por nachommmartinez" loading="lazy"></div><div class="copy"><div><div class="type">Game · Gratis · Idle / Terror / Romance</div><h3>Drácula</h3><p>Sangre y eternidad. Mina y Drácula reinan juntos en un castillo que crece solo. Terror gótico, romance y un vals de 8 bits. Un castillo vivo en formato vertical, con defensa vampírica y acceso libre.</p></div><span class="cta">Entrar al castillo ↗</span></div></a>
-      <a class="card card-art card-commandos" href="/sdj-commandos/"><div class="artwork-original"><span class="n">R-016</span><img src="/sdj-commandos/cover-comic-v27.webp?v=20261005-public45" width="768" height="1152" alt="Commandos: Most Wanted — portada de cómic con el jinete y su camello" loading="lazy"></div><div class="copy"><div><div class="type">Juego · Supervivencia arcade</div><h3>Commandos: Most Wanted</h3><p>Cinco zonas de combate con estética de cómic, armas progresivas y jefes con patrones propios. Muévete, gira para defender tu espalda y busca los botiquines.</p></div><span class="cta">Jugar ↗</span></div></a>
-    </div>
-  </div>
-</section>
-
-<section id="read">
-  <div class="wrap">
-    <div class="section-head"><h2>Read</h2><span>Archive / history / philosophy</span></div>
-    <div class="grid">
-      <a class="card card-art card-thelema" href="/thelema-preview/"><div class="artwork-original"><span class="n">R-005</span><img src="/assets/thelema-cover.jpg?v=v12" alt="Thelema"></div><div class="copy"><div><div class="type">Historical archive</div><h3>THELEMA</h3><p>Archivo digital sobre Aleister Crowley, su obra, pensamiento y legado cultural.</p></div><span class="cta">Read ↗</span></div></a>
-      <a class="card" href="/seis-caminos/"><div class="thumb paper-thumb"><span class="n">R-010</span><div class="paper-mark"><strong>SEIS<br>CAMINOS</strong><small>哲学 · 戦略 · 規律</small></div></div><div class="copy"><div><div class="type">Interactive philosophy</div><h3>Seis Caminos</h3><p>Seis tradiciones antiguas convertidas en un manual contemporáneo de filosofía, estrategia y disciplina.</p></div><span class="cta">Explore ↗</span></div></a>
-    </div>
-  </div>
-</section>
-
-<section id="listen">
-  <div class="wrap">
-    <div class="section-head"><h2>Listen</h2><span>Playlist / sound / transmission</span></div>
-    <div class="grid">
-      <a class="card" href="https://open.spotify.com/playlist/4l7Q5zlpxrBLu7yFwyJeEY" target="_blank" rel="noopener"><div class="thumb playlist-thumb"><span class="n">R-011</span><img src="/assets/rain-playlist-cover.webp?v=v25" alt="Rain Playlist"></div><div class="copy"><div><div class="type">Spotify · Playlist</div><h3>Rain Playlist</h3><p>La banda sonora abierta del laboratorio y sus mutaciones.</p></div><span class="cta">Listen ↗</span></div></a>
-    </div>
-  </div>
-</section>
-
-<section id="experiment">
-  <div class="wrap">
-    <div class="section-head"><h2>Experiment</h2><span>Systems / narrative / noise / web</span></div>
-    <div class="grid">
-      <a class="card" id="rain-media" href="https://desktop-0qpstrv.tailae0643.ts.net/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="position:relative;overflow:hidden;background:#060c10"><span class="n">R-014</span><div class="rain-feature-art rain-media-art" aria-label="Portada RAIN MEDIA"><div class="rain-feature-symbol">▶</div><strong>RAIN<br>MEDIA</strong><small>CINE · SERIES · MÚSICA</small></div></div><div class="copy"><div><div class="type">Jellyfin · Biblioteca audiovisual · Acceso privado</div><h3>Rain Media</h3><p>Biblioteca audiovisual: cine, series, música y experimentación. Acceso mediante Jellyfin; requiere permisos de conexión y cuenta autorizada.</p></div><span class="cta">Acceder a Jellyfin ↗</span></div></a>
-      <a class="card card-zen" href="/rain-black-spring/?v=25" aria-label="Abrir Fuente Zen Rain Black Spring, experimento abierto"><div class="thumb"><span class="n">R-018 · EXPERIMENTAL</span><img src="/assets/rain-black-spring-v25-poster.jpg?v=20261022" loading="lazy" alt="Fuente zen de roca volcánica con agua limpia en un bosque lluvioso"></div><div class="copy"><div><div class="type">Arte audiovisual · Fuente Zen · Abierto / V25</div><h3>Rain — Black Spring</h3><p>La piedra permanece. El agua fluye. Experimento zen con cascadas animadas, sonido original y reproducción continua.</p></div><span class="cta">Entrar · Reproducción en bucle ↗</span></div></a>
-      <a class="card" href="/infinite-noise/"><div class="thumb noise-thumb"><span class="n">R-009</span></div><div class="copy"><div><div class="type">Web experiment</div><h3>Infinite Noise</h3><p>Texto, ruido e interferencias generados mientras haces scroll. No termina.</p></div><span class="cta">Enter ↗</span></div></a>
-      <a class="card" href="https://luxroth.industriestm.workers.dev/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="display:grid;place-items:center;background:#f5a6cb;color:#201019"><span class="n">R-017</span><div style="text-align:center;font-weight:900;font-size:clamp(24px,4vw,42px);line-height:.9;letter-spacing:-.06em">LUXROTH<br>INDUSTRIES™<div style="font-size:30px;margin-top:15px">💗 🐆 👻</div></div></div><div class="copy"><div><div class="type">Web experiment · Arte digital / Poesía</div><h3>Luxroth Industries</h3><p>El universo de Lu Roth: poesía, imágenes, personajes y experimentación digital.</p></div><span class="cta">Visitar web ↗</span></div></a>
-      <a class="card card-art card-heraldo" href="https://heraldodelfindelostiempos.github.io/"><div class="artwork-original"><span class="n">R-006</span><img src="https://heraldodelfindelostiempos.github.io/assets/meditacion-espejos.jpg?v=v12" alt="Heraldo del fin de los tiempos"></div><div class="copy"><div><div class="type">Narrative archive · Interactive web</div><h3>Heraldo</h3><p>Archivo narrativo, personajes, tarot, sistemas y ficción digital en expansión.</p></div><span class="cta">Explore ↗</span></div></a>
-    </div>
-  </div>
-</section>
-
-<section id="development">
-  <div class="wrap">
-    <div class="section-head"><h2>Development</h2><span>Private access / unfinished worlds</span></div>
-    <div class="grid">
-      <article class="development-entry private"><div class="development-art"><span class="n">R-003</span><img src="/assets/descenso-cover.webp?v=v25" alt="Descenso"></div><div class="copy"><div><div class="type">In development · Private access</div><h3>Descenso</h3><p>Biología marina, exploración submarina y catálogo vivo de especies.</p></div><span class="cta">Private development</span></div></article>
-<article class="development-entry private"><div class="development-art"><span class="n">R-004</span><img src="/rain-interactive/assets/wolf-lobo.webp?v=wolf-lobo-v18" alt="Wolf Story"></div><div class="copy"><div><div class="type">In development · Private access</div><h3>Wolf Story</h3><p>Un lobo negro atraviesa un bosque mágico dibujado a mano.</p></div><span class="cta">Private development</span></div></article>
-    </div>
-  </div>
-</section>
-
-
-
-<section id="coruna" class="coruna-section">
-  <div class="wrap">
-    <div class="section-head"><h2>A Coruña</h2><span>Lugares de interés / lugares con historia</span></div>
-    <p class="archive-note">Una selección de espacios culturales y lugares que forman parte de nuestra ciudad.</p>
-    <div class="grid coruna-grid">
-
-      <a class="card" href="https://oraposopurpura.com/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#6d416c,#29192f 65%,#0c090f);color:#f1d9f2"><span class="n">A CORUÑA · 02</span><div style="text-align:center;font-family:Georgia,serif;font-size:clamp(25px,3vw,43px);line-height:1">O RAPOSO<br>PÚRPURA</div></div><div class="copy"><div><div class="type">Arte · Taller · Pintura / Cerámica</div><h3>O Raposo Púrpura</h3><p>Un espacio dedicado a la creación artística, la pintura y la cerámica.</p></div><span class="cta">Visitar el taller ↗</span></div></a>
-      <a class="card" href="/a-coruna/azteca-box/index.html?v=20261018"><div class="thumb" style="display:grid;place-items:center;background:linear-gradient(140deg,#080808,#3a3530 52%,#111);color:#f1eee6;position:relative"><span class="n">A CORUÑA · 03</span><div style="text-align:center;font-family:Georgia,serif;font-weight:900;font-size:clamp(31px,4vw,53px);line-height:1.05;letter-spacing:-.04em;text-shadow:2px 3px #000">AZTECA<br>BOX</div><span style="position:absolute;bottom:12px;font-size:10px;letter-spacing:.18em">KATANGA · EL NOBLE ARTE</span></div><div class="copy"><div><div class="type">Boxeo · Escuela · Katanga / Os Mariñeiros</div><h3>Azteca Box</h3><p>El noble arte: una escuela de boxeo con historia, fotografías y espíritu de gimnasio clásico.</p></div><span class="cta">Conocer la escuela ↗</span></div></a>
-    </div>
-  </div>
-</section>
-
+<main id="inicio">
+<section id="featured" class="home-featured"><div class="wrap">
+<div class="section-head"><h2>Destacados</h2><span>Ahora en Rain / dos proyectos principales</span></div>
+<div class="grid home-grid">
+<a class="card card-art card-marea" href="/marea/"><div class="artwork-original"><span class="n">R-002</span><img src="/rain-interactive/assets/marea-caratula.webp?v=v12" alt="Marea"></div><div class="copy"><div><div class="type">Game · Surf · Versión 3.32</div><h3>Marea</h3><p>Surf, olas, fauna y movimiento. Versión 3.32 para Android.</p></div><span class="cta">Enter ↗</span></div></a>
+<a class="card card-zen" href="/rain-black-spring/?v=25" aria-label="Abrir Fuente Zen Rain Black Spring, experimento abierto"><div class="thumb"><span class="n">R-018 · EXPERIMENTAL</span><img src="/assets/rain-black-spring-v25-poster.jpg?v=20261022" loading="lazy" alt="Fuente zen de roca volcánica con agua limpia en un bosque lluvioso"></div><div class="copy"><div><div class="type">Arte audiovisual · Fuente Zen · Abierto / V25</div><h3>Rain — Black Spring</h3><p>La piedra permanece. El agua fluye. Experimento zen con cascadas animadas, sonido original y reproducción continua.</p></div><span class="cta">Entrar · Reproducción en bucle ↗</span></div></a>
+</div></div></section>
+<section id="catalog" class="home-catalog"><div class="wrap">
+<div class="section-head"><h2>Explora Rain</h2><span>Todo el archivo, sin scroll infinito</span></div>
+<p class="archive-note">Juegos, arte digital, experiencias audiovisuales y proyectos en desarrollo. Cada experimento tiene su lugar y conserva su enlace.</p>
+<div class="directory-grid"><a class="directory-tile" href="/catalogo.html#play" id="play"><span>05 / Videojuegos / mundos jugables</span><strong>Arcade</strong><em>Explorar →</em></a>
+<a class="directory-tile" href="/catalogo.html#experiment" id="experiment"><span>02 / Arte digital / web / sistemas</span><strong>Experiments</strong><em>Explorar →</em></a>
+<a class="directory-tile" href="/catalogo.html#listen" id="listen"><span>03 / Audiovisual / sonido / contemplación</span><strong>Media</strong><em>Explorar →</em></a>
+<a class="directory-tile" href="/catalogo.html#read" id="read"><span>03 / Narrativas / historia / pensamiento</span><strong>Archive</strong><em>Explorar →</em></a>
+<a class="directory-tile" href="/catalogo.html#development" id="development"><span>02 / Prototipos / acceso privado</span><strong>Development</strong><em>Explorar →</em></a>
+<a class="directory-tile" href="/catalogo.html#coruna" id="coruna"><span>02 / Espacios culturales / entorno</span><strong>A Coruña</strong><em>Explorar →</em></a></div>
+<a class="catalog-primary" href="/catalogo.html">Abrir catálogo completo → <span>17 proyectos y espacios</span></a>
+</div></section>
 </main>
 
 <footer>
@@ -350,48 +304,5 @@ document.querySelectorAll('img').forEach(function(img){
 });
 </script>
 
-<!-- Rain Interactive: compact catalogue navigation, preserves every original project/link -->
-<style>
-.catalog-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px auto 0;padding:16px;border:1px solid #303030;background:#0b0b0b}
-.catalog-tools label{font:700 11px/1.4 monospace;letter-spacing:.1em;color:var(--mint)}
-#rain-search{flex:1 1 220px;min-width:0;background:#151515;border:1px solid #444;border-radius:0;color:#fff;padding:12px;font:14px Arial,sans-serif}
-#rain-search:focus{outline:2px solid var(--mint);outline-offset:2px}
-.catalog-count{color:#aaa;font:11px monospace}
-.catalog-more{display:block;margin:22px auto 0;padding:12px 20px;background:#111;border:1px solid #555;color:var(--fg);cursor:pointer;font:700 11px monospace;letter-spacing:.08em}
-.catalog-more:hover{border-color:var(--mint);color:var(--mint)}
-.catalog-hidden{display:none!important}
-.catalog-empty{color:#aaa;padding:15px 0;font:13px monospace}
-@media(max-width:520px){header{min-height:0;padding-bottom:32px}section{padding:38px 0}.section-head h2{font-size:clamp(32px,10vw,55px)}.catalog-tools{padding:12px}.card .copy{padding:14px}.card h3{font-size:28px}}
-</style>
-<script>
-(function(){
- function init(){
-  var main=document.querySelector('main');if(!main)return;
-  var sections=Array.from(main.querySelectorAll('section')).filter(function(sec){return sec.querySelector('.grid .card')});
-  if(!sections.length)return;
-  var tools=document.createElement('div');tools.className='wrap catalog-tools';
-  tools.innerHTML='<label for="rain-search">BUSCAR EN RAIN</label><input id="rain-search" type="search" placeholder="Proyecto, juego, experimento…" autocomplete="off" aria-label="Buscar proyectos"><span class="catalog-count" aria-live="polite"></span>';
-  main.insertBefore(tools,main.firstChild);
-  var input=tools.querySelector('input'),count=tools.querySelector('.catalog-count');
-  var state=sections.map(function(sec){
-   var cards=Array.from(sec.querySelectorAll('.grid > .card'));
-   var button=document.createElement('button');button.type='button';button.className='catalog-more';button.setAttribute('aria-expanded','false');
-   sec.querySelector('.grid').insertAdjacentElement('afterend',button);
-   var item={sec:sec,cards:cards,button:button,expanded:false};
-   button.addEventListener('click',function(){item.expanded=!item.expanded;render()});return item;
-  });
-  function render(){var q=input.value.trim().toLocaleLowerCase(),matches=0;
-   state.forEach(function(item){var hits=0;
-    item.cards.forEach(function(card,i){var found=!q||card.textContent.toLocaleLowerCase().includes(q);if(found)hits++;card.classList.toggle('catalog-hidden',!found||(!q&&!item.expanded&&i>=4))});
-    matches+=hits;item.button.hidden=!!q||item.cards.length<=4;
-    item.button.textContent=item.expanded?'Mostrar menos':'Ver todos ('+item.cards.length+')';item.button.setAttribute('aria-expanded',String(item.expanded));
-    item.sec.hidden=!!q&&hits===0;
-   });count.textContent=q?matches+' resultados':'Explora por sección · sin perder proyectos';
-  }
-  input.addEventListener('input',render);render();
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
-</script>
 </body>
 </html>
