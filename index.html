@@ -349,5 +349,49 @@ document.querySelectorAll('img').forEach(function(img){
   if(img.complete && img.naturalWidth===0) img.dispatchEvent(new Event('error'));
 });
 </script>
+
+<!-- Rain Interactive: compact catalogue navigation, preserves every original project/link -->
+<style>
+.catalog-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px auto 0;padding:16px;border:1px solid #303030;background:#0b0b0b}
+.catalog-tools label{font:700 11px/1.4 monospace;letter-spacing:.1em;color:var(--mint)}
+#rain-search{flex:1 1 220px;min-width:0;background:#151515;border:1px solid #444;border-radius:0;color:#fff;padding:12px;font:14px Arial,sans-serif}
+#rain-search:focus{outline:2px solid var(--mint);outline-offset:2px}
+.catalog-count{color:#aaa;font:11px monospace}
+.catalog-more{display:block;margin:22px auto 0;padding:12px 20px;background:#111;border:1px solid #555;color:var(--fg);cursor:pointer;font:700 11px monospace;letter-spacing:.08em}
+.catalog-more:hover{border-color:var(--mint);color:var(--mint)}
+.catalog-hidden{display:none!important}
+.catalog-empty{color:#aaa;padding:15px 0;font:13px monospace}
+@media(max-width:520px){header{min-height:0;padding-bottom:32px}section{padding:38px 0}.section-head h2{font-size:clamp(32px,10vw,55px)}.catalog-tools{padding:12px}.card .copy{padding:14px}.card h3{font-size:28px}}
+</style>
+<script>
+(function(){
+ function init(){
+  var main=document.querySelector('main');if(!main)return;
+  var sections=Array.from(main.querySelectorAll('section')).filter(function(sec){return sec.querySelector('.grid .card')});
+  if(!sections.length)return;
+  var tools=document.createElement('div');tools.className='wrap catalog-tools';
+  tools.innerHTML='<label for="rain-search">BUSCAR EN RAIN</label><input id="rain-search" type="search" placeholder="Proyecto, juego, experimento…" autocomplete="off" aria-label="Buscar proyectos"><span class="catalog-count" aria-live="polite"></span>';
+  main.insertBefore(tools,main.firstChild);
+  var input=tools.querySelector('input'),count=tools.querySelector('.catalog-count');
+  var state=sections.map(function(sec){
+   var cards=Array.from(sec.querySelectorAll('.grid > .card'));
+   var button=document.createElement('button');button.type='button';button.className='catalog-more';button.setAttribute('aria-expanded','false');
+   sec.querySelector('.grid').insertAdjacentElement('afterend',button);
+   var item={sec:sec,cards:cards,button:button,expanded:false};
+   button.addEventListener('click',function(){item.expanded=!item.expanded;render()});return item;
+  });
+  function render(){var q=input.value.trim().toLocaleLowerCase(),matches=0;
+   state.forEach(function(item){var hits=0;
+    item.cards.forEach(function(card,i){var found=!q||card.textContent.toLocaleLowerCase().includes(q);if(found)hits++;card.classList.toggle('catalog-hidden',!found||(!q&&!item.expanded&&i>=4))});
+    matches+=hits;item.button.hidden=!!q||item.cards.length<=4;
+    item.button.textContent=item.expanded?'Mostrar menos':'Ver todos ('+item.cards.length+')';item.button.setAttribute('aria-expanded',String(item.expanded));
+    item.sec.hidden=!!q&&hits===0;
+   });count.textContent=q?matches+' resultados':'Explora por sección · sin perder proyectos';
+  }
+  input.addEventListener('input',render);render();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>
