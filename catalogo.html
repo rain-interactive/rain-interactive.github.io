@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050505">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+
+<style>
+:root{--bg:#050505;--fg:#f1efe9;--muted:#77736d;--mint:#37d3b0;--red:#ff4a3d;--line:#232323}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif}
+a{color:inherit}
+.wrap{width:min(1280px,calc(100% - 36px));margin:auto}
+header{min-height:76vh;display:flex;flex-direction:column;justify-content:space-between;padding:22px 0 42px;border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.brand{font-size:14px;font-weight:900;letter-spacing:.2em;text-transform:uppercase}
+.nav{display:flex;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+.nav a{text-decoration:none;font:700 10px/1 "Courier New",monospace;letter-spacing:.14em;color:#9d9891;text-transform:uppercase}
+.nav a:hover{color:var(--fg)}
+.hero{max-width:1100px}
+.kicker{font:700 10px/1 "Courier New",monospace;letter-spacing:.25em;color:var(--mint);text-transform:uppercase;margin-bottom:18px}
+h1{font-size:clamp(60px,11vw,164px);line-height:.78;letter-spacing:-.075em;margin:0;text-transform:uppercase}
+.hero p{max-width:760px;font-size:clamp(18px,2.4vw,34px);line-height:1.08;letter-spacing:-.03em;color:#cfcac2;margin:26px 0 0}
+.manifest{margin-top:22px;font:700 10px/1.6 "Courier New",monospace;letter-spacing:.12em;color:#85807a;text-transform:uppercase}
+.modebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:34px}
+.mode{border:1px solid #343434;padding:10px 12px;font:700 10px/1 "Courier New",monospace;letter-spacing:.14em;text-transform:uppercase;color:#bbb4ad}
+.mode strong{color:var(--mint)}
+section{padding:72px 0;border-bottom:1px solid var(--line)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:24px}
+.section-head h2{font-size:clamp(32px,6vw,82px);line-height:.85;letter-spacing:-.055em;margin:0;text-transform:uppercase}
+.section-head span{font:700 9px/1.3 "Courier New",monospace;letter-spacing:.14em;color:#777;text-transform:uppercase;text-align:right}
+
+/* Featured playlist */
+
+
+.feature-media:before{content:"";position:absolute;inset:-15%;background:radial-gradient(circle at 30% 28%,#37d3b055,transparent 28%),radial-gradient(circle at 72% 66%,#37d3b026,transparent 34%),linear-gradient(145deg,#111,#050505 70%);filter:blur(8px);transform:scale(1.08);z-index:-2}
+.feature-media:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0000,#0008);z-index:-1}
+.spotify-mark{width:min(310px,72%);aspect-ratio:1/1;border:1px solid #3a3a3a;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;box-shadow:0 22px 80px #000;text-align:center}
+.spotify-disc{width:94px;height:94px;border:1px solid var(--mint);border-radius:50%;position:relative}
+.spotify-disc:before,.spotify-disc:after{content:"";position:absolute;left:20%;right:20%;height:1px;background:var(--mint);border-radius:50%}
+.spotify-disc:before{top:39%;box-shadow:0 14px 0 var(--mint)}
+.spotify-disc:after{top:66%}
+.spotify-mark strong{font-size:28px;line-height:.9;letter-spacing:-.04em}
+.spotify-mark small{font:700 9px/1.4 "Courier New",monospace;letter-spacing:.18em;color:var(--mint);text-transform:uppercase}
+
+.meta{font:700 9px/1.5 "Courier New",monospace;letter-spacing:.14em;color:var(--mint);text-transform:uppercase}
+.feature-info h3,.card h3{font-size:clamp(30px,4vw,58px);line-height:.9;letter-spacing:-.05em;margin:12px 0}
+.feature-info p,.card p{color:#aaa39b;line-height:1.5;margin:0}
+.cta{display:inline-block;margin-top:24px;text-decoration:none;font:700 10px/1 "Courier New",monospace;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid #555;padding-bottom:4px}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{border:1px solid var(--line);background:#090909;text-decoration:none;display:grid;grid-template-columns:180px 1fr;min-height:220px}
+.card .thumb{background:#111;overflow:hidden;position:relative;min-height:220px}
+.card .thumb img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;image-rendering:auto;background:#090909}
+.card .copy{padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.card .n{position:absolute;left:10px;top:10px;z-index:4;background:#050505d9;border:1px solid #333;padding:5px 7px;font:700 9px/1 "Courier New",monospace;letter-spacing:.1em}
+.card .type{font:700 9px/1.2 "Courier New",monospace;letter-spacing:.12em;color:#837d77;text-transform:uppercase}
+.card:hover{border-color:#6f6f6f}
+.card:hover .type,.card:hover .cta{color:var(--mint)}
+.private{opacity:.8}
+.private .type{color:#a7837d}
+.private:hover{opacity:1;border-color:#5f403a}
+.private:hover .type{color:var(--red)}
+
+/* Generated editorial thumbnails */
+.paper-thumb{display:grid;place-items:center;background:linear-gradient(150deg,#e3d3ad,#b9a37b)!important;color:#2a241b}
+.paper-thumb:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#6b56340b 0 1px,transparent 1px 5px),repeating-linear-gradient(90deg,#6b563408 0 1px,transparent 1px 6px)}
+.paper-mark{position:relative;text-align:center;border:1px solid #574a3766;padding:22px 16px;width:74%;font-family:Georgia,serif}
+.paper-mark strong{display:block;font-size:27px;line-height:.92;font-weight:400}
+.paper-mark small{display:block;margin-top:10px;font:700 9px monospace;letter-spacing:.16em;color:#6f6048}
+.noise-thumb{background:#050505!important}
+.noise-thumb:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,#050505 0 3px,#eee 3px 5px);opacity:.85}
+.noise-thumb:after{content:"INFINITE\A NOISE";white-space:pre;position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:#0009;color:#fff;font:900 29px/.8 Arial Black,Arial,sans-serif;letter-spacing:-.06em;mix-blend-mode:difference}
+.lux-thumb{background:radial-gradient(circle at 50% 44%,#1d2722 0 7%,#111613 31%,#080909 68%)!important;display:grid;place-items:center}
+.lux-orb{width:58%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 29%,#d8eee0 0 1.2%,#7f988a 8%,#27312c 28%,#0b0e0c 62%,#030404 78%);box-shadow:0 0 0 1px #7791824c,0 20px 60px #000,inset -22px -28px 55px #000;position:relative}
+.lux-orb:after{content:"";position:absolute;inset:12%;border-radius:50%;border:1px solid #ccefdc12;box-shadow:0 0 35px #bfe6cf12}
+.heraldo-thumb{background:#111!important}
+.heraldo-thumb img{object-position:center center;filter:grayscale(.12) contrast(1.08)}
+.playlist-thumb{background:radial-gradient(circle at 35% 30%,#37d3b03b,transparent 30%),#080808!important;display:grid;place-items:center}.playlist-thumb:after{content:"PLAYLIST";font:900 24px/1 Arial,sans-serif;letter-spacing:-.04em;color:#f1efe9}
+
+.archive-note{max-width:760px;color:#8f8983;font-size:15px;line-height:1.6}
+footer{padding:38px 0 60px}
+.footerline{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:700 9px/1.5 "Courier New",monospace;letter-spacing:.12em;color:#777;text-transform:uppercase}
+.support{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.support a{border:1px solid #333;padding:12px 14px;text-decoration:none;font:700 9px/1 "Courier New",monospace;letter-spacing:.12em;text-transform:uppercase}
+.support a:hover{border-color:var(--mint);color:var(--mint)}
+
+@media(max-width:800px){
+ header{min-height:68vh}
+ 
+ 
+ .feature-media img{width:min(300px,70vw)}
+ .grid{grid-template-columns:1fr}
+ .card{grid-template-columns:145px 1fr}
+ .section-head{align-items:flex-start;flex-direction:column}
+ .section-head span{text-align:left}
+}
+@media(max-width:520px){
+ .wrap{width:min(100% - 24px,520px)}
+ .top{flex-direction:column}
+ .nav{justify-content:flex-start}
+ .card{grid-template-columns:1fr}
+ .card .thumb{aspect-ratio:1.35/1;min-height:0}
+}
+
+/* El Depósito: fluorescent type over the dark rave. */
+.deposit-poster{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:20px;position:relative;overflow:hidden;min-height:280px;background:radial-gradient(ellipse at 10% 15%,#ff268e38,transparent 60%),radial-gradient(ellipse at 90% 85%,#28bfff38,transparent 65%),repeating-linear-gradient(0deg,transparent 0 7px,#a2a2a207 7px 8px),#030307}
+.deposit-poster strong{font:900 clamp(24px,4vw,62px)/.88 "Courier New",monospace;text-align:center;letter-spacing:-.08em;color:#f9c7ee;text-shadow:3px 2px 0 #5ce7ff,0 0 18px #ff268e70}
+.deposit-poster small{font:700 9px/1.3 "Courier New",monospace;letter-spacing:.16em;color:#b2c7df;text-align:center}
+.card-deposit:hover{border-color:#ff268e}
+@media(max-width:800px){.deposit-poster strong{font-size:clamp(32px,8vw,72px)}}
+
+/* Featured Experiment thumbnails: visible on narrow and wide screens */
+#experiment #rain-media .thumb,#experiment #rain-arcade .thumb{min-height:240px;display:flex;align-items:stretch;overflow:hidden}
+#experiment .rain-feature-art{width:100%;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:30px 8px 15px;background:radial-gradient(ellipse at 50% 40%,#1a5856,#071615 75%);color:#e8fff8}
+#experiment .rain-arcade-art{background:radial-gradient(ellipse at 50% 40%,#3d2a5d,#0b101f 75%)}
+#experiment .rain-feature-symbol{width:72px;height:72px;border:4px solid #65f6d2;border-radius:18px;display:grid;place-items:center;font:bold 48px Arial;color:#65f6d2;box-shadow:0 0 28px #42dfb755}
+#experiment .rain-arcade-art .rain-feature-symbol{border-color:#ed83d6;color:#ed83d6;box-shadow:0 0 28px #ed83d644}
+#experiment .rain-feature-art strong{font:900 clamp(20px,2.5vw,33px)/.95 Arial,sans-serif;letter-spacing:-.055em}
+#experiment .rain-feature-art small{font:700 8px/1.5 monospace;letter-spacing:.05em;color:#9eead5}
+@media(max-width:520px){#experiment #rain-media,#experiment #rain-arcade{grid-template-columns:45% 55%}#experiment .rain-feature-art{padding:30px 5px 10px}#experiment .rain-feature-art strong{font-size:clamp(18px,5vw,26px)}}
+
+/* Rain Media / Arcade mobile layout repair: keep artwork above copy, never overlap */
+#experiment #rain-media,#experiment #rain-arcade{display:flex!important;flex-direction:column!important;min-height:0!important;overflow:hidden}
+#experiment #rain-media .thumb,#experiment #rain-arcade .thumb{width:100%!important;height:260px!important;min-height:0!important;max-height:260px!important;aspect-ratio:auto!important;flex:0 0 260px!important;display:flex!important;align-items:stretch!important}
+#experiment #rain-media .rain-feature-art,#experiment #rain-arcade .rain-feature-art{width:100%!important;min-height:0!important;height:100%!important;padding:24px 12px 16px!important;gap:10px!important}
+#experiment #rain-media .rain-feature-symbol,#experiment #rain-arcade .rain-feature-symbol{width:60px;height:60px;font-size:37px;flex-shrink:0}
+#experiment #rain-media .rain-feature-art strong,#experiment #rain-arcade .rain-feature-art strong{font-size:30px!important;line-height:.92}
+#experiment #rain-media .copy,#experiment #rain-arcade .copy{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;padding:20px!important;gap:22px!important;overflow-wrap:anywhere}
+#experiment #rain-media .copy p,#experiment #rain-arcade .copy p{max-width:100%;overflow-wrap:break-word}
+@media(min-width:801px){#experiment #rain-media,#experiment #rain-arcade{flex-direction:row!important}#experiment #rain-media .thumb,#experiment #rain-arcade .thumb{width:220px!important;height:auto!important;max-height:none!important;flex:0 0 220px!important}#experiment #rain-media .copy,#experiment #rain-arcade .copy{flex:1!important}}
+</style>
+<!-- BUILD 20261003-DEPOSITO-THUMBNAIL-V26 -->
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://rain-interactive.github.io/#organization","name":"Rain Interactive","url":"https://rain-interactive.github.io/","sameAs":["https://www.instagram.com/rain.interactive/"]},{"@type":"WebSite","@id":"https://rain-interactive.github.io/#website","url":"https://rain-interactive.github.io/","name":"Rain Interactive","publisher":{"@id":"https://rain-interactive.github.io/#organization"},"inLanguage":"es","description":"Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez."},{"@type":"CollectionPage","@id":"https://rain-interactive.github.io/#home","url":"https://rain-interactive.github.io/","name":"Rain Interactive — Juegos independientes y experimentos digitales","isPartOf":{"@id":"https://rain-interactive.github.io/#website"},"about":["videojuegos independientes","arte digital","experimentos web","filosofía interactiva"],"description":"Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez."}]}</script>
+
+
+
+
+
+
+<style id="rain-original-artwork-v12">
+.card-art{display:block!important;min-height:0!important;height:auto!important;align-self:start!important}
+.artwork-original{position:relative;display:block;width:100%;height:auto;background:#050505}
+.artwork-original img{display:block;width:100%;height:auto;max-width:100%;border:0}
+.artwork-original .n{position:absolute;left:10px;top:10px;z-index:4;background:#050505d9;border:1px solid #333;padding:5px 7px;font:700 9px/1 "Courier New",monospace;letter-spacing:.1em}
+.card-art .copy{width:100%!important}
+</style>
+<style id="rain-editorial-v14">
+/* Editorial archive layout: one project per row. No shared card geometry. */
+#play .grid,#read .grid,#experiment .grid,#development .grid{
+ display:flex!important;flex-direction:column!important;gap:28px!important
+}
+#play .card-art,#read .card-art,#experiment .card-art{
+ display:grid!important;grid-template-columns:minmax(280px,46%) 1fr!important;
+ width:100%!important;min-height:0!important;height:auto!important;
+ align-items:start!important;border:1px solid var(--line)!important;background:#090909!important
+}
+.card-art .artwork-original{
+ width:100%!important;height:auto!important;min-height:0!important;
+ display:block!important;position:relative!important;overflow:visible!important
+}
+.card-art .artwork-original img{
+ display:block!important;position:static!important;width:100%!important;height:auto!important;
+ max-width:100%!important;max-height:none!important;object-fit:initial!important;aspect-ratio:auto!important
+}
+.card-art .copy{align-self:stretch!important;min-height:100%!important;padding:clamp(22px,4vw,52px)!important}
+#read .card:not(.card-art),#experiment .card:not(.card-art),#development .card{
+ width:100%!important
+}
+@media(max-width:760px){
+ #play .card-art,#read .card-art,#experiment .card-art{
+  display:block!important
+ }
+ .card-art .copy{min-height:0!important}
+}
+</style>
+<style id="rain-development-v16">
+#development .grid{display:block!important}
+#development .development-entry{display:grid!important;grid-template-columns:minmax(260px,38%) 1fr!important;width:100%;border:1px solid var(--line);background:#090909}
+#development .development-art{position:relative;width:100%;background:#050505}
+#development .development-art img{display:block;width:100%;height:auto;max-width:100%}
+#development .development-art .n{position:absolute;left:10px;top:10px;z-index:3;background:#050505d9;border:1px solid #333;padding:5px 7px;font:700 9px/1 "Courier New",monospace;letter-spacing:.1em}
+#development .development-entry .copy{padding:clamp(22px,4vw,52px)}
+@media(max-width:760px){#development .development-entry{display:block!important}}
+</style>
+<style id="rain-assets-v24">
+#listen .playlist-thumb{height:auto!important;min-height:0!important;aspect-ratio:auto!important;background:#050505!important}
+#listen .playlist-thumb img{display:block!important;position:static!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important}
+</style>
+
+<title>Catálogo completo | Rain Interactive</title>
+<meta name="description" content="Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez.">
+<link rel="canonical" href="https://rain-interactive.github.io/catalogo.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rain Interactive | Juegos independientes y arte digital">
+<meta property="og:description" content="Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez.">
+<meta property="og:url" content="https://rain-interactive.github.io/catalogo.html">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rain Interactive | Juegos independientes y arte digital">
+<meta name="twitter:description" content="Juegos de navegador y arte digital de Rain Interactive: Drácula, El Depósito, Boxer Life, Marea, Seis Caminos y experimentos interactivos de Nacho Martínez.">
+<meta property="og:image" content="https://rain-interactive.github.io/rain-interactive/assets/rain-logo.webp">
+<meta name="twitter:image" content="https://rain-interactive.github.io/rain-interactive/assets/rain-logo.webp">
+<!-- Barrio: relación contextual entre espacios independientes, sin servicios compartidos --><script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Rain Interactive — espacios de A Coruña","mentions":[{"@type":"SportsActivityLocation","name":"Azteca Box","url":"https://aztecabox.com/"},{"@type":"LocalBusiness","name":"O Raposo Púrpura","url":"https://oraposopurpura.com/","description":"Clases de pintura y cerámica para niños y adultos"}]}</script><style id="rain-catalog-2026">
+body.catalog-page header{min-height:0;padding:22px 0 35px}
+body.catalog-page .hero{margin-top:44px}
+body.catalog-page h1{font-size:clamp(56px,9vw,110px);line-height:.9}
+body.catalog-page .hero p{font-size:clamp(16px,2vw,23px);margin-top:14px}
+body.catalog-page section{padding:52px 0;scroll-margin-top:20px}
+body.catalog-page .catalog-intro{padding:28px 0 6px}
+body.catalog-page .catalog-intro p{max-width:850px;color:#b5aea6;line-height:1.55}
+body.catalog-page .catalog-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+body.catalog-page .catalog-pills a{font:700 11px/1.4 monospace;text-decoration:none;border:1px solid #454545;padding:10px 12px}
+body.catalog-page .catalog-pills a:hover{border-color:var(--mint);color:var(--mint)}
+body.catalog-page .catalog-pills small{color:var(--mint)}
+body.catalog-page .catalog-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px auto 0;padding:16px;border:1px solid #303030;background:#0b0b0b}
+body.catalog-page #rain-search{flex:1 1 230px;min-width:0;background:#151515;border:1px solid #444;color:white;padding:12px;font:14px Arial}
+body.catalog-page #rain-search:focus{outline:2px solid var(--mint)}
+body.catalog-page .catalog-tools label,body.catalog-page .catalog-count{font:700 11px/1.4 monospace;color:#c7c2bc}
+body.catalog-page .catalog-more{display:block;margin:22px auto 0;padding:13px 24px;background:#151515;border:1px solid #555;color:white;cursor:pointer;font:700 11px monospace}
+body.catalog-page .catalog-more:hover{border-color:var(--mint)}
+body.catalog-page .catalog-hidden{display:none!important}
+body.catalog-page .catalog-empty{display:none;color:#aaa;padding:20px 0}
+body.catalog-page #listen .rain-feature-art{width:100%;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:30px 8px 15px;background:radial-gradient(ellipse at 50% 40%,#1a5856,#071615 75%);color:#e8fff8}
+/* Featured Experiment thumbnails: visible on narrow and wide screens */
+#listen #rain-media .thumb,#listen #rain-arcade .thumb{min-height:240px;display:flex;align-items:stretch;overflow:hidden}
+#listen .rain-feature-art{width:100%;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:30px 8px 15px;background:radial-gradient(ellipse at 50% 40%,#1a5856,#071615 75%);color:#e8fff8}
+#listen .rain-arcade-art{background:radial-gradient(ellipse at 50% 40%,#3d2a5d,#0b101f 75%)}
+#listen .rain-feature-symbol{width:72px;height:72px;border:4px solid #65f6d2;border-radius:18px;display:grid;place-items:center;font:bold 48px Arial;color:#65f6d2;box-shadow:0 0 28px #42dfb755}
+#listen .rain-arcade-art .rain-feature-symbol{border-color:#ed83d6;color:#ed83d6;box-shadow:0 0 28px #ed83d644}
+#listen .rain-feature-art strong{font:900 clamp(20px,2.5vw,33px)/.95 Arial,sans-serif;letter-spacing:-.055em}
+#listen .rain-feature-art small{font:700 8px/1.5 monospace;letter-spacing:.05em;color:#9eead5}
+@media(max-width:520px){#listen #rain-media,#listen #rain-arcade{grid-template-columns:45% 55%}#listen .rain-feature-art{padding:30px 5px 10px}#listen .rain-feature-art strong{font-size:clamp(18px,5vw,26px)}}
+
+/* Rain Media / Arcade mobile layout repair: keep artwork above copy, never overlap */
+#listen #rain-media,#listen #rain-arcade{display:flex!important;flex-direction:column!important;min-height:0!important;overflow:hidden}
+#listen #rain-media .thumb,#listen #rain-arcade .thumb{width:100%!important;height:260px!important;min-height:0!important;max-height:260px!important;aspect-ratio:auto!important;flex:0 0 260px!important;display:flex!important;align-items:stretch!important}
+#listen #rain-media .rain-feature-art,#listen #rain-arcade .rain-feature-art{width:100%!important;min-height:0!important;height:100%!important;padding:24px 12px 16px!important;gap:10px!important}
+#listen #rain-media .rain-feature-symbol,#listen #rain-arcade .rain-feature-symbol{width:60px;height:60px;font-size:37px;flex-shrink:0}
+#listen #rain-media .rain-feature-art strong,#listen #rain-arcade .rain-feature-art strong{font-size:30px!important;line-height:.92}
+#listen #rain-media .copy,#listen #rain-arcade .copy{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;padding:20px!important;gap:22px!important;overflow-wrap:anywhere}
+#listen #rain-media .copy p,#listen #rain-arcade .copy p{max-width:100%;overflow-wrap:break-word}
+@media(min-width:801px){#listen #rain-media,#listen #rain-arcade{flex-direction:row!important}#listen #rain-media .thumb,#listen #rain-arcade .thumb{width:220px!important;height:auto!important;max-height:none!important;flex:0 0 220px!important}#listen #rain-media .copy,#listen #rain-arcade .copy{flex:1!important}}
+
+@media(max-width:520px){body.catalog-page header{padding-bottom:24px}body.catalog-page .hero{margin-top:30px}body.catalog-page section{padding:36px 0}body.catalog-page .catalog-tools{padding:12px}}
+</style></head>
+<body class="catalog-page">
+<header>
+  <div class="wrap top">
+    <div class="brand">RAIN INTERACTIVE</div>
+    <nav class="nav" aria-label="Navegación del catálogo"><a href="/">← Inicio</a><a href="#play">Arcade</a><a href="#experiment">Experiments</a><a href="#listen">Media</a><a href="#read">Archive</a><a href="#development">Development</a><a href="#coruna">A Coruña</a></nav>
+  </div>
+  <div class="wrap hero"><div class="kicker">Rain Interactive / archivo abierto</div><h1>CATÁLOGO</h1><p>Juegos, sistemas, imágenes, sonido e ideas en evolución.</p></div></header>
+
+<main>
+<div class="wrap catalog-intro"><p>Todos los trabajos de Rain Interactive, incluidos experimentos, proyectos inacabados y colaboraciones. Ninguna entrada se ha eliminado: cada proyecto conserva su destino original.</p>
+<nav class="catalog-pills" aria-label="Filtrar por colección"><a href="#play">Arcade <small>5</small></a><a href="#experiment">Experiments <small>2</small></a><a href="#listen">Media <small>3</small></a><a href="#read">Archive <small>3</small></a><a href="#development">Development <small>2</small></a><a href="#coruna">A Coruña <small>2</small></a></nav></div>
+<section id="play"><div class="wrap"><div class="section-head"><h2>Arcade</h2><span>Videojuegos / mundos jugables</span></div><div class="grid"><a class="card card-art card-marea" href="/marea/"><div class="artwork-original"><span class="n">R-002</span><img src="/rain-interactive/assets/marea-caratula.webp?v=v12" alt="Marea"></div><div class="copy"><div><div class="type">Game · Surf · Versión 3.32</div><h3>Marea</h3><p>Surf, olas, fauna y movimiento. Versión 3.32 para Android.</p></div><span class="cta">Enter ↗</span></div></a>
+<a class="card card-art card-boxer" href="/boxer-life/"><div class="artwork-original"><span class="n">R-001</span><img src="/assets/boxer-life-cover.webp?v=v12" alt="Boxer Life"></div><div class="copy"><div><div class="type">Game · Boxing</div><h3>Boxer Life</h3><p>Tres decisiones al mes. Una carrera dentro y fuera del ring.</p></div><span class="cta">Play ↗</span></div></a>
+<a class="card card-art card-deposit" href="https://el-deposito.mmmartineznacho.chatgpt.site/"><div class="artwork-original"><span class="n">R-013</span><img src="/assets/el-deposito-cover-20261003.webp?v=20261003-11" width="1536" height="1024" alt="El Depósito — creado por nachommmartinez"></div><div class="copy"><div><div class="type">Game · Gratis · Terror / Rave</div><h3>El Depósito</h3><p>150 engendros en una ciudad apocalíptica. Encuentra a tus colegas, llena la rave y explora la Engendroteca. Juega gratis en móvil.</p></div><span class="cta">Jugar gratis ↗</span></div></a>
+<a class="card card-art card-dracula" href="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/"><div class="artwork-original"><span class="n">R-015</span><img src="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/dracula-rain-v32.svg?v=32" width="1024" height="1280" alt="Drácula — Sangre y eternidad. Creado por nachommmartinez" loading="lazy"></div><div class="copy"><div><div class="type">Game · Gratis · Idle / Terror / Romance</div><h3>Drácula</h3><p>Sangre y eternidad. Mina y Drácula reinan juntos en un castillo que crece solo. Terror gótico, romance y un vals de 8 bits. Un castillo vivo en formato vertical, con defensa vampírica y acceso libre.</p></div><span class="cta">Entrar al castillo ↗</span></div></a>
+<a class="card card-art card-commandos" href="/sdj-commandos/"><div class="artwork-original"><span class="n">R-016</span><img src="/sdj-commandos/cover-comic-v27.webp?v=20261005-public45" width="768" height="1152" alt="Commandos: Most Wanted — portada de cómic con el jinete y su camello" loading="lazy"></div><div class="copy"><div><div class="type">Juego · Supervivencia arcade</div><h3>Commandos: Most Wanted</h3><p>Cinco zonas de combate con estética de cómic, armas progresivas y jefes con patrones propios. Muévete, gira para defender tu espalda y busca los botiquines.</p></div><span class="cta">Jugar ↗</span></div></a></div></div></section>
+<section id="experiment"><div class="wrap"><div class="section-head"><h2>Experiments</h2><span>Arte digital / web / sistemas</span></div><div class="grid"><a class="card" href="/infinite-noise/"><div class="thumb noise-thumb"><span class="n">R-009</span></div><div class="copy"><div><div class="type">Web experiment</div><h3>Infinite Noise</h3><p>Texto, ruido e interferencias generados mientras haces scroll. No termina.</p></div><span class="cta">Enter ↗</span></div></a>
+<a class="card" href="https://luxroth.industriestm.workers.dev/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="display:grid;place-items:center;background:#f5a6cb;color:#201019"><span class="n">R-017</span><div style="text-align:center;font-weight:900;font-size:clamp(24px,4vw,42px);line-height:.9;letter-spacing:-.06em">LUXROTH<br>INDUSTRIES™<div style="font-size:30px;margin-top:15px">💗 🐆 👻</div></div></div><div class="copy"><div><div class="type">Web experiment · Arte digital / Poesía</div><h3>Luxroth Industries</h3><p>El universo de Lu Roth: poesía, imágenes, personajes y experimentación digital.</p></div><span class="cta">Visitar web ↗</span></div></a></div></div></section>
+<section id="listen"><div class="wrap"><div class="section-head"><h2>Media</h2><span>Audiovisual / sonido / contemplación</span></div><div class="grid"><a class="card card-zen" href="/rain-black-spring/?v=25" aria-label="Abrir Fuente Zen Rain Black Spring, experimento abierto"><div class="thumb"><span class="n">R-018 · EXPERIMENTAL</span><img src="/assets/rain-black-spring-v25-poster.jpg?v=20261022" loading="lazy" alt="Fuente zen de roca volcánica con agua limpia en un bosque lluvioso"></div><div class="copy"><div><div class="type">Arte audiovisual · Fuente Zen · Abierto / V25</div><h3>Rain — Black Spring</h3><p>La piedra permanece. El agua fluye. Experimento zen con cascadas animadas, sonido original y reproducción continua.</p></div><span class="cta">Entrar · Reproducción en bucle ↗</span></div></a>
+<a class="card" id="rain-media" href="https://desktop-0qpstrv.tailae0643.ts.net/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="position:relative;overflow:hidden;background:#060c10"><span class="n">R-014</span><div class="rain-feature-art rain-media-art" aria-label="Portada RAIN MEDIA"><div class="rain-feature-symbol">▶</div><strong>RAIN<br>MEDIA</strong><small>CINE · SERIES · MÚSICA</small></div></div><div class="copy"><div><div class="type">Jellyfin · Biblioteca audiovisual · Acceso privado</div><h3>Rain Media</h3><p>Biblioteca audiovisual: cine, series, música y experimentación. Acceso mediante Jellyfin; requiere permisos de conexión y cuenta autorizada.</p></div><span class="cta">Acceder a Jellyfin ↗</span></div></a>
+<a class="card" href="https://open.spotify.com/playlist/4l7Q5zlpxrBLu7yFwyJeEY" target="_blank" rel="noopener"><div class="thumb playlist-thumb"><span class="n">R-011</span><img src="/assets/rain-playlist-cover.webp?v=v25" alt="Rain Playlist"></div><div class="copy"><div><div class="type">Spotify · Playlist</div><h3>Rain Playlist</h3><p>La banda sonora abierta del laboratorio y sus mutaciones.</p></div><span class="cta">Listen ↗</span></div></a></div></div></section>
+<section id="read"><div class="wrap"><div class="section-head"><h2>Archive</h2><span>Narrativas / historia / pensamiento</span></div><div class="grid"><a class="card card-art card-thelema" href="/thelema-preview/"><div class="artwork-original"><span class="n">R-005</span><img src="/assets/thelema-cover.jpg?v=v12" alt="Thelema"></div><div class="copy"><div><div class="type">Historical archive</div><h3>THELEMA</h3><p>Archivo digital sobre Aleister Crowley, su obra, pensamiento y legado cultural.</p></div><span class="cta">Read ↗</span></div></a>
+<a class="card" href="/seis-caminos/"><div class="thumb paper-thumb"><span class="n">R-010</span><div class="paper-mark"><strong>SEIS<br>CAMINOS</strong><small>哲学 · 戦略 · 規律</small></div></div><div class="copy"><div><div class="type">Interactive philosophy</div><h3>Seis Caminos</h3><p>Seis tradiciones antiguas convertidas en un manual contemporáneo de filosofía, estrategia y disciplina.</p></div><span class="cta">Explore ↗</span></div></a>
+<a class="card card-art card-heraldo" href="https://heraldodelfindelostiempos.github.io/"><div class="artwork-original"><span class="n">R-006</span><img src="https://heraldodelfindelostiempos.github.io/assets/meditacion-espejos.jpg?v=v12" alt="Heraldo del fin de los tiempos"></div><div class="copy"><div><div class="type">Narrative archive · Interactive web</div><h3>Heraldo</h3><p>Archivo narrativo, personajes, tarot, sistemas y ficción digital en expansión.</p></div><span class="cta">Explore ↗</span></div></a></div></div></section>
+<section id="development"><div class="wrap"><div class="section-head"><h2>Development</h2><span>Prototipos / acceso privado</span></div><p class="archive-note">Proyectos en desarrollo sin acceso público. Siguen registrados en el archivo.</p><div class="grid"><article class="development-entry private"><div class="development-art"><span class="n">R-003</span><img src="/assets/descenso-cover.webp?v=v25" alt="Descenso"></div><div class="copy"><div><div class="type">In development · Private access</div><h3>Descenso</h3><p>Biología marina, exploración submarina y catálogo vivo de especies.</p></div><span class="cta">Private development</span></div></article>
+<article class="development-entry private"><div class="development-art"><span class="n">R-004</span><img src="/rain-interactive/assets/wolf-lobo.webp?v=wolf-lobo-v18" alt="Wolf Story"></div><div class="copy"><div><div class="type">In development · Private access</div><h3>Wolf Story</h3><p>Un lobo negro atraviesa un bosque mágico dibujado a mano.</p></div><span class="cta">Private development</span></div></article></div></div></section>
+<section id="coruna" class="coruna-section"><div class="wrap"><div class="section-head"><h2>A Coruña</h2><span>Espacios culturales / entorno</span></div><div class="grid coruna-grid"><a class="card" href="https://oraposopurpura.com/" target="_blank" rel="noopener noreferrer"><div class="thumb" style="display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#6d416c,#29192f 65%,#0c090f);color:#f1d9f2"><span class="n">A CORUÑA · 02</span><div style="text-align:center;font-family:Georgia,serif;font-size:clamp(25px,3vw,43px);line-height:1">O RAPOSO<br>PÚRPURA</div></div><div class="copy"><div><div class="type">Arte · Taller · Pintura / Cerámica</div><h3>O Raposo Púrpura</h3><p>Un espacio dedicado a la creación artística, la pintura y la cerámica.</p></div><span class="cta">Visitar el taller ↗</span></div></a>
+<a class="card" href="/a-coruna/azteca-box/index.html?v=20261018"><div class="thumb" style="display:grid;place-items:center;background:linear-gradient(140deg,#080808,#3a3530 52%,#111);color:#f1eee6;position:relative"><span class="n">A CORUÑA · 03</span><div style="text-align:center;font-family:Georgia,serif;font-weight:900;font-size:clamp(31px,4vw,53px);line-height:1.05;letter-spacing:-.04em;text-shadow:2px 3px #000">AZTECA<br>BOX</div><span style="position:absolute;bottom:12px;font-size:10px;letter-spacing:.18em">KATANGA · EL NOBLE ARTE</span></div><div class="copy"><div><div class="type">Boxeo · Escuela · Katanga / Os Mariñeiros</div><h3>Azteca Box</h3><p>El noble arte: una escuela de boxeo con historia, fotografías y espíritu de gimnasio clásico.</p></div><span class="cta">Conocer la escuela ↗</span></div></a></div></div></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footerline"><span>RAIN INTERACTIVE · 2026</span><span>Laboratorio digital independiente</span></div>
+    <div class="support">
+      <a href="https://www.paypal.com/ncp/payment/UMGRDCW4PXS26" target="_blank" rel="noopener">Support · PayPal</a>
+      <a href="https://patreon.com/RainInteractive" target="_blank" rel="noopener">Support · Patreon</a>
+      <a href="https://www.instagram.com/rain.interactive/" target="_blank" rel="noopener">@rain.interactive</a>
+    </div>
+  </div>
+</footer>
+<style id="rain-lang-style">#rain-lang{position:fixed;top:14px;right:14px;z-index:99999;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);padding:5px 8px;font:11px Arial,sans-serif;letter-spacing:.08em}#rain-lang button{appearance:none;border:0;background:transparent;color:#aaa;padding:5px;cursor:pointer}#rain-lang button.active{color:#fff;text-decoration:underline;text-underline-offset:3px}#google_translate_element{position:fixed;left:-9999px;top:-9999px}.goog-te-banner-frame.skiptranslate{display:none!important}body{top:0!important}</style><div id="rain-lang"><button data-lang="es">ES</button><span>/</span><button data-lang="en">EN</button></div><div id="google_translate_element" aria-hidden="true"></div><script id="rain-lang-js">(function(){const K="rain-site-lang";function mark(l){document.querySelectorAll("#rain-lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));document.documentElement.lang=l}function apply(l){localStorage.setItem(K,l);mark(l);const go=()=>{const s=document.querySelector(".goog-te-combo");if(!s)return false;s.value=l==="es"?"":l;s.dispatchEvent(new Event("change",{bubbles:true}));return true};if(!go()){let n=0,t=setInterval(()=>{if(go()||++n>40)clearInterval(t)},250)}}window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:"es",includedLanguages:"es,en",autoDisplay:false},"google_translate_element");setTimeout(()=>apply(localStorage.getItem(K)||"es"),300)};document.querySelectorAll("#rain-lang button").forEach(b=>b.onclick=()=>apply(b.dataset.lang));mark(localStorage.getItem(K)||"es")})();</script><script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script><script>
+/* Keep broken remote artwork from showing as an empty image icon. */
+document.querySelectorAll('img').forEach(function(img){
+  img.addEventListener('error',function(){
+    if(img.dataset.fallbackApplied) return;
+    img.dataset.fallbackApplied='1';
+    img.style.display='none';
+    var parent=img.parentElement;
+    if(parent){
+      parent.style.position='relative';
+      var label=document.createElement('span');
+      label.textContent=img.getAttribute('alt') || 'Rain Interactive';
+      label.setAttribute('aria-label',label.textContent);
+      label.style.cssText='display:grid;place-items:center;width:100%;min-height:140px;padding:20px;text-align:center;font-weight:700;letter-spacing:.08em;background:linear-gradient(135deg,#101a1c,#182d30);color:#d6eded;box-sizing:border-box';
+      parent.appendChild(label);
+    }
+  });
+  if(img.complete && img.naturalWidth===0) img.dispatchEvent(new Event('error'));
+});
+</script>
+
+<script id="rain-catalog-filter-2026">
+(function(){
+function setup(){
+var main=document.querySelector('main'),intro=main&&main.querySelector('.catalog-intro');if(!main||!intro)return;
+var bar=document.createElement('div');bar.className='wrap catalog-tools';bar.innerHTML='<label for="rain-search">BUSCAR PROYECTO</label><input id="rain-search" type="search" placeholder="Buscar por título o descripción…" aria-label="Buscar en todos los proyectos" autocomplete="off"><span class="catalog-count" aria-live="polite"></span>';
+intro.insertAdjacentElement('afterend',bar);
+var input=bar.querySelector('input'),count=bar.querySelector('.catalog-count');
+var states=Array.from(main.querySelectorAll('section')).map(function(sec){
+var cards=Array.from(sec.querySelectorAll('.grid > .card, .grid > .development-entry'));
+var btn=document.createElement('button');btn.type='button';btn.className='catalog-more';btn.setAttribute('aria-expanded','false');sec.querySelector('.grid').insertAdjacentElement('afterend',btn);
+var state={sec:sec,cards:cards,btn:btn,expanded:false};
+btn.addEventListener('click',function(){state.expanded=!state.expanded;render()});return state;
+});
+function render(){var query=input.value.trim().toLocaleLowerCase(),total=0;
+states.forEach(function(st){var hits=0;st.cards.forEach(function(card,idx){var found=!query||card.textContent.toLocaleLowerCase().includes(query);if(found)hits++;card.classList.toggle('catalog-hidden',!found||(!query&&!st.expanded&&idx>=4))});
+st.sec.hidden=!!query&&hits===0;st.btn.hidden=!!query||st.cards.length<=4;st.btn.textContent=st.expanded?'Ver menos':'Ver todos ('+st.cards.length+')';st.btn.setAttribute('aria-expanded',String(st.expanded));total+=hits;
+});count.textContent=query?total+' resultado'+(total===1?'':'s'):'17 entradas · 6 colecciones';
+}
+input.addEventListener('input',render);render();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
+})();
+</script></body>
+</html>
