@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090d14">
+<meta name="description" content="Las cosas que deja la lluvia — una pieza de arte digital contemplativo de Lu Roth.">
+<title>Las cosas que deja la lluvia · Lu Roth</title>
+<style>
+:root{color-scheme:dark;--ivory:#ede6db;--quiet:#bbb8b9;--accent:#d9ad8b}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b11}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ivory);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+#scene{position:fixed;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.veil{position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(3,6,10,.20),transparent 26%,transparent 71%,rgba(3,6,10,.19)),linear-gradient(0deg,rgba(4,6,10,.62),transparent 35%,transparent 75%,rgba(4,6,10,.39));z-index:2}
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.13;z-index:3;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.interface{position:fixed;inset:0;z-index:5;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(21px,4.1vw,55px) clamp(22px,5.7vw,90px) max(24px,env(safe-area-inset-bottom) + 29px)}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.brand{font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:rgba(235,221,209,.74);line-height:1.8;text-shadow:0 1px 7px #111}
+.brand b{font-weight:500;letter-spacing:.42em;color:#f3d1bf}
+.toolbar{display:flex;gap:8px;pointer-events:auto}
+.small-button{border:1px solid rgba(242,223,209,.27);border-radius:100px;background:rgba(12,17,26,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:rgba(244,232,220,.87);font:400 10px Arial,sans-serif;letter-spacing:.12em;cursor:pointer;padding:11px 16px;min-height:38px;transition:background .2s,border-color .2s}
+.small-button:hover,.small-button:focus-visible{background:rgba(57,57,62,.55);border-color:#e4d4c8;outline:none}
+.mid{margin:auto 0 4vh;max-width:650px;pointer-events:none;transition:opacity 1.2s}
+.eyebrow{text-transform:uppercase;letter-spacing:.35em;font-size:10px;color:#e5bda2;margin-bottom:17px;text-shadow:0 2px 20px #000}
+h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.045em;font-size:clamp(43px,7.2vw,107px);line-height:.98;margin:0;text-shadow:0 6px 55px rgba(0,0,0,.72),0 2px 8px #05080a;max-width:690px}
+h1 em{font-weight:400;font-style:italic;color:#e0bca8}
+.intro{margin-top:27px;line-height:1.85;color:rgba(235,221,218,.82);font-size:clamp(11px,1.15vw,13px);letter-spacing:.09em;text-shadow:0 2px 14px #000}
+.enter{pointer-events:auto;display:inline-flex;align-items:center;gap:16px;margin-top:24px;border:0;background:transparent;color:#f7dccd;cursor:pointer;letter-spacing:.22em;font-size:10px;padding:12px 6px 12px 0;text-transform:uppercase}
+.enter .arrow{display:grid;place-items:center;height:35px;width:35px;border:1px solid #d2a58c;border-radius:50%;font-size:17px;transition:transform .2s}
+.enter:hover .arrow{transform:translateX(5px)}
+.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:25px}
+.story{max-width:min(590px,72vw);min-height:120px;opacity:0;transform:translateY(14px);transition:opacity 2.3s,transform 2.3s;text-shadow:0 2px 20px #000}
+.story.visible{opacity:1;transform:translateY(0)}
+.chapter{letter-spacing:.32em;font-size:9px;color:#deb49d;text-transform:uppercase;margin-bottom:17px}
+.story-line{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400;font-size:clamp(21px,3.3vw,40px);line-height:1.24;letter-spacing:-.02em;max-width:580px}
+.story-sub{margin-top:14px;font-size:10px;letter-spacing:.13em;color:rgba(232,218,206,.65);line-height:1.8}
+.progress-area{display:flex;flex-direction:column;align-items:flex-end;gap:18px;min-width:135px;pointer-events:auto}
+.number{font:13px Georgia,serif;letter-spacing:.22em;color:#f0c9b5}.number span{color:#999696}
+.dots{display:flex;gap:8px;align-items:center}
+.dot{padding:0;cursor:pointer;width:25px;height:19px;background:transparent;border:0;position:relative}
+.dot:before{content:"";position:absolute;left:0;right:0;top:8px;height:1px;background:rgba(235,221,214,.42);transition:background .6s,height .6s}
+.dot.active:before{height:2px;background:#ead2bb}.dot:hover:before{background:#fff}
+.hint{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(230,224,218,.66);white-space:nowrap;text-align:right}
+.hidden{display:none!important}
+#message{position:fixed;z-index:6;pointer-events:none;color:#f4e4d9;font:italic 23px Georgia,serif;text-shadow:0 2px 25px #000;opacity:0;transform:translate(-50%,-50%);transition:opacity 1.2s;max-width:280px;text-align:center}
+#about{position:fixed;z-index:9;right:clamp(22px,5.7vw,90px);top:92px;width:min(360px,calc(100vw - 44px));background:rgba(11,15,23,.86);border:1px solid rgba(216,196,178,.25);border-radius:3px;padding:23px 25px 24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);font-size:13px;line-height:1.85;color:#ded3cd;box-shadow:0 12px 48px #07080d90}
+#about strong{font-weight:400;letter-spacing:.2em;font-size:11px;color:#e7b79e;text-transform:uppercase}
+#about p{margin:13px 0 0}#about button{float:right;background:transparent;border:0;color:#e8d5c8;font-size:20px;cursor:pointer}
+@media(max-width:650px){.interface{padding:27px 24px max(25px,env(safe-area-inset-bottom) + 18px)}.brand{font-size:8px;letter-spacing:.21em}.brand b{letter-spacing:.26em}.small-button{padding:10px 11px;font-size:9px}.mid{margin-bottom:8vh}h1{font-size:clamp(44px,13vw,76px)}.intro{max-width:270px}.story{max-width:calc(100vw - 46px);min-height:190px}.story-line{font-size:clamp(24px,7vw,36px)}.bottom{align-items:end;gap:9px}.progress-area{align-items:flex-end;min-width:90px}.hint{display:none}.dot{width:13px}.dots{gap:4px}.story-sub{max-width:225px;font-size:9px}.number{font-size:11px}#about{right:24px;top:75px}}
+@media(max-height:540px){.mid{margin:0 0 6px}h1{font-size:clamp(38px,6vw,70px)}.intro{margin-top:10px}.enter{margin-top:6px}.story{min-height:96px}.story-line{font-size:24px}.chapter{margin-bottom:7px}.story-sub{margin-top:7px}.interface{padding-top:16px;padding-bottom:16px}}
+@media(prefers-reduced-motion:reduce){.story,.mid,.dot:before{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="Ciudad nocturna contemplada a través de una ventana cubierta de lluvia. Puedes tocar el cristal para revelar palabras."></canvas>
+<div class="veil"></div><div class="noise"></div>
+<div id="ui" class="interface">
+ <div class="top"><div class="brand"><b>LU ROTH</b> &nbsp; / &nbsp; PIEZA Nº 001<br><span>ESTUDIOS SOBRE LO QUE PERMANECE</span></div>
+  <div class="toolbar"><button class="small-button" id="audio" title="Activar o desactivar el sonido ambiental" aria-pressed="false">♫ &nbsp; SONIDO</button><button class="small-button" id="info" title="Acerca de la obra">ⓘ</button></div></div>
+ <section class="mid" id="intro"><div class="eyebrow">Una obra para mirar sin prisa</div><h1>Las cosas<br>que deja <em>la lluvia.</em></h1><div class="intro">Una ciudad. Una ventana. Una historia que apenas existe.<br>La lluvia no se detiene cuando nadie la mira.</div><button class="enter" id="begin"><span class="arrow">↗</span> ACERCARSE A LA VENTANA</button></section>
+ <div class="bottom"><div class="story" id="story"><div class="chapter" id="chapter">01 / 06 &nbsp; · &nbsp; UNA LUZ ENCENDIDA</div><div class="story-line" id="line">Alguien dejó una luz encendida para nadie.</div><div class="story-sub" id="sub">Toca el cristal. A veces, algo permanece debajo del agua.</div></div><div class="progress-area" id="progress" style="opacity:0;transition:opacity 2s"><div class="number" id="number">01 <span>/ 06</span></div><div class="dots" id="dots" aria-label="Fragmentos de la historia"></div><div class="hint">TOCA EL CRISTAL PARA RECORDAR</div></div></div>
+</div>
+<div id="message" role="status" aria-live="polite"></div>
+<div id="about" hidden><button id="closeAbout" aria-label="Cerrar">×</button><strong>Las cosas que deja la lluvia</strong><p>Una pieza audiovisual generativa de <em>Lu Roth</em>. Seis fragmentos de una historia nunca contada; una ciudad que respira detrás de un cristal.</p><p>No hay puntuaciones ni un final que alcanzar. La lluvia, los reflejos y los pequeños encuentros cambian a cada instante. Toca o desliza el dedo sobre la ventana para descubrir lo que queda.</p><p>El sonido es opcional y se genera dentro de tu navegador. Sin descargas adicionales ni conexión a Internet.</p></div>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('scene'),g=canvas.getContext('2d',{alpha:false});
+let W=0,H=0,DPR=1,scale=1,now=0,last=0,elapsed=0,started=false,paused=false,current=0,enteredAt=0,chapterElapsed=0,autoChapter=true;
+const CHAPTER_SEC=43, reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const chapters=[
+ {tag:'UNA LUZ ENCENDIDA',text:'Alguien dejó una luz encendida para nadie.',sub:'Toca el cristal. A veces, algo permanece debajo del agua.',time:'02:17'},
+ {tag:'LAS CALLES VACÍAS',text:'La ciudad aprendió a hablar en voz baja.',sub:'Los semáforos siguieron cambiando aunque no hubiese nadie.',time:'02:49'},
+ {tag:'AL OTRO LADO',text:'En otra ventana alguien también miraba llover.',sub:'Nunca llegamos a saber su nombre.',time:'03:22'},
+ {tag:'INVENTARIO DE AUSENCIAS',text:'Lo que perdemos no siempre se marcha.',sub:'Hay cosas que se quedan a vivir en los cristales.',time:'04:06'},
+ {tag:'ANTES DEL AMANECER',text:'La lluvia borró las huellas, pero no el camino.',sub:'Una primera luz empieza a cambiar las fachadas.',time:'05:13'},
+ {tag:'LO QUE PERMANECE',text:'Por la mañana, nadie sabrá que estuvimos aquí.',sub:'Y, sin embargo, la ciudad será un poco distinta.',time:'05:41'}
+];
+const murmurs=['Todavía estás aquí.','Había una carta sin abrir.','Una sombra parecía conocida.','Mañana también lloverá.','No todas las despedidas hacen ruido.','Alguien recuerda esta calle.','Esta luz siempre estuvo encendida.','Al otro lado hay otra historia.'];
+let murmurIndex=0, disappear=null, smears=[], drops=[], distantRain=[], bldgs=[], nearBldgs=[], sparks=[], tramX=-1, tramTime=0, storyVisible=false, tapCount=0;
+const rand=(a=1,b)=>b===undefined?Math.random()*a:a+Math.random()*(b-a);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const rgba=(r,g,b,a)=>`rgba(${r|0},${g|0},${b|0},${a})`;
+const fract=x=>x-Math.floor(x);
+const srnd=x=>fract(Math.sin(x*127.1+78.233)*43758.5453123);
+const bell=(t,at,width)=>Math.exp(-Math.pow((t-at)/width,2));
+function resize(){let dw=innerWidth,dh=innerHeight;DPR=Math.min(devicePixelRatio||1,dh<700?1.45:1.8);W=dw;H=dh;canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);g.setTransform(DPR,0,0,DPR,0,0);scale=Math.min(W/1200,H/770);setupCity();setupDrops();}
+function setupCity(){bldgs=[];nearBldgs=[];let x=-60,i=0, horizon=H*.67;
+ while(x<W+130){let bw=rand(54,145)*(W<550?.65:1),bh=rand(.21,.47)*H;let windows=[];for(let wx=13;wx<bw-10;wx+=12.8)for(let wy=13;wy<bh-15;wy+=17.2){let h=srnd((i+1)*17+wx*7+wy*11);windows.push({x:wx,y:wy,lit:h>.66,level:h,phase:h*8});}bldgs.push({x,w:bw,h:bh,windows,roof:Math.random(),color:rand(.4,.8)});x+=bw+rand(0,9);i++;}
+ x=-70;i=0;while(x<W+170){let bw=rand(110,225)*(W<550?.65:1),bh=rand(.23,.4)*H;let wins=[];for(let wx=15;wx<bw-14;wx+=20)for(let wy=21;wy<bh-18;wy+=25){let n=srnd(i*150+wx*11+wy*13);wins.push({x:wx,y:wy,lit:n>.79,level:n,phase:n*13});}nearBldgs.push({x,w:bw,h:bh,windows:wins,roof:rand()});x+=bw+rand(15,55);i++;}
+ distantRain=Array.from({length:Math.floor(Math.min(450,W*H/1400))},()=>({x:rand(W),y:rand(H),speed:rand(90,260),length:rand(9,29),alpha:rand(.015,.105)}));
+ sparks=Array.from({length:32},()=>({x:rand(W),y:rand(H*.5,H*.93),phase:rand(7),a:rand(.02,.12)}));}
+function setupDrops(){drops=Array.from({length:Math.floor(clamp(W*H/1700,120,570))},()=>makeDrop(true));}
+function makeDrop(any){let x=rand(W),y=any?rand(-20,H+40):rand(-100,-5),r=rand(.55,3.0);return{x,y,r,vel:rand(15,57)/(r<1.25?2.7:1),drift:rand(-.18,.18),trail:rand(8,120)*r*.6,phase:rand(6.28),hang:rand(.2,2),opacity:rand(.36,.96)};}
+function grad(ctx,x0,y0,x1,y1,stops){let z=ctx.createLinearGradient(x0,y0,x1,y1);for(const [p,c] of stops)z.addColorStop(p,c);return z;}
+function glow(x,y,r,rgb,op=.5){let f=g.createRadialGradient(x,y,0,x,y,r);f.addColorStop(0,`rgba(${rgb},${op})`);f.addColorStop(.24,`rgba(${rgb},${op*.37})`);f.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=f;g.fillRect(x-r,y-r,r*2,r*2);}
+function windowDraw(b,near,vis){let top=H*.71-b.h, left=b.x+(near?Math.sin(elapsed*.004)*2:Math.sin(elapsed*.006)*4);if(left>W||left+b.w<0)return;
+ let night=1-vis;g.fillStyle=near?rgba(14+vis*29,20+vis*27,31+vis*28,.99):rgba(23+vis*36,33+vis*36,52+vis*36,.9);g.fillRect(left,top,b.w,b.h+H*.4);
+ g.fillStyle=rgba(6+vis*29,10+vis*29,17+vis*37,near?1:.95);
+ if(b.roof>.5){g.fillRect(left-2,top-3,b.w+4,4)}else if(b.roof>.2){g.fillRect(left+b.w*.68,top-10,b.w*.16,11)}
+ for(const w of b.windows){let lit=w.lit&&(Math.sin(elapsed*.006+w.phase)>-.7);let fade=lit?clamp(w.level*1.1):.13;
+ g.fillStyle=lit?rgba(218+vis*16,156+vis*31,103+vis*69,fade*(near?.57:.30)):rgba(95+vis*65,115+vis*70,132+vis*67,near?.18:.11);g.fillRect(left+w.x,top+w.y,near?8:5,near?11:9);
+ if(lit&&near){g.fillStyle=rgba(255,189,118,.1);g.fillRect(left+w.x-2,top+w.y-2,12,15)}
+ }
+ if(near){g.fillStyle=rgba(8+vis*18,11+vis*23,20+vis*29,.72);g.fillRect(left,top+b.h-5,b.w,9);}
+}
+function drawSky(vis){const t=elapsed*.001;let base1=[7+vis*34,13+vis*27,26+vis*28],base2=[13+vis*64,23+vis*46,45+vis*41];g.fillStyle=grad(g,0,0,0,H,[
+ [0,rgba(...base1,1)],[.5,rgba(...base2,1)],[.76,rgba(33+vis*78,44+vis*62,66+vis*46,1)],[1,rgba(8+vis*30,16+vis*29,31+vis*38,1)]]);g.fillRect(0,0,W,H);
+ // dusk cloud banks, slow atmospheric veils
+ for(let i=0;i<6;i++){let y=H*(.08+i*.095),x=Math.sin(t*.12+i)*W*.15;let cg=g.createLinearGradient(0,y-100,0,y+120);cg.addColorStop(0,'rgba(30,39,70,0)');cg.addColorStop(.5,rgba(51+vis*56,58+vis*44,85+vis*28,.07));cg.addColorStop(1,'rgba(51,58,85,0)');g.fillStyle=cg;g.fillRect(x-130,y-100,W+260,220);}
+ let moonX=W*.75,moonY=H*.15;glow(moonX,moonY,H*.17,'182,193,217',.12*(1-vis));g.fillStyle=rgba(224,227,219,.2*(1-vis));g.beginPath();g.arc(moonX,moonY,Math.max(3,H*.015),0,Math.PI*2);g.fill();g.fillStyle=rgba(7+vis*34,13+vis*27,26+vis*28,1);g.beginPath();g.arc(moonX+H*.009,moonY-H*.006,Math.max(3,H*.014),0,Math.PI*2);g.fill();}
+function drawWorld(vis){drawSky(vis);
+ // distant city and windows
+ for(const b of bldgs)windowDraw(b,false,vis);
+ let haze=g.createLinearGradient(0,H*.54,0,H*.84);haze.addColorStop(0,'rgba(78,102,128,0)');haze.addColorStop(.63,rgba(82+vis*51,109+vis*36,125+vis*20,.14+vis*.05));haze.addColorStop(1,'rgba(26,38,52,0)');g.fillStyle=haze;g.fillRect(0,H*.53,W,H*.31);
+ for(const b of nearBldgs)windowDraw(b,true,vis);
+ // farther street and wet surface
+ g.fillStyle=rgba(12+vis*23,19+vis*29,30+vis*27,1);g.fillRect(0,H*.80,W,H*.20);
+ g.fillStyle=grad(g,0,H*.79,0,H,[ [0,rgba(39+vis*21,43+vis*36,50+vis*37,.30)],[.24,rgba(42+vis*34,45+vis*35,52+vis*38,.44)],[1,rgba(4+vis*15,9+vis*14,19+vis*18,.97)] ]);g.fillRect(0,H*.79,W,H*.21);
+ // street rails perspective
+ g.strokeStyle=rgba(154+vis*22,145+vis*22,138+vis*22,.085);g.lineWidth=1.5;for(let k=0;k<5;k++){let y=H*(.85+k*.046);g.beginPath();g.moveTo(0,y);g.lineTo(W,y+4);g.stroke()}
+ // street lamps
+ let lights=[W*.18,W*.49,W*.81];for(let i=0;i<lights.length;i++){const lx=lights[i],ly=H*(.73+Math.sin(i*2)*.03),col=i===1?'255,162,99':'249,198,136';glow(lx,ly,H*.18,col,.36);glow(lx,ly,H*.051,col,.47);g.fillStyle='rgba(255,217,165,.6)';g.beginPath();g.arc(lx,ly,1.9,0,Math.PI*2);g.fill();let refl=g.createLinearGradient(lx,ly,lx,ly+H*.26);refl.addColorStop(0,'rgba(227,169,111,.30)');refl.addColorStop(1,'rgba(227,169,111,0)');g.fillStyle=refl;g.beginPath();g.moveTo(lx-6,ly+9);g.lineTo(lx+7,ly+9);g.lineTo(lx+H*.043,Math.min(H,ly+H*.22));g.lineTo(lx-H*.03,Math.min(H,ly+H*.22));g.fill();}
+ // a distant tram occasionally passes, no importance attached
+ let tx=((elapsed*.014)%(W*2.8))-W*.3;
+ if(tx>0&&tx<W+100){let ty=H*.792;g.fillStyle='rgba(9,14,21,.83)';g.fillRect(tx-70,ty-21,120,21);for(let j=0;j<5;j++){g.fillStyle='rgba(240,172,110,.56)';g.fillRect(tx-60+j*22,ty-17,13,8)}glow(tx+48,ty-6,30,'236,186,119',.11);}
+ // distant diagonal rain behind the glass
+ g.lineWidth=.65;for(let i=0;i<distantRain.length;i++){const p=distantRain[i],y=(p.y+elapsed*p.speed*.12)%H,x=(p.x-elapsed*p.speed*.03%W+W)%W;g.strokeStyle=`rgba(200,214,233,${p.alpha*(.7+vis*.13)})`;g.beginPath();g.moveTo(x,y);g.lineTo(x-5,y+p.length);g.stroke()}
+ // window fog/vignette exterior
+ g.fillStyle=grad(g,0,0,W,0,[[0,'rgba(6,7,12,.67)'],[.11,'rgba(8,10,18,.20)'],[.46,'rgba(12,13,19,.02)'],[.90,'rgba(6,8,14,.19)'],[1,'rgba(4,6,11,.77)']]);g.fillRect(0,0,W,H);
+}
+function drawPane(){const sx=W*.065,rx=W*.936,top=H*.045,bot=H*.96;
+ // interior walls shadow
+ g.fillStyle='rgba(4,5,9,.85)';g.fillRect(0,0,sx,H);g.fillRect(rx,0,W-rx,H);g.fillRect(0,0,W,top);g.fillRect(0,bot,W,H-bot);
+ // dark window frame bevel
+ g.fillStyle='rgba(5,8,12,.87)';g.fillRect(sx-7,top-4,13,H-top);g.fillRect(rx-5,top-4,13,H-top);g.fillRect(sx,top-9,rx-sx,11);g.fillRect(sx,bot-12,rx-sx,17);
+ // window mullion framed between two panes at horizontal 0.63
+ let mull=H*.638;g.fillStyle='rgba(5,8,12,.88)';g.fillRect(sx,mull,rx-sx,9);g.fillStyle='rgba(159,169,165,.12)';g.fillRect(sx,mull+9,rx-sx,1);g.fillStyle='rgba(193,169,150,.12)';g.fillRect(sx+13,top+2,1,bot-top);g.fillRect(rx-16,top+2,1,bot-top);
+ // warm room, right side table silhouette
+ let ty=H*.90;g.fillStyle='rgba(7,8,11,.94)';g.fillRect(0,ty,W*.19,8);g.fillRect(W*.075,ty,W*.05,H*.12);g.fillRect(W*.105,ty,W*.08,H*.08);
+ // low interior plant as silhouette at lower left, origami-like leaves
+ const bx=W*.095,by=H*.905;g.strokeStyle='rgba(3,8,11,.92)';g.lineCap='round';for(let i=0;i<9;i++){let a=-2.9+(i/8)*2.9,l=H*(.05+.07*srnd(i+1)),xx=bx+Math.cos(a)*l,yy=by+Math.sin(a)*l;g.lineWidth=3.7;g.beginPath();g.moveTo(bx,by);g.quadraticCurveTo((xx+bx)*.5-10,(yy+by)*.5,xx,yy);g.stroke();g.fillStyle='rgba(5,12,14,.94)';g.beginPath();g.ellipse(xx,yy,H*.026,H*.008,a+1.2,0,Math.PI*2);g.fill();}
+ // room lamp, light pools into foreground near lower right
+ let lx=W*.92,ly=H*.80;glow(lx,ly,H*.29,'215,126,85',.11);g.fillStyle='rgba(10,9,12,.94)';g.fillRect(W*.958,H*.75,5,H*.22);g.fillStyle='rgba(11,11,13,.97)';g.beginPath();g.moveTo(lx-22,ly-18);g.lineTo(lx+26,ly-18);g.lineTo(lx+13,ly+7);g.lineTo(lx-9,ly+7);g.closePath();g.fill();}
+function drawGlass(dt){let sx=W*.068,ex=W*.935,top=H*.056,bot=H*.958;
+ g.save();g.beginPath();g.rect(sx,top,ex-sx,bot-top);g.clip();
+ // milky depth in the glass
+ g.fillStyle='rgba(118,155,169,.028)';g.fillRect(sx,top,ex-sx,bot-top);
+ // secret condensation smears in response to finger contact
+ for(let i=smears.length-1;i>=0;i--){let s=smears[i];s.life-=dt;s.life<=0?smears.splice(i,1):null;if(s.life<=0)continue;
+ let a=Math.pow(clamp(s.life/6),1.6);let r=s.r*(1+(6-s.life)*.025);glow(s.x,s.y,r*1.7,'178,209,214',a*.09);
+ g.strokeStyle=`rgba(222,232,225,${a*.18})`;g.lineWidth=1;g.beginPath();g.arc(s.x,s.y,r,Math.PI*1.03,Math.PI*1.92);g.stroke();}
+ for(let i=0;i<drops.length;i++){let d=drops[i];if(!paused&&!reduce){d.hang-=dt;if(d.hang<=0){d.y+=d.vel*dt*(Math.sin(elapsed*.21+d.phase)*.12+.94);d.x+=d.drift*dt;}}if(d.y>H+60||d.x<0||d.x>W){drops[i]=makeDrop(false);continue;}
+ if(d.x<sx||d.x>ex)continue;
+ let fade=1;for(let j=smears.length-1;j>=0;j--){let s=smears[j],dx=d.x-s.x,dy=d.y-s.y;if(dx*dx+dy*dy<s.r*s.r){fade=.04;break;}}
+ if(fade<.1)continue;
+ let opacity=d.opacity*fade;
+ // slightly darker area around each drop: lens distortion illusion
+ g.fillStyle=`rgba(4,11,18,${opacity*.19})`;g.beginPath();g.ellipse(d.x+1.2,d.y-1,d.r*1.8,d.r*2.2,0,0,Math.PI*2);g.fill();
+ // drip trail
+ let trail=Math.max(3,d.trail*(.45+.55*Math.sin(elapsed*.07+d.phase)**2));g.strokeStyle=`rgba(186,204,222,${opacity*.085})`;g.lineWidth=d.r*.85;g.beginPath();g.moveTo(d.x,d.y);g.lineTo(d.x+.5,d.y-trail);g.stroke();
+ g.strokeStyle=`rgba(212,234,236,${opacity*.31})`;g.lineWidth=Math.max(.6,d.r*.39);g.beginPath();g.ellipse(d.x-.45,d.y-.30,Math.max(.4,d.r*.52),d.r*1.4,-.12,Math.PI*.9,Math.PI*1.8);g.stroke();
+ g.fillStyle=`rgba(231,244,246,${opacity*.48})`;g.beginPath();g.ellipse(d.x-d.r*.30,d.y-d.r*.58,Math.max(.4,d.r*.22),Math.max(.5,d.r*.48),-.34,0,Math.PI*2);g.fill();
+ }
+ // reflections of streetlights vertically running down wet pane
+ g.globalAlpha=.14;for(const x of [W*.18,W*.49,W*.81]){let ref=g.createLinearGradient(x-60,0,x+60,0);ref.addColorStop(0,'rgba(232,158,103,0)');ref.addColorStop(.47,'rgba(232,158,103,.35)');ref.addColorStop(1,'rgba(232,158,103,0)');g.fillStyle=ref;g.fillRect(x-60,H*.45,120,H*.39);}g.globalAlpha=1;
+ g.restore();}
+function render(dt){const v=clamp((current-3.2)/2.4)*.68;drawWorld(v);drawGlass(dt);drawPane();}
+let raf=0;function frame(t){let dt=last?Math.min((t-last)/1000,.05):.016;last=t;if(!paused){elapsed+=dt;if(started&&autoChapter){chapterElapsed+=dt;if(chapterElapsed>=CHAPTER_SEC){chapterElapsed=0;setChapter((current+1)%chapters.length);}}}render(paused?0:dt);raf=requestAnimationFrame(frame)}
+function setChapter(n){current=n;chapterElapsed=0;document.getElementById('chapter').textContent=`${String(n+1).padStart(2,'0')} / 06   ·   ${chapters[n].tag}`;document.getElementById('line').textContent=chapters[n].text;document.getElementById('sub').textContent=chapters[n].sub;document.getElementById('number').innerHTML=`${String(n+1).padStart(2,'0')} <span>/ 06</span>`;document.querySelectorAll('.dot').forEach((e,i)=>{e.classList.toggle('active',i===n);e.setAttribute('aria-current',i===n?'true':'false')});let s=document.getElementById('story');s.classList.remove('visible');clearTimeout(disappear);disappear=setTimeout(()=>s.classList.add('visible'),140);}
+const dots=document.getElementById('dots');chapters.forEach((c,i)=>{let e=document.createElement('button');e.className='dot';e.setAttribute('aria-label',`Fragmento ${i+1}: ${c.tag.toLowerCase()}`);e.onclick=()=>{start();autoChapter=true;setChapter(i)};dots.appendChild(e)});
+function start(){if(started)return;started=true;document.getElementById('intro').classList.add('hidden');document.getElementById('progress').style.opacity=1;setChapter(0)}
+document.getElementById('begin').onclick=start;
+const message=document.getElementById('message');let mt=null;
+function touch(x,y){if(!started){start();return}x=clamp(x,W*.08,W*.93);y=clamp(y,H*.065,H*.955);smears.push({x,y,r:rand(17,31),life:6});if(smears.length>45)smears.shift();if(++tapCount%3!==1)return;message.textContent=murmurs[murmurIndex++%murmurs.length];message.style.left=`${clamp(x,130,W-130)}px`;message.style.top=`${clamp(y-60,70,H-95)}px`;message.style.opacity=.9;clearTimeout(mt);mt=setTimeout(()=>message.style.opacity=0,3100)}
+let dragging=false,lastSwipe=0;canvas.addEventListener('pointerdown',e=>{dragging=true;canvas.setPointerCapture?.(e.pointerId);touch(e.clientX,e.clientY)});canvas.addEventListener('pointermove',e=>{if(!dragging||!started)return;if(performance.now()-lastSwipe<36)return;lastSwipe=performance.now();smears.push({x:e.clientX,y:e.clientY,r:rand(16,29),life:6});if(smears.length>45)smears.shift()});canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
+let audioCtx=null,nodes=[],ambient=false,clickTimer=null;
+function soundStart(){try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();audioCtx.resume();
+ let noise=audioCtx.createBuffer(1,audioCtx.sampleRate*4,audioCtx.sampleRate),buffer=noise.getChannelData(0),ns=buffer.length;for(let i=0;i<ns;i++)buffer[i]=rand(-1,1)*.45;
+ let src=audioCtx.createBufferSource();src.buffer=noise;src.loop=true;let lp=audioCtx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;let hp=audioCtx.createBiquadFilter();hp.type='highpass';hp.frequency.value=170;let amp=audioCtx.createGain();amp.gain.value=.18;src.connect(lp).connect(hp).connect(amp).connect(audioCtx.destination);src.start();nodes.push(src);
+ // quiet harmonic drone beneath the rain
+ for(let i=0;i<3;i++){let osc=audioCtx.createOscillator();osc.type=i===0?'sine':'triangle';osc.frequency.value=[73.42,110,146.83][i];let gain=audioCtx.createGain();gain.gain.value=[.016,.006,.004][i];let filter=audioCtx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=220;osc.connect(filter).connect(gain).connect(audioCtx.destination);osc.start();nodes.push(osc);}
+ clickTimer=setInterval(()=>{if(!ambient||!audioCtx)return;if(Math.random()>.66)return;let at=audioCtx.currentTime,o=audioCtx.createOscillator(),ga=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(rand(330,810),at);o.frequency.exponentialRampToValueAtTime(rand(145,260),at+.09);ga.gain.setValueAtTime(.0001,at);ga.gain.exponentialRampToValueAtTime(.005,at+.008);ga.gain.exponentialRampToValueAtTime(.0001,at+.13);o.connect(ga).connect(audioCtx.destination);o.start(at);o.stop(at+.14)},680);
+ }catch(e){ambient=false;console.warn('Audio no disponible',e)}}
+function soundStop(){clearInterval(clickTimer);if(audioCtx){for(let n of nodes){try{n.stop()}catch(e){}}nodes=[];audioCtx.close();audioCtx=null;}}
+document.getElementById('audio').onclick=()=>{ambient=!ambient;let b=document.getElementById('audio');b.innerHTML=ambient?'♫ &nbsp; SONIDO ACTIVADO':'♫ &nbsp; SONIDO';b.setAttribute('aria-pressed',String(ambient));if(ambient)soundStart();else soundStop()};
+const about=document.getElementById('about');document.getElementById('info').onclick=()=>{about.hidden=!about.hidden};document.getElementById('closeAbout').onclick=()=>about.hidden=true;window.addEventListener('keydown',e=>{if(e.key==='Escape')about.hidden=true;if(e.key==='ArrowRight'&&started)setChapter((current+1)%chapters.length);if(e.key==='ArrowLeft'&&started)setChapter((current+5)%chapters.length)});
+window.addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',()=>{paused=document.hidden;if(!paused)last=0;});resize();frame(0);
+})();
+</script>
+</body>
+</html>
