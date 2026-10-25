@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080e"><meta name="robots" content="noindex, nofollow">
+<title>Wallpapers — Rain Interactive</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+body{margin:0;color:#ece8f5;background:#060710;font-family:Arial,Helvetica,sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 10%,#122931 0,transparent 40%),radial-gradient(ellipse at 80% 90%,#2a0927 0,transparent 45%);opacity:.65}
+main{position:relative;max-width:1120px;margin:auto;padding:25px clamp(18px,4vw,44px) 65px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:24px;border-bottom:1px solid #ffffff30;font:700 11px 'Courier New',monospace;letter-spacing:.14em;text-transform:uppercase}
+nav a{color:#57dccb;text-decoration:none}nav span{color:#c5b9d2}
+.eyebrow{margin-top:60px;color:#5ce1d2;font:700 12px 'Courier New',monospace;letter-spacing:.22em}
+h1{font-size:clamp(46px,8vw,100px);letter-spacing:-.08em;line-height:.87;text-transform:uppercase;margin:18px 0 18px}
+p{color:#bbb5cb;line-height:1.5;margin:0 0 30px;max-width:730px}
+.image{display:block;border:1px solid #ffffff40;background:#060611;box-shadow:0 24px 90px #000a;overflow:hidden}
+.image img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px}
+.meta{font:700 11px/1.6 'Courier New',monospace;color:#aba1b9;letter-spacing:.08em}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.actions a,.actions button{border:1px solid #49d9c6;background:#49d9c6;color:#061013;padding:15px 19px;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font:900 12px 'Courier New',monospace;cursor:pointer}
+.actions a{color:#57e2d0;background:transparent}
+.actions button:hover{background:#82f9e9}.actions a:hover{background:#ffffff0d}
+.tip{font:11px/1.6 'Courier New',monospace;color:#91889f;margin-top:26px}
+footer{margin-top:68px;padding-top:18px;border-top:1px solid #ffffff24;color:#696377;font:11px 'Courier New',monospace}
+</style></head>
+<body><main>
+<nav><span>RAIN INTERACTIVE // ARCHIVO TEMPORAL</span><a href="/">← Volver a Rain</a></nav>
+<div class="eyebrow">FONDO DE ESCRITORIO · 2026</div>
+<h1>WALLPAPER<br>95_</h1>
+<p>T-Rex tropical. Una postal imposible para un ordenador rescatado. Vaporwave, palmeras y Rain Interactive.</p>
+<a class="image" href="https://cdn.shopify.com/s/files/1/0957/7352/4307/files/rain-interactive-trex-vaporwave-wallpaper.png?v=1792972245" target="_blank" rel="noopener" title="Abrir la imagen a tamaño completo">
+<img src="https://cdn.shopify.com/s/files/1/0957/7352/4307/files/rain-interactive-trex-vaporwave-wallpaper.png?v=1792972245" width="1672" height="941" alt="Fondo de pantalla Rain Interactive vaporwave: T-Rex, palmeras y lago tropical en rosa y turquesa"></a>
+<div class="bar"><span class="meta">PNG ORIGINAL · 1672 × 941 PX · 16:9</span>
+<div class="actions"><a href="https://cdn.shopify.com/s/files/1/0957/7352/4307/files/rain-interactive-trex-vaporwave-wallpaper.png?v=1792972245" target="_blank" rel="noopener">Ver imagen</a><button id="save" type="button">Descargar PNG ↓</button></div></div>
+<p class="tip">Si la imagen se abre en otra pestaña, pulsa con el botón derecho y elige «Guardar imagen como…». Desde el móvil, mantén pulsada la imagen.</p>
+<footer>RAIN INTERACTIVE · JUEGOS INDEPENDIENTES PARA DESCUBRIR LO DESCONOCIDO</footer>
+</main>
+<script>
+document.getElementById('save').addEventListener('click',async function(){
+  const source="https://cdn.shopify.com/s/files/1/0957/7352/4307/files/rain-interactive-trex-vaporwave-wallpaper.png?v=1792972245";
+  try {
+    const response=await fetch(source,{mode:'cors'});
+    if(!response.ok) throw Error('download unavailable');
+    const blob=await response.blob();
+    const link=document.createElement('a');
+    const url=URL.createObjectURL(blob);
+    link.href=url;link.download='Rain_Interactive_Trex_Vaporwave.png';
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+  } catch(e) {window.open(source,'_blank','noopener');}
+});
+</script></body></html>
