@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080807">
+<title>TOPOR — Archivo visual | Rain Interactive</title>
+<meta name="description" content="TOPOR: archivo visual de dibujos, estampas, carteles y publicaciones de Roland Topor. Referencias verificadas y acceso a colecciones originales.">
+<link rel="canonical" href="https://rain-interactive.github.io/topor/">
+<style>
+:root{--bg:#090909;--ink:#ece8df;--soft:#b5ae9f;--dim:#797771;--line:#393833;--acid:#c8ff43;--paper:#ddd4bf}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}a{color:inherit}
+.shell{width:min(1280px,calc(100% - 36px));margin:auto}.bar{border-bottom:1px solid var(--line);padding:19px 0}.bar .shell{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.logo{font-weight:900;font-size:13px;letter-spacing:.14em;text-decoration:none}.path{font:700 10px/1.5 "Courier New",monospace;letter-spacing:.11em;color:var(--soft);text-decoration:none}.path:hover{color:var(--acid)}
+.hero{padding:64px 0 56px;border-bottom:1px solid var(--line)}.hero-label{font:700 11px "Courier New",monospace;letter-spacing:.16em;color:var(--acid)}h1{margin:18px 0 22px;font-size:clamp(88px,20vw,290px);font-weight:900;letter-spacing:-.105em;line-height:.74}h1::after{content:"®";vertical-align:top;font-size:clamp(13px,2vw,24px);letter-spacing:0;position:relative;top:5px;left:7px;color:var(--acid)}.lede{max-width:780px;margin:35px 0 0;font-size:clamp(19px,2.3vw,32px);line-height:1.22;letter-spacing:-.025em}.hero-foot{display:flex;gap:24px;align-items:end;justify-content:space-between;margin-top:48px;flex-wrap:wrap}.hero-foot p{max-width:550px;color:var(--soft);line-height:1.5;font-size:14px;margin:0}.stamp{font:700 11px "Courier New",monospace;letter-spacing:.09em;border:1px solid var(--acid);color:var(--acid);padding:12px;transform:rotate(-3deg)}
+.archive{padding:34px 0 70px}.tools{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:30px}.buttons{display:flex;gap:7px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:transparent;color:var(--soft);padding:12px 15px;cursor:pointer;font:700 10px "Courier New",monospace;letter-spacing:.08em}.filter:hover,.filter[aria-pressed="true"]{background:var(--acid);color:#131313;border-color:var(--acid)}#search{width:min(340px,100%);max-width:100%;background:#141414;border:1px solid var(--line);border-radius:0;color:var(--ink);padding:13px 14px;outline:0;font-size:14px}#search:focus{border-color:var(--acid)}.count{font:700 11px "Courier New",monospace;color:var(--dim);letter-spacing:.09em;margin:0 0 20px}.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.item{min-width:0}.item[hidden]{display:none!important}.entry{height:100%;display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);transition:border-color .15s,transform .15s;background:#10100f}.entry:hover{border-color:var(--acid);transform:translateY(-2px)}.paper{height:300px;padding:18px 18px 16px;background:var(--paper);color:#161510;position:relative;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.paper:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#2823150c 3px 4px);pointer-events:none}.paper:after{content:"";position:absolute;right:-39px;bottom:-63px;width:180px;height:180px;border:24px solid #24231e15;border-radius:50%;pointer-events:none}.shelf,.paper-index{font:700 11px "Courier New",monospace;letter-spacing:.11em;z-index:1}.paper-title{z-index:1;overflow-wrap:anywhere;font:900 clamp(28px,3.25vw,52px)/.94 Arial,Helvetica,sans-serif;text-transform:uppercase;letter-spacing:-.07em;max-width:94%}.paper-index{display:flex;justify-content:space-between;align-items:center}.entry-info{padding:21px;display:flex;flex-direction:column;flex:1;min-height:225px}.entry-no{font:700 10px "Courier New",monospace;color:var(--acid);letter-spacing:.12em}.entry-info h2{font-size:25px;line-height:1.02;letter-spacing:-.04em;margin:12px 0}.medium{color:#b6b1a5;font-size:13px;line-height:1.45;margin:0}.source{font:11px/1.4 "Courier New",monospace;color:#817d72;margin:10px 0 22px}.action{color:var(--acid);font:700 10px "Courier New",monospace;letter-spacing:.08em;margin-top:auto}.empty{color:var(--soft);padding:34px 0;font-size:15px}
+.disclaimer{border-top:1px solid var(--line);padding:34px 0 45px;color:#a9a39a;font-size:13px;line-height:1.6}.disclaimer strong{color:var(--ink)}footer{border-top:1px solid var(--line);padding:22px 0 45px;font:700 10px "Courier New",monospace;letter-spacing:.1em;color:#8d8982}footer .shell{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}footer a{text-decoration:none;color:var(--acid)}
+@media(max-width:980px){.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.catalog{grid-template-columns:1fr;gap:18px}.paper{height:250px}.paper-title{font-size:clamp(36px,10vw,54px)}.hero{padding:46px 0 40px}.hero-foot{margin-top:32px}.entry-info{min-height:0;padding:18px}.action{margin-top:18px}.tools{align-items:stretch}.tools #search{width:100%}h1{font-size:clamp(84px,23vw,145px)}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="shell"><a href="/" class="logo">RAIN INTERACTIVE</a><a class="path" href="/catalogo.html#read">← ARCHIVE / VOLVER AL CATÁLOGO</a></div></header>
+<main>
+<section class="hero"><div class="shell"><div class="hero-label">READ / ARCHIVO VISUAL / 001</div><h1>TOPOR</h1><p class="lede">Un catálogo abierto de lo grotesco, lo absurdo y la imaginación gráfica de Roland Topor (1938–1997).</p><div class="hero-foot"><p>Dibujos, estampas, carteles y publicaciones. Cada referencia conduce a una ficha documental de su colección original. El archivo crecerá a medida que encontremos nuevas obras.</p><span class="stamp">EN CONSTRUCCIÓN<br>NO DEFINITIVO</span></div></div></section>
+<section class="archive"><div class="shell"><div class="tools"><div class="buttons" aria-label="Filtrar obras"><button class="filter" data-filter="Todas" aria-pressed="true">TODAS</button><button class="filter" data-filter="Dibujo" aria-pressed="false">DIBUJO</button><button class="filter" data-filter="Estampa" aria-pressed="false">ESTAMPA</button><button class="filter" data-filter="Cartel" aria-pressed="false">CARTEL</button><button class="filter" data-filter="Publicación" aria-pressed="false">PUBLICACIONES</button></div><input id="search" type="search" placeholder="Buscar título, año, técnica..." aria-label="Buscar en el archivo"></div><p id="count" class="count" aria-live="polite">12 REFERENCIAS EN EL ARCHIVO</p><div id="catalog" class="catalog">
+<article class="item" data-category="Dibujo" data-search="le bon dos 1970 dibujo centre pompidou · am 1983-330 tinta china y collage sobre papel">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/c69Mqn" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Le bon dos">
+<div class="paper" aria-hidden="true"><span class="shelf">01 / DIBUJO</span><div class="paper-title">Le bon dos</div><div class="paper-index">R.T. <span>1970</span></div></div>
+<div class="entry-info"><div class="entry-no">01 / Dibujo</div><h2>Le bon dos</h2><p class="medium">1970 · Tinta china y collage sobre papel</p><p class="source">Centre Pompidou · AM 1983-330</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Estampa" data-search="le courrier des lettres 1976 estampa centre pompidou · am 1977-560 litografía">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cxgjjz" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Le courrier des lettres">
+<div class="paper" aria-hidden="true"><span class="shelf">02 / ESTAMPA</span><div class="paper-title">Le courrier des lettres</div><div class="paper-index">R.T. <span>1976</span></div></div>
+<div class="entry-info"><div class="entry-no">02 / Estampa</div><h2>Le courrier des lettres</h2><p class="medium">1976 · Litografía</p><p class="source">Centre Pompidou · AM 1977-560</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="pas de deux 1978 dibujo centre pompidou · am 1978-729 tinta y acuarela sobre papel ingres">
+<a class="entry" href="https://www.centrepompidou.fr/es/ressources/oeuvre/cGbB8Bj" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Pas de deux">
+<div class="paper" aria-hidden="true"><span class="shelf">03 / DIBUJO</span><div class="paper-title">Pas de deux</div><div class="paper-index">R.T. <span>1978</span></div></div>
+<div class="entry-info"><div class="entry-no">03 / Dibujo</div><h2>Pas de deux</h2><p class="medium">1978 · Tinta y acuarela sobre papel Ingres</p><p class="source">Centre Pompidou · AM 1978-729</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="la réussite par dessous la jambe 1978 dibujo centre pompidou · am 1987-546 lápiz de color y tinta">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cAedGr" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de La réussite par dessous la jambe">
+<div class="paper" aria-hidden="true"><span class="shelf">04 / DIBUJO</span><div class="paper-title">La réussite par dessous la jambe</div><div class="paper-index">R.T. <span>1978</span></div></div>
+<div class="entry-info"><div class="entry-no">04 / Dibujo</div><h2>La réussite par dessous la jambe</h2><p class="medium">1978 · Lápiz de color y tinta</p><p class="source">Centre Pompidou · AM 1987-546</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="le mangeur d'homme 1978 dibujo centre pompidou · am 1978-728 tinta, aguada, gouache y pastel">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/c9nBy4z" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Le mangeur d'homme">
+<div class="paper" aria-hidden="true"><span class="shelf">05 / DIBUJO</span><div class="paper-title">Le mangeur d'homme</div><div class="paper-index">R.T. <span>1978</span></div></div>
+<div class="entry-info"><div class="entry-no">05 / Dibujo</div><h2>Le mangeur d'homme</h2><p class="medium">1978 · Tinta, aguada, gouache y pastel</p><p class="source">Centre Pompidou · AM 1978-728</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="tue la mort 1978 dibujo centre pompidou · am 1988-612 tinta china y acuarela">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cajBq5L" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Tue la mort">
+<div class="paper" aria-hidden="true"><span class="shelf">06 / DIBUJO</span><div class="paper-title">Tue la mort</div><div class="paper-index">R.T. <span>1978</span></div></div>
+<div class="entry-info"><div class="entry-no">06 / Dibujo</div><h2>Tue la mort</h2><p class="medium">1978 · Tinta china y acuarela</p><p class="source">Centre Pompidou · AM 1988-612</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="education culturelle 1981 dibujo centre pompidou · am 1982-37 (v) grafito sobre papel, reverso">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/c5ddX8" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Education culturelle">
+<div class="paper" aria-hidden="true"><span class="shelf">07 / DIBUJO</span><div class="paper-title">Education culturelle</div><div class="paper-index">R.T. <span>1981</span></div></div>
+<div class="entry-info"><div class="entry-no">07 / Dibujo</div><h2>Education culturelle</h2><p class="medium">1981 · Grafito sobre papel, reverso</p><p class="source">Centre Pompidou · AM 1982-37 (V)</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Dibujo" data-search="la femme à poigne 1983 dibujo centre pompidou · am 1987-547 tinta china, pintura acrílica y papel">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cGepM7" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de La femme à poigne">
+<div class="paper" aria-hidden="true"><span class="shelf">08 / DIBUJO</span><div class="paper-title">La femme à poigne</div><div class="paper-index">R.T. <span>1983</span></div></div>
+<div class="entry-info"><div class="entry-no">08 / Dibujo</div><h2>La femme à poigne</h2><p class="medium">1983 · Tinta china, pintura acrílica y papel</p><p class="source">Centre Pompidou · AM 1987-547</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Cartel" data-search="affiche droit à la paresse 1988 cartel centre pompidou · am 2020-1-1060 impresión offset">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cRrpAzz" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Affiche Droit à la paresse">
+<div class="paper" aria-hidden="true"><span class="shelf">09 / CARTEL</span><div class="paper-title">Affiche Droit à la paresse</div><div class="paper-index">R.T. <span>1988</span></div></div>
+<div class="entry-info"><div class="entry-no">09 / Cartel</div><h2>Affiche Droit à la paresse</h2><p class="medium">1988 · Impresión offset</p><p class="source">Centre Pompidou · AM 2020-1-1060</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Cartel" data-search="affiche pas sur la tête 1993 cartel centre pompidou · am 2020-1-1061 impresión offset">
+<a class="entry" href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cbEpo6b" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Affiche Pas sur la tête">
+<div class="paper" aria-hidden="true"><span class="shelf">10 / CARTEL</span><div class="paper-title">Affiche Pas sur la tête</div><div class="paper-index">R.T. <span>1993</span></div></div>
+<div class="entry-info"><div class="entry-no">10 / Cartel</div><h2>Affiche Pas sur la tête</h2><p class="medium">1993 · Impresión offset</p><p class="source">Centre Pompidou · AM 2020-1-1061</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Publicación" data-search="toporgrafías 2011 publicación fundación luis seoane · a coruña catálogo ilustrado · 483 páginas">
+<a class="entry" href="https://fundacionluisseoane.gal/es/publicaciones/roland-topor-toporgrafi/" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Toporgrafías">
+<div class="paper" aria-hidden="true"><span class="shelf">11 / PUBLICACIÓN</span><div class="paper-title">Toporgrafías</div><div class="paper-index">R.T. <span>2011</span></div></div>
+<div class="entry-info"><div class="entry-no">11 / Publicación</div><h2>Toporgrafías</h2><p class="medium">2011 · Catálogo ilustrado · 483 páginas</p><p class="source">Fundación Luis Seoane · A Coruña</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+<article class="item" data-category="Publicación" data-search="un monsieur tout esquinté 1972 / 2017 publicación les presses du réel dibujos con nicolas topor · reedición 2017">
+<a class="entry" href="https://www.lespressesdureel.com/ouvrage.php?id=5417&amp;menu=221" target="_blank" rel="noopener noreferrer" aria-label="Abrir ficha original de Un monsieur tout esquinté">
+<div class="paper" aria-hidden="true"><span class="shelf">12 / PUBLICACIÓN</span><div class="paper-title">Un monsieur tout esquinté</div><div class="paper-index">R.T. <span>1972 / 2017</span></div></div>
+<div class="entry-info"><div class="entry-no">12 / Publicación</div><h2>Un monsieur tout esquinté</h2><p class="medium">1972 / 2017 · Dibujos con Nicolas Topor · reedición 2017</p><p class="source">Les presses du réel</p><span class="action">VER OBRA EN ARCHIVO ORIGINAL ↗</span></div>
+</a></article>
+</div><p id="empty" class="empty" hidden>No hay referencias para esa búsqueda.</p></div></section>
+<section class="disclaimer"><div class="shell"><strong>Nota de archivo</strong><p>Este proyecto es una guía independiente de investigación y consulta, no una colección de reproducciones. Las tarjetas presentan títulos y datos bibliográficos, no imágenes de las obras. La autoría y los derechos sobre las imágenes corresponden a sus titulares. Cada enlace abre el sitio de la institución o editorial responsable; futuras reproducciones se añadirán únicamente con autorización o licencia suficiente.</p><p>Archivo TOPOR · Selección y documentación: Rain Interactive · Sin afiliación con Roland Topor, sus representantes o las instituciones enlazadas.</p></div></section>
+</main><footer><div class="shell"><span>RAIN INTERACTIVE · ARCHIVE / TOPOR</span><a href="/catalogo.html#read">← VOLVER A ARCHIVE</a></div></footer>
+<script>
+(function(){
+const nodes=Array.from(document.querySelectorAll('.item'));
+const buttons=Array.from(document.querySelectorAll('.filter'));
+const search=document.getElementById('search');
+const count=document.getElementById('count');
+const empty=document.getElementById('empty');
+let filter='Todas';
+function update(){
+ const term=search.value.trim().toLocaleLowerCase('es');
+ let visible=0;
+ nodes.forEach(n=>{
+   const match=(filter==='Todas'||n.dataset.category===filter) && (!term||n.dataset.search.includes(term));
+   n.hidden=!match;
+   if(match)visible++;
+ });
+ count.textContent=visible+' REFERENCIA'+(visible===1?'':'S')+' EN EL ARCHIVO';
+ empty.hidden=visible!==0;
+}
+buttons.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;buttons.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update();}));
+search.addEventListener('input',update);update();
+})();
+</script></body></html>
