@@ -289,6 +289,26 @@ main section{scroll-margin-top:16px}
 .card-oraculo .oraculo-deck-preview{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;gap:clamp(1px,.25vw,4px)!important;aspect-ratio:3/2!important;width:100%!important;max-width:100%!important;padding:clamp(2px,.4vw,7px)!important;background:#05060b!important;overflow:hidden!important;align-content:stretch!important}
 .card-oraculo .oraculo-deck-preview img{display:block!important;position:static!important;min-width:0!important;width:100%!important;height:100%!important;max-width:100%!important;object-fit:fill!important;object-position:center!important;margin:0!important;padding:0!important;border:0!important;background:#060a10!important}
 </style>
+<style id="rain-trex2000-thumb-repair">
+/* La ilustración del T-Rex usa PNG transparentes. El fondo oscuro
+   genérico de .card .thumb img dibujaba rectángulos detrás de cada sprite. */
+#experiment .card-trex-2000 .thumb{position:relative!important;isolation:isolate;overflow:hidden}
+#experiment .card-trex-2000 .thumb img{
+  position:absolute!important;
+  display:block!important;
+  max-width:none!important;
+  background:transparent!important;
+  border:0!important;
+  image-rendering:pixelated;
+  margin:0!important;
+  padding:0!important
+}
+#experiment .card-trex-2000 .thumb img:nth-of-type(1){z-index:0;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important}
+#experiment .card-trex-2000 .thumb img:nth-of-type(2){z-index:2;left:67.5%!important;top:49.6%!important;width:29.7%!important;height:42.2%!important;object-fit:contain!important}
+#experiment .card-trex-2000 .thumb img:nth-of-type(3){z-index:3;left:19.4%!important;top:22%!important;width:58.33%!important;height:78.35%!important;object-fit:contain!important}
+#experiment .card-trex-2000 .thumb img:nth-of-type(4){z-index:4;left:2.8%!important;top:49.6%!important;width:25%!important;height:42.5%!important;object-fit:contain!important}
+#experiment .card-trex-2000 .thumb .n{z-index:5}
+</style>
 </head>
 <body>
 <header>
@@ -317,7 +337,7 @@ main section{scroll-margin-top:16px}
 <a class="card card-art card-dracula" href="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/"><div class="artwork-original"><span class="n">R-015</span><img src="https://dracula-el-dominio-de-la-noche.mmmartineznacho.chatgpt.site/dracula-rain-v32.svg?v=32" width="1024" height="1280" alt="Drácula — Sangre y eternidad. Creado por nachommmartinez" loading="lazy"></div><div class="copy"><div><div class="type">Game · Gratis · Idle / Terror / Romance</div><h3>Drácula</h3><p>Sangre y eternidad. Mina y Drácula reinan juntos en un castillo que crece solo. Terror gótico, romance y un vals de 8 bits. Un castillo vivo en formato vertical, con defensa vampírica y acceso libre.</p></div><span class="cta">Entrar al castillo ↗</span></div></a>
 <a class="card card-art card-commandos" href="/sdj-commandos/"><div class="artwork-original"><span class="n">R-016</span><img src="/sdj-commandos/cover-comic-v27.webp?v=20261005-public45" width="768" height="1152" alt="Commandos: Most Wanted — portada de cómic con el jinete y su camello" loading="lazy"></div><div class="copy"><div><div class="type">Juego · Supervivencia arcade</div><h3>Commandos: Most Wanted</h3><p>Cinco zonas de combate con estética de cómic, armas progresivas y jefes con patrones propios. Muévete, gira para defender tu espalda y busca los botiquines.</p></div><span class="cta">Jugar ↗</span></div></a></div></div></section>
 <section id="experiment"><div class="wrap"><div class="section-head"><h2>Experiments</h2><span>Arte digital / web / sistemas</span></div><div class="grid">
-<a class="card" href="/t-rex-taller-2026/" aria-label="Abrir T-Rex 2000, mascota virtual de O Raposo Púrpura y Rain Interactive"><div class="thumb" style="position:relative;width:100%;height:auto;min-height:0;aspect-ratio:360/268;overflow:hidden;background:#062329">
+<a class="card card-trex-2000" href="/t-rex-taller-2026/" aria-label="Abrir T-Rex 2000, mascota virtual de O Raposo Púrpura y Rain Interactive"><div class="thumb" style="position:relative;width:100%;height:auto;min-height:0;aspect-ratio:360/268;overflow:hidden;background:#062329">
 <img src="/t-rex-taller-2026/assets/jungle.png" alt="Selva turquesa de T-Rex 2000" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;max-width:none">
 <img src="/t-rex-taller-2026/assets/caballete.png" alt="" aria-hidden="true" loading="lazy" style="position:absolute;left:67.5%;top:49.6%;width:29.7%;height:42.2%;object-fit:contain">
 <img src="/t-rex-taller-2026/assets/dino.png" alt="" aria-hidden="true" loading="lazy" style="position:absolute;left:19.4%;top:22%;width:58.33%;height:78.35%;object-fit:contain">
