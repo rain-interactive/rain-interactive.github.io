@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 360 268" role="img" aria-label="T-Rex 2000 púrpura en selva turquesa, con tubo de pintura a la izquierda y caballete a la derecha">
+<image href="./assets/jungle.png" x="0" y="0" width="360" height="268" preserveAspectRatio="none"/>
+<rect x="0" y="0" width="360" height="26" fill="#0a1833" opacity=".36"/><rect x="0" y="248" width="360" height="20" fill="#0a1833" opacity=".28"/>
+<image href="./assets/caballete.png" x="243" y="133" width="107" height="113" preserveAspectRatio="xMidYMid meet"/>
+<g opacity=".85"><path d="M276 169 L293 155 L310 178" stroke="#8b37b5" stroke-width="5" fill="none"/><circle cx="296" cy="170" r="6" fill="#bb60e9"/><path d="M285 181l25 -14" stroke="#53118d" stroke-width="3"/></g>
+<image href="./assets/dino.png" x="70" y="59" width="210" height="210" preserveAspectRatio="xMidYMid meet"/>
+<image href="./assets/tubo-purpura.png" x="10" y="133" width="90" height="114" preserveAspectRatio="xMidYMid meet"/>
+<text x="14" y="21" fill="#a2e5ff" font-size="10" font-family="monospace" letter-spacing="2">CRETÁCICO.EXE</text>
+<text x="344" y="251" fill="#96bfe3" font-size="10" font-family="monospace" text-anchor="end">© 65.000.000 a.C.</text></svg>
