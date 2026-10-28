@@ -553,6 +553,22 @@ body{background:#06314c!important;margin:0}
   .right .terminal{bottom:22px!important;}
 }
 
+
+/* T-Rex 2000 · entrada al experimento de webcam jurásica */
+.right .jurassic-entry{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  flex-wrap:wrap!important;gap:5px!important;width:100%!important;
+  margin:14px 0 0!important;padding:7px 2px!important;
+  border:0!important;border-bottom:2px solid #65f1e8!important;
+  background:transparent!important;box-shadow:none!important;border-radius:0!important;
+  color:#fff!important;font:850 clamp(11px,1.05vw,15px)/1.2 Arial,'DejaVu Sans',sans-serif!important;
+  text-decoration:none!important;letter-spacing:.012em!important;
+  text-shadow:0 1px 5px #062733!important;
+}
+.right .jurassic-entry small{font:800 9px monospace!important;color:#80fff4!important}
+.right .jurassic-entry:hover{color:#85fff4!important;border-bottom-color:#ff8fcf!important}
+@media(max-width:640px){.right .jurassic-entry{font-size:10px!important;margin-top:8px!important;padding:5px 2px!important}.right .jurassic-entry small{font-size:8px!important}}
+
 </style>
 </head>
 <body>
@@ -664,6 +680,7 @@ body{background:#06314c!important;margin:0}
           <button class="action" id="sleep" type="button">☾ SIESTA<span>Recargar 65 millones de años</span></button>
           <button class="action" id="talk" type="button">💬 HABLAR<span>Charlar con el T-Rex</span></button>
         </div>
+        <a id="jurassicEntry" class="jurassic-entry" href="./camara-jurasica.html"><span>📷 CÁMARA JURÁSICA</span><small>ENTRAR ↗</small></a>
         <div class="below">
           <div class="line"></div>
           <div class="info"><span>IDENTIDAD<br><strong id="identity">PROTO #001</strong></span><span style="text-align:right">SUPERVIVENCIA<br><strong>GARANTIZADA</strong></span></div>
