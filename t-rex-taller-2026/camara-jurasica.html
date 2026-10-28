@@ -161,7 +161,16 @@ h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-
     notice.textContent='';status('SOLICITANDO PERMISO…');
     try{
       if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Esta cámara necesita un navegador actualizado y una conexión HTTPS.');
-      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{width:{ideal:320},height:{ideal:180},frameRate:{ideal:10,max:12}}});
+      // No imponer fps ni resolución: las webcams de 2010 suelen ofrecer modos 4:3.
+      var formats=[true,{width:{ideal:640},height:{ideal:480}},{width:{ideal:320},height:{ideal:240}}],lastError;
+      for(var i=0;i<formats.length;i++){
+        try{stream=await navigator.mediaDevices.getUserMedia({audio:false,video:formats[i]});break;}
+        catch(err){
+          lastError=err;
+          if(err && /^(NotAllowedError|PermissionDeniedError|SecurityError|NotReadableError|TrackStartError)$/.test(err.name))throw err;
+        }
+      }
+      if(!stream)throw lastError||new Error('No se ha detectado ninguna cámara.');
       video.srcObject=stream;await video.play();
       status('INICIANDO RECORTE DE SILUETA…');
       running=true;hero.hidden=true;controls.hidden=false;
@@ -174,7 +183,16 @@ h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-
         console.warn('No se pudo iniciar segmentación:',e);
       }
       raf=requestAnimationFrame(loop);
-    }catch(e){stop();notice.textContent=e&&e.name==='NotAllowedError'?'Permite el acceso a la cámara en el navegador para empezar.':(e.message||'No se pudo acceder a la cámara.');status('CÁMARA NO DISPONIBLE');}
+    }catch(e){
+      stop();
+      var name=e&&e.name||'';
+      notice.textContent=/NotAllowedError|PermissionDeniedError|SecurityError/.test(name)?'Permite el acceso a la webcam en el navegador.':
+        /NotReadableError|TrackStartError/.test(name)?'La webcam está ocupada por otra aplicación.':
+        /NotFoundError|DevicesNotFoundError/.test(name)?'No se detecta ninguna webcam conectada.':
+        /OverconstrainedError|ConstraintNotSatisfiedError/.test(name)?'Este modo de vídeo no es compatible con la webcam.':
+        'No se pudo abrir la webcam. Comprueba el dispositivo y los permisos.';
+      status('CÁMARA NO DISPONIBLE');
+    }
     finally{b.disabled=false;}
   }
   function stop(){
