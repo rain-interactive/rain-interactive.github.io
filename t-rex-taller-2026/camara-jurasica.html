@@ -117,6 +117,7 @@ h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-
   const statusText=document.getElementById('statusText'),notice=document.getElementById('notice');
   const modeBtn=document.getElementById('mode'),dayBtn=document.getElementById('day'),mirrorBtn=document.getElementById('mirror');
   let stream=null,seg=null,running=false,busy=false,raf=0,last=0,mode='silhouette',mirror=true,night=false,frames=0;
+  // Video de baja resolución; fondo recortado localmente, sin grabaciones.
   const url='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation';
   function status(s){statusText.textContent=s;}
   function loadModel(){
@@ -143,7 +144,7 @@ h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-
   async function loop(t){
     if(!running)return;
     raf=requestAnimationFrame(loop);
-    if(busy||t-last<115||video.readyState<2)return;
+    if(busy||t-last<145||video.readyState<2)return;
     last=t;busy=true;
     try{
       if(mode==='direct'){
@@ -160,7 +161,7 @@ h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-
     notice.textContent='';status('SOLICITANDO PERMISO…');
     try{
       if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Esta cámara necesita un navegador actualizado y una conexión HTTPS.');
-      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{width:{ideal:640},height:{ideal:360},frameRate:{ideal:12,max:18}}});
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{width:{ideal:320},height:{ideal:180},frameRate:{ideal:10,max:12}}});
       video.srcObject=stream;await video.play();
       status('INICIANDO RECORTE DE SILUETA…');
       running=true;hero.hidden=true;controls.hidden=false;
