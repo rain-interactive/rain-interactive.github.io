@@ -275,6 +275,85 @@ body{background:#06314c!important;margin:0}
 .class-alert{position:fixed!important;left:50%!important;transform:translateX(-50%)!important;right:auto!important;bottom:12%!important;width:min(520px,72vw);z-index:35!important}
 @media(max-width:900px){.top{top:8px;left:8px;padding:6px}.top .rain-brand{transform:scale(.74);transform-origin:left top;margin-bottom:-8px!important}.top h1{font-size:20px!important}.time-console{top:8px;left:auto;right:8px;transform:none;width:230px;padding:7px!important}.clock-tools{left:auto;right:8px;transform:none;top:75px;max-width:270px}.right{width:min(270px,37vw);top:126px;bottom:8px;right:8px}.right .terminal{max-height:20vh}.right .title{font-size:8px!important}.right .action{font-size:10px!important;min-height:38px!important;padding:6px!important}.right .action span{display:none}.right .below{padding:5px}.right #soundTip{display:none}.status{width:38vw;bottom:9px;left:8px}.screenfooter{width:38vw;bottom:87px;left:8px}}
 @media(max-width:640px){.top .rain-brand{display:none!important}.top h1{font-size:16px!important}.time-console{width:220px;top:5px}.clock-tools{top:63px;max-width:250px}.right{width:48vw;top:115px}.right #speech{font-size:12px!important}.right .terminal{max-height:19vh}.right .info{display:none}.right .settings button{font-size:8px!important}.screenfooter{bottom:89px;width:45vw}.status{width:45vw}.metric-top{display:block!important;font-size:8px!important}.status .metric{padding:6px 4px!important}}
+
+/* T-REX 2000 · V2.4 · interfaz sin panel inferior, reloj púrpura y acciones verticales */
+.time-console{
+ position:fixed!important;left:0!important;right:0!important;top:0!important;
+ width:100vw!important;max-width:none!important;height:clamp(86px,17vh,166px)!important;
+ transform:none!important;z-index:19!important;display:flex!important;justify-content:center!important;
+ align-items:flex-start!important;margin:0!important;padding:clamp(5px,1.1vh,16px) 6px 0!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:transparent!important;backdrop-filter:none!important;
+ pointer-events:none!important;
+}
+.time-console .time-main{width:auto!important;min-width:0!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:0!important;}
+.time-console .time-main>div{display:flex;justify-content:center;align-items:center;}
+.time-console small,.time-console .time-lamp,.time-console .next-alarm{display:none!important;}
+#bigClock{
+ font-family:'DejaVu Sans Mono','Liberation Mono',Consolas,monospace!important;
+ font-size:clamp(50px,8.7vw,132px)!important;font-weight:900!important;
+ letter-spacing:-.065em!important;line-height:1.1!important;
+ color:#ca78ff!important;-webkit-text-fill-color:#ca78ff!important;
+ text-shadow:0 3px 0 #51237a,0 0 9px rgba(15,4,33,.96),0 0 25px rgba(87,21,137,.6)!important;
+ font-variant-numeric:tabular-nums!important;white-space:nowrap!important;
+}
+.clock-tools{
+ position:fixed!important;left:12px!important;top:115px!important;right:auto!important;bottom:auto!important;
+ transform:none!important;max-width:220px!important;padding:5px 7px!important;
+ gap:4px!important;background:rgba(4,21,45,.58)!important;
+ border:1px solid rgba(108,211,255,.35)!important;
+}
+.clock-tools #clockStatus{font-size:8px!important;min-width:0!important;}
+.clock-tools button,.clock-tools summary{font-size:8px!important;padding:4px!important;}
+.clock-tools details{min-width:0!important;}
+.right{
+ top:clamp(135px,20vh,190px)!important;bottom:52px!important;right:10px!important;
+ width:clamp(152px,16.5vw,218px)!important;max-width:30vw!important;
+}
+.right>.title{font-size:9px!important;line-height:1.3!important;margin:3px 0 6px!important;padding:3px 5px!important}
+.right>.title[style]{margin-top:9px!important}
+.right .terminal{max-height:20vh!important;padding:7px!important;gap:5px!important;}
+.right #speech{font-size:clamp(11px,1.05vw,15px)!important;line-height:1.3!important;}
+.right .terminal .prompt,.right #event{font-size:8px!important;}
+.right .actions{display:flex!important;flex-direction:column!important;grid-template-columns:none!important;gap:5px!important;}
+.right .action{
+ width:100%!important;min-height:38px!important;flex-shrink:0!important;
+ text-align:left!important;font-size:clamp(10px,1vw,12px)!important;
+ padding:7px 9px!important;border-radius:3px!important;
+ background:rgba(5,20,49,.82)!important;
+}
+.right .action span{display:none!important}
+.right .below{
+ position:fixed!important;right:10px!important;bottom:10px!important;
+ width:auto!important;z-index:30!important;margin:0!important;padding:0!important;
+ background:none!important;border:0!important;border-radius:0!important;
+ backdrop-filter:none!important;box-shadow:none!important;
+}
+.right .below .line,.right .below .info,#soundTip,
+#sound,#testAlarm,#evolve{display:none!important}
+.right .settings{margin:0!important;padding:0!important;display:flex!important;justify-content:flex-end!important;}
+.right .settings #fullscreen{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ min-width:33px!important;min-height:30px!important;padding:2px 7px!important;
+ font-size:19px!important;line-height:1!important;font-weight:700!important;
+ color:#ead7ff!important;border:1px solid #9865bf!important;
+ background:rgba(16,12,43,.73)!important;border-radius:4px!important;
+}
+.right .settings #fullscreen:hover{background:rgba(64,28,105,.91)!important;}
+@media(max-width:900px){
+ #bigClock{font-size:clamp(43px,8vw,94px)!important}
+ .clock-tools{top:89px!important;left:8px!important;max-width:160px!important}
+ .right{right:8px!important;top:125px!important;bottom:46px!important;width:clamp(143px,22vw,190px)!important;max-width:42vw!important}
+ .right .terminal{max-height:18vh!important}
+ .right .action{min-height:35px!important;padding:6px!important}
+}
+@media(max-width:640px){
+ #bigClock{font-size:clamp(35px,9.3vw,58px)!important}
+ .clock-tools{top:75px!important;left:6px!important;max-width:135px!important}
+ .right{top:117px!important;width:clamp(130px,38vw,176px)!important;max-width:45vw!important}
+ .right .action{font-size:9px!important;min-height:34px!important}
+ .right .terminal{max-height:15vh!important}
+}
 </style>
 </head>
 <body>
@@ -299,7 +378,7 @@ body{background:#06314c!important;margin:0}
     <div class="machinebar"><span><i class="led"></i>SISTEMA OPERATIVO: REINUX 2000</span><span id="systemStatus">MASCOTA ONLINE · #001</span></div>
     <div class="time-console" aria-label="Reloj digital del taller y próximo aviso">
       <div class="time-main"><span class="time-lamp" aria-hidden="true"></span><div><small>RELOJ DEL TALLER</small><strong id="bigClock">--:--:--</strong></div></div>
-      <div class="next-alarm"><small>PRÓXIMO AVISO</small><strong id="nextAlarmTime">11:00</strong><span id="nextAlarmNote">Comienza la clase</span></div>
+      <div class="next-alarm" hidden><small>PRÓXIMO AVISO</small><strong id="nextAlarmTime">11:00</strong><span id="nextAlarmNote">Comienza la clase</span></div>
     </div>
     <div class="clock-tools" aria-label="Ajustes del reloj del taller">
       <span id="clockStatus" role="status">RELOJ: comprobando hora de Internet…</span>
@@ -365,7 +444,7 @@ body{background:#06314c!important;margin:0}
               <rect x="12" y="37" width="145" height="30" rx="3" fill="#12172f" stroke="#ffe28b" stroke-width="1.5"/>
               <text id="needLabel" x="84.5" y="56.5" font-family="monospace" font-size="10" font-weight="bold" fill="#ffe28b" text-anchor="middle">¡GRRR!</text>
             </g>
-            <text x="14" y="21" fill="#a2e5ff" font-size="10" font-family="monospace" letter-spacing="2">CRETÁCICO.EXE</text>
+            
             <text x="344" y="251" fill="#96bfe3" font-size="10" font-family="monospace" text-anchor="end">© 65.000.000 a.C.</text>
           </svg>
           <div id="classAlert" class="class-alert" role="alert" aria-live="assertive" aria-atomic="true" hidden>
@@ -399,10 +478,10 @@ body{background:#06314c!important;margin:0}
           <div class="line"></div>
           <div class="info"><span>IDENTIDAD<br><strong id="identity">PROTO #001</strong></span><span style="text-align:right">SUPERVIVENCIA<br><strong>GARANTIZADA</strong></span></div>
           <div class="settings">
-            <button class="smallbutton" type="button" id="sound">🔊 ACTIVAR SONIDOS</button>
-            <button class="smallbutton" type="button" id="testAlarm">🔔 PROBAR AVISO</button>
-            <button class="smallbutton" type="button" id="fullscreen">PANTALLA COMPLETA</button>
-            <button class="smallbutton" type="button" id="evolve">NUEVA GENERACIÓN ✦</button>
+            <button class="smallbutton" type="button" id="sound" hidden>🔊 ACTIVAR SONIDOS</button>
+            <button class="smallbutton" type="button" id="testAlarm" hidden>🔔 PROBAR AVISO</button>
+            <button class="smallbutton" type="button" id="fullscreen" aria-label="Pantalla completa" title="Pantalla completa">⛶</button>
+            <button class="smallbutton" type="button" id="evolve" hidden>NUEVA GENERACIÓN ✦</button>
           </div>
           <div id="soundTip" style="font-size:10px;color:#b4aec9;margin-top:8px">Pulsa «ACTIVAR SONIDOS» para oír rugidos y 4 pitidos por aviso. Sin voz. Los avisos se apagan solos.</div>
         </div>
@@ -414,7 +493,7 @@ body{background:#06314c!important;margin:0}
 <script>
 (function(){
 'use strict';
-var key='trex2000.v1', soundOn=false, sleeping=false, wakeTimer=null, actionTimer=null;
+var key='trex2000.v1', soundOn=true, sleeping=false, wakeTimer=null, actionTimer=null;
 var lastInput=0, lastNeedType='', lastNeedSound=0, needCooldown=6*60*1000, audioCtx=null, mutedByVisibility=false;
 var defaults={food:74,energy:81,ideas:66,works:0,generation:1,actions:0,updated:Date.now()};
 var s;
@@ -999,6 +1078,16 @@ document.addEventListener('visibilitychange',function(){
  mutedByVisibility=document.hidden;
  if(!document.hidden){passage();render();tick();playNeedAlert(false);}
 });
+
+// Los navegadores pueden bloquear el audio hasta la primera interacción.
+// Las alarmas están habilitadas por defecto, sin necesidad de pulsar "activar sonidos".
+function habilitarAudioDesdeInteraccion(){
+  if(!soundOn)return;
+  var ac=getAudio();
+  if(ac && ac.state==='suspended')ac.resume().catch(function(){});
+}
+document.addEventListener('pointerdown',habilitarAudioDesdeInteraccion,{passive:true});
+document.addEventListener('keydown',habilitarAudioDesdeInteraccion);
 restoreClock();passage();render();tick();refreshManualInput();syncClock();
 setInterval(tick,1000);
 setInterval(function(){if(clockSource!=='MANUAL')syncClock();},20*60*1000);
