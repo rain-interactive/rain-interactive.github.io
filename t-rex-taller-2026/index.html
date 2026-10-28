@@ -1527,9 +1527,21 @@ setInterval(needsTick,30000);
       if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
         throw new Error("La cámara necesita un navegador compatible con HTTPS.");
       }
-      var s=await navigator.mediaDevices.getUserMedia({
-        audio:false,video:{width:{ideal:320},height:{ideal:180},frameRate:{ideal:10,max:12}}
-      });
+      // Algunas webcams antiguas no aceptan max:12 fps ni 16:9.
+      // Dejar al navegador elegir el formato y reducir solo el CANVAS de salida.
+      var s, ultimoError;
+      var formatos=[true,{width:{ideal:640},height:{ideal:480}},
+        {width:{ideal:320},height:{ideal:240}}];
+      for(var i=0;i<formatos.length;i++){
+        try{
+          s=await navigator.mediaDevices.getUserMedia({audio:false,video:formatos[i]});
+          break;
+        }catch(error){
+          ultimoError=error;
+          if(error && /^(NotAllowedError|PermissionDeniedError|SecurityError|NotReadableError|TrackStartError)$/.test(error.name))throw error;
+        }
+      }
+      if(!s)throw ultimoError||new Error("No se ha detectado ninguna webcam.");
       if(myToken!==token||!open){s.getTracks().forEach(function(t){t.stop();});return;}
       stream=s;
       video.srcObject=s;await video.play();
@@ -1552,7 +1564,16 @@ setInterval(needsTick,30000);
     }catch(err){
       if(myToken!==token)return;
       loader.textContent="CÁMARA NO DISPONIBLE";
-      note.textContent=err&&err.name==="NotAllowedError"?"Permite usar la webcam en Chromium.":(err.message||"No se pudo acceder a la webcam.");
+      var names=err&&err.name||"";
+      note.textContent=/NotAllowedError|PermissionDeniedError|SecurityError/.test(names)?
+        "Da permiso a la cámara en Chromium y vuelve a abrir.":
+        /NotReadableError|TrackStartError/.test(names)?
+        "La webcam está ocupada por otro programa. Ciérralo y prueba otra vez.":
+        /NotFoundError|DevicesNotFoundError/.test(names)?
+        "No se detecta una webcam. Comprueba que esté conectada.":
+        /OverconstrainedError|ConstraintNotSatisfiedError/.test(names)?
+        "La webcam no admite este modo. Comprueba los ajustes de vídeo en Chromium.":
+        "No se pudo iniciar la webcam. Comprueba la conexión y vuelve a abrir.";
     }
   }
   entry.addEventListener("click",function(){
