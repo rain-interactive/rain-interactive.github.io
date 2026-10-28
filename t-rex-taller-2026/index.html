@@ -599,11 +599,92 @@ body{background:#06314c!important;margin:0}
  padding:5px 7px!important;min-height:29px!important;font-size:9px!important;gap:4px!important;}
 }
 
+
+/* CÁMARA JURÁSICA en ventanita dentro del T-Rex — 2026-10-28.12 */
+#jurassicEntry.jurassic-shortcut {
+  box-sizing:border-box!important;
+  display:inline-flex!important;position:fixed!important;
+  top:clamp(155px,23vh,197px)!important;left:14px!important;right:auto!important;
+  z-index:45!important;width:auto!important;max-width:224px!important;
+  min-height:33px!important;padding:6px 9px!important;gap:6px!important;
+  border:1px solid rgba(143,249,237,.68)!important;
+  border-radius:5px!important;
+  background:rgba(4,28,42,.72)!important;
+  color:#fff!important;box-shadow:0 3px 13px rgba(0,16,31,.23)!important;
+  text-decoration:none!important;font-size:clamp(10px,1.03vw,12px)!important;
+  font-weight:850!important;text-shadow:0 1px 3px #082635!important;
+  white-space:nowrap!important;cursor:pointer!important;
+}
+#jurassicEntry.jurassic-shortcut:hover,
+#jurassicEntry.jurassic-shortcut:focus-visible{
+  background:rgba(9,67,79,.94)!important;border-color:#bafff3!important;
+}
+#jurassicEntry.jurassic-shortcut .jurassic-arrow{color:#7cf6ec!important;}
+#jurassicWindow.jurassic-window {
+  position:fixed!important;z-index:46!important;left:14px;top:242px;
+  box-sizing:border-box;width:clamp(185px,20vw,252px);
+  max-width:calc(100vw - 20px);height:auto;
+  display:flex;flex-direction:column;
+  padding:6px;margin:0;
+  border:1px solid rgba(117,238,225,.85);
+  border-radius:7px;background:rgba(3,23,37,.95);
+  box-shadow:0 8px 28px rgba(0,8,29,.48);
+  color:#eaffff;overflow:hidden;
+}
+#jurassicWindow[hidden]{display:none!important}
+.jurassic-window-top{display:flex;align-items:center;justify-content:space-between;
+  gap:6px;padding:1px 2px 6px;font:800 10px/1.3 "DejaVu Sans Mono",monospace}
+.jurassic-window-top strong{font-weight:800}
+.jurassic-window-top button{font:800 20px/1 Arial,sans-serif;min-width:25px;
+  min-height:24px;padding:0;color:#fff;background:transparent;border:0;border-radius:3px}
+.jurassic-window-top button:hover{background:#244e58}
+.jurassic-stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;
+  background:#26ced3 url('./assets/jungle.png') center center/cover no-repeat;
+  border:1px solid rgba(180,242,237,.35)}
+#jurassicVideo{display:none}
+#jurassicCanvas{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
+  transform:scaleX(-1)}
+.jurassic-loader{position:absolute;inset:0;display:grid;place-items:center;
+  padding:8px;text-align:center;background:rgba(1,23,36,.45);color:#fff;
+  font:800 10px/1.4 "DejaVu Sans Mono",monospace;text-shadow:0 2px 5px #05192b}
+.jurassic-loader[hidden]{display:none!important}
+.jurassic-controls{display:flex;justify-content:space-between;align-items:center;
+  gap:8px;padding-top:7px}
+.jurassic-controls button,.jurassic-controls a{border:1px solid #537f86;border-radius:3px;
+  color:#d9fffa;background:rgba(8,48,61,.84);padding:5px 7px;
+  font:800 9px/1.3 "DejaVu Sans Mono",monospace;text-decoration:none;cursor:pointer}
+.jurassic-controls button:hover,.jurassic-controls a:hover{background:#1a6371}
+.jurassic-note{font:600 9px/1.35 "DejaVu Sans Mono",monospace;
+  padding-top:5px;min-height:11px;color:#b8dad8}
+@media(max-width:900px) {
+ #jurassicEntry.jurassic-shortcut{left:8px!important;min-height:30px!important;
+   font-size:10px!important;padding:5px 8px!important}
+ #jurassicWindow.jurassic-window{width:216px;left:8px}
+}
+@media(max-width:640px){
+ #jurassicEntry.jurassic-shortcut{left:6px!important;min-height:28px!important;
+   font-size:9px!important;padding:5px 6px!important;gap:4px!important}
+ #jurassicWindow.jurassic-window{left:6px;width:min(216px,55vw);padding:4px}
+ .jurassic-window-top{font-size:8px}
+ .jurassic-controls button,.jurassic-controls a{font-size:8px;padding:4px}
+ .jurassic-note{font-size:8px}
+}
+
 </style>
 </head>
 <body>
 <main class="shell">
-  <a id="jurassicEntry" class="jurassic-shortcut" href="./camara-jurasica.html" title="Entrar en la Cámara Jurásica">📷 <span>CÁMARA JURÁSICA</span> <span class="jurassic-arrow">↗</span></a>
+  <button id="jurassicEntry" class="jurassic-shortcut" type="button" aria-expanded="false" aria-controls="jurassicWindow" title="Abrir ventanita jurásica sin salir del dinosaurio">📷 <span>CÁMARA JURÁSICA</span> <span class="jurassic-arrow">▾</span></button>
+  <section id="jurassicWindow" class="jurassic-window" aria-label="Webcam Jurásica en miniatura" hidden>
+    <div class="jurassic-window-top"><strong>📷 CÁMARA JURÁSICA</strong><button id="jurassicClose" type="button" aria-label="Cerrar y apagar la cámara">×</button></div>
+    <div class="jurassic-stage">
+      <video id="jurassicVideo" muted playsinline autoplay aria-hidden="true"></video>
+      <canvas id="jurassicCanvas" width="320" height="180" aria-label="Tu silueta en la selva en directo"></canvas>
+      <div id="jurassicLoader" class="jurassic-loader">CONECTANDO WEBCAM…</div>
+    </div>
+    <div class="jurassic-controls"><button id="jurassicMode" type="button">◉ SILUETA</button><a href="./camara-jurasica.html" target="_blank" rel="noopener">AMPLIAR ↗</a></div>
+    <div class="jurassic-note" id="jurassicNote" role="status" aria-live="polite">La webcam solo se activa al abrirla.</div>
+  </section>
   <header class="top">
     <div>
       <div class="rain-brand" aria-label="Rain Interactive">
@@ -1342,5 +1423,152 @@ setInterval(syncClock,20*60*1000);
 setInterval(needsTick,30000);
 })();
 </script>
+
+<script>
+/* Cámara Jurásica en el T-Rex (miniatura). La cámara se detiene al cerrar o perder visibilidad. */
+(function(){
+  "use strict";
+  var entry=document.getElementById("jurassicEntry");
+  var panel=document.getElementById("jurassicWindow");
+  var closeBtn=document.getElementById("jurassicClose");
+  var modeBtn=document.getElementById("jurassicMode");
+  var video=document.getElementById("jurassicVideo");
+  var canvas=document.getElementById("jurassicCanvas");
+  var ctx=canvas.getContext("2d",{alpha:true});
+  var loader=document.getElementById("jurassicLoader");
+  var note=document.getElementById("jurassicNote");
+  var stream=null,segmenter=null,raf=0,lastFrame=0,processing=false;
+  var mode="silueta",open=false,token=0,modelPromise=null;
+  var modelUrl="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation";
+  function loadModel(){
+    if(window.SelfieSegmentation)return Promise.resolve();
+    if(modelPromise)return modelPromise;
+    modelPromise=new Promise(function(resolve,reject){
+      var script=document.createElement("script");
+      script.src=modelUrl+"/selfie_segmentation.js";
+      script.crossOrigin="anonymous";
+      script.onload=function(){window.SelfieSegmentation?resolve():reject(new Error("Modelo de recorte no disponible"));};
+      script.onerror=function(){reject(new Error("No se pudo descargar el recorte. Comprueba la conexión."));};
+      document.head.appendChild(script);
+    }).catch(function(err){modelPromise=null;throw err;});
+    return modelPromise;
+  }
+  function updatePosition(){
+    if(panel.hidden)return;
+    var r=entry.getBoundingClientRect();
+    panel.style.left=Math.max(6,Math.round(r.left))+"px";
+    var preferred=Math.round(r.bottom)+7;
+    var h=panel.getBoundingClientRect().height;
+    panel.style.top=Math.max(4,Math.min(preferred,window.innerHeight-h-8))+"px";
+  }
+  function onResults(results){
+    if(!open||!results||!results.segmentationMask)return;
+    var w=320,h=180;
+    ctx.clearRect(0,0,w,h);
+    ctx.save();
+    ctx.drawImage(results.segmentationMask,0,0,w,h);
+    ctx.globalCompositeOperation="source-in";
+    if(mode==="silueta"){
+      ctx.fillStyle="#1e123d";
+      ctx.fillRect(0,0,w,h);
+    }else{
+      ctx.drawImage(results.image,0,0,w,h);
+    }
+    ctx.restore();
+    loader.hidden=true;
+    note.textContent=mode==="silueta"?"SILUETA JURÁSICA EN DIRECTO":"FIGURA RECORTADA EN DIRECTO";
+  }
+  function stop(){
+    token++;
+    open=false;
+    if(raf){cancelAnimationFrame(raf);raf=0;}
+    if(stream){stream.getTracks().forEach(function(track){track.stop();});stream=null;}
+    try{video.pause();video.srcObject=null;}catch(e){}
+    if(segmenter&&segmenter.close){try{segmenter.close();}catch(e){}}
+    segmenter=null;processing=false;lastFrame=0;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    panel.hidden=true;
+    loader.hidden=false;
+    entry.setAttribute("aria-expanded","false");
+    entry.querySelector(".jurassic-arrow").textContent="▾";
+    note.textContent="La webcam solo se activa al abrirla.";
+  }
+  async function frame(t){
+    if(!open)return;
+    raf=requestAnimationFrame(frame);
+    if(processing||t-lastFrame<155||video.readyState<2)return;
+    lastFrame=t;processing=true;
+    try{
+      if(segmenter){
+        await segmenter.send({image:video});
+      }else{
+        ctx.clearRect(0,0,320,180);
+        ctx.drawImage(video,0,0,320,180);
+        loader.hidden=true;
+      }
+    }catch(e){
+      console.warn("Cámara Jurásica: segmentación no disponible",e);
+      if(segmenter&&segmenter.close){try{segmenter.close();}catch(err){}}
+      segmenter=null;
+      note.textContent="MODO CÁMARA DIRECTA (SIN RECORTE)";
+      loader.hidden=true;
+    }finally{processing=false;}
+  }
+  async function start(){
+    if(open)return;
+    var myToken=++token;
+    open=true;panel.hidden=false;loader.hidden=false;
+    loader.textContent="CONECTANDO WEBCAM…";
+    entry.setAttribute("aria-expanded","true");
+    entry.querySelector(".jurassic-arrow").textContent="▴";
+    note.textContent="Permite usar la cámara cuando lo pida el navegador.";
+    updatePosition();
+    try{
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+        throw new Error("La cámara necesita un navegador compatible con HTTPS.");
+      }
+      var s=await navigator.mediaDevices.getUserMedia({
+        audio:false,video:{width:{ideal:320},height:{ideal:180},frameRate:{ideal:10,max:12}}
+      });
+      if(myToken!==token||!open){s.getTracks().forEach(function(t){t.stop();});return;}
+      stream=s;
+      video.srcObject=s;await video.play();
+      if(myToken!==token||!open)return;
+      loader.textContent="DETECTANDO SILUETA…";
+      try{
+        await loadModel();
+        if(myToken!==token||!open)return;
+        segmenter=new window.SelfieSegmentation({
+          locateFile:function(file){return modelUrl+"/"+file;}
+        });
+        segmenter.setOptions({modelSelection:0});
+        segmenter.onResults(onResults);
+      }catch(err){
+        console.warn("Cámara Jurásica: modelo de silueta",err);
+        note.textContent="SIN RECORTE · SE MUESTRA CÁMARA NORMAL";
+      }
+      if(myToken!==token||!open)return;
+      raf=requestAnimationFrame(frame);
+    }catch(err){
+      if(myToken!==token)return;
+      loader.textContent="CÁMARA NO DISPONIBLE";
+      note.textContent=err&&err.name==="NotAllowedError"?"Permite usar la webcam en Chromium.":(err.message||"No se pudo acceder a la webcam.");
+    }
+  }
+  entry.addEventListener("click",function(){
+    if(open){stop();}else{start();}
+  });
+  closeBtn.addEventListener("click",stop);
+  modeBtn.addEventListener("click",function(){
+    mode=mode==="silueta"?"foto":"silueta";
+    this.textContent=mode==="silueta"?"◉ SILUETA":"◉ EN COLOR";
+    if(!segmenter){note.textContent="RECORTE NO DISPONIBLE · CÁMARA DIRECTA";}
+  });
+  window.addEventListener("resize",updatePosition);
+  document.addEventListener("visibilitychange",function(){if(document.hidden&&open)stop();});
+  window.addEventListener("pagehide",stop);
+})();
+</script>
+
 </body>
 </html>
