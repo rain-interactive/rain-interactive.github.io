@@ -220,8 +220,63 @@ h1 span {background:linear-gradient(125deg,#ff80d8 15%,#ff4aaf 70%,#cf5ef9);back
 @media(max-width:740px){.time-console{gap:9px;padding:10px}.time-main{gap:9px}.next-alarm{font-size:9px;min-width:116px}.next-alarm strong{font-size:11px}.time-console small{font-size:8px}#bigClock{font-size:clamp(26px,6vw,37px)}}
 @media(max-width:370px){.time-console{gap:4px}#bigClock{font-size:24px;letter-spacing:0}.next-alarm{min-width:96px;font-size:8px}}
 @media(prefers-reduced-motion:reduce){.class-alert{animation:none!important}}
+
+/* RELOJ INDEPENDIENTE: fuente de Internet, fecha/hora manual y avisos silenciosos */
+.clock-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:6px 14px 10px;background:#0a1227;border:1px solid #336b93;border-top:0;color:#a5dced;font:10px Consolas,'DejaVu Sans Mono',monospace;letter-spacing:.01em}
+.clock-tools button{cursor:pointer;color:#99edff;background:#15283c;border:1px solid #3b728c;padding:7px 10px;font:inherit}
+.clock-tools button:hover{background:#233c56}
+.clock-tools #clockStatus{flex:1;min-width:145px}
+.clock-tools details{margin-left:auto;min-width:175px;max-width:100%}
+.clock-tools summary{cursor:pointer;color:#e8baff;user-select:none}
+.clock-tools .clock-edit{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:9px}
+.clock-tools label{color:#d6c7f8}
+.clock-tools input{font:12px Consolas,'DejaVu Sans Mono',monospace;min-width:185px;max-width:100%;color:#fff;border:1px solid #5183a2;background:#081d33;padding:8px;color-scheme:dark}
+.clock-tools .clock-help{font-size:10px;line-height:1.4;color:#96bbd0;flex-basis:100%}
+@media(max-width:740px){.clock-tools{padding:10px;gap:8px}.clock-tools details{margin-left:0}}
+
+/* T-REX 2000 v2.2 · SELVA PANORAMICA, UI FLOTANTE */
+html,body{height:100%;width:100%;overflow:hidden}
+body{background:#06314c!important;margin:0}
+.shell{position:relative;max-width:none!important;width:100%;height:100vh;height:100dvh;padding:0!important;margin:0!important;overflow:hidden}
+.machine,.grid,.grid>div:first-child{display:contents!important}
+.machinebar,.foot{display:none!important}
+.screen{position:fixed!important;inset:0!important;padding:0!important;margin:0!important;z-index:0;border:0!important;box-shadow:none!important;background:#176481 url('./assets/jungle.png') center center/cover no-repeat!important;overflow:hidden}
+.screen::after{inset:0!important;opacity:.045!important;pointer-events:none}
+#jungleBackground{opacity:0!important}
+.scene{position:absolute;inset:0;width:100%!important;height:100%!important;aspect-ratio:auto!important;background:transparent!important;image-rendering:pixelated}
+.top{position:fixed!important;top:12px;left:12px;z-index:20;margin:0!important;padding:9px 12px;display:block!important;background:rgba(5,21,42,.82);border:1px solid #5fcbec;box-shadow:0 4px 24px #00162888;border-radius:5px;backdrop-filter:blur(5px)}
+.top .kicker,.top .subtitle,.top .clock{display:none!important}
+.top .rain-brand{margin:0 0 4px!important;min-height:0}
+.rain-nameplate{display:none!important}
+.top h1{font-size:clamp(20px,2.2vw,33px)!important;margin:0!important;line-height:1!important}
+.time-console{position:fixed!important;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:flex!important;gap:11px!important;align-items:center;justify-content:space-between;width:clamp(250px,27vw,370px);margin:0!important;padding:9px 12px!important;border:1px solid #5fcbec!important;background:rgba(5,21,42,.83)!important;border-radius:5px;box-shadow:0 4px 24px #00162888;backdrop-filter:blur(5px)}
+.time-main{gap:7px!important}.time-console small{font-size:8px!important;letter-spacing:.05em!important}
+#bigClock{font-size:clamp(23px,2.5vw,34px)!important;letter-spacing:0!important}
+.time-console .next-alarm{min-width:73px!important;font-size:9px!important;line-height:1.2!important}.time-console .next-alarm strong{font-size:12px!important}.time-console #nextAlarmNote{font-size:9px!important}
+.clock-tools{position:fixed!important;z-index:24;left:50%;transform:translateX(-50%);top:80px;max-width:min(480px,50vw);padding:5px 8px!important;background:rgba(5,21,42,.76)!important;border:1px solid #396784;border-radius:4px;backdrop-filter:blur(5px)}
+.clock-tools button,.clock-tools summary{font-size:9px!important}
+.clock-tools #clockStatus{font-size:9px!important}
+.clock-tools details[open]{background:#081c36;position:relative;z-index:40;padding:7px}
+.right{position:fixed!important;right:12px;top:12px;bottom:12px;width:clamp(250px,25vw,340px);z-index:21;display:flex!important;flex-direction:column;min-width:0;pointer-events:none}
+.right>*{pointer-events:auto}
+.right>.title{font-size:9px!important;margin-bottom:5px!important;padding:3px 8px;background:#07162ab8;align-self:flex-start;border-radius:3px}
+.right .terminal{min-height:0!important;max-height:34vh;overflow-y:auto;padding:10px!important;gap:7px!important;background:rgba(3,18,41,.84)!important;backdrop-filter:blur(4px);box-shadow:0 5px 25px #0005}
+.right #speech{font-size:clamp(13px,1.2vw,17px)!important;line-height:1.35!important}
+.right #event,.right .prompt{font-size:9px!important}
+.right .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.right .action{min-height:47px!important;font-size:12px!important;padding:8px!important;background:rgba(7,28,61,.84)!important;backdrop-filter:blur(4px)}
+.right .action span{font-size:8px!important;margin-top:3px!important}
+.right .below{margin-top:auto!important;background:rgba(5,21,42,.78);border:1px solid #345b8b;border-radius:4px;padding:8px;backdrop-filter:blur(4px)}
+.right .below .line{margin:3px 0}.right .info{font-size:9px!important;line-height:1.25!important}.right .settings{gap:5px!important}.right .settings button{font-size:9px!important;padding:6px!important}
+.right #soundTip{font-size:9px!important;margin-top:2px!important}
+.screenfooter{position:fixed!important;z-index:22;left:12px;bottom:100px;width:min(370px,35vw);padding:7px!important;background:rgba(5,21,42,.83)!important;border:1px solid #5b96be!important;font-size:10px!important}
+.status{position:fixed!important;z-index:22;left:12px;bottom:12px;width:min(370px,35vw);display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;margin:0!important}
+.status .metric{padding:8px 5px!important;background:rgba(5,21,42,.83)!important;backdrop-filter:blur(4px)}.status .metric-top{font-size:9px!important;gap:2px!important}.status .track{margin-top:6px!important}
+.class-alert{position:fixed!important;left:50%!important;transform:translateX(-50%)!important;right:auto!important;bottom:12%!important;width:min(520px,72vw);z-index:35!important}
+@media(max-width:900px){.top{top:8px;left:8px;padding:6px}.top .rain-brand{transform:scale(.74);transform-origin:left top;margin-bottom:-8px!important}.top h1{font-size:20px!important}.time-console{top:8px;left:auto;right:8px;transform:none;width:230px;padding:7px!important}.clock-tools{left:auto;right:8px;transform:none;top:75px;max-width:270px}.right{width:min(270px,37vw);top:126px;bottom:8px;right:8px}.right .terminal{max-height:20vh}.right .title{font-size:8px!important}.right .action{font-size:10px!important;min-height:38px!important;padding:6px!important}.right .action span{display:none}.right .below{padding:5px}.right #soundTip{display:none}.status{width:38vw;bottom:9px;left:8px}.screenfooter{width:38vw;bottom:87px;left:8px}}
+@media(max-width:640px){.top .rain-brand{display:none!important}.top h1{font-size:16px!important}.time-console{width:220px;top:5px}.clock-tools{top:63px;max-width:250px}.right{width:48vw;top:115px}.right #speech{font-size:12px!important}.right .terminal{max-height:19vh}.right .info{display:none}.right .settings button{font-size:8px!important}.screenfooter{bottom:89px;width:45vw}.status{width:45vw}.metric-top{display:block!important;font-size:8px!important}.status .metric{padding:6px 4px!important}}
 </style>
-<link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"></head>
+</head>
 <body>
 <main class="shell">
   <header class="top">
@@ -244,12 +299,25 @@ h1 span {background:linear-gradient(125deg,#ff80d8 15%,#ff4aaf 70%,#cf5ef9);back
     <div class="machinebar"><span><i class="led"></i>SISTEMA OPERATIVO: REINUX 2000</span><span id="systemStatus">MASCOTA ONLINE · #001</span></div>
     <div class="time-console" aria-label="Reloj digital del taller y próximo aviso">
       <div class="time-main"><span class="time-lamp" aria-hidden="true"></span><div><small>RELOJ DEL TALLER</small><strong id="bigClock">--:--:--</strong></div></div>
-      <div class="next-alarm"><small>PRÓXIMO AVISO</small><strong id="nextAlarmTime">17:00</strong><span id="nextAlarmNote">Comienza la clase</span></div>
+      <div class="next-alarm"><small>PRÓXIMO AVISO</small><strong id="nextAlarmTime">11:00</strong><span id="nextAlarmNote">Comienza la clase</span></div>
+    </div>
+    <div class="clock-tools" aria-label="Ajustes del reloj del taller">
+      <span id="clockStatus" role="status">RELOJ: comprobando hora de Internet…</span>
+      <button type="button" id="syncClock">🌐 SINCRONIZAR</button>
+      <details id="clockSetup">
+        <summary>⚙ AJUSTAR RELOJ</summary>
+        <div class="clock-edit">
+          <label for="manualClock">Fecha y hora reales de Galicia</label>
+          <input id="manualClock" type="datetime-local" step="60" aria-label="Fecha y hora actuales en España peninsular">
+          <button type="button" id="applyClock">GUARDAR HORA</button>
+          <div class="clock-help">Funciona sin Internet y no cambia la hora de Linux. Si reinicias el PC con otra hora, conviene sincronizar o reajustar.</div>
+        </div>
+      </details>
     </div>
     <div class="grid">
       <div>
         <div class="screen">
-          <svg id="scene" class="scene" viewBox="0 0 360 268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="T-Rex púrpura apoyado sobre suelo de selva turquesa; come, pinta, duerme y ruge">
+          <svg id="scene" class="scene" viewBox="0 0 360 268" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="T-Rex púrpura apoyado sobre suelo de selva turquesa; come, pinta, duerme y ruge">
             <defs>
               <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#183977"/><stop offset="1" stop-color="#db448c"/></linearGradient>
             </defs>
@@ -323,7 +391,8 @@ h1 span {background:linear-gradient(125deg,#ff80d8 15%,#ff4aaf 70%,#cf5ef9);back
           <button class="action" id="feed" type="button">🍪 ALIMENTAR<span>Un tentempié jurásico</span></button>
           <button class="action" id="paint" type="button">🎨 PINTAR<span>Una obra inclasificable</span></button>
           <button class="action" id="sleep" type="button">☾ SIESTA<span>Recargar 65 millones de años</span></button>
-          <button class="action" id="talk" type="button">💬 HABLAR<span>Escuchar una barbaridad</span></button>
+          <button class="action" id="talk" type="button">💬 HABLAR<span>Charlar con el T-Rex</span></button>
+          <button class="action" id="artHistory" type="button">🏺 HISTORIA DEL ARTE<span>Pintura, escultura y cerámica</span></button>
         </div>
         <div class="below">
           <div class="line"></div>
@@ -334,7 +403,7 @@ h1 span {background:linear-gradient(125deg,#ff80d8 15%,#ff4aaf 70%,#cf5ef9);back
             <button class="smallbutton" type="button" id="fullscreen">PANTALLA COMPLETA</button>
             <button class="smallbutton" type="button" id="evolve">NUEVA GENERACIÓN ✦</button>
           </div>
-          <div id="soundTip" style="font-size:10px;color:#b4aec9;margin-top:8px">Pulsa «ACTIVAR SONIDOS» para oír rugidos y alarmas. Los avisos se apagan solos.</div>
+          <div id="soundTip" style="font-size:10px;color:#b4aec9;margin-top:8px">Pulsa «ACTIVAR SONIDOS» para oír rugidos y 4 pitidos por aviso. Sin voz. Los avisos se apagan solos.</div>
         </div>
       </div>
     </div>
@@ -672,8 +741,58 @@ el('sleep').addEventListener('click',function(){
  s.energy=cap(s.energy+35);s.food=cap(s.food-3);say(pick(napped),'dormir','Ojos cerrados · ZZZ');chirp('sleep');activity();
  wakeTimer=setTimeout(function(){wake();render();say(pick(woken),'despertar','Sueño completado');},14000);
 });
+
+var artFacts=[
+ "CERÁMICA · La alfarería es anterior a la escritura: hay piezas de barro cocido de hace más de 20.000 años, como las de la cueva de Xianrendong, en China.",
+ "CERÁMICA · En el Neolítico, los recipientes de barro sirvieron para almacenar, cocinar y transportar alimentos.",
+ "CERÁMICA · La cerámica griega de figuras negras representaba escenas con siluetas oscuras sobre la arcilla rojiza.",
+ "CERÁMICA · La técnica griega de figuras rojas invirtió la relación: dejó los personajes del color de la arcilla y pintó el fondo oscuro.",
+ "CERÁMICA · La porcelana se desarrolló en China muchos siglos antes de que Europa consiguiera producirla de manera sistemática.",
+ "CERÁMICA · La porcelana combina materias primas adecuadas y temperaturas altas; es distinta de la loza por su mayor vitrificación.",
+ "CERÁMICA · El gres se cuece a alta temperatura y suele tener un cuerpo compacto y poco poroso.",
+ "CERÁMICA · La loza suele cocerse a temperatura más baja que el gres; sus esmaltes pueden darle color e impermeabilidad.",
+ "CERÁMICA · Los esmaltes cerámicos son capas vítreas que se funden durante la cocción. Química y arte en el mismo horno.",
+ "CERÁMICA · En Japón, la tradición raku está ligada a la ceremonia del té desde el siglo XVI.",
+ "CERÁMICA · Los azulejos de reflejo metálico de tradición islámica emplearon técnicas complejas para conseguir superficies brillantes.",
+ "CERÁMICA · Los mosaicos de cerámica vidriada aparecen en grandes monumentos de Asia occidental desde la Antigüedad.",
+ "CERÁMICA · Bernard Leach fue una figura importante para la cerámica de estudio británica del siglo XX.",
+ "CERÁMICA · Lucie Rie experimentó con formas depuradas y superficies sutiles, renovando la cerámica de estudio del siglo XX.",
+ "CERÁMICA · Grayson Perry utiliza jarrones narrativos para hablar de identidad, sociedad y cultura contemporánea.",
+ "CERÁMICA · Los engobes son mezclas de arcilla y agua, a menudo coloreadas, que se aplican sobre la superficie de una pieza.",
+ "CERÁMICA · Un craquelado es una red de pequeñas grietas en el esmalte. Puede buscarse como efecto estético, aunque también puede afectar a su uso alimentario.",
+ "CERÁMICA · La contracción de una pieza empieza al secarse y continúa en la cocción. Por eso las medidas finales nunca son idénticas a las del barro fresco.",
+ "PINTURA · En las cuevas de Altamira se conservan extraordinarias pinturas paleolíticas de bisontes y otros animales.",
+ "PINTURA · El fresco se pinta sobre enlucido húmedo: el pigmento queda integrado al carbonatarse la cal.",
+ "PINTURA · Giotto ayudó a abrir camino hacia una representación más espacial y expresiva en la pintura italiana medieval.",
+ "PINTURA · En el Renacimiento, la perspectiva lineal permitió construir espacios arquitectónicos con puntos de fuga.",
+ "PINTURA · Leonardo da Vinci empleó el sfumato para suavizar los bordes y las transiciones de luz.",
+ "PINTURA · Caravaggio es conocido por el claroscuro dramático y sus escenas de fuerte naturalismo.",
+ "PINTURA · Velázquez pintó Las meninas en 1656. El cuadro juega con la mirada, la representación y el espacio del espectador.",
+ "PINTURA · Goya realizó las Pinturas negras en los muros de su casa, la Quinta del Sordo, durante sus últimos años en España.",
+ "PINTURA · Monet participó en la primera exposición impresionista de 1874. Su obra Impresión, sol naciente dio nombre al movimiento.",
+ "PINTURA · Cézanne simplificó la naturaleza en planos y volúmenes, influyendo en el desarrollo del cubismo.",
+ "PINTURA · Picasso y Braque desarrollaron el cubismo a comienzos del siglo XX, rompiendo el punto de vista único.",
+ "PINTURA · Hilma af Klint pintó grandes series abstractas desde 1906, antes de que la abstracción fuera ampliamente conocida.",
+ "PINTURA · En el expresionismo, el color y la deformación pueden expresar emociones sin imitar la realidad.",
+ "PINTURA · El aerógrafo pulveriza pintura de forma controlada y permite crear transiciones suaves y degradados.",
+ "ESCULTURA · El contrapposto de la escultura griega distribuye el peso del cuerpo de forma desigual y crea una postura más natural.",
+ "ESCULTURA · Las esculturas de terracota se modelan con barro y se endurecen en un horno; no todas las esculturas son de mármol.",
+ "ESCULTURA · Miguel Ángel esculpió el David en mármol a comienzos del siglo XVI.",
+ "ESCULTURA · En bronce se pueden hacer esculturas mediante la técnica de la cera perdida, utilizada desde la Antigüedad.",
+ "ESCULTURA · Rodin dejó visibles texturas y huellas de modelado para que la superficie transmitiera movimiento.",
+ "ESCULTURA · Brancusi buscó formas simplificadas y esenciales. No hace falta tallar cada pluma para representar un pájaro.",
+ "ESCULTURA · Duchamp llamó ready-made a objetos cotidianos trasladados al contexto del arte, cuestionando qué convierte algo en obra.",
+ "ESCULTURA · Louise Bourgeois creó grandes esculturas de arañas, entre ellas Maman, relacionadas con la memoria y su madre.",
+ "ESCULTURA · El arte cinético incorpora movimiento real o aparente; el material puede moverse y transformar toda la obra."
+];
+var artFactIndex=-1;
+function nextArtFact(){artFactIndex=(artFactIndex+1+Math.floor(Math.random()*7))%artFacts.length;return artFacts[artFactIndex];}
+el('artHistory').addEventListener('click',function(){wake();s.ideas=cap(s.ideas+3);say(nextArtFact(),'historia_del_arte','Archivo didáctico del T-Rex · sin voz');startScene('talking',1400);activity();});
+// Curiosidades visibles ocasionales, sin voz ni pitidos, para acompañar a las clases.
+setInterval(function(){if(document.hidden||sleeping)return;var now=clockNow();var z=zoneParts(now);if(z.hour>=11&&z.hour<20){say(nextArtFact(),'¿sabías_que?','Un dato de historia del arte desde la selva');startScene('talking',1300);}},300000);
+
 el('talk').addEventListener('click',function(){
- wake();s.ideas=cap(s.ideas+2);say(pick(lines),'hablar','Rugido traducido del Cretácico');
+ wake();s.ideas=cap(s.ideas+2);say(Math.random()<.5?nextArtFact():pick(lines),'hablar','T-Rex profesor de arte');
  startScene('roaring',1400);roar();activity();
 });
 el('evolve').addEventListener('click',function(){
@@ -685,27 +804,31 @@ el('evolve').addEventListener('click',function(){
 el('sound').addEventListener('click',function(){
  soundOn=!soundOn;
  this.textContent=soundOn?'🔊 SONIDOS: ON':'🔇 SONIDOS: OFF';
- el('soundTip').textContent=soundOn?'Alarmas de clase y rugidos activos. Cada alarma dura 3 segundos y se apaga sola.':'Pulsa «ACTIVAR SONIDOS» para oír rugidos y alarmas.';
- if(soundOn){getAudio();roar();lastNeedSound=Date.now();}else{if(audioCtx&&audioCtx.state==='running')audioCtx.suspend().catch(function(){});if('speechSynthesis' in window)window.speechSynthesis.cancel();}
+ el('soundTip').textContent=soundOn?'Alarmas de clase y rugidos activos. Cada aviso suena con 4 pitidos y se apaga solo.':'Pulsa «ACTIVAR SONIDOS» para oír rugidos y cuatro pitidos por aviso. Sin voz.';
+ if(soundOn){getAudio();roar();lastNeedSound=Date.now();}else{if(audioCtx&&audioCtx.state==='running')audioCtx.suspend().catch(function(){});}
 });
 el('fullscreen').addEventListener('click',function(){
  if(document.fullscreenElement){if(document.exitFullscreen)document.exitFullscreen();}
  else{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();}
 });
 
-// RECORDATORIOS DEL TALLER (hora local del ordenador): un aviso al dia y franja.
-// 3 segundos de pitidos, mensaje visible durante 9 s y voz opcional si está disponible.
+// RECORDATORIOS DEL TALLER (reloj interno corregido, Europe/Madrid).
+// Cuatro pitidos breves sin voz; el aviso en pantalla desaparece solo.
 var classSchedule = [
- {hour:17, minute:0, time:'17:00', short:'Empieza la clase', message:'¡Atención, artistas! ¡Empieza la clase!'},
- {hour:18, minute:0, time:'18:00', short:'Son las seis', message:'¡Son las seis de la tarde!'},
- {hour:19, minute:0, time:'19:00', short:'Son las siete', message:'¡Son las siete de la tarde!'},
- {hour:19, minute:45, time:'19:45', short:'A recoger', message:'¡Quedan quince minutos! ¡Vamos recogiendo los materiales!'}
+ {hour:11,minute:0,time:'11:00',short:'Empieza la clase',message:'¡Buenos días, artistas! ¡Empieza la clase de la mañana!'},
+ {hour:12,minute:0,time:'12:00',short:'Son las doce',message:'¡Son las doce!'},
+ {hour:13,minute:0,time:'13:00',short:'Es la una',message:'¡Es la una del mediodía!'},
+ {hour:13,minute:45,time:'13:45',short:'A recoger',message:'¡Quedan quince minutos! Vamos recogiendo los materiales.'},
+ {hour:17,minute:0,time:'17:00',short:'Empieza la clase',message:'¡Atención, artistas! ¡Empieza la clase de la tarde!'},
+ {hour:18,minute:0,time:'18:00',short:'Son las seis',message:'¡Son las seis de la tarde!'},
+ {hour:19,minute:0,time:'19:00',short:'Son las siete',message:'¡Son las siete de la tarde!'},
+ {hour:19,minute:45,time:'19:45',short:'A recoger',message:'¡Quedan quince minutos! Vamos recogiendo los materiales.'}
 ];
-var noticeTimer=null, speechStopTimer=null, lastAlarmKey='trex2000.classAlert.last.v1', lastNotice='';
+var noticeTimer=null, lastAlarmKey='trex2000.classAlert.last.v1', lastNotice='';
 try {lastNotice=localStorage.getItem(lastAlarmKey)||'';} catch(e){}
-function localDateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function localDateKey(d){return d.year+'-'+two(d.month)+'-'+two(d.day);}
 function nextClassAlert(d){
- var current=d.getHours()*60+d.getMinutes();
+ var current=d.hour*60+d.minute;
  for(var i=0;i<classSchedule.length;i++){
    var a=classSchedule[i];if(a.hour*60+a.minute>current)return {alarm:a,tomorrow:false};
  }
@@ -720,32 +843,18 @@ function renderNextAlert(d){
 function bellAlarm(){
  var ac=getAudio();if(!ac)return;
  try{
-   var now=ac.currentTime, notes=[784,988,784,988,1175];
-   notes.forEach(function(freq,i){
-     var start=now+i*.51,stop=start+.30,osc=ac.createOscillator(),volume=ac.createGain();
-     osc.type='square';osc.frequency.setValueAtTime(freq,start);
-     volume.gain.setValueAtTime(.0001,start);
-     volume.gain.linearRampToValueAtTime(.105,start+.035);
-     volume.gain.setValueAtTime(.10,start+.16);
-     volume.gain.exponentialRampToValueAtTime(.0001,stop);
-     osc.connect(volume);volume.connect(ac.destination);
-     osc.start(start);osc.stop(stop+.01);
-     osc.onended=function(){try{osc.disconnect();volume.disconnect();}catch(e){}};
-   });
- }catch(e){}
-}
-function speakAlarm(message){
- if(!soundOn || document.hidden || !('speechSynthesis' in window))return;
- try{
-   window.speechSynthesis.cancel();
-   var u=new SpeechSynthesisUtterance(message);u.lang='es-ES';u.rate=.95;u.pitch=1.05;u.volume=1;
-   var vs=window.speechSynthesis.getVoices();
-   var spanish=vs.find(function(v){return /^es([-_]|$)/i.test(v.lang) && v.localService;}) ||
-               vs.find(function(v){return /^es([-_]|$)/i.test(v.lang);});
-   if(spanish)u.voice=spanish;
-   window.speechSynthesis.speak(u);
-   clearTimeout(speechStopTimer);
-   speechStopTimer=setTimeout(function(){window.speechSynthesis.cancel();},7500);
+   // Cuatro pitidos cortos de aviso. Solo musica sintetica, nunca voz.
+   var now=ac.currentTime;
+   for(var i=0;i<4;i++){
+     var start=now+i*.32,stop=start+.16,osc=ac.createOscillator(),vol=ac.createGain();
+     osc.type='sine';osc.frequency.setValueAtTime(960,start);
+     vol.gain.setValueAtTime(.0001,start);
+     vol.gain.linearRampToValueAtTime(.12,start+.018);
+     vol.gain.setValueAtTime(.11,start+.11);
+     vol.gain.exponentialRampToValueAtTime(.0001,stop);
+     osc.connect(vol);vol.connect(ac.destination);osc.start(start);osc.stop(stop+.015);
+     osc.onended=(function(o,v){return function(){try{o.disconnect();v.disconnect();}catch(e){}};})(osc,vol);
+   }
  }catch(e){}
 }
 function announceClass(alarm,isTest){
@@ -757,8 +866,6 @@ function announceClass(alarm,isTest){
  say(alarm.message,'aviso '+alarm.time,(isTest?'Prueba de aviso':'Horario del taller')+' · se apaga solo');
  startScene('roaring',1800);
  bellAlarm();
- // La voz también se detiene sola y no exige pulsar ningún botón.
- speakAlarm(alarm.message);
  noticeTimer=setTimeout(function(){el('classAlert').hidden=true;},9000);
 }
 function checkClassAlerts(d){
@@ -767,7 +874,7 @@ function checkClassAlerts(d){
  if(document.hidden)return;
  for(var i=0;i<classSchedule.length;i++){
    var alarm=classSchedule[i];
-   if(d.getHours()!==alarm.hour || d.getMinutes()!==alarm.minute)continue;
+   if(d.hour!==alarm.hour || d.minute!==alarm.minute)continue;
    var eventId=localDateKey(d)+'|'+alarm.time;
    if(lastNotice===eventId)return;
    lastNotice=eventId;
@@ -778,25 +885,124 @@ function checkClassAlerts(d){
 }
 el('testAlarm').addEventListener('click',function(){
  // El usuario puede probar sonido y aviso sin consumir la alarma real.
- if(!soundOn){soundOn=true;el('sound').textContent='🔊 SONIDOS: ON';el('soundTip').textContent='Alarmas de clase y rugidos activos. Cada alarma dura 3 segundos y se apaga sola.';getAudio();}
- announceClass(classSchedule[3],true);
+ if(!soundOn){soundOn=true;el('sound').textContent='🔊 SONIDOS: ON';el('soundTip').textContent='Alarmas de clase y rugidos activos. Cada aviso suena con 4 pitidos y se apaga solo.';getAudio();}
+ announceClass(classSchedule[7],true);
 });
 
+// RELOJ INTERNO AUTONOMO: usa una hora UTC de Internet y performance.now().
+// Evita depender del reloj y del huso horario de Debian tras sincronizar.
+var clockKey='trex2000.clock.v2';
+var timeBaseEpoch=null, timeBaseMono=0, clockSource='EQUIPO (SIN VERIFICAR)';
+var zone='Europe/Madrid';
+var zoneFmt=new Intl.DateTimeFormat('en-GB',{
+ timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',
+ hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'
+});
+function two(x){return String(x).padStart(2,'0');}
+function zoneParts(epoch){
+ var p={},bits=zoneFmt.formatToParts(new Date(epoch));
+ bits.forEach(function(v){if(v.type!=='literal')p[v.type]=Number(v.value);});
+ return {year:p.year,month:p.month,day:p.day,hour:p.hour,minute:p.minute,second:p.second};
+}
+function manualEpoch(text){
+ // La entrada de usuario corresponde a la fecha/hora de Galicia (no del sistema).
+ var m=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(text||'');
+ if(!m)return NaN;
+ var yy=+m[1],mm=+m[2],dd=+m[3],hh=+m[4],mi=+m[5];
+ if(yy<2020||yy>2100||mm<1||mm>12||dd<1||dd>31||hh>23||mi>59)return NaN;
+ var goal=Date.UTC(yy,mm-1,dd,hh,mi,0),guess=goal;
+ for(var i=0;i<5;i++){
+   var z=zoneParts(guess);
+   var seen=Date.UTC(z.year,z.month-1,z.day,z.hour,z.minute,z.second);
+   var dif=goal-seen;
+   if(Math.abs(dif)<1000)break;
+   guess+=dif;
+ }
+ var check=zoneParts(guess);
+ if(check.year!==yy||check.month!==mm||check.day!==dd||check.hour!==hh||check.minute!==mi)return NaN;
+ return guess;
+}
+function clockNow(){
+ return timeBaseEpoch===null?Date.now():timeBaseEpoch+(performance.now()-timeBaseMono);
+}
+function clockLabel(label){el('clockStatus').textContent='RELOJ: '+label;}
+function applyEpoch(epoch,source){
+ if(!Number.isFinite(epoch)||epoch<1577836800000)return false;
+ timeBaseEpoch=epoch;timeBaseMono=performance.now();clockSource=source;
+ try{localStorage.setItem(clockKey,JSON.stringify({offset:epoch-Date.now(),source:source,stored:Date.now()}));}catch(e){}
+ clockLabel(source);tick();return true;
+}
+function restoreClock(){
+ try{
+  var saved=JSON.parse(localStorage.getItem(clockKey)||'null');
+  if(saved&&Number.isFinite(saved.offset)&&Math.abs(saved.offset)<315360000000){
+   applyEpoch(Date.now()+saved.offset,(saved.source==='MANUAL'?'MANUAL · GUARDADO':'GUARDADO · PENDIENTE DE RED'));
+  }
+ }catch(e){}
+}
+function refreshManualInput(){
+ var z=zoneParts(clockNow());
+ el('manualClock').value=z.year+'-'+two(z.month)+'-'+two(z.day)+'T'+two(z.hour)+':'+two(z.minute);
+}
+var syncing=false, clockRevision=0;
+async function syncClock(){
+ if(syncing)return;
+ var revision=clockRevision;
+ syncing=true;el('syncClock').disabled=true;
+ clockLabel('BUSCANDO HORA DE INTERNET…');
+ var sources=[
+  {url:'https://utctime.app/api/now',get:function(d){return Number(d.unix_ms)||Number(d.unix)*1000;}},
+  {url:'https://worldtime.timezone.io/api/timezone/Europe/Madrid',get:function(d){return Number(d.unixtime)*1000;}},
+  {url:'https://timeapi.io/api/Time/current/zone?timeZone=Europe/Madrid',get:function(d){return manualEpoch(String(d.year)+'-'+two(d.month)+'-'+two(d.day)+'T'+two(d.hour)+':'+two(d.minute))+(Number(d.seconds)||0)*1000;}}
+ ];
+ var success=false;
+ for(var i=0;i<sources.length;i++){
+  var ctl=typeof AbortController!=='undefined'?new AbortController():null;
+  var timer=ctl?setTimeout(function(c){return function(){c.abort();};}(ctl),4200):null;
+  var begin=performance.now();
+  try{
+   var r=await fetch(sources[i].url,{cache:'no-store',signal:ctl?ctl.signal:undefined});
+   if(!r.ok)throw Error('HTTP '+r.status);
+   var data=await r.json(),ms=sources[i].get(data);
+   if(!Number.isFinite(ms)||ms<1577836800000)throw Error('Fecha incorrecta');
+   var latency=(performance.now()-begin)/2;
+   if(revision!==clockRevision)break; // Un ajuste manual reciente tiene prioridad.
+   success=applyEpoch(ms+latency,'SINCRONIZADO · EUROPA/MADRID');
+   if(success){el('clockSetup').open=false;refreshManualInput();break;}
+  }catch(e){ /* Si falla red/CORS, se ofrece ajuste manual. */ }
+  finally{if(timer)clearTimeout(timer);}
+ }
+ if(!success && revision===clockRevision){
+  clockLabel(timeBaseEpoch===null?'SIN INTERNET · AJUSTAR MANUALMENTE':'SIN RED · '+clockSource);
+  if(timeBaseEpoch===null){el('clockSetup').open=true;refreshManualInput();}
+ }
+ syncing=false;el('syncClock').disabled=false;
+}
+el('syncClock').addEventListener('click',syncClock);
+el('clockSetup').addEventListener('toggle',function(){if(this.open)refreshManualInput();});
+el('applyClock').addEventListener('click',function(){
+ var epoch=manualEpoch(el('manualClock').value);
+ if(!Number.isFinite(epoch)){clockLabel('FECHA/HORA NO VALIDA');return;}
+ clockRevision++;applyEpoch(epoch,'MANUAL');el('clockSetup').open=false;
+});
+// Solo una vez por aviso y dia; el calendario se interpreta en Espana peninsular.
 function tick(){
- var d=new Date();el('clock').textContent=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
- el('bigClock').textContent=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
- el('date').textContent=d.toLocaleDateString('es-ES',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
- renderNextAlert(d);checkClassAlerts(d);
+ var epoch=clockNow(),d=new Date(epoch),z=zoneParts(epoch);
+ el('clock').textContent=d.toLocaleTimeString('es-ES',{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:false});
+ el('bigClock').textContent=two(z.hour)+':'+two(z.minute)+':'+two(z.second);
+ el('date').textContent=d.toLocaleDateString('es-ES',{timeZone:zone,weekday:'short',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+ renderNextAlert(z);checkClassAlerts(z);
 }
 function needsTick(){passage();render();playNeedAlert(false);}
 document.addEventListener('visibilitychange',function(){
  mutedByVisibility=document.hidden;
  if(!document.hidden){passage();render();tick();playNeedAlert(false);}
 });
-passage();render();tick();
+restoreClock();passage();render();tick();refreshManualInput();syncClock();
 setInterval(tick,1000);
+setInterval(function(){if(clockSource!=='MANUAL')syncClock();},20*60*1000);
 setInterval(needsTick,30000);
 })();
 </script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script></body>
+</body>
 </html>
