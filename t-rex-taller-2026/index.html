@@ -501,18 +501,9 @@ body{background:#06314c!important;margin:0}
       <div class="time-main"><span class="time-lamp" aria-hidden="true"></span><div><small>RELOJ DEL TALLER</small><strong id="bigClock">--:--:--</strong></div></div>
       <div class="next-alarm" hidden><small>PRÓXIMO AVISO</small><strong id="nextAlarmTime">11:00</strong><span id="nextAlarmNote">Comienza la clase</span></div>
     </div>
-    <div class="clock-tools" aria-label="Ajustes del reloj del taller">
+    <div class="clock-tools" aria-label="Sincronización del reloj del taller">
       <span id="clockStatus" role="status">RELOJ: comprobando hora de Internet…</span>
       <button type="button" id="syncClock">🌐 SINCRONIZAR</button>
-      <details id="clockSetup">
-        <summary>⚙ AJUSTAR RELOJ</summary>
-        <div class="clock-edit">
-          <label for="manualClock">Fecha y hora reales de Galicia</label>
-          <input id="manualClock" type="datetime-local" step="60" aria-label="Fecha y hora actuales en España peninsular">
-          <button type="button" id="applyClock">GUARDAR HORA</button>
-          <div class="clock-help">Funciona sin Internet y no cambia la hora de Linux. Si reinicias el PC con otra hora, conviene sincronizar o reajustar.</div>
-        </div>
-      </details>
     </div>
     <div class="grid">
       <div>
@@ -997,14 +988,19 @@ function nextMixedLine(){
  lastTalkKind=art?'art':'dino';
  return {text:art?nextArtFact():pick(lines),isArt:art};
 }
-// Apariciones ocasionales, sin voz ni pitidos, solo si la pantalla está visible.
-setInterval(function(){
- if(document.hidden||sleeping||!el('classAlert').hidden)return;
- var z=zoneParts(clockNow());if(z.hour<11||z.hour>=20)return;
- var x=nextMixedLine();
- say(x.text,'charla',x.isArt?'Curiosidad artística':'Ocurrencia jurásica');
- startScene('talking',1300);
-},300000);
+// Vida propia: entre cinco y diez minutos aleatorios, sin voz ni pitidos.
+function programarFraseEspontanea(){
+ var demora=300000+Math.floor(Math.random()*300001);
+ setTimeout(function(){
+  if(!document.hidden&&!sleeping&&el('classAlert').hidden){
+   var x=nextMixedLine();
+   say(x.text,'charla',x.isArt?'Curiosidad artística':'Ocurrencia jurásica');
+   startScene('talking',1300);
+  }
+  programarFraseEspontanea();
+ },demora);
+}
+programarFraseEspontanea();
 
 el('talk').addEventListener('click',function(){
  wake();s.ideas=cap(s.ideas+2);
@@ -1154,19 +1150,14 @@ function applyEpoch(epoch,source){
 function restoreClock(){
  try{
   var saved=JSON.parse(localStorage.getItem(clockKey)||'null');
-  if(saved&&Number.isFinite(saved.offset)&&Math.abs(saved.offset)<315360000000){
-   applyEpoch(Date.now()+saved.offset,(saved.source==='MANUAL'?'MANUAL · GUARDADO':'GUARDADO · PENDIENTE DE RED'));
+  if(saved&&saved.source!=='MANUAL'&&Number.isFinite(saved.offset)&&Math.abs(saved.offset)<315360000000){
+   applyEpoch(Date.now()+saved.offset,'GUARDADO · PENDIENTE DE RED');
   }
  }catch(e){}
 }
-function refreshManualInput(){
- var z=zoneParts(clockNow());
- el('manualClock').value=z.year+'-'+two(z.month)+'-'+two(z.day)+'T'+two(z.hour)+':'+two(z.minute);
-}
-var syncing=false, clockRevision=0;
+var syncing=false;
 async function syncClock(){
  if(syncing)return;
- var revision=clockRevision;
  syncing=true;el('syncClock').disabled=true;
  clockLabel('BUSCANDO HORA DE INTERNET…');
  var sources=[
@@ -1185,25 +1176,17 @@ async function syncClock(){
    var data=await r.json(),ms=sources[i].get(data);
    if(!Number.isFinite(ms)||ms<1577836800000)throw Error('Fecha incorrecta');
    var latency=(performance.now()-begin)/2;
-   if(revision!==clockRevision)break; // Un ajuste manual reciente tiene prioridad.
    success=applyEpoch(ms+latency,'SINCRONIZADO · EUROPA/MADRID');
-   if(success){el('clockSetup').open=false;refreshManualInput();break;}
-  }catch(e){ /* Si falla red/CORS, se ofrece ajuste manual. */ }
+   if(success)break;
+  }catch(e){ /* Si falla red/CORS, seguimos probando otras fuentes. */ }
   finally{if(timer)clearTimeout(timer);}
  }
- if(!success && revision===clockRevision){
-  clockLabel(timeBaseEpoch===null?'SIN INTERNET · AJUSTAR MANUALMENTE':'SIN RED · '+clockSource);
-  if(timeBaseEpoch===null){el('clockSetup').open=true;refreshManualInput();}
+ if(!success){
+  clockLabel(timeBaseEpoch===null?'SIN RED · HORA NO VERIFICADA':'SIN RED · ULTIMA SINCRONIZACION');
  }
  syncing=false;el('syncClock').disabled=false;
 }
 el('syncClock').addEventListener('click',syncClock);
-el('clockSetup').addEventListener('toggle',function(){if(this.open)refreshManualInput();});
-el('applyClock').addEventListener('click',function(){
- var epoch=manualEpoch(el('manualClock').value);
- if(!Number.isFinite(epoch)){clockLabel('FECHA/HORA NO VALIDA');return;}
- clockRevision++;applyEpoch(epoch,'MANUAL');el('clockSetup').open=false;
-});
 // Solo una vez por aviso y dia; el calendario se interpreta en Espana peninsular.
 function tick(){
  var epoch=clockNow(),d=new Date(epoch),z=zoneParts(epoch);
@@ -1227,9 +1210,9 @@ function habilitarAudioDesdeInteraccion(){
 }
 document.addEventListener('pointerdown',habilitarAudioDesdeInteraccion,{passive:true});
 document.addEventListener('keydown',habilitarAudioDesdeInteraccion);
-restoreClock();passage();render();tick();refreshManualInput();syncClock();
+restoreClock();passage();render();tick();syncClock();
 setInterval(tick,1000);
-setInterval(function(){if(clockSource!=='MANUAL')syncClock();},20*60*1000);
+setInterval(syncClock,20*60*1000);
 setInterval(needsTick,30000);
 })();
 </script>
