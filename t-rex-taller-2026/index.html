@@ -393,6 +393,36 @@ body{background:#06314c!important;margin:0}
  .right .terminal{bottom:42px!important;max-height:34vh!important}
  .right #speech{font-size:clamp(15px,1.5vw,20px)!important}
 }
+
+/* T-REX 2000 v2.6 · reloj blanco · dialogos mas grandes y mas abajo */
+#bigClock{
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  -webkit-text-stroke:.35px rgba(5,20,38,.38)!important;
+  text-shadow:0 3px 0 rgba(18,28,58,.75),0 0 13px rgba(21,61,103,.5)!important;
+}
+.right .terminal{
+  right:12px!important;
+  bottom:27px!important;
+  width:min(390px,39vw)!important;
+  max-height:min(34vh,290px)!important;
+  padding:13px 16px!important;
+}
+.right #speech{
+  font-size:clamp(21px,2vw,28px)!important;
+  line-height:1.32!important;
+  font-weight:750!important;
+  color:#ffffff!important;
+}
+@media(max-width:900px){
+  .right .terminal{right:8px!important;bottom:25px!important;width:min(360px,43vw)!important;padding:10px 12px!important;max-height:32vh!important}
+  .right #speech{font-size:clamp(18px,2.25vw,23px)!important}
+}
+@media(max-width:640px){
+  .right .terminal{right:6px!important;bottom:22px!important;width:min(286px,52vw)!important;padding:8px 10px!important;max-height:30vh!important}
+  .right #speech{font-size:clamp(15px,3.5vw,19px)!important}
+}
+
 </style>
 </head>
 <body>
