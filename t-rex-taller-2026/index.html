@@ -1425,6 +1425,87 @@ setInterval(needsTick,30000);
 </script>
 
 <script>
+
+/* T-REX MASK 2000 — pixel-art retro, seguimiento de silueta local sin reconocimiento facial. */
+function jurassicDinoFX(){
+  var scan=document.createElement("canvas");scan.width=80;scan.height=45;
+  var sc=scan.getContext("2d",{willReadFrequently:true});
+  var head=document.createElement("canvas");head.width=64;head.height=54;
+  var hc=head.getContext("2d");
+  var tail=document.createElement("canvas");tail.width=64;tail.height=39;
+  var tc=tail.getContext("2d");
+  function box(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h);}
+  function shape(c,pts,color){c.fillStyle=color;c.beginPath();c.moveTo(pts[0],pts[1]);
+    for(var i=2;i<pts.length;i+=2)c.lineTo(pts[i],pts[i+1]);c.closePath();c.fill();}
+  // Cabeza de perfil: cráneo, hocico enorme, dientes y cresta dentada.
+  box(hc,10,4,35,35,"#251332");box(hc,35,19,27,26,"#251332");
+  box(hc,13,7,31,27,"#8e40c9");box(hc,38,21,21,21,"#8e40c9");
+  box(hc,13,10,7,18,"#c27af4");box(hc,20,7,22,5,"#bd68ec");
+  box(hc,38,24,19,8,"#a55edc");box(hc,48,33,11,5,"#cb84ec");
+  box(hc,37,39,25,8,"#21102d");box(hc,41,43,18,4,"#e0a2ed");
+  box(hc,42,38,5,5,"#ffffff");box(hc,50,38,5,5,"#ffffff");box(hc,57,38,4,4,"#ffffff");
+  box(hc,35,30,19,3,"#2c143a");box(hc,52,23,4,4,"#4e205e");
+  box(hc,33,15,8,9,"#28113e");box(hc,35,16,5,6,"#fff0a1");box(hc,38,18,3,4,"#130a1e");
+  box(hc,17,1,7,7,"#251332");box(hc,19,2,4,5,"#d6a1f7");
+  box(hc,28,0,7,8,"#251332");box(hc,30,2,3,4,"#d3a0ff");
+  box(hc,8,13,5,9,"#251332");box(hc,9,33,10,13,"#251332");
+  box(hc,12,33,8,10,"#6d31a5");box(hc,20,33,9,13,"#562788");
+  box(hc,14,44,17,6,"#251332");
+  // Cola quebrada que sale de la cadera izquierda.
+  shape(tc,[62,13,47,5,38,10,30,6,21,17,11,15,4,27,0,26,4,34,17,30,23,34,38,24,49,29,63,21],"#261231");
+  shape(tc,[59,15,46,10,39,15,30,11,23,22,12,20,7,27,17,26,24,29,39,20,48,24,59,19],"#8c3dcc");
+  box(tc,27,15,8,4,"#c685f1");
+  var current=null,tries=0,found=false;
+  function track(mask,w,h){
+    tries++;
+    if(current && tries%3!==0)return current;
+    try{
+      sc.clearRect(0,0,80,45);sc.drawImage(mask,0,0,80,45);
+      var px=sc.getImageData(0,0,80,45).data, minX=80,minY=45,maxX=0,maxY=0,qty=0;
+      for(var y=1;y<44;y+=2)for(var x=1;x<79;x+=2){
+        if(px[(y*80+x)*4+3]<115)continue;
+        if(x<minX)minX=x;if(x>maxX)maxX=x;
+        if(y<minY)minY=y;if(y>maxY)maxY=y;qty++;
+      }
+      if(qty<18||qty>1600||maxY-minY<6){found=false;return null;}
+      // La parte superior de la silueta aproxima la zona de cabeza.
+      var topEnd=Math.min(44,minY+Math.max(5,Math.round((maxY-minY)*.23)));
+      var xSum=0,topN=0;
+      for(var yy=minY;yy<=topEnd;yy+=2)for(var xx=1;xx<79;xx+=2){
+        if(px[(yy*80+xx)*4+3]>115){xSum+=xx;topN++;}
+      }
+      var xHead=topN>=3?xSum/topN:(minX+maxX)/2;
+      var target={hx:xHead*w/80,top:minY*h/45,left:minX*w/80,
+        height:(maxY-minY)*h/45,width:(maxX-minX)*w/80};
+      if(!current){current=target;}else{
+        var ease=.46;
+        for(var key in target)current[key]+=Math.max(-24,Math.min(24,(target[key]-current[key])*ease));
+      }
+      found=true;
+      return current;
+    }catch(err){return null;}
+  }
+  function ready(mask,w,h){return track(mask,w,h);}
+  function drawTail(c,t){
+    if(!t||!found)return;
+    var size=Math.max(25,Math.min(82,t.height*.45));
+    var x=t.left-size*.66,y=t.top+t.height*.58;
+    c.save();c.imageSmoothingEnabled=false;
+    c.drawImage(tail,Math.round(x),Math.round(y),Math.round(size*1.24),Math.round(size*.66));
+    c.restore();
+  }
+  function drawHead(c,t){
+    if(!t||!found)return;
+    var size=Math.max(30,Math.min(100,t.height*.46));
+    var x=t.hx-size*.49,y=Math.max(-size*.28,t.top-size*.11);
+    c.save();c.imageSmoothingEnabled=false;
+    c.drawImage(head,Math.round(x),Math.round(y),Math.round(size),Math.round(size*.85));
+    c.restore();
+  }
+  function reset(){current=null;tries=0;found=false;}
+  return{ready:ready,tail:drawTail,head:drawHead,reset:reset};
+}
+
 /* Cámara Jurásica en el T-Rex (miniatura). La cámara se detiene al cerrar o perder visibilidad. */
 (function(){
   "use strict";
@@ -1438,7 +1519,11 @@ setInterval(needsTick,30000);
   var loader=document.getElementById("jurassicLoader");
   var note=document.getElementById("jurassicNote");
   var stream=null,segmenter=null,raf=0,lastFrame=0,processing=false;
-  var mode="silueta",open=false,token=0,modelPromise=null;
+  var mode="dino",open=false,token=0,modelPromise=null;
+  var dinoFX=jurassicDinoFX();
+  var layer=document.createElement("canvas");layer.width=320;layer.height=180;
+  var lc=layer.getContext("2d");
+  modeBtn.textContent="◉ DINOSAURIO";
   var modelUrl="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation";
   function loadModel(){
     if(window.SelfieSegmentation)return Promise.resolve();
@@ -1464,19 +1549,24 @@ setInterval(needsTick,30000);
   function onResults(results){
     if(!open||!results||!results.segmentationMask)return;
     var w=320,h=180;
+    lc.clearRect(0,0,w,h);
+    lc.save();
+    lc.globalCompositeOperation="source-over";
+    lc.drawImage(results.segmentationMask,0,0,w,h);
+    lc.globalCompositeOperation="source-in";
+    if(mode==="silueta"||mode==="dino"){
+      lc.fillStyle=mode==="dino"?"#4e277e":"#1e123d";
+      lc.fillRect(0,0,w,h);
+    }else lc.drawImage(results.image,0,0,w,h);
+    lc.restore();
     ctx.clearRect(0,0,w,h);
-    ctx.save();
-    ctx.drawImage(results.segmentationMask,0,0,w,h);
-    ctx.globalCompositeOperation="source-in";
-    if(mode==="silueta"){
-      ctx.fillStyle="#1e123d";
-      ctx.fillRect(0,0,w,h);
-    }else{
-      ctx.drawImage(results.image,0,0,w,h);
-    }
-    ctx.restore();
+    var target=mode==="dino"?dinoFX.ready(results.segmentationMask,w,h):null;
+    if(target)dinoFX.tail(ctx,target);
+    ctx.drawImage(layer,0,0);
+    if(target)dinoFX.head(ctx,target);
     loader.hidden=true;
-    note.textContent=mode==="silueta"?"SILUETA JURÁSICA EN DIRECTO":"FIGURA RECORTADA EN DIRECTO";
+    note.textContent=mode==="dino"?(target?"¡UN DINOSAURIO EN EL TALLER!":"ESPERANDO UNA CRIATURA…"):
+      mode==="silueta"?"SILUETA JURÁSICA EN DIRECTO":"FIGURA RECORTADA EN DIRECTO";
   }
   function stop(){
     token++;
@@ -1486,6 +1576,7 @@ setInterval(needsTick,30000);
     try{video.pause();video.srcObject=null;}catch(e){}
     if(segmenter&&segmenter.close){try{segmenter.close();}catch(e){}}
     segmenter=null;processing=false;lastFrame=0;
+    dinoFX.reset();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     panel.hidden=true;
     loader.hidden=false;
@@ -1557,7 +1648,7 @@ setInterval(needsTick,30000);
         segmenter.onResults(onResults);
       }catch(err){
         console.warn("Cámara Jurásica: modelo de silueta",err);
-        note.textContent="SIN RECORTE · SE MUESTRA CÁMARA NORMAL";
+        note.textContent="LA MÁSCARA NECESITA EL RECORTE · CÁMARA DIRECTA";
       }
       if(myToken!==token||!open)return;
       raf=requestAnimationFrame(frame);
@@ -1581,8 +1672,9 @@ setInterval(needsTick,30000);
   });
   closeBtn.addEventListener("click",stop);
   modeBtn.addEventListener("click",function(){
-    mode=mode==="silueta"?"foto":"silueta";
-    this.textContent=mode==="silueta"?"◉ SILUETA":"◉ EN COLOR";
+    mode=mode==="dino"?"silueta":mode==="silueta"?"foto":"dino";
+    this.textContent=mode==="dino"?"◉ DINOSAURIO":mode==="silueta"?"◉ SILUETA":"◉ EN COLOR";
+    dinoFX.reset();
     if(!segmenter){note.textContent="RECORTE NO DISPONIBLE · CÁMARA DIRECTA";}
   });
   window.addEventListener("resize",updatePosition);
