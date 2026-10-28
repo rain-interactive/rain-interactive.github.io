@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#042c40">
+<title>Cámara Jurásica · T-Rex 2000 · Rain Interactive × O Raposo Púrpura</title>
+<meta name="description" content="Experimento de webcam del T-Rex 2000: recorta tu silueta y viaja a la selva jurásica. La imagen no se graba ni se envía a servidores.">
+<style>
+:root{--cyan:#78fff1;--magenta:#ff7ec8;--ink:#051727}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;background:var(--ink);color:#fff;font-family:system-ui,"DejaVu Sans",Arial,sans-serif}
+button,a{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.world{position:fixed;inset:0;overflow:hidden;isolation:isolate;background:#2fc8c9 url("./assets/jungle.png") center/cover no-repeat}
+.world:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,20,40,.24),transparent 42%,rgba(3,24,33,.42));z-index:1;pointer-events:none}
+.world.dusk{filter:none;background-color:#142357}
+.world.dusk:before{background:linear-gradient(180deg,rgba(8,3,40,.75),rgba(24,6,69,.38) 44%,rgba(6,7,32,.68))}
+.world.dusk .moon{opacity:1}
+.world.dusk .sun{opacity:0}
+.celestial{position:absolute;top:15%;right:18%;width:min(10vw,110px);aspect-ratio:1;border-radius:50%;pointer-events:none;z-index:1}
+.sun{background:#fff49e;box-shadow:0 0 80px #fff0a9;opacity:.7}
+.moon{opacity:0;background:#d9ddff;box-shadow:0 0 55px #a3bafa}
+.decor{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+#output{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:4;transform:scaleX(-1);filter:drop-shadow(0 0 5px rgba(105,245,232,.7))}
+#output.photo{filter:drop-shadow(0 0 7px rgba(104,255,241,.65))}
+#output.direct{opacity:.8;filter:none}
+#video{display:none}
+.top{position:fixed;z-index:15;left:0;right:0;top:0;padding:clamp(13px,2vw,25px) clamp(14px,3vw,40px);display:flex;align-items:flex-start;gap:20px;justify-content:space-between;pointer-events:none}
+.identity{pointer-events:auto;text-shadow:0 2px 8px #062338}
+.partners{font-size:clamp(10px,1.15vw,15px);font-weight:800;letter-spacing:.06em}
+.partners b{color:var(--magenta)}
+h1{font-size:clamp(30px,5.2vw,78px);font-weight:950;letter-spacing:-.065em;line-height:1;margin:3px 0;text-shadow:0 3px 0 #155564,0 5px 20px #061b32}
+.identity small{font:700 clamp(10px,1vw,13px) ui-monospace,"DejaVu Sans Mono",monospace;color:#cbfff9;letter-spacing:.15em}
+.back{pointer-events:auto;display:inline-flex;align-items:center;gap:7px;text-decoration:none;border:1px solid rgba(255,255,255,.6);background:rgba(3,21,34,.7);color:#fff;padding:10px 15px;font-weight:800;white-space:nowrap;border-radius:4px;backdrop-filter:blur(5px)}
+.back:hover{background:#175c67}
+.hero{position:fixed;z-index:7;left:50%;top:52%;transform:translate(-50%,-50%);width:min(520px,86vw);text-align:center;background:rgba(4,22,39,.76);border:1px solid rgba(157,250,240,.6);padding:18px 22px;border-radius:6px;box-shadow:0 7px 27px #021d3380}
+.hero strong{font-size:clamp(18px,2.2vw,29px);display:block;letter-spacing:.02em}
+.hero p{font-size:clamp(12px,1.25vw,16px);color:#d1fff9;line-height:1.45;margin:9px auto 14px}
+.primary,.control{border:1px solid rgba(205,255,249,.65);background:rgba(2,29,48,.85);color:#fff;border-radius:4px;font-weight:850;min-height:46px;padding:10px 15px}
+.primary{background:#137b82;min-width:190px;box-shadow:0 4px 0 #053e57}
+.primary:hover,.control:hover{background:#286c7b}
+.privacy{font:600 11px ui-monospace,"DejaVu Sans Mono",monospace;color:#b6ffec;margin-top:14px}
+.controls{position:fixed;z-index:16;bottom:clamp(13px,3vh,24px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:10px;border:1px solid rgba(130,239,228,.52);background:rgba(3,20,35,.83);border-radius:7px;backdrop-filter:blur(7px);max-width:calc(100% - 20px);flex-wrap:wrap;justify-content:center}
+.controls[hidden],.hero[hidden]{display:none!important}
+.control{min-height:39px;padding:8px 11px;font-size:clamp(11px,1.15vw,14px)}
+.control.active{border-color:#ff91d4;color:#ffcaec}
+.status{position:fixed;z-index:10;left:clamp(12px,3vw,40px);bottom:clamp(13px,3vh,25px);font:700 11px ui-monospace,"DejaVu Sans Mono",monospace;text-shadow:0 2px 6px #022;max-width:220px}
+.status .led{display:inline-block;width:8px;height:8px;background:#6effd0;border-radius:50%;margin-right:5px;box-shadow:0 0 10px #6effd0}
+.badge{position:fixed;z-index:7;right:clamp(12px,3vw,40px);bottom:clamp(15px,3vh,25px);font:800 11px ui-monospace,"DejaVu Sans Mono",monospace;letter-spacing:.1em;text-shadow:0 2px 7px #001b33}
+#notice{min-height:20px;color:#f6dbe9}
+@media(max-width:900px){.status,.badge{bottom:82px}.hero{top:48%}}
+@media(max-width:640px){.top{gap:7px}.back{padding:8px;font-size:11px}h1{font-size:clamp(26px,7vw,42px)}.identity small{letter-spacing:0}.partners{max-width:230px;line-height:1.4}.hero{top:45%}.controls{width:calc(100% - 16px);gap:5px;padding:7px}.control{font-size:10px;padding:7px 9px;min-height:38px}.badge{display:none}.status{font-size:9px;bottom:75px;max-width:100%}}
+@media(max-height:440px){.hero{top:50%;padding:8px 15px}.hero p{margin:3px auto 7px}.privacy{margin-top:6px}.hero strong{font-size:18px}.top{padding:8px 14px}h1{font-size:25px}.identity small{display:none}.controls{bottom:5px}.status,.badge{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="world" id="world">
+  <div class="celestial sun"></div><div class="celestial moon"></div>
+  <svg class="decor" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="#092b41" opacity=".68">
+      <path d="M730 355 L940 90 1070 355 Z" fill="#15566a"/>
+      <path d="M865 182 Q903 158 925 196 L941 215 960 182 982 210 1015 355 806 355Z" fill="#5a5977" opacity=".55"/>
+      <path d="M938 91 L925 118 Q936 137 963 120 L951 93Z" fill="#e5a5ab" opacity=".5"/>
+      <path d="M110 193 q35 -21 65 0 l32 -8 -31 18 -20 -2 -18 15 -12 -16 -38 -8z"/>
+      <path d="M1160 115 q24 -17 51 -4 l30 -10 -25 20 -20 -1 -14 12 -10 -14 -24 -1z" opacity=".72"/>
+    </g>
+    <g fill="#063843" opacity=".85">
+      <path d="M0 770 q120 -100 265 -52 q120 -76 260 12 q180 -69 345 -8 q80 -69 160 0 q160 -50 410 0v88H0Z"/>
+      <path d="M0 806 q220 -90 400 -30 q220 -73 450 0 q280 -84 590 -18v52H0Z" fill="#032b35"/>
+    </g>
+    <g fill="#052f3b" opacity=".91">
+      <path d="M39 810q20 -125 -50 -160q65 14 75 63q-2 -93 46 -139q-34 76 -19 123q35 -83 116 -104q-80 48 -92 128q54 -57 116 -41q-98 14 -105 130z"/>
+      <path d="M1255 810q-5 -117 -99 -150q93 4 118 74q-16 -107 42 -167q-30 91 0 142q28 -73 116 -92q-69 48 -78 109q42 -28 98 -15q-89 24 -70 99z"/>
+    </g>
+    <g fill="#052b3b" opacity=".75" transform="translate(1020 478) scale(1.06)">
+      <path d="M39 123 Q18 88 36 66 Q54 48 108 59 Q145 63 176 86 L190 42 Q193 10 219 4 L241 16 240 35 220 36 212 89 205 114 189 121 183 192 168 192 168 124 104 125 99 192 83 192 79 120 51 117 56 190 41 190Z"/>
+      <path d="M53 67 Q16 47 9 9 Q35 29 70 37Z"/>
+    </g>
+  </svg>
+  <video id="video" playsinline muted autoplay aria-hidden="true"></video>
+  <canvas id="output" width="640" height="360" aria-label="Silueta en directo sobre la selva jurásica"></canvas>
+</div>
+<header class="top">
+  <div class="identity">
+    <div class="partners">RAIN INTERACTIVE <b>×</b> O RAPOSO PÚRPURA</div>
+    <h1>CÁMARA JURÁSICA</h1>
+    <small>T-REX 2000 · EXPERIMENTO 01</small>
+  </div>
+  <a class="back" href="./">← VOLVER AL T-REX</a>
+</header>
+<section class="hero" id="hero">
+  <strong>ENTRA EN EL JURÁSICO</strong>
+  <p>La cámara separa tu silueta del fondo real para introducirte en una selva prehistórica. Elige entre sombra de dinosaurio o imagen recortada.</p>
+  <button class="primary" id="start" type="button">📷 ACTIVAR WEBCAM</button>
+  <div class="privacy">● Se procesa en tu navegador. No grabamos ni enviamos vídeo.</div>
+  <div id="notice" role="status" aria-live="polite"></div>
+</section>
+<div class="controls" id="controls" hidden>
+  <button class="control active" id="mode" type="button">◉ SILUETA</button>
+  <button class="control" id="day" type="button">☾ NOCHE</button>
+  <button class="control" id="mirror" type="button">↔ ESPEJO ON</button>
+  <button class="control" id="full" type="button">⛶ PANTALLA COMPLETA</button>
+  <button class="control" id="stop" type="button">■ APAGAR CÁMARA</button>
+</div>
+<div class="status"><span class="led"></span><span id="statusText">CÁMARA DESCONECTADA</span></div>
+<div class="badge">SELVA TURQUESA · PROTOCOLO VISUAL 2000</div>
+<script>
+(function(){
+  'use strict';
+  const video=document.getElementById('video'),output=document.getElementById('output'),ctx=output.getContext('2d');
+  const mask=document.createElement('canvas');mask.width=640;mask.height=360;
+  const mctx=mask.getContext('2d');
+  const hero=document.getElementById('hero'),controls=document.getElementById('controls');
+  const statusText=document.getElementById('statusText'),notice=document.getElementById('notice');
+  const modeBtn=document.getElementById('mode'),dayBtn=document.getElementById('day'),mirrorBtn=document.getElementById('mirror');
+  let stream=null,seg=null,running=false,busy=false,raf=0,last=0,mode='silhouette',mirror=true,night=false,frames=0;
+  const url='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation';
+  function status(s){statusText.textContent=s;}
+  function loadModel(){
+    if(window.SelfieSegmentation)return Promise.resolve();
+    return new Promise(function(resolve,reject){
+      const script=document.createElement('script');script.src=url+'/selfie_segmentation.js';
+      script.crossOrigin='anonymous';
+      script.onload=function(){window.SelfieSegmentation?resolve():reject(new Error('Modelo no disponible'));};
+      script.onerror=function(){reject(new Error('No se pudo descargar el modelo de recorte. Comprueba Internet.'));};
+      document.head.appendChild(script);
+    });
+  }
+  function onResults(results){
+    if(!running||!results.segmentationMask)return;
+    frames++;mctx.save();mctx.globalCompositeOperation='source-over';mctx.clearRect(0,0,640,360);
+    mctx.drawImage(results.segmentationMask,0,0,640,360);
+    mctx.globalCompositeOperation='source-in';
+    if(mode==='silhouette'){mctx.fillStyle='rgba(17,11,51,.98)';mctx.fillRect(0,0,640,360);}
+    else mctx.drawImage(results.image,0,0,640,360);
+    mctx.restore();
+    ctx.clearRect(0,0,640,360);ctx.drawImage(mask,0,0,640,360);
+    if(frames===1)status('SILUETA DETECTADA · EN DIRECTO');
+  }
+  async function loop(t){
+    if(!running)return;
+    raf=requestAnimationFrame(loop);
+    if(busy||t-last<115||video.readyState<2)return;
+    last=t;busy=true;
+    try{
+      if(mode==='direct'){
+        ctx.clearRect(0,0,640,360);ctx.drawImage(video,0,0,640,360);
+      }else{
+        await seg.send({image:video});
+      }
+    }catch(e){status('RECORTE NO DISPONIBLE');console.warn('Webcam Jurassic:',e);mode='direct';modeBtn.textContent='◉ CÁMARA DIRECTA';output.className='direct';}
+    finally{busy=false;}
+  }
+  async function start(){
+    if(running)return;
+    const b=document.getElementById('start');b.disabled=true;
+    notice.textContent='';status('SOLICITANDO PERMISO…');
+    try{
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Esta cámara necesita un navegador actualizado y una conexión HTTPS.');
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{width:{ideal:640},height:{ideal:360},frameRate:{ideal:12,max:18}}});
+      video.srcObject=stream;await video.play();
+      status('INICIANDO RECORTE DE SILUETA…');
+      running=true;hero.hidden=true;controls.hidden=false;
+      try{
+        await loadModel();seg=new window.SelfieSegmentation({locateFile:function(file){return url+'/'+file;}});
+        seg.setOptions({modelSelection:1});seg.onResults(onResults);
+      }catch(e){
+        mode='direct';modeBtn.textContent='◉ CÁMARA DIRECTA';output.className='direct';
+        status('CÁMARA ACTIVA · SIN RECORTE');
+        console.warn('No se pudo iniciar segmentación:',e);
+      }
+      raf=requestAnimationFrame(loop);
+    }catch(e){stop();notice.textContent=e&&e.name==='NotAllowedError'?'Permite el acceso a la cámara en el navegador para empezar.':(e.message||'No se pudo acceder a la cámara.');status('CÁMARA NO DISPONIBLE');}
+    finally{b.disabled=false;}
+  }
+  function stop(){
+    running=false;cancelAnimationFrame(raf);raf=0;
+    if(stream){stream.getTracks().forEach(function(track){track.stop();});stream=null;}
+    video.pause();video.srcObject=null;ctx.clearRect(0,0,640,360);
+    if(seg&&seg.close){try{seg.close();}catch(e){}} seg=null;
+    busy=false;frames=0;hero.hidden=false;controls.hidden=true;
+    status('CÁMARA DESCONECTADA');
+  }
+  document.getElementById('start').addEventListener('click',start);
+  document.getElementById('stop').addEventListener('click',stop);
+  modeBtn.addEventListener('click',function(){
+    if(!seg){mode='direct';modeBtn.textContent='◉ CÁMARA DIRECTA';return;}
+    mode=mode==='silhouette'?'photo':mode==='photo'?'direct':'silhouette';
+    modeBtn.textContent=mode==='silhouette'?'◉ SILUETA':mode==='photo'?'◉ PERSONA RECORTADA':'◉ CÁMARA DIRECTA';
+    modeBtn.classList.toggle('active',mode==='silhouette');
+    output.className=mode==='photo'?'photo':mode==='direct'?'direct':'';
+    status(mode==='direct'?'CÁMARA ACTIVA':mode==='photo'?'PERSONA RECORTADA':'SILUETA JURÁSICA');
+  });
+  dayBtn.addEventListener('click',function(){night=!night;document.getElementById('world').classList.toggle('dusk',night);dayBtn.textContent=night?'☼ DÍA':'☾ NOCHE';});
+  mirrorBtn.addEventListener('click',function(){mirror=!mirror;output.style.transform=mirror?'scaleX(-1)':'none';mirrorBtn.textContent=mirror?'↔ ESPEJO ON':'↔ ESPEJO OFF';});
+  document.getElementById('full').addEventListener('click',function(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(function(){});}else document.exitFullscreen&&document.exitFullscreen();});
+  window.addEventListener('pagehide',stop);
+  document.addEventListener('visibilitychange',function(){if(document.hidden&&running){stop();}});
+})();
+</script>
+</body>
+</html>
