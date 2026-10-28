@@ -423,6 +423,58 @@ body{background:#06314c!important;margin:0}
   .right #speech{font-size:clamp(15px,3.5vw,19px)!important}
 }
 
+
+/* T-REX 2000 v2.7 · indicadores integrados en la selva, sin recuadros */
+.screenfooter{display:none!important}
+.status{
+ position:fixed!important;z-index:22!important;left:12px!important;bottom:14px!important;
+ width:min(395px,39vw)!important;max-width:calc(100vw - 24px)!important;
+ margin:0!important;padding:0!important;
+ display:flex!important;flex-direction:column!important;gap:9px!important;
+ grid-template-columns:none!important;
+ background:transparent!important;border:none!important;box-shadow:none!important;
+ pointer-events:none!important;
+}
+.status .metric{
+ display:block!important;width:100%!important;min-width:0!important;
+ padding:0!important;margin:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;backdrop-filter:none!important;
+}
+.status .metric-top{
+ display:flex!important;justify-content:space-between!important;align-items:center!important;
+ gap:12px!important;font-family:'DejaVu Sans Mono',Consolas,monospace!important;
+ font-size:clamp(12px,1.3vw,16px)!important;line-height:1.25!important;
+ font-weight:850!important;color:#ffffff!important;
+ text-shadow:0 2px 3px #071124,0 0 8px #061d31!important;
+}
+.status .metric-top strong{font-size:inherit!important;font-weight:900!important;letter-spacing:.04em}
+.status .metric-top span{font-size:inherit!important;font-weight:800!important;color:#ffffff!important}
+.status .track{
+ display:block!important;position:relative!important;
+ width:100%!important;height:15px!important;margin-top:6px!important;padding:2px!important;
+ background:rgba(4,20,41,.48)!important;border:1px solid rgba(209,232,255,.36)!important;
+ border-radius:9px!important;overflow:hidden!important;
+ box-shadow:0 2px 9px rgba(4,15,31,.38)!important;
+}
+.status .track .fill{
+ height:100%!important;min-height:9px!important;
+ border-radius:6px!important;
+ box-shadow:0 0 11px rgba(133,210,255,.25)!important;
+}
+@media(max-width:900px){
+ .status{left:8px!important;bottom:10px!important;width:42vw!important;gap:7px!important}
+ .status .metric-top{font-size:clamp(11px,1.6vw,14px)!important}
+ .status .track{height:13px!important;margin-top:4px!important}
+ .status .track .fill{min-height:7px!important}
+}
+@media(max-width:640px){
+ .status{left:6px!important;bottom:7px!important;width:43vw!important;gap:6px!important}
+ .status .metric-top{font-size:clamp(10px,2.2vw,12px)!important;display:flex!important}
+ .status .track{height:12px!important}
+ .status .track .fill{min-height:6px!important}
+}
+
 </style>
 </head>
 <body>
@@ -541,7 +593,6 @@ body{background:#06314c!important;margin:0}
           <button class="action" id="paint" type="button">🎨 PINTAR<span>Una obra inclasificable</span></button>
           <button class="action" id="sleep" type="button">☾ SIESTA<span>Recargar 65 millones de años</span></button>
           <button class="action" id="talk" type="button">💬 HABLAR<span>Charlar con el T-Rex</span></button>
-          <button class="action" id="artHistory" type="button">🏺 HISTORIA DEL ARTE<span>Pintura, escultura y cerámica</span></button>
         </div>
         <div class="below">
           <div class="line"></div>
@@ -936,13 +987,32 @@ var artFacts=[
 ];
 var artFactIndex=-1;
 function nextArtFact(){artFactIndex=(artFactIndex+1+Math.floor(Math.random()*7))%artFacts.length;return artFacts[artFactIndex];}
-el('artHistory').addEventListener('click',function(){wake();s.ideas=cap(s.ideas+3);say(nextArtFact(),'historia_del_arte','Archivo didáctico del T-Rex · sin voz');startScene('talking',1400);activity();});
-// Curiosidades visibles ocasionales, sin voz ni pitidos, para acompañar a las clases.
-setInterval(function(){if(document.hidden||sleeping)return;var now=clockNow();var z=zoneParts(now);if(z.hour>=11&&z.hour<20){say(nextArtFact(),'¿sabías_que?','Un dato de historia del arte desde la selva');startScene('talking',1300);}},300000);
+// Conversaciones mixtas: bromas jurásicas y curiosidades de pintura, cerámica y escultura.
+var lastTalkKind='';
+function nextMixedLine(){
+ var art=Math.random()<.48;
+ // Evita secuencias largas del mismo tipo sin hacer la alternancia previsible.
+ if(lastTalkKind==='art'&&Math.random()<.55)art=false;
+ else if(lastTalkKind==='dino'&&Math.random()<.55)art=true;
+ lastTalkKind=art?'art':'dino';
+ return {text:art?nextArtFact():pick(lines),isArt:art};
+}
+// Apariciones ocasionales, sin voz ni pitidos, solo si la pantalla está visible.
+setInterval(function(){
+ if(document.hidden||sleeping||!el('classAlert').hidden)return;
+ var z=zoneParts(clockNow());if(z.hour<11||z.hour>=20)return;
+ var x=nextMixedLine();
+ say(x.text,'charla',x.isArt?'Curiosidad artística':'Ocurrencia jurásica');
+ startScene('talking',1300);
+},300000);
 
 el('talk').addEventListener('click',function(){
- wake();s.ideas=cap(s.ideas+2);say(Math.random()<.5?nextArtFact():pick(lines),'hablar','T-Rex profesor de arte');
- startScene('roaring',1400);roar();activity();
+ wake();s.ideas=cap(s.ideas+2);
+ var x=nextMixedLine();
+ say(x.text,'hablar',x.isArt?'Curiosidad artística':'Ocurrencia jurásica');
+ startScene(x.isArt?'talking':'roaring',1400);
+ if(!x.isArt)roar();
+ activity();
 });
 el('evolve').addEventListener('click',function(){
  if(s.works<10)return;
