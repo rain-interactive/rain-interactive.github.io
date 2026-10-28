@@ -569,10 +569,41 @@ body{background:#06314c!important;margin:0}
 .right .jurassic-entry:hover{color:#85fff4!important;border-bottom-color:#ff8fcf!important}
 @media(max-width:640px){.right .jurassic-entry{font-size:10px!important;margin-top:8px!important;padding:5px 2px!important}.right .jurassic-entry small{font-size:8px!important}}
 
+
+/* CAMARA JURASICA · acceso pequeno en zona izquierda entre marca y barras (v20261028.11) */
+#jurassicEntry.jurassic-shortcut{
+ position:fixed!important;z-index:40!important;
+ top:clamp(155px,23vh,197px)!important;left:15px!important;
+ right:auto!important;bottom:auto!important;width:auto!important;
+ display:inline-flex!important;align-items:center!important;
+ gap:7px!important;padding:7px 10px 8px!important;
+ margin:0!important;min-height:34px!important;max-width:240px!important;
+ font:850 clamp(10px,1.03vw,13px)/1.15 'DejaVu Sans Mono',Consolas,monospace!important;
+ letter-spacing:.02em!important;text-decoration:none!important;
+ background:rgba(3,28,43,.35)!important;
+ color:#fff!important;border:0!important;border-bottom:2px solid #7cf6ec!important;
+ border-radius:2px!important;box-shadow:none!important;
+ backdrop-filter:none!important;text-shadow:0 2px 5px rgba(2,20,32,.9)!important;
+ white-space:nowrap!important;pointer-events:auto!important;
+}
+#jurassicEntry.jurassic-shortcut .jurassic-arrow{color:#7cf6ec!important}
+#jurassicEntry.jurassic-shortcut:hover,#jurassicEntry.jurassic-shortcut:focus-visible{
+ background:rgba(5,41,55,.82)!important;color:#b7fff7!important;
+}
+@media(max-width:900px){
+ #jurassicEntry.jurassic-shortcut{left:8px!important;top:clamp(140px,22vh,180px)!important;
+ padding:6px 8px!important;min-height:31px!important;font-size:10px!important;}
+}
+@media(max-width:640px){
+ #jurassicEntry.jurassic-shortcut{left:6px!important;top:clamp(135px,22vh,172px)!important;
+ padding:5px 7px!important;min-height:29px!important;font-size:9px!important;gap:4px!important;}
+}
+
 </style>
 </head>
 <body>
 <main class="shell">
+  <a id="jurassicEntry" class="jurassic-shortcut" href="./camara-jurasica.html" title="Entrar en la Cámara Jurásica">📷 <span>CÁMARA JURÁSICA</span> <span class="jurassic-arrow">↗</span></a>
   <header class="top">
     <div>
       <div class="rain-brand" aria-label="Rain Interactive">
@@ -680,7 +711,6 @@ body{background:#06314c!important;margin:0}
           <button class="action" id="sleep" type="button">☾ SIESTA<span>Recargar 65 millones de años</span></button>
           <button class="action" id="talk" type="button">💬 HABLAR<span>Charlar con el T-Rex</span></button>
         </div>
-        <a id="jurassicEntry" class="jurassic-entry" href="./camara-jurasica.html"><span>📷 CÁMARA JURÁSICA</span><small>ENTRAR ↗</small></a>
         <div class="below">
           <div class="line"></div>
           <div class="info"><span>IDENTIDAD<br><strong id="identity">PROTO #001</strong></span><span style="text-align:right">SUPERVIVENCIA<br><strong>GARANTIZADA</strong></span></div>
