@@ -1,0 +1,47 @@
+
+/* Cuaderno cultural de Lux · overlay independiente de los 50 planos */
+#luxChatDock{position:fixed;z-index:85;top:112px;right:72px;width:min(368px,calc(100vw - 34px));font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f5ece9;line-height:1.45;filter:drop-shadow(0 16px 33px #0009)}
+#luxChatDock *{box-sizing:border-box}
+#luxChatToggle{width:100%;border:1px solid #e9b2a668;border-radius:13px;padding:11px 14px;display:flex;align-items:center;gap:10px;background:#14131bdf;color:#f8f0ee;backdrop-filter:blur(22px);cursor:pointer;text-align:left;box-shadow:inset 0 1px #ffffff1b}
+#luxChatToggle:hover{border-color:#ecb3a8bd}
+#luxChatLed{width:8px;height:8px;flex:none;border-radius:50%;background:#f1aa9c;box-shadow:0 0 14px #f2b1aa8a}
+#luxChatLabel{font-weight:650;font-size:12px;letter-spacing:.09em;white-space:nowrap}
+#luxChatTeaser{display:block;font-size:12px;color:#c2b8bb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+#luxChatArrow{font-size:17px;opacity:.8;flex:none}
+#luxChatPanel{display:none;margin-top:8px;border:1px solid #efdbd14f;border-radius:16px;overflow:hidden;background:#11131bee;backdrop-filter:blur(25px);box-shadow:0 18px 70px #000b}
+#luxChatDock.open #luxChatPanel{display:flex;flex-direction:column}
+#luxChatDock.open #luxChatArrow{transform:rotate(180deg)}
+#luxChatHead{padding:15px 16px 10px;border-bottom:1px solid #ffffff24}
+#luxChatHead strong{font:17px Georgia,serif;letter-spacing:.07em;font-weight:400}
+#luxChatHead small{display:block;margin-top:3px;font-size:11px;color:#d6c9cd}
+#luxChatTabs{display:flex;gap:5px;padding:10px 10px 4px;flex-wrap:wrap}
+#luxChatTabs button,#luxChatChips button{border:1px solid #ffffff26;background:#ffffff0d;color:#e7dcdb;padding:7px 10px;border-radius:999px;font-size:11px;cursor:pointer}
+#luxChatTabs button[aria-pressed=true]{background:#f1b2a322;color:#ffddd3;border-color:#edb5a878}
+#luxChatTabs button:hover,#luxChatChips button:hover{border-color:#f0b7a9}
+#luxChatLog{padding:8px 13px;min-height:130px;height:min(284px,36vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#f1c8b566 transparent}
+.luxChatMsg{max-width:94%;margin:9px 0;border-radius:11px;padding:10px 12px;font-size:12px;overflow-wrap:anywhere;background:#ffffff0d;border:1px solid #ffffff12}
+.luxChatMsg.user{margin-left:auto;background:#b9696140;border-color:#d48b874b}
+.luxChatMsg.bot{margin-right:auto}
+.luxChatMsg .luxChatFrom{display:block;font-size:10px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;color:#f0bdb3;margin-bottom:4px}
+.luxChatMsg p{margin:0 0 7px}
+.luxChatMsg p:last-child{margin:0}
+.luxChatResult{padding:9px 0;border-top:1px solid #ffffff20}
+.luxChatResult:first-of-type{border-top:0}
+.luxChatResult b{display:block;color:#f8e7e2;font-size:12px;font-weight:650}
+.luxChatResult span{display:block;color:#bdb5b7;font-size:11px;margin:3px 0}
+.luxChatResult a{display:inline-block;margin-right:10px;margin-top:4px;color:#f6bdad;text-decoration:underline;text-underline-offset:3px;font-size:11px}
+#luxChatChips{padding:5px 11px 8px;display:flex;flex-wrap:wrap;gap:5px}
+#luxChatForm{padding:9px 10px 11px;display:flex;gap:6px;border-top:1px solid #ffffff20}
+#luxChatInput{width:100%;min-width:0;border:1px solid #ffffff35;background:#08090dcc;color:#f9efed;padding:10px 11px;font:12px system-ui;border-radius:9px;outline:0}
+#luxChatInput:focus{border-color:#edb7ad}
+#luxChatSend{border:1px solid #eabbac83;border-radius:9px;color:#221a19;background:#e3b1a4;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700}
+#luxChatFoot{padding:0 13px 12px;font-size:10px;color:#aaa2a5}
+#luxChatDock a:focus-visible,#luxChatDock button:focus-visible{outline:2px solid #f1b9af;outline-offset:2px}
+@media(max-width:700px){
+  #luxChatDock{top:66px;right:9px;width:min(340px,calc(100vw - 18px))}
+  #luxChatDock.open #luxChatPanel{max-height:calc(100dvh - 135px)}
+  #luxChatLog{height:min(254px,31dvh)}
+  #luxChatDock:not(.open) #luxChatTeaser{max-width:180px}
+}
+@media(max-height:620px) and (min-width:701px){#luxChatDock{top:58px}#luxChatLog{height:min(180px,29vh)}}
+@media(prefers-reduced-motion:reduce){#luxChatDock *{transition:none!important}}
