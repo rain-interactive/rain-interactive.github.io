@@ -1,0 +1,65 @@
+name: Crear JPG de los 50 planos de Lux
+on:
+  push:
+    branches: [vista-50-planos-lux-20261029]
+    paths: ['.github/workflows/vista-lux-jpg.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Crear cuadrícula JPG
+        run: |
+          python - <<'PY'
+          import re, json, base64, io
+          from pathlib import Path
+          from PIL import Image, ImageOps, ImageDraw, ImageFont
+          packs=Path('casa-lux/assets')
+          frames={}
+          for path in sorted(packs.glob('pack_*.js')):
+              content=path.read_text(encoding='utf-8')
+              for i,data in re.findall(r'window\.__luxImages\[(\d+)\]="data:image/webp;base64,([^"]+)";',content):
+                  frames[int(i)]=Image.open(io.BytesIO(base64.b64decode(data))).convert('RGB')
+          assert set(frames)==set(range(50)), f"Expected 50 images, found {len(frames)}: {sorted(frames)}"
+          h=Path('casa-lux/index.html').read_text(encoding='utf-8')
+          m=re.search(r'const scenes=(\[.*?\]);',h,re.S)
+          names=[x['name'] for x in json.loads(m.group(1))]
+          cw=442; ih=249; th=298; gap=17; margin=45; top=150
+          W=margin*2+5*cw+4*gap
+          H=top+10*th+9*gap+48
+          out=Image.new('RGB',(W,H),'#0c0d11')
+          d=ImageDraw.Draw(out)
+          bold='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+          reg='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+          titlefont=ImageFont.truetype(bold,46)
+          smallfont=ImageFont.truetype(reg,21)
+          label=ImageFont.truetype(bold,18)
+          d.text((margin,35),'CASA DE LUX',font=titlefont,fill='#f7ede9')
+          d.text((margin,103),'LOS 50 PLANOS  /  1920 × 1080',font=smallfont,fill='#beb5b6')
+          for i in range(50):
+              col=i%5; row=i//5
+              x=margin+col*(cw+gap); y=top+row*(th+gap)
+              tile=ImageOps.fit(frames[i],(cw,ih),Image.Resampling.LANCZOS,centering=(0.5,0.5))
+              out.paste(tile,(x,y))
+              d.rectangle((x,y+ih,x+cw,y+th),fill='#191b22')
+              d.text((x+12,y+ih+11),f'{i+1:02d}',font=label,fill='#f0a99c')
+              name=names[i] if i<len(names) else ''
+              while d.textlength(name,font=smallfont)>cw-63 and name: name=name[:-2].rstrip()+'…'
+              d.text((x+58,y+ih+10),name,font=smallfont,fill='#f4eced')
+          out.save('casa-lux-50-planos.jpg','JPEG',quality=91,optimize=True,subsampling=0)
+          print('Generated',out.size,'bytes',Path('casa-lux-50-planos.jpg').stat().st_size)
+          PY
+      - name: Guardar JPG en la rama de revisión
+        run: |
+          git config user.name "Casa de Lux"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux-50-planos.jpg
+          git commit -m "Vista general JPG de los 50 planos de Lux"
+          git push
