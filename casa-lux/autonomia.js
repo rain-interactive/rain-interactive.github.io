@@ -3,22 +3,38 @@
 // LU ROTH / Autonomía local. Sin observación fuera de esta pestaña ni acceso a dispositivos.
 const house=window.__luHouse,stage=document.getElementById('stage'),panel=document.getElementById('panel');
 if(!house||!stage||!panel)return;
-const key='lu-roth-autonomia-v2',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
+const key='lu-roth-autonomia-v3',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
 let memory={enabled:false,events:[],counts:{},lastMood:'',lastRadio:0};
 try{
  const chosen=localStorage.getItem(key);
- const saved=JSON.parse(chosen||localStorage.getItem('lu-roth-autonomia-v1')||'null');
+ const previous=chosen?null:(localStorage.getItem('lu-roth-autonomia-v2')||localStorage.getItem('lu-roth-autonomia-v1'));
+ const saved=JSON.parse(chosen||previous||'null');
+ // Migrate old scene IDs without confusing removed 17–26 with current 17–26.
+ const remap=(id)=>{
+  if(typeof id!=='string')return '';
+  const match=id.match(/^scene-(\\d+)$/);
+  if(!match)return '';
+  const oldIndex=Number(match[1]);
+  if(!Number.isInteger(oldIndex)||oldIndex<0)return '';
+  if(chosen)return oldIndex<43?'scene-'+oldIndex:'';
+  if(oldIndex>=16&&oldIndex<=25)return '';
+  const currentIndex=oldIndex>25?oldIndex-10:oldIndex;
+  return currentIndex<43?'scene-'+currentIndex:'';
+ };
  if(saved&&typeof saved==='object'){
   // Esta nueva versión se inicia apagada; solo ON explícito activa la autonomía.
   memory.enabled=false; // Cada carga requiere la pulsación ON para activar sonido y director.
   // Migración: no volver a guardar data:image enormes dentro de localStorage.
-  memory.events=Array.isArray(saved.events)?saved.events.slice(-60).filter(e=>e&&typeof e.name==='string').map(e=>({
-    id:typeof e.id==='string'?e.id:'',
+  memory.events=Array.isArray(saved.events)?saved.events.slice(-60)
+   .filter(e=>e&&typeof e.name==='string'&&remap(e.id))
+   .map(e=>({
+    id:remap(e.id),
     name:e.name.slice(0,110),at:Number(e.at)||Date.now(),mood:String(e.mood||'').slice(0,45),hold:!!e.hold
-  })):[];
+   })):[];
   memory.counts={};
   for(const [k,v] of Object.entries(saved.counts&&typeof saved.counts==='object'?saved.counts:{})){
-   if(/^scene-\d+$/.test(k)&&Number.isFinite(Number(v)))memory.counts[k]=Number(v);
+   const current=remap(k);
+   if(current&&Number.isFinite(Number(v)))memory.counts[current]=Number(v);
   }
   memory.lastMood=typeof saved.lastMood==='string'?saved.lastMood:'';
   memory.lastRadio=Number(saved.lastRadio)||0;
