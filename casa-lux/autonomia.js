@@ -131,6 +131,8 @@ function onScene(index,scenes){
  if(vision?.presentation){
   vision.presentation(index,scenes[index],layer).then(profile=>{
    if(!profile||!memory.enabled||house.getState()?.index!==index)return;
+   // El color de esta fotografía orienta el siguiente set; no se corta el actual.
+   window.__luRadio?.setVisualPreference?.(profile);
    // Una nota visual cada cierto tiempo: observaciones de luz, no de objetos.
    if(Date.now()-lastVisionCaption>8*60*1000&&memory.events.length%3===0){
     const phrase=profile.tone==='oscuro'
