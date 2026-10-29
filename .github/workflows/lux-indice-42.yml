@@ -1,0 +1,51 @@
+name: Casa de Lux · índice de 42 planos
+on:
+  push:
+    paths:
+      - '.github/workflows/lux-indice-42.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lux-index-42
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Construir lámina JPG con 42 planos numerados
+        run: python casa-lux/crear_indice_42.py
+      - name: Validar que los 24 planos eliminados no se muestran ni se descargan
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json,re
+          root=Path('casa-lux')
+          html=(root/'index.html').read_text('utf8')
+          scenes=json.loads(re.search(r'const scenes=(\[.*?\]);',html,re.S).group(1))
+          assert len(scenes)==42,len(scenes)
+          assert "window.__luxImages?.[i+24]" in html
+          for n in range(1,9):
+              assert not (root/'assets'/f'pack_{n:02}.js').exists(),n
+              assert f'assets/pack_{n:02}.js' not in html,n
+          for token in ['chat.js','radio.js','windfinder.js','monocromo.css']:
+              assert token in html,token
+          img=Image.open(root/'Casa_de_Lux_42_planos_numerados.jpg')
+          assert img.width>2200 and img.height>1700,img.size
+          print('OK · 42 planos, packs 01-08 ausentes y controles conservados',img.size)
+          PY
+      - name: Publicar lámina actual
+        run: |
+          git config user.name "Casa de Lux"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/Casa_de_Lux_42_planos_numerados.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Publicar miniaturas de los 42 planos conservados"
+            git push
+          fi
