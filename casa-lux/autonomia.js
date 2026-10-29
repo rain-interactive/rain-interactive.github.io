@@ -11,8 +11,15 @@ try{
  if(saved&&typeof saved==='object'){
   // Esta nueva versión se inicia apagada; solo ON explícito activa la autonomía.
   memory.enabled=false; // Cada carga requiere la pulsación ON para activar sonido y director.
-  memory.events=Array.isArray(saved.events)?saved.events.slice(-60).filter(e=>e&&typeof e.src==='string'):[];
-  memory.counts=saved.counts&&typeof saved.counts==='object'?saved.counts:{};
+  // Migración: no volver a guardar data:image enormes dentro de localStorage.
+  memory.events=Array.isArray(saved.events)?saved.events.slice(-60).filter(e=>e&&typeof e.name==='string').map(e=>({
+    id:typeof e.id==='string'?e.id:'',
+    name:e.name.slice(0,110),at:Number(e.at)||Date.now(),mood:String(e.mood||'').slice(0,45),hold:!!e.hold
+  })):[];
+  memory.counts={};
+  for(const [k,v] of Object.entries(saved.counts&&typeof saved.counts==='object'?saved.counts:{})){
+   if(/^scene-\d+$/.test(k)&&Number.isFinite(Number(v)))memory.counts[k]=Number(v);
+  }
   memory.lastMood=typeof saved.lastMood==='string'?saved.lastMood:'';
   memory.lastRadio=Number(saved.lastRadio)||0;
  }
@@ -61,14 +68,16 @@ function weightedChoice(choices){
 }
 function choose(scenes,shown,recent){
  if(!memory.enabled)return null;
- const p=sense(),mood=atmosphere(p),palette=weights[mood]||{},tail=memory.events.slice(-15).map(e=>e.src),pool=[];
+ const p=sense(),mood=atmosphere(p),palette=weights[mood]||{},tail=memory.events.slice(-15).map(e=>e.id),pool=[];
  for(let index=0;index<scenes.length;index++){
   const s=scenes[index];if(!s||!s.src||index===shown)continue;
   let w=palette[s.group]||1.65;
   if(s.time==='noche'&&!p.night)w*=.14;
   if(s.time==='dia'&&p.night)w*=.22;
-  if(tail.includes(s.src)||recent.includes(index))w*=.035;
-  w/=Math.sqrt(1+(Number(memory.counts[s.src])||0)*.45);
+  const id='scene-'+index;
+  if(tail.includes(id)||recent.includes(index))w*=.035;
+  w/=Math.sqrt(1+(Number(memory.counts[id])||0)*.45);
+  w*=window.__luVision?.score?.(index,s,mood,shown,scenes)||1;
   if(w>0)pool.push({index,weight:w});
  }
  return pool.length?weightedChoice(pool):null;
@@ -101,8 +110,10 @@ function chooseRadio(mood){
 function record(index,scenes){
  const s=scenes[index];if(!memory.enabled||!s?.src)return;
  const p=sense(),mood=atmosphere(p);
- memory.events.push({src:s.src,name:s.name,at:Date.now(),mood});memory.events=memory.events.slice(-60);
- memory.counts[s.src]=(Number(memory.counts[s.src])||0)+1;
+ const id='scene-'+index;
+ memory.events.push({id,name:s.name,at:Date.now(),mood,hold:false});memory.events=memory.events.slice(-60);
+ memory.counts[id]=(Number(memory.counts[id])||0)+1;
+ window.__luVision?.remember?.(index,mood,false);
  if(Object.keys(memory.counts).length>120)memory.counts={};
  if(Math.max(0,...Object.values(memory.counts).map(Number))>150){
   for(const k of Object.keys(memory.counts))memory.counts[k]=Math.ceil(memory.counts[k]/2);
@@ -110,9 +121,43 @@ function record(index,scenes){
  memory.lastMood=mood;
  cameraAndColor(p,mood);chooseRadio(mood);save();render();
 }
+let lastVisionCaption=0;
 function onScene(index,scenes){
  if(!memory.enabled){stage.classList.remove('lu-autonomous');return}
  record(index,scenes);
+ const active=house.getState()?.active;
+ const layer=el(active===0?'filmA':'filmB');
+ const vision=window.__luVision;
+ if(vision?.presentation){
+  vision.presentation(index,scenes[index],layer).then(profile=>{
+   if(!profile||!memory.enabled||house.getState()?.index!==index)return;
+   // Una nota visual cada cierto tiempo: observaciones de luz, no de objetos.
+   if(Date.now()-lastVisionCaption>8*60*1000&&memory.events.length%3===0){
+    const phrase=profile.tone==='oscuro'
+     ?'Esta fotografía deja más espacio a las sombras. Voy a mover la cámara despacio.'
+     :profile.tone==='luminoso'
+     ?'Hay mucha luz en este plano. Prefiero que los detalles respiren.'
+     :profile.tone==='frío'
+     ?'La imagen tiene una temperatura fría. El Atlántico también participa en el encuadre.'
+     :'Una imagen puede cambiar de sentido solo con la luz y el tiempo.';
+    window.__luNotes?.say?.('Lu Roth · '+phrase,'visión');
+    lastVisionCaption=Date.now();
+   }
+   render();
+  }).catch(()=>{});
+ }
+}
+function shouldHold(index,scenes){
+ if(!memory.enabled||index<0)return false;
+ return window.__luVision?.shouldHold?.(index,scenes[index],atmosphere(sense()))===true;
+}
+function onHold(index,scenes){
+ if(!memory.enabled||!scenes[index])return;
+ const mood=atmosphere(sense());
+ window.__luVision?.remember?.(index,mood,true);
+ memory.events.push({id:'scene-'+index,name:scenes[index].name,at:Date.now(),mood,hold:true});
+ memory.events=memory.events.slice(-60);
+ save();render();
 }
 // El motor sigue cambios reales en el clima, mareas, luna, mensajes y subtítulos.
 // No inventa mediciones y no guarda contenido privado fuera del navegador.
@@ -166,7 +211,16 @@ function render(){
  el('luBrainState').textContent+=(memory.enabled?' · '+audioInfo:'');
  el('luBrainMemory').title=mailInfo+' · Subtítulo: '+(p.subtitle?.text||'sin subtítulo');
  const last=memory.events.at(-1);
- el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name:'');
+ el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name+(last.hold?' (mantener)':''):'');
+ const vision=window.__luVision;
+ const visionStatus=vision?.status?.();
+ const state=house.getState();
+ const photo=vision?.view?.(state?.index,house.getScenes());
+ let eyes=el('luBrainEyes');
+ if(!eyes){eyes=document.createElement('p');eyes.id='luBrainEyes';el('luBrainMemory').after(eyes)}
+ if(eyes)eyes.textContent=visionStatus
+  ?'Ojos: '+visionStatus.analyzed+'/'+visionStatus.total+' fotografías · '+vision.summary(photo)
+  :'Ojos: esperando el módulo de visión';
  el('luBrainToggle').textContent=memory.enabled?'Pausar autonomía':'Activar autonomía';
  el('luBrainToggle').setAttribute('aria-pressed',String(memory.enabled));
  const power=el('luAutoPower');
@@ -196,6 +250,8 @@ function setAutonomy(enabled){
   render();
   return;
  }
+ // Los ojos comienzan a catalogar fotografías locales, sin subir ninguna imagen.
+ window.__luVision?.begin?.(house.getScenes());
  // Comienza el audio directamente en el gesto ON (permiso sujeto a SoundCloud/navegador).
  const initialPerception=sense();
  window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
@@ -220,7 +276,7 @@ el('luAutoPower')?.addEventListener('click',toggleAutonomy);
 el('luBrainErase').addEventListener('click',()=>{
  memory.events=[];memory.counts={};memory.lastMood='';memory.lastRadio=0;save();render();
 });
-window.__luAutonomy={choose,onScene,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
+window.__luAutonomy={choose,onScene,onHold,shouldHold,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
