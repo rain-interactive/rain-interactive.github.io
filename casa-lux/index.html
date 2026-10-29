@@ -88,7 +88,82 @@
 #mobileBar{z-index:35!important}
 @media(max-width:720px){#liveStrip{display:none!important}#mobileBar{display:block!important}#filmState{bottom:55px}}
 @media(min-width:721px) and (max-width:1190px){#liveStrip{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:9px}#liveStrip .value{font-size:17px}#liveStrip .detail{font-size:11px}}
-</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"><link rel="stylesheet" href="/casa-lux/radio.css?v=5"><link rel="stylesheet" href="/casa-lux/monocromo.css?v=3"><style>#topLine{justify-content:flex-end!important}</style><link rel="stylesheet" href="/casa-lux/windfinder.css?v=2"></head><body><div id="backdrop"></div>
+</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"><link rel="stylesheet" href="/casa-lux/radio.css?v=5"><link rel="stylesheet" href="/casa-lux/monocromo.css?v=3"><style>#topLine{justify-content:flex-end!important}</style><link rel="stylesheet" href="/casa-lux/windfinder.css?v=2"><style id="lux-clean-screen-v1">
+/* CASA DE LUX — vista limpia. No modificar iluminación, fotografías ni los datos. */
+#view{inset:0!important;overflow:hidden!important;padding:0!important;align-items:center!important;justify-content:center!important}
+#stage{box-shadow:none!important}
+#topLine{top:22px!important;right:30px!important;left:30px!important;z-index:35!important;opacity:1!important}
+#topLine #cornerClock{min-width:0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important}
+#topLine #clockLarge{font-size:31px!important;letter-spacing:.055em!important;line-height:1!important;color:#fff!important;text-shadow:0 1px 5px #000,0 2px 14px #000d!important}
+#topLine #clockDate{font-size:12px!important;margin-top:5px!important;color:#fff!important;text-shadow:0 1px 5px #000,0 2px 12px #000d!important}
+/* Indicadores permanentemente visibles sin tarjetas ni banda de fondo. */
+#liveStrip,#stage.show-data #liveStrip{
+ display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:auto!important;
+ align-items:end!important;gap:20px!important;
+ position:absolute!important;left:34px!important;right:34px!important;bottom:24px!important;
+ padding:0!important;margin:0!important;min-height:0!important;max-height:none!important;overflow:visible!important;
+ opacity:1!important;visibility:visible!important;pointer-events:none!important;
+ background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important
+}
+#liveStrip .metric{
+ border:0!important;border-right:0!important;padding:0!important;margin:0!important;min-width:0!important;
+ background:transparent!important;box-shadow:none!important;
+ text-shadow:0 1px 4px #000,0 2px 14px #000e!important
+}
+#liveStrip .metric:first-child{display:none!important} /* La hora ya está en la esquina superior. */
+#liveStrip .metric .kicker{color:#fff!important;font-size:11px!important;font-weight:600!important;letter-spacing:.075em!important;opacity:.84!important;margin-bottom:5px!important}
+#liveStrip .metric .value{color:#fff!important;font-size:21px!important;line-height:1.16!important;font-weight:500!important}
+#liveStrip .metric .detail{color:#fff!important;font-size:12px!important;line-height:1.32!important;margin-top:4px!important}
+#liveStrip .metric .tiny{color:#fff!important;font-size:10px!important;line-height:1.25!important;opacity:.84!important}
+#liveStrip .metric:nth-child(4)>.tiny{display:none!important}
+#liveStrip .phaseCell{gap:8px!important;align-items:center!important}
+#liveStrip #moonDisc{width:43px!important;height:43px!important}
+#liveStrip #wfForecast{background:transparent!important;border:0!important;padding:0!important;margin:0!important;justify-content:flex-end!important;gap:3px!important;pointer-events:auto!important}
+#liveStrip #wfOpen{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#fff!important;text-decoration:underline!important;text-underline-offset:2px!important;padding:3px 0!important;pointer-events:auto!important}
+#filmState{background:transparent!important;border:0!important;box-shadow:none!important;bottom:113px!important;padding:0!important}
+#dataStatus{display:none!important}
+#controlsBar{opacity:.12!important}
+#controlsBar:hover,#controlsBar:focus-within{opacity:1!important}
+/* En pantallas medianas, la misma composición se reduce sin perder datos. */
+@media(min-width:721px) and (max-width:1300px){
+ #liveStrip{gap:12px!important;left:25px!important;right:25px!important;bottom:18px!important}
+ #liveStrip .metric .value{font-size:18px!important}
+ #liveStrip .metric .detail{font-size:11px!important}
+ #liveStrip .metric .tiny{font-size:9px!important}
+}
+/* El móvil también es una ventana a la casa, no un panel de media pantalla. */
+@media(max-width:720px){
+ #view{inset:0!important;height:100dvh!important;padding:0!important;overflow:hidden!important;align-items:center!important;justify-content:center!important}
+ #liveStrip{display:none!important}
+ #mobileBar{
+  display:block!important;position:fixed!important;z-index:45!important;
+  left:0!important;right:0!important;bottom:0!important;top:auto!important;
+  height:auto!important;max-height:190px!important;min-height:0!important;overflow-y:auto!important;
+  padding:12px 14px max(12px,env(safe-area-inset-bottom))!important;
+  background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;backdrop-filter:none!important;
+  text-shadow:0 1px 5px #000,0 2px 12px #000f!important
+ }
+ #mobileBar h2{display:none!important}
+ #mobileBar .mobgrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px 12px!important}
+ #mobileBar .mobcell,#mobileBar #wfForecast{
+  background:transparent!important;border:0!important;border-radius:0!important;
+  min-height:0!important;padding:0!important;margin:0!important;box-shadow:none!important
+ }
+ #mobileBar .kicker,#mobileBar #wfForecast .kicker{font-size:9px!important;color:#fff!important;opacity:.86!important;letter-spacing:.04em!important}
+ #mobileBar .mobvalue,#mobileBar #wfForecast .value{font-size:15px!important;line-height:1.2!important;color:#fff!important}
+ #mobileBar .mobdetail,#mobileBar #wfForecast .detail{font-size:10px!important;line-height:1.2!important;color:#fff!important}
+ #mobileBar #wfOpen{pointer-events:auto!important}
+ #topLine{top:16px!important;right:15px!important}
+ #topLine #cornerClock{display:none!important} /* El reloj permanece en el HUD móvil. */
+ #controlsBar{top:16px!important;right:10px!important;bottom:auto!important;transform:none!important;opacity:.64!important;flex-direction:row!important}
+ #controlsBar .ctrl{background:#09090966!important;border:0!important;font-size:15px!important;padding:5px!important}
+ #panel{left:4vw!important;right:4vw!important;top:62px!important;bottom:auto!important;transform:none!important;width:auto!important;max-height:calc(100dvh - 100px)!important}
+ #filmState{display:none!important}
+ #wfDetails{bottom:185px!important;max-height:40dvh!important}
+}
+@media(prefers-reduced-motion:reduce){#filmA,#filmB{transition-duration:.2s!important}}
+</style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -171,7 +246,7 @@ async function loadTides(){const d=now(),a=encodeURIComponent(shiftDate(d,-1)),b
  try{let ctl=new AbortController(),tt=setTimeout(()=>ctl.abort(),11000),r=await fetch(url,{signal:ctl.signal,cache:'no-store'});clearTimeout(tt);if(!r.ok)throw Error('HTTP '+r.status);let data=await r.json();let list=normalizeTides(data);if(list.length<2)throw Error('respuesta sin pleamares/bajamares interpretables');tideEvents=list;showTides();setCopy('tideSource','MeteoGalicia · puerto 1 · datos oficiales');}catch(e){tideEvents=[];setCopy('tideTitle','No disponible');setCopy('tideNext','No se pudo consultar MeteoGalicia');setCopy('tideSource','Ver tabla oficial en ⚙');setCopy('mTide','Sin conexión');setCopy('mTideD','Consultar tabla del puerto');}}
 function showTides(){if(tideEvents.length<2)return;const n=now(),idx=tideEvents.findIndex(e=>e.when>n);let prev=idx>0?tideEvents[idx-1]:null,next=idx>=0?tideEvents[idx]:null;let state=prev&&next?(next.high?'Subiendo ↑':'Bajando ↓'):'Cambio de marea';let time=next?`${next.high?'Pleamar':'Bajamar'} ${shortHour.format(next.when)}`:'Sin próximas mareas';let height=next?.height!=null?` · ${next.height.toFixed(2).replace('.',',')} m`:'';setCopy('tideTitle',state);setCopy('tideNext',time+height);setCopy('mTide',state);setCopy('mTideD',time+height);}
 function chooseScene(){const still=$('still');const src=window.__luxImages?.[sleep?26:24]||'';still.style.backgroundImage=src?`url("${src}")`:'none';$('windowCut').style.backgroundImage='none';}
-function fit(){let stage=$('stage'),outer=$('view');let scale=Math.min(outer.clientWidth/1920,outer.clientHeight/1080);stage.style.transform=`scale(${scale})`;}window.addEventListener('resize',fit);fit();
+function fit(){let stage=$('stage'),outer=$('view');let isPortraitPhone=window.matchMedia('(max-width:720px) and (orientation:portrait)').matches;let scale=(isPortraitPhone?Math.max:Math.min)(outer.clientWidth/1920,outer.clientHeight/1080);stage.style.transform=`scale(${scale})`;}window.addEventListener('resize',fit);fit();
 function setSea(mode){seaMode=mode;let active=mode!=='photo';$('sky').style.display=active?'block':'none';$('windowCut').style.opacity=active?'1':'0';$('still').style.opacity=active?'0':'1';if(active){$('seaVideo').style.display=mode==='video'?'block':'none';if(mode==='video')$('seaVideo').play().catch(()=>{});else $('seaVideo').pause();}else $('seaVideo').pause();}
 $('infoBtn').onclick=()=>{$('panel').classList.toggle('open')};
 $('closePanel').onclick=()=>{$('panel').classList.remove('open')};
