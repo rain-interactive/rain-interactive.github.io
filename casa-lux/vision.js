@@ -4,7 +4,7 @@
 // No captura la pantalla ni usa webcams: solo analiza las fotos de la propia instalación.
 const house=window.__luHouse;
 if(!house)return;
-const storeKey='lu-roth-ojos-v1',profiles=new Map();
+const storeKey='lu-roth-ojos-v2',profiles=new Map();
 const cap=(v,a,b)=>Math.max(a,Math.min(b,v));
 let scanned=0,total=0,queue=[],working=false,started=false,lastHold=0;
 let experiences=[];
