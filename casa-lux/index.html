@@ -468,6 +468,14 @@ const c=$('seaCanvas'),ctx=c.getContext('2d');let phase=0;
 function animateSea(){if(seaMode==='demo'){const w=1920,h=1080;phase+=.012;let sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#31415b');sky.addColorStop(.4,'#d29183');sky.addColorStop(.50,'#eec3a7');sky.addColorStop(.51,'#24516b');sky.addColorStop(1,'#07172a');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);for(let i=0;i<105;i++){let y=600+i*4.9,amp=(i/105)*8,alpha=.05+(i/105)*.18;ctx.beginPath();ctx.strokeStyle=`rgba(238,202,186,${alpha})`;ctx.lineWidth=.7+i/75;for(let x=0;x<=w;x+=24){let yy=y+Math.sin(x*.019+phase*(1+i*.024))*amp;if(x===0)ctx.moveTo(x,yy);else ctx.lineTo(x,yy)}ctx.stroke()}}
  requestAnimationFrame(animateSea)}animateSea();
 let drops=[];for(let i=0;i<150;i++)drops.push({x:Math.random()*1920,y:Math.random()*1080,v:9+Math.random()*12,len:8+Math.random()*12});const rainCtx=$('rain').getContext('2d');function rainLoop(){rainCtx.clearRect(0,0,1920,1080);if($('rain').style.opacity!=='0'){rainCtx.strokeStyle='#b8d4e688';rainCtx.lineWidth=1.4;for(let d of drops){rainCtx.beginPath();rainCtx.moveTo(d.x,d.y);rainCtx.lineTo(d.x-7,d.y+d.len);rainCtx.stroke();d.y+=d.v;d.x-=2;if(d.y>1080){d.y=-10;d.x=Math.random()*1920}}}requestAnimationFrame(rainLoop)}rainLoop();
+// Permite que el botón ON refresque las lecturas disponibles sin recargar la página.
+let lastLuClimateRefresh=0;
+window.__luClimateRefresh=()=>{
+ if(Date.now()-lastLuClimateRefresh<4*60*1000)return;
+ lastLuClimateRefresh=Date.now();
+ updateMoon();showTides();autoAtmosphere();
+ Promise.allSettled([loadWeather(),loadTides()]).catch(()=>{});
+};
 chooseScene();autoBaseScene();updateMoon();clockTick();syncClock();loadWeather();setInterval(()=>{clockTick();autoBaseScene()},1000);setInterval(updateMoon,60000);setInterval(showTides,60000);setInterval(autoAtmosphere,60000);setInterval(loadWeather,15*60000);setInterval(loadTides,60*60000);setInterval(syncClock,60*60000);
 </script>
 <script>
@@ -926,4 +934,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=11" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=3" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=11" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=4" defer></script></body></html>
