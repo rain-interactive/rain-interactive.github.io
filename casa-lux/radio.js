@@ -25,14 +25,14 @@ const mixes=[
 /* Sonido continuo: empieza tras pulsar Play y después enlaza sesiones en orden aleatorio. */
 const dock=document.createElement('aside');
 dock.id='luxRadioDock';dock.setAttribute('aria-label','Radio de Lux · SoundCloud NTS Radio');
-dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">SOUNDCLOUD · RADIO DE LUX</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>NTS Radio: soul, funk, disco, house, rock y descubrimientos. Reproducción continua, con orden aleatorio.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><a href="https://www.nts.live/" target="_blank" rel="noopener noreferrer">Escuchar NTS en directo</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
+dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">RADIO DELUXE</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><div id="luxRadioNow" role="status" aria-live="polite"></div><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>NTS Radio: soul, funk, disco, house, rock y descubrimientos. Reproducción continua, con orden aleatorio.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><a href="https://www.nts.live/" target="_blank" rel="noopener noreferrer">Escuchar NTS en directo</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
 document.body.appendChild(dock);
 const $=id=>document.getElementById(id);
 const toggle=$('luxRadioToggle'),choices=$('luxRadioChoices'),frame=$('luxRadioFrame');
 const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1';
 let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=false;
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
-let flow={loop:true,random:true},hasPlayed=false;
+let flow={loop:true,random:true},hasPlayed=false,isPlaying=false;
 try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
@@ -40,6 +40,7 @@ try {
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow=saved;
 } catch {}
 function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow))}catch{}}
+function updateNow(){const mix=mixes[selected];if(!mix)return;$('luxRadioNow').textContent=(isPlaying?'♫ Sonando · ':hasPlayed?'Pausada · ':'Playlist · ')+mix.name;}
 function mixURL(mix,play){
  return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(mix.url)+
    '&auto_play='+Boolean(play)+'&color=%23ffffff&show_artwork=true&show_comments=false&show_user=true'+
@@ -62,7 +63,7 @@ function pickNext(){
 }
 function setMix(i,play=false){
  if(!Number.isInteger(i)||!mixes[i])return;
- selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;
+ selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;updateNow();
  const mix=mixes[i];
  const active=$('luxRadioActive');
  active.replaceChildren();
@@ -99,13 +100,14 @@ function setupWidget(){
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
   });
   widget.bind(api.Events.PLAY,()=>{
-   hasPlayed=true;widgetReady=true;transitioning=false;
+   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;updateNow();
    widget.getCurrentSoundIndex(index=>{
     if(Number.isInteger(index))lastTrackIndex=index;
    });
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
    $('luxRadioHint').textContent='Sonando · al acabar, '+(flow.loop?'otra sesión '+(flow.random?'aleatoria':'en orden'):'la radio se detendrá')+'.';
   });
+  widget.bind(api.Events.PAUSE,()=>{isPlaying=false;updateNow()});
   widget.bind(api.Events.FINISH,()=>{
    if(!flow.loop||!hasPlayed||transitioning)return;
    // FINISH se emite también al terminar pistas individuales de un set.
@@ -117,6 +119,7 @@ function setupWidget(){
    });
   });
   widget.bind(api.Events.ERROR,()=>{
+   isPlaying=false;updateNow();
    $('luxRadioHint').textContent='Esta sesión no está disponible. Prueba «Siguiente» o ábrela en SoundCloud.';
   });
  }catch{widget=null;widgetReady=false}
@@ -161,6 +164,6 @@ toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&dock.classList.contains('open'))open(false);
 });
-updateControls();
+updateControls();updateNow();
 if(window.matchMedia('(min-width:801px)').matches)open(true);
 })();
