@@ -12,7 +12,7 @@ try{
  // Migrate old scene IDs without confusing removed 17–26 with current 17–26.
  const remap=(id)=>{
   if(typeof id!=='string')return '';
-  const match=id.match(/^scene-(\\d+)$/);
+  const match=id.match(/^scene-(\d+)$/);
   if(!match)return '';
   const oldIndex=Number(match[1]);
   if(!Number.isInteger(oldIndex)||oldIndex<0)return '';
