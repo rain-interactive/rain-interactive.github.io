@@ -887,7 +887,7 @@ function display(index){
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
- // En ocasiones, la Casa decide contemplar el mismo plano otro ciclo de tres minutos.
+ // En ocasiones Lu conserva la fotografía durante otra duración elegida por ella.
  if(shown>=0&&window.__luAutonomy?.shouldHold?.(shown,scenes))return shown;
  const choice=window.__luAutonomy?.choose?.(scenes,shown,recent);
  if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src){
@@ -918,28 +918,40 @@ function applyLighting(mins){
  return {sleeping,on};
 }
 function hold(minutes){until=Date.now()+minutes*60000;}
+const isAutonomous=()=>window.__luAutonomy?.isEnabled?.()===true;
+function planNext(index=shown){
+ if(!isAutonomous())return 180000; // Modo clásico: tres minutos exactos.
+ const proposed=window.__luAutonomy?.nextDelay?.(index,scenes);
+ return Number.isFinite(proposed)?Math.max(45000,Math.min(900000,proposed)):180000;
+}
 function advance(force=false){
  const now=Date.now();
- if(!force && now<nextChange)return;
+ if(!force&&now<nextChange)return;
  const next=chooseAutomatic();
  if(next!==null){
   if(next===shown)window.__luAutonomy?.onHold?.(shown,scenes);
   else display(next);
  }
- nextChange=now+180000; // Tres minutos exactos entre elecciones.
+ // En autonomía se recalcula tras cada elección; en clásico siempre son 180 s.
+ nextChange=now+planNext(shown);
 }
 function tick(){
  const mins=toMinutes(new Date(Date.now()+(typeof clockSkew==='number'?clockSkew:0)));
  const state=applyLighting(mins);
  advance(false);
  const txt=state.sleeping?'Descansando · luz apagada hasta las 10:00':shown<0?'Habitación tranquila':(scenes[shown]?.name||'En la habitación');
- $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+' · Cambio aleatorio cada 3 minutos.';
+ $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+
+ (isAutonomous()?' · Ritmo autónomo: Lu decide cuándo cambiar.':' · Cambio aleatorio cada 3 minutos.');
 }
 window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
 window.__luHouse={
  getScenes:()=>scenes.map(s=>({...s})),
- getState:()=>({index:shown,active,scene:scenes[shown]?.name||'',sleeping:stage.dataset.luxAsleep==='yes',lights:stage.dataset.luxLamps||'off'}),
- show:(index)=>{if(!Number.isInteger(index)||index<0||!scenes[index]?.src)return false;display(index);nextChange=Date.now()+180000;return true}
+ getState:()=>({index:shown,active,scene:scenes[shown]?.name||'',sleeping:stage.dataset.luxAsleep==='yes',lights:stage.dataset.luxLamps||'off',nextChange}),
+ reschedule:()=>{nextChange=Date.now()+planNext(shown);return nextChange},
+ show:(index)=>{
+  if(!Number.isInteger(index)||index<0||!scenes[index]?.src)return false;
+  display(index);nextChange=Date.now()+planNext(shown);return true;
+ }
 };
 advance(true);setInterval(tick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
@@ -971,4 +983,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=14" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=9" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=14" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=10" defer></script></body></html>
