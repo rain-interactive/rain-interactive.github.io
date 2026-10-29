@@ -1,0 +1,133 @@
+{
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "keep_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    28,
+    35,
+    37,
+    39,
+    40,
+    41,
+    43,
+    49,
+    50
+  ],
+  "removed_numbers": [
+    26,
+    27,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    36,
+    38,
+    42,
+    44,
+    45,
+    46,
+    47,
+    48
+  ],
+  "groups": [
+    {
+      "keep": 35,
+      "removed": [
+        26,
+        36,
+        45,
+        46
+      ],
+      "reason": "mismo retrato en el estudio, recortes/variaciones de encuadre"
+    },
+    {
+      "keep": 37,
+      "removed": [
+        27,
+        47
+      ],
+      "reason": "misma pose junto al mural negro, recortes"
+    },
+    {
+      "keep": 28,
+      "removed": [
+        38
+      ],
+      "reason": "fotografía junto a la valla, distinto recorte"
+    },
+    {
+      "keep": 39,
+      "removed": [
+        29
+      ],
+      "reason": "retrato con tipografía coreana, distinto encuadre"
+    },
+    {
+      "keep": 40,
+      "removed": [
+        30
+      ],
+      "reason": "misma exposición KETA, preferido encuadre panorámico sin bordes desenfocados"
+    },
+    {
+      "keep": 41,
+      "removed": [
+        31,
+        48
+      ],
+      "reason": "pintar lienzo negro, recortes de la misma fotografía"
+    },
+    {
+      "keep": 49,
+      "removed": [
+        32,
+        42
+      ],
+      "reason": "retrato con flores rojas, recortes"
+    },
+    {
+      "keep": 43,
+      "removed": [
+        33
+      ],
+      "reason": "retrato con prenda roja, recorte"
+    },
+    {
+      "keep": 50,
+      "removed": [
+        34,
+        44
+      ],
+      "reason": "retrato en vestido claro, recortes"
+    }
+  ],
+  "policy": "Conservar solo fotografías visualmente distintas y FHD; si hay recortes de la misma imagen, elegir versión panorámica sin bandas."
+}
