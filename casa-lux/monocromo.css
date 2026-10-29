@@ -84,3 +84,8 @@ body a{color:#fff}
 /* Mantener siempre visibles los datos sobre los planos, sin tapar las fotografías más de lo necesario. */
 #liveStrip{background:#000d!important}
 @media(max-width:720px){#mobileBar{background:#000e!important}}
+
+/* Reloj legible en cualquier fotografía */
+#topLine #cornerClock{display:inline-flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;background:#000!important;color:#fff!important;border:1px solid #ffffff72!important;border-radius:12px!important;padding:12px 19px 11px!important;box-shadow:0 8px 26px #0009!important;backdrop-filter:none!important;min-width:184px!important}
+#topLine #clockLarge,#topLine #clockDate{color:#fff!important;text-shadow:none!important;opacity:1!important}
+@media(max-width:720px){#topLine #cornerClock{padding:8px 12px!important;min-width:0!important;border-radius:9px!important}}
