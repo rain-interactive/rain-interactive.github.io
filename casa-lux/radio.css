@@ -42,3 +42,21 @@
 /* El título de la playlist se muestra incluso con Radio Deluxe plegada. */
 #luxRadioNow{margin-top:5px;padding:8px 11px;min-height:31px;background:#111a21e9;border:1px solid #a2c8bd59;border-radius:9px;color:#d4f3e9;font:11px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px #0008}
 #luxRadioDock.open #luxRadioNow{display:none}
+
+/* Radio Lu Roth · archivo integrado, sin divisiones por autor. */
+#luMusicShelf{padding:8px 12px 12px;border-top:1px solid #ffffff20}
+#luMusicShelf .luMusicShelfNav{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+#luMusicShelf .luMusicShelfNav button,
+#luMusicShelf .luMusicShelfNav a{display:inline-flex;align-items:center;min-height:30px;padding:7px 10px;
+ background:#ffffff12;border:1px solid #ffffff43;border-radius:20px;color:#fff;
+ font:600 11px/1.2 system-ui,sans-serif;text-decoration:none;cursor:pointer}
+#luMusicShelf .luMusicShelfNav button[aria-expanded=true]{background:#fff;color:#151515;border-color:#fff}
+#luMusicShelf .luMusicShelfNav :is(a,button):hover{border-color:#fff}
+#luMusicPlaylistPanel[hidden]{display:none!important}
+#luMusicPlaylistPanel{padding-top:10px}
+#luMusicPlaylistPanel p{font-size:11px;line-height:1.45;color:#ddd;margin:4px 0 10px}
+#luMusicSpotifyFrame{display:block;width:100%;height:292px;border:0;border-radius:8px;background:#0b0b0b}
+#luxRadioDock.has-lu-collection #luxRadioActive,
+#luxRadioDock.has-lu-collection #luxRadioFrame,
+#luxRadioDock.has-lu-collection .luxRadioFlow{display:none!important}
+@media(max-width:720px){#luMusicSpotifyFrame{height:240px}}
