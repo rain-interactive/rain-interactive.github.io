@@ -74,7 +74,10 @@ function showDetail(m){const target=$('luxMailDetail');target.replaceChildren();
  for(const entry of m.links){const href=safe(entry[1]);if(!href)continue;const link=txt(target,'a',entry[0]);link.href=href;link.target='_blank';link.rel='noopener noreferrer';}
 }
 function render(){buildTools();counts();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||m.category===state.filter).sort((a,b)=>b.date-a.date);
-if(!msgs.length){txt(list,'p','No hay mensajes en esta sección.','luxMailEmpty');showDetail(null);return}
+if(!msgs.length){state.active=null;txt(list,'p','No hay mensajes en esta sección.','luxMailEmpty');showDetail(null);return}
+// Mostrar automáticamente el mensaje más reciente al abrir o filtrar el buzón.
+if(!msgs.some(m=>m.id===state.active))state.active=msgs[0].id;
+if(state.open){const current=msgs.find(m=>m.id===state.active);if(current&&!current.read){current.read=true;persist();counts()}}
 for(const m of msgs){const btn=document.createElement('button');btn.className='luxMailItem'+(m.read?'':' unread')+(state.active===m.id?' active':'');btn.type='button';btn.setAttribute('role','listitem');btn.setAttribute('aria-label',(m.read?'':'Sin leer: ')+m.subject);const dot=txt(btn,'span','','luxMailDot');dot.setAttribute('aria-hidden','true');const body=document.createElement('span');body.className='luxMailBody';txt(body,'span',m.subject,'luxMailSubject');txt(body,'span',m.body,'luxMailPreview');btn.appendChild(body);txt(btn,'time',niceDate(m.date));btn.addEventListener('click',()=>{state.active=m.id;m.read=true;persist();render();$('luxMailDetail').scrollTop=0});list.appendChild(btn)}
 showDetail(state.messages.find(m=>m.id===state.active))}
 function setOpen(value){state.open=value;dock.classList.toggle('open',value);$('luxMailToggle').setAttribute('aria-expanded',String(value));if(value){initAudio();render()}else state.active=null}
@@ -83,7 +86,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)setOpen(
 let ctx=null;
 function initAudio(){if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume().catch(()=>{})}catch{}}}
 function chime(){if(state.prefs.mute||!ctx||ctx.state!=='running')return;try{const t=ctx.currentTime;for(const [i,hz] of [[0,610],[1,820]]){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(hz,t+i*0.14);g.gain.setValueAtTime(0.0001,t+i*0.14);g.gain.exponentialRampToValueAtTime(i?0.012:0.017,t+i*0.14+0.025);g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.14+0.21);o.connect(g);g.connect(ctx.destination);o.start(t+i*0.14);o.stop(t+i*0.14+0.23)}}catch{}}
-function deliver(msg,silent=false){if(state.messages.some(m=>m.id===msg.id))return false;state.messages.unshift(msg);state.messages=state.messages.slice(0,180);persist();render();if(!silent)chime();return true}
+function deliver(msg,silent=false){if(state.messages.some(m=>m.id===msg.id))return false;state.messages.unshift(msg);state.messages=state.messages.slice(0,180);if(state.filter==='all'||state.filter===msg.category)state.active=msg.id;persist();render();if(!silent)chime();return true}
 function writing(msg){if(state.writing||state.messages.some(m=>m.id===msg.id))return;state.writing=true;$('luxMailStatus').textContent='Lux está escribiendo una nota…';try{window.__luxShowWriting?.(14000)}catch{}setTimeout(()=>{deliver(msg);state.writing=false;$('luxMailStatus').textContent='';},4400)}
 let number=0;
 function curPick(arr){return arr[(Math.floor(Date.now()/86400000)+number++)%arr.length]}
