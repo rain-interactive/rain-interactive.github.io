@@ -10,7 +10,7 @@ try{
  const saved=JSON.parse(chosen||localStorage.getItem('lu-roth-autonomia-v1')||'null');
  if(saved&&typeof saved==='object'){
   // Esta nueva versión se inicia apagada; solo ON explícito activa la autonomía.
-  memory.enabled=Boolean(chosen)&&saved.enabled===true;
+  memory.enabled=false; // Cada carga requiere la pulsación ON para activar sonido y director.
   memory.events=Array.isArray(saved.events)?saved.events.slice(-60).filter(e=>e&&typeof e.src==='string'):[];
   memory.counts=saved.counts&&typeof saved.counts==='object'?saved.counts:{};
   memory.lastMood=typeof saved.lastMood==='string'?saved.lastMood:'';
