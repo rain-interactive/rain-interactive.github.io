@@ -70,7 +70,7 @@ def preview(data,scenes,report,numbers=None,output=None):
     draw=ImageDraw.Draw(out)
     font=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",12)
     title=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",19)
-    draw.text((12,10),f"CASA DE LUX · {len(data)} planos originales · FHD {report['fhd']}",font=title,fill="#faf0ed")
+    draw.text((12,10),f"CASA DE LUX · {len(data)} planos únicos · FHD {sum(data[i]['image'].size==(1920,1080) for i in data)}",font=title,fill="#faf0ed")
     for i,k in enumerate(sorted(data)):
         col=i%cols;row=i//cols;x=gap+col*(width+gap);y=gap+52+row*(cell_h+gap)
         im=ImageOps.contain(data[k]["image"],(width,height))
