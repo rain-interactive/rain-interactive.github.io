@@ -25,3 +25,5 @@
 @media(max-width:800px){#luxRadioDock{left:10px;top:68px;width:min(315px,calc(100vw - 20px))}#luxRadioPanel{max-height:calc(100dvh - 144px);overflow-y:auto}#luxRadioFrame{height:260px}}
 @media(max-height:690px){#luxRadioDock{top:49px}#luxRadioPanel{max-height:calc(100dvh - 111px);overflow-y:auto}#luxRadioFrame{height:230px}}
 @media(prefers-reduced-motion:reduce){#luxRadioDock *{transition:none!important}}
+/* Icono compacto para que no se solape con el correo en pantallas pequeñas */
+@media(max-width:700px){#luxRadioDock{width:min(258px,calc(100vw - 94px))}#luxRadioToggle{padding:9px 10px;gap:7px}#luxRadioToggle .luxRadioName{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
