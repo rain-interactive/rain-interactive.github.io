@@ -1,0 +1,51 @@
+name: Instalar nuevas imágenes de Casa de Lux
+on:
+  push:
+    paths:
+      - 'casa-lux/lux_16_upload.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.modified, 'casa-lux/lux_16_upload.zip') || contains(github.event.head_commit.added, 'casa-lux/lux_16_upload.zip')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preparar procesador de imágenes
+        run: pip install Pillow
+      - name: Integrar 16 planos sin repeticiones
+        run: python casa-lux/instalar_lote_16.py
+      - name: Comprobar imágenes y conservar buzón, radio y reloj
+        run: |
+          python - <<'PY'
+          import base64,io,json,re
+          from pathlib import Path
+          from PIL import Image
+          root=Path('casa-lux')
+          h=(root/'index.html').read_text('utf-8')
+          m=re.search(r'const scenes=(\[.*?\]);',h,re.S)
+          assert m and len(json.loads(m.group(1)))==50
+          assert all(t in h for t in ['monocromo.css','chat.js','radio.js','cornerClock'])
+          count=0
+          for n in range(13,19):
+              s=(root/'assets'/f'pack_{n:02}.js').read_text()
+              for data in re.findall(r'data:image/webp;base64,([^"]+)',s):
+                  with Image.open(io.BytesIO(base64.b64decode(data))) as im:
+                      assert im.size==(1920,1080)
+                  count+=1
+          assert count==16,count
+          print('OK: 50 escenas, 16 nuevas imágenes Full-HD, componentes conservados')
+          PY
+      - name: Publicar e incluir los assets nuevos
+        run: |
+          git config user.name "Casa de Lux"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/index.html casa-lux/assets/pack_*.js casa-lux/lote_16_integrado.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Incorporar 16 fotos del usuario a 1920x1080"
+            git push
+          fi
