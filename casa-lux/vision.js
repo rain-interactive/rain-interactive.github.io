@@ -26,7 +26,12 @@ const persist=()=>{
 const signature=src=>{
  if(typeof src!=='string')return '';
  // La cadena de imagen puede ser una data URI enorme: no se guarda su contenido.
- return [src.length,src.slice(0,26),src.slice(-25)].join(':');
+ let hash=2166136261;
+ const fragment=src.slice(0,48)+'|'+src.slice(-96);
+ for(let i=0;i<fragment.length;i++){
+  hash^=fragment.charCodeAt(i);hash=Math.imul(hash,16777619);
+ }
+ return src.length+':'+(hash>>>0).toString(36);
 };
 const key=i=>'scene-'+i;
 function get(i,scene){
