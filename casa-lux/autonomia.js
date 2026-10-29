@@ -133,6 +133,8 @@ function onScene(index,scenes){
    if(!profile||!memory.enabled||house.getState()?.index!==index)return;
    // El color de esta fotografía orienta el siguiente set; no se corta el actual.
    window.__luRadio?.setVisualPreference?.(profile);
+   // Las elecciones locales de Jellyfin comparten la percepción visual.
+   window.__luJellyfin?.suggest?.(atmosphere(sense()),profile);
    // Una nota visual cada cierto tiempo: observaciones de luz, no de objetos.
    if(Date.now()-lastVisionCaption>8*60*1000&&memory.events.length%3===0){
     const phrase=profile.tone==='oscuro'
@@ -241,6 +243,7 @@ function setAutonomy(enabled){
  memory.enabled=enabled;save();
  if(!enabled){
   window.__luRadio?.stopAutonomy?.();
+  window.__luJellyfin?.stop?.();
   window.__luNotes?.stop?.();
   stage.classList.remove('lu-autonomous');
   stage.style.removeProperty('--lu-art-grade');
@@ -256,7 +259,9 @@ function setAutonomy(enabled){
  window.__luVision?.begin?.(house.getScenes());
  // Comienza el audio directamente en el gesto ON (permiso sujeto a SoundCloud/navegador).
  const initialPerception=sense();
- window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
+ const privateRadio=window.__luJellyfin?.status?.();
+ if(privateRadio?.connected&&privateRadio?.auto)window.__luJellyfin?.resume?.();
+ else window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
  // Las lecturas del Atlántico se refrescan y los nuevos datos alimentan el motor.
  window.__luClimateRefresh?.();
  // ON inicia inmediatamente una escena nueva. Después sigue cada tres minutos.
