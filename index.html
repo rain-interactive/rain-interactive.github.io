@@ -318,7 +318,7 @@ main section{scroll-margin-top:16px}
   </div>
   <div class="wrap hero">
     <div class="kicker">Laboratorio digital independiente · 2026</div>
-    <h1>RAIN<br>INTERACTIVE</h1>
+    <h1>R<span id="lux-entry-letter">A</span>IN<br>INTERACTIVE</h1>
     <p>Un laboratorio de juegos, archivos, sonido y experimentos digitales. Algunas cosas funcionan. Otras mutan. Todas forman parte del proceso.</p>
     <div class="modebar"><div class="mode"><strong>ARCADE</strong> · juegos</div><div class="mode"><strong>EXPERIMENTS</strong> · sistemas</div><div class="mode"><strong>MEDIA</strong> · audiovisual</div><div class="mode"><strong>ARCHIVE</strong> · ideas</div></div><div class="manifest">NO HAY UN FORMATO ÚNICO. CADA PROYECTO ES UNA PRUEBA: PUEDE FUNCIONAR, ROMPERSE, MUTAR O CONVERTIRSE EN OTRA COSA.</div>
   </div>
@@ -395,5 +395,29 @@ document.querySelectorAll('img').forEach(function(img){
 });
 </script>
 
+
+<!-- LUX SECRET ENTRANCE: ten silent taps on the A in RAIN; no private content in this repository. -->
+<style>
+#lux-entry-letter{color:inherit;font:inherit;letter-spacing:inherit;cursor:inherit;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#lux-entry-letter:hover,#lux-entry-letter:active,#lux-entry-letter:focus{color:inherit;background:transparent;filter:none;text-decoration:none;outline:none}
+</style>
+<script>
+(()=>{
+  const letter=document.getElementById('lux-entry-letter');
+  if(!letter)return;
+  // Nunca se guarda la contraseña aquí. Sólo enlazar cuando el Worker protegido esté activo.
+  const PRIVATE_URL='__LUX_PRIVATE_URL__';
+  let taps=0,lastTap=0;
+  letter.addEventListener('pointerup',()=>{
+    const now=Date.now();
+    taps=now-lastTap>4000?1:taps+1;
+    lastTap=now;
+    if(taps===10){
+      taps=0;
+      if(PRIVATE_URL.startsWith('https://')&&!PRIVATE_URL.includes('__'))location.assign(PRIVATE_URL);
+    }
+  });
+})();
+</script>
 </body>
 </html>
