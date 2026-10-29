@@ -489,7 +489,20 @@ chooseScene();autoBaseScene();updateMoon();clockTick();syncClock();loadWeather()
  function persist(){try{localStorage.setItem('lux-casa-notes-v1',JSON.stringify(notes.slice(-180)))}catch(e){}}
  function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
  function addNote(){const date=new Date(),pool=proposals.filter((p,i)=>!seen.has(i));if(!pool.length)seen.clear();const indices=proposals.map((_,i)=>i).filter(i=>!seen.has(i));const k=indices[Math.floor(Math.random()*indices.length)];seen.add(k);const p=proposals[k];notes.push({id:date.getTime(),date:date.toISOString(),...p,read:false});persist();showNewest();}
- function showNewest(){const p=notes.find(n=>!n.read);if(!p){subtitle.classList.remove('visible');return;}line.textContent=p.text;subtitle.classList.add('visible');}
+ function showNewest(){const p=notes.slice().reverse().find(n=>!n.read);if(!p){subtitle.classList.remove('visible');return;}line.textContent=p.text;subtitle.classList.add('visible');subtitle.dataset.luAuto='no';}
+ // Acceso del director autónomo al mismo archivo de notas y subtítulos de la Casa.
+ window.__luNotes={
+  getState:()=>({text:line.textContent||'',visible:subtitle.classList.contains('visible'),count:notes.length}),
+  say:(message,tag='ambiente')=>{
+   if(typeof message!=='string'||!message.trim())return false;
+   const date=new Date();
+   const note={id:date.getTime(),date:date.toISOString(),text:message.slice(0,320),tag,read:false,url:null};
+   notes.push(note);notes=notes.slice(-180);persist();
+   line.textContent=note.text;subtitle.classList.add('visible');subtitle.dataset.luAuto='yes';
+   return true;
+  },
+  stop:()=>{if(subtitle.dataset.luAuto==='yes'){subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'}}
+ };
  function render(){list.innerHTML='';for(const note of notes.slice().reverse()){const item=document.createElement('p');const t=document.createElement('small');t.textContent=`${dateFmt.format(new Date(note.date))} · ${note.tag} · ${note.read?'leído':'pendiente'}`;item.appendChild(t);item.appendChild(document.createElement('br'));item.appendChild(document.createTextNode(note.text+' '));if(note.url){const a=document.createElement('a');a.href=note.url;a.rel='noopener noreferrer';a.target='_blank';a.textContent='Ver fuente';item.appendChild(a)}const b=document.createElement('button');b.style.marginLeft='8px';b.textContent=note.read?'Leído':'Marcar leído';b.onclick=()=>{note.read=true;persist();render();showNewest()};item.appendChild(b);list.appendChild(item)} }
  document.getElementById('luxDataToggle').onclick=()=>stage.classList.toggle('show-data');
  document.getElementById('luxArchiveOpen').onclick=()=>{archive.classList.add('open');render()};
@@ -913,4 +926,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=4" defer></script><script src="/casa-lux/radio.js?v=10" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=3" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=11" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=3" defer></script></body></html>
