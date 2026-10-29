@@ -1,0 +1,55 @@
+/* Casa de Lux · previsión oficial Windfinder A Coruña
+   Conserva los datos locales de mareas, luna, reloj y rutinas. */
+#liveStrip{
+  opacity:1!important;
+  pointer-events:auto!important;
+  grid-template-columns:minmax(0,3.3fr) repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+  padding:11px 14px!important;
+  bottom:13px!important;
+  left:22px!important;
+  right:22px!important;
+  align-items:stretch;
+  background:#000e!important;
+}
+#liveStrip .metric{
+  padding:10px 12px!important;
+  border-right:1px solid #ffffff30!important;
+  min-width:0;
+}
+#liveStrip .metric:last-child{border-right:0!important}
+#liveStrip .metric .value{font-size:clamp(17px,1.35vw,27px)!important;overflow-wrap:anywhere}
+#liveStrip .metric .detail,#liveStrip .metric .tiny{font-size:11px!important}
+#liveStrip .phaseCell{gap:5px!important}
+#liveStrip #moonDisc{width:43px!important;height:43px!important}
+#liveStrip .metric .kicker{font-size:11px!important}
+.luxWeatherLegacy{display:none!important}
+#wfForecast{
+  display:flex;flex-direction:column;align-self:stretch;min-width:0;
+  margin:0;overflow:hidden;border:1px solid #ffffff55;border-radius:10px;
+  background:#000;color:#fff;
+}
+#wfHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 11px 5px}
+#wfHeader strong{color:#fff;font:700 12px system-ui,sans-serif;letter-spacing:.025em}
+#wfHeader a,#wfFooter a{color:#fff!important;text-underline-offset:3px;text-decoration:underline}
+#wfHeader a{white-space:nowrap;font:11px system-ui,sans-serif}
+#wfForecast iframe{
+  display:block;width:100%;height:225px;min-height:190px;border:0;
+  background:#fff;filter:grayscale(1) invert(1);
+  color-scheme:normal;
+}
+#wfFooter{padding:5px 11px 7px;color:#d9d9d9;font:10px/1.4 system-ui,sans-serif}
+#wfFooter small{font:inherit}
+@media(min-width:721px) and (max-width:1300px){
+ #liveStrip{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-height:70vh;overflow:auto}
+ #wfForecast{grid-column:1/-1}
+ #wfForecast iframe{height:195px}
+}
+@media(max-width:720px){
+ #liveStrip{display:none!important}
+ #mobileBar{background:#000!important}
+ #wfForecast{width:100%;margin:0 0 14px}
+ #wfForecast iframe{height:235px}
+ #mobileBar h2{color:#fff!important}
+ #mobileBar .mobgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
