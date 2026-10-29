@@ -55,7 +55,7 @@ let state={messages:[],prefs:{mute:false},filter:'all',active:null,open:false,wr
 function load(k,fallback){try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}}
 function persist(){try{localStorage.setItem(storageKey,JSON.stringify(state.messages.slice(0,180)));localStorage.setItem(prefsKey,JSON.stringify(state.prefs))}catch{}}
 function idFor(v){return (v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/-$/,'').slice(0,60)}
-function mk(tuple,id,time,read=false,source='editorial'){return{id,category:tuple[0],subject:tuple[1],body:tuple[2],links:tuple.slice(3).filter(x=>Array.isArray(x)&&x.length===2),date:time||Date.now(),read,source}}
+function mk(tuple,id,time,read=false,source='editorial'){return{id,category:tuple[0]==='música'?'musica':tuple[0],subject:tuple[1],body:tuple[2],links:tuple.slice(3).filter(x=>Array.isArray(x)&&x.length===2),date:time||Date.now(),read,source}}
 const start=load(storageKey,null);
 const valid=v=>v&&typeof v.id==='string'&&typeof v.subject==='string'&&typeof v.body==='string'&&typeof v.category==='string'&&Array.isArray(v.links);
 state.messages=Array.isArray(start)?start.filter(valid).slice(0,180):seed.map((s,i)=>mk(s,'seed-'+i,Date.now()-(seed.length-i)*240000,false));
