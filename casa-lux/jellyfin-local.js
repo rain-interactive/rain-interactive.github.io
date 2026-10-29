@@ -218,6 +218,20 @@ e('luMediaAudio').addEventListener('error',()=>{
  if(failures>=3){auto=false;e('luMediaAuto').textContent='Continuidad: OFF';e('luMediaAuto').setAttribute('aria-pressed','false')}
 });
 window.__luJellyfin={
+ stop:()=>{
+  auto=false;
+  e('luMediaAuto').textContent='Continuidad: OFF';
+  e('luMediaAuto').setAttribute('aria-pressed','false');
+  e('luMediaAudio').pause();
+ },
+ resume:()=>{
+  if(!connected)return false;
+  auto=true;
+  e('luMediaAuto').textContent='Continuidad: ON';
+  e('luMediaAuto').setAttribute('aria-pressed','true');
+  if(e('luMediaAudio').paused){suggest(lastMood);selectAndPlay()}
+  return true;
+ },
  suggest:(mood,visual)=>{
   if(!connected)return false;
   if(visual?.tone)visualTone=visual.tone;
