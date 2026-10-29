@@ -70,6 +70,7 @@ function showMusicShelf(show){
  musicShelfPanel.hidden=!musicShelfOpen;
  musicShelfButton.setAttribute('aria-expanded',String(musicShelfOpen));
  if(musicShelfOpen){
+  window.__luJellyfin?.stop?.();
   if(!musicShelfFrame.src)musicShelfFrame.src=musicShelfURL;
   // No se oyen dos reproductores simultáneos.
   try{widget?.pause()}catch{}
@@ -262,6 +263,10 @@ function ambientChoices(mood){
  return mixes.map((m,i)=>({m,i})).filter(x=>filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
 window.__luRadio={
+ // Evita reproducir Spotify y Jellyfin simultáneamente.
+ pauseCollection:()=>{
+  if(musicShelfFrame.src)musicShelfFrame.removeAttribute('src');
+ },
  getState:()=>({title:musicShelfOpen?'Colección musical':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen}),
  openCollection:()=>showMusicShelf(true),
  // La imagen guía el próximo set, sin interrumpir jamás la sesión en marcha.
