@@ -88,7 +88,7 @@
 #mobileBar{z-index:35!important}
 @media(max-width:720px){#liveStrip{display:none!important}#mobileBar{display:block!important}#filmState{bottom:55px}}
 @media(min-width:721px) and (max-width:1190px){#liveStrip{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:9px}#liveStrip .value{font-size:17px}#liveStrip .detail{font-size:11px}}
-</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"><link rel="stylesheet" href="/casa-lux/radio.css?v=3"></head><body><div id="backdrop"></div>
+</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"><link rel="stylesheet" href="/casa-lux/radio.css?v=4"><link rel="stylesheet" href="/casa-lux/monocromo.css?v=1"><style>#topLine{justify-content:flex-end!important}</style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -99,7 +99,7 @@
  <div id="luxLightFx" aria-hidden="true"></div><div id="luxDayLamp" aria-hidden="true"></div>
  <div id="filmState" aria-live="off"></div>
  <div id="poster" title="Póster de arte abstracto"></div><div id="alarmToast" role="status" aria-live="polite"><div id="alarmTitle">Clase en una hora</div><div id="alarmBody">O Raposo Púrpura</div></div>
- <header id="topLine"><div><div id="wordmark">LUX</div><div id="smallBrand">CASA · ATLÁNTICO</div></div><div id="cornerClock"><div id="clockLarge">--:--:--</div><div id="clockDate">A Coruña</div></div></header>
+ <header id="topLine"><div id="cornerClock"><div id="clockLarge">--:--:--</div><div id="clockDate">A Coruña</div></div></header>
  <section id="liveStrip" aria-label="Datos en directo"><div class="metric"><div class="kicker">◷ Reloj · A Coruña</div><div class="value" id="clockInfo">--:--</div><div class="detail" id="syncInfo">Sincronizando...</div></div>
  <div class="metric"><div class="kicker">◉ Tiempo</div><div class="value" id="temp">— °C</div><div class="detail" id="weatherText">Consultando...</div><div class="tiny" id="wind">A Coruña</div></div>
  <div class="metric"><div class="kicker">≈ Puerto de A Coruña</div><div class="value" id="tideTitle">—</div><div class="detail" id="tideNext">Consultando mareas...</div><div class="tiny" id="tideSource">MeteoGalicia</div></div>
