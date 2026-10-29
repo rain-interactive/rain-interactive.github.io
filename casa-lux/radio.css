@@ -60,3 +60,21 @@
 #luxRadioDock.has-lu-collection #luxRadioFrame,
 #luxRadioDock.has-lu-collection .luxRadioFlow{display:none!important}
 @media(max-width:720px){#luMusicSpotifyFrame{height:240px}}
+
+/* Archivo privado de Radio Lu Roth: la sesión no se guarda en la web. */
+#luPrivateMedia{margin-top:11px;border-top:1px solid #ffffff30;padding:11px 2px 3px;color:#f8f8f8}
+#luPrivateMedia button,#luPrivateMedia input{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#luMediaConnect{background:#111!important;color:#fff!important;border:1px solid #ffffff6b!important;border-radius:20px!important;padding:9px 11px!important;font-size:11px!important}
+#luMediaBody[hidden],#luMediaLogin[hidden],#luMediaLibrary[hidden]{display:none!important}
+#luMediaBody{padding:10px 1px 2px;font-size:11px;line-height:1.5}
+#luMediaBody p{margin:6px 0 11px;color:#e0e0e0}
+#luMediaLogin{display:flex;flex-direction:column;gap:9px;margin:11px 0}
+#luMediaLogin label{display:grid;gap:4px;font-size:11px;color:#ededed}
+#luMediaLogin input{display:block;max-width:100%;width:100%;padding:9px 10px;background:#090909;color:#fff;border:1px solid #ffffff5e;border-radius:6px;outline-color:white}
+#luMediaLogin button,#luPrivateMedia .luMediaActions button{background:#262626;color:white;border:1px solid #ffffff65;border-radius:16px;padding:8px 11px;font-size:11px;cursor:pointer}
+#luPrivateMedia .luMediaActions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+#luMediaCounts{font-size:11px;color:#ccc;padding:6px 0}
+#luMediaSuggestion{font:15px/1.4 Georgia,serif;color:#fff;margin:7px 0 10px}
+#luMediaAudio{display:block;width:100%;margin:10px 0;max-height:42px}
+#luMediaOpen{display:inline-block;margin-top:4px;color:white;text-decoration:underline;text-underline-offset:3px;font-size:11px}
+#luPrivateMedia .luMediaPrivate{font-size:10px;color:#c6c6c6}
