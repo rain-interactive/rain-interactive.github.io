@@ -1,124 +1,131 @@
-
-/* Casa de Lux: chat cultural local (no simula una IA remota) */
+/* LUX · BUZÓN CULTURAL. Mensajes editoriales generados localmente, sin IA ni servicio de chat externo. */
 (()=>{'use strict';
-const dock=document.createElement('aside');dock.id='luxChatDock';dock.setAttribute('aria-label','Cuaderno cultural de Lux');
-dock.innerHTML="\n<button type=\"button\" id=\"luxChatToggle\" aria-expanded=\"false\" aria-controls=\"luxChatPanel\"><span id=\"luxChatLed\"></span><span id=\"luxChatLabel\">LUX · CUADERNO</span><span id=\"luxChatTeaser\">Cine, música y cultura</span><span id=\"luxChatArrow\" aria-hidden=\"true\">⌄</span></button>\n<section id=\"luxChatPanel\" aria-label=\"Recomendaciones y mensajes\">\n<div id=\"luxChatHead\"><strong>Un cuaderno abierto</strong><small>Cine · música · A Coruña · Santiago · convocatorias</small></div>\n<nav id=\"luxChatTabs\" aria-label=\"Temas del cuaderno\"><button type=\"button\" data-ask=\"Cine\" aria-pressed=\"true\">Cine</button><button type=\"button\" data-ask=\"Música\" aria-pressed=\"false\">Música</button><button type=\"button\" data-ask=\"Agenda Coruña\" aria-pressed=\"false\">Coruña</button><button type=\"button\" data-ask=\"Agenda Santiago\" aria-pressed=\"false\">Santiago</button><button type=\"button\" data-ask=\"Becas de arte\" aria-pressed=\"false\">Becas</button></nav>\n<div id=\"luxChatLog\" role=\"log\" aria-live=\"polite\" aria-relevant=\"additions\"></div>\n<div id=\"luxChatChips\" aria-label=\"Pedir recomendaciones\"><button type=\"button\" data-ask=\"Cine raro\">Cine raro</button><button type=\"button\" data-ask=\"Música oscura\">Música oscura</button><button type=\"button\" data-ask=\"Exposiciones Coruña\">Exposiciones</button><button type=\"button\" data-ask=\"Convocatorias artísticas\">Convocatorias</button></div>\n<form id=\"luxChatForm\"><input id=\"luxChatInput\" aria-label=\"Mensaje para el cuaderno cultural\" autocomplete=\"off\" maxlength=\"220\" placeholder=\"Prueba: cine noir, música, becas…\" /><button id=\"luxChatSend\" type=\"submit\">Enviar</button></form>\n<div id=\"luxChatFoot\">Selección editorial y noticias enlazadas. Comprueba fechas y bases en la fuente. Sin mensajes privados.</div>\n</section>";
+const storageKey='casa-lux-correo-publico-v3';
+const prefsKey='casa-lux-correo-opciones-v3';
+const filmUrl=t=>'https://www.filmaffinity.com/es/search.php?stext='+encodeURIComponent(t);
+const imdbUrl=t=>'https://www.imdb.com/find/?q='+encodeURIComponent(t);
+const musicUrl=t=>'https://www.youtube.com/results?search_query='+encodeURIComponent(t);
+const spotifyUrl=t=>'https://open.spotify.com/search/'+encodeURIComponent(t);
+const cityA='https://www.coruna.gal/cultura/es/agenda/calendario?argIdioma=es&categoriaID=1417055540843';
+const cityS='https://www.santiagoturismo.com/axenda-cultural/';
+const grantsUrl='https://www.cultura.gob.es/cultura/creacion-contemporanea/becas-ayudas-y-subvenciones.html';
+const datestring=()=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Madrid',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const escapeDay=(date)=>new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',day:'2-digit',month:'2-digit'}).format(date);
+const seed=[
+ ['cine','Una película para empezar la noche','After Hours (1985), de Martin Scorsese. La peor noche de alguien puede convertirse en una comedia perfecta.',['FilmAffinity',filmUrl('After Hours 1985')],['IMDb',imdbUrl('After Hours 1985')]],
+ ['música','Algo industrial y hermoso','Portishead — Machine Gun. Percusión casi mecánica para mirar por la ventana.',['Escuchar en YouTube',musicUrl('Portishead Machine Gun')],['Spotify',spotifyUrl('Portishead Machine Gun')]],
+ ['idea','Una nota desde el estudio','Las imágenes no tienen por qué explicarlo todo. En ocasiones, el misterio es parte de la obra.'],
+ ['cine','Fotografías que se convierten en cine','La Jetée (1962), de Chris Marker. Una historia de ciencia ficción contada casi completamente mediante imágenes fijas.',['FilmAffinity',filmUrl('La Jetée 1962')],['IMDb',imdbUrl('La Jetée 1962')]],
+ ['coruna','Agenda de A Coruña','Una exposición puede ser una buena excusa para cruzar la ciudad. Consultar la agenda municipal para fechas actualizadas.',['Agenda de A Coruña',cityA]],
+ ['santiago','Un paseo por Compostela','Un día para cine, artes visuales y pasear por Santiago. La agenda oficial reúne las citas culturales.',['Agenda Santiago',cityS]],
+ ['becas','Radar de creación artística','Conviene revisar periódicamente residencias, ayudas de producción y convocatorias de artes visuales. Los plazos deben comprobarse en las bases.',['Ayudas del Ministerio',grantsUrl]],
+ ['música','Bajos en una habitación oscura','Massive Attack — Angel. Empieza como una sombra y termina ocupando toda la habitación.',['YouTube',musicUrl('Massive Attack Angel')],['Spotify',spotifyUrl('Massive Attack Angel')]],
+ ['cine','La televisión también puede dar miedo','Videodrome (1983), de David Cronenberg. Pantallas, cuerpo y tecnología en una pesadilla sin manual de instrucciones.',['FilmAffinity',filmUrl('Videodrome 1983')],['IMDb',imdbUrl('Videodrome 1983')]],
+ ['idea','Acerca del mar','El océano de ahí fuera nunca va a ofrecer dos planos iguales. Eso ya es una película interminable.'],
+ ['cine','Una película que hace ruido','Tetsuo: The Iron Man (1989), de Shinya Tsukamoto. Chatarra, piel y una energía industrial salvaje.',['FilmAffinity',filmUrl('Tetsuo The Iron Man 1989')]],
+ ['música','El sonido de una ciudad vacía','Burial — Archangel. Un tema que parece grabado en una calle después de llover.',['YouTube',musicUrl('Burial Archangel')],['Spotify',spotifyUrl('Burial Archangel')]],
+ ['becas','No olvidar las residencias','Las residencias pueden ofrecer espacio, equipo, acompañamiento o financiación; cada convocatoria establece sus propios requisitos.',['Convocatorias del Ministerio',grantsUrl]],
+ ['cine','Un samurái urbano','Ghost Dog: The Way of the Samurai (1999), de Jim Jarmusch. Un oficio extraño, palomas y una música estupenda.',['FilmAffinity',filmUrl('Ghost Dog 1999')]],
+ ['idea','Recordatorio del taller','Hay ideas que mejoran después de pasar varios días mirándolas sin hacer nada.'],
+ ['música','Cintas de otro tiempo','Boards of Canada — Dayvan Cowboy. Electrónica que huele a cintas magnéticas y carreteras desiertas.',['YouTube',musicUrl('Boards of Canada Dayvan Cowboy')]],
+ ['cine','Algo para perder las certezas','Daisies (1966), de Věra Chytilová. Collage cinematográfico y una libertad difícil de domesticar.',['FilmAffinity',filmUrl('Daisies 1966')]],
+ ['santiago','Cine de autor en Santiago','Cineuropa es una cita interesante para descubrir películas que no llegan siempre a las salas. Verificar las fechas de la edición en la agenda.',['Agenda de Santiago',cityS]],
+ ['música','Un grupo que suena a fábrica','Swans — Screen Shot. Repetición, percusión y una maquinaria que va creciendo.',['YouTube',musicUrl('Swans Screen Shot')]],
+ ['idea','Una última observación','Tal vez una casa virtual también pueda funcionar como un pequeño archivo de descubrimientos.']
+];
+const notes=[
+ ['idea','Una observación','Hoy me he quedado pensando en lo raro que es mirar el mar desde una pantalla. No es el mar, pero puede recordar su ritmo.'],
+ ['idea','Una idea sin obligación','La próxima obra podría empezar con un material abandonado y sin un plan claro.'],
+ ['música','Un disco para esta habitación','Cocteau Twins — Heaven or Las Vegas. Una atmósfera luminosa y extraña.',['YouTube',musicUrl('Cocteau Twins Heaven or Las Vegas')]],
+ ['cine','Cine de madrugada','The Lighthouse (2019). Dos hombres, un faro y un blanco y negro que parece salir de otro siglo.',['FilmAffinity',filmUrl('The Lighthouse 2019')]],
+ ['música','Más electrónica nocturna','The Knife — Silent Shout. Para cuando la casa se queda a oscuras.',['YouTube',musicUrl('The Knife Silent Shout')]],
+ ['cine','Una película lenta para mirar despacio','Stalker (1979), de Andréi Tarkovski. Un viaje por un lugar donde las reglas cambian.',['FilmAffinity',filmUrl('Stalker 1979')]],
+ ['idea','Sobre las imágenes','Un encuadre quieto puede sugerir movimiento si se mira durante suficiente tiempo.'],
+ ['idea','Un mensaje sin importancia','Si hoy no sale ninguna idea extraordinaria, quizá salga una buena pregunta.'],
+ ['becas','Revisar nuevas oportunidades','Consulta las nuevas convocatorias de creación visual. Una noticia reciente no garantiza que el plazo siga abierto.',['Ministerio de Cultura',grantsUrl]],
+ ['coruna','Algo para hacer en Coruña','Un museo, una sala pequeña o una proyección también pueden alimentar un proyecto.',['Agenda municipal',cityA]]
+];
+const byCategory={cine:'Cine',musica:'Música',idea:'Notas',coruna:'A Coruña',santiago:'Santiago',becas:'Becas'};
+const filters=[['Todos','all'],['Cine','cine'],['Música','musica'],['Coruña','coruna'],['Santiago','santiago'],['Becas','becas'],['Notas','idea']];
+const dock=document.createElement('aside');dock.id='luxMailDock';dock.setAttribute('aria-label','Buzón cultural de Lux');
+dock.innerHTML='<button type="button" id="luxMailToggle" aria-label="Abrir buzón cultural" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg><span id="luxMailCount"></span></button><section id="luxMailPanel" aria-label="Mensajes culturales"><div id="luxMailHead"><div id="luxMailTitle"><strong>Correo de Lux</strong><span id="luxMailTotal"></span></div><p>Una pequeña correspondencia desde la casa.</p></div><div id="luxMailTools" role="group" aria-label="Filtrar mensajes"></div><div id="luxMailList" role="list" aria-label="Bandeja de mensajes"></div><article id="luxMailDetail" aria-live="polite"></article><form id="luxMailPrompt"><input id="luxMailInput" maxlength="180" placeholder="Pide cine, música, agenda o becas…" aria-label="Pedir una recomendación"/><button id="luxMailSend" type="submit">Pedir</button></form><p id="luxMailStatus" aria-live="polite"></p><div id="luxMailFoot">Mensajes editoriales programados; no es un chat en directo. El sonido funciona tras interactuar con la página.</div></section>';
 document.body.appendChild(dock);
-const $=id=>document.getElementById(id), log=$('luxChatLog'),input=$('luxChatInput'),toggle=$('luxChatToggle');
-const films=[
- ['After Hours','1985','Martin Scorsese','Una odisea nocturna donde cada puerta lleva a un desastre.','noir humor raro'],
- ['La Jetée','1962','Chris Marker','Ciencia ficción construida con fotografías y memoria.','experimental raro ciencia'],
- ['Tetsuo: The Iron Man','1989','Shinya Tsukamoto','Metal, cuerpo y ruido industrial.','terror raro experimental cyberpunk'],
- ['Ghost Dog: The Way of the Samurai','1999','Jim Jarmusch','Un samurái urbano y una banda sonora hipnótica.','noir raro musica'],
- ['Videodrome','1983','David Cronenberg','Televisión, carne y señales que no deberían existir.','terror cyberpunk raro'],
- ['Daisies','1966','Věra Chytilová','Collage cinematográfico travieso y anárquico.','experimental surreal humor raro'],
- ['Stalker','1979','Andréi Tarkovski','Un viaje lento al territorio de los deseos.','ciencia contemplativo raro'],
- ['The Lighthouse','2019','Robert Eggers','Dos hombres, un faro y una locura en blanco y negro.','terror noir raro'],
- ['Brazil','1985','Terry Gilliam','Burocracia, sueño y distopía de retazos.','ciencia surreal humor'],
- ['Possession','1981','Andrzej Żuławski','Una ruptura convertida en pesadilla física.','terror surreal raro'],
- ['The Cremator','1969','Juraj Herz','Humor negro y puesta en escena alucinada.','terror noir humor raro'],
- ['Memoria','2021','Apichatpong Weerasethakul','Una vibración misteriosa interrumpe lo cotidiano.','contemplativo raro experimental'],
- ['El caballo de Turín','2011','Béla Tarr','El tiempo, el viento y el fin del mundo.','contemplativo noir raro'],
- ['Under the Skin','2013','Jonathan Glazer','Ciencia ficción extrañamente humana.','terror ciencia experimental'],
- ['The Love Witch','2016','Anna Biller','Tecnicolor, magia y comedia incómoda.','surreal humor terror']
-];
-const tracks=[
- ['Portishead','Machine Gun','Ritmo mecánico y melancolía abrasiva.','oscura electronica noir'],
- ['Massive Attack','Angel','Bajo pesado y amenaza creciente.','oscura triphop'],
- ['Burial','Archangel','Niebla urbana y voces de otro lugar.','electronica nocturna oscura'],
- ['Sonic Youth','Teen Age Riot','Guitarras que tardan en estallar.','rock experimental'],
- ['Boards of Canada','Dayvan Cowboy','Cintas gastadas, infancia y horizontes.','ambient electronica contemplativo'],
- ['Stereolab','French Disko','Repetición y electricidad.','experimental rock'],
- ['Nine Inch Nails','The Day the World Went Away','Distorsión y ausencia.','oscura industrial'],
- ['The Knife','Silent Shout','Electrónica fría e inquietante.','oscura electronica'],
- ['Low','Dancing and Blood','Silencio y ruido en una misma habitación.','oscura contemplativo rock'],
- ['Chelsea Wolfe','Feral Love','Ritual de guitarras y sombras.','oscura rock'],
- ['Swans','Screen Shot','Una maquinaria rítmica insistente.','experimental oscura rock'],
- ['Cocteau Twins','Cherry-coloured Funk','Voces que parecen venir del agua.','contemplativo pop'],
- ['Death Grips','Hacker','Caos rítmico y velocidad.','experimental industrial electronica']
-];
-const ac='https://www.visitcoruna.com/turismo/es/agenda/agenda-por-tema?argIdioma=es&categoriaID=1417054416724';
-const sc='https://www.santiagoturismo.com/axenda-cultural/';
-const agenda={
- coruna:[
-  ['Encontros. Federico García-Cabezón. Retrospectiva 1968–2026','Kiosco Alfonso','2026-10-15','2027-01-10',ac],
-  ['Teño que cantar','Sala Salvador de Madariaga','2026-10-08','2026-11-15',ac],
-  ['Fotografía micropictórica · More de la Cal','Fórum Metropolitano','2026-10-19','2026-11-02',ac],
-  ['Norte Cinema Diverso','A Coruña','2026-11-25','2026-11-27','https://www.coruna.gal/cultura/es/agenda/calendario?argIdioma=es&categoriaID=1417055540843']
- ],
- santiago:[
-  ['Ser Noutras · arte galega do Museo Reina Sofía','Santiago','2026-10-30','2027-03-28',sc],
-  ['Cineuropa 2026','Santiago','2026-11-06','2026-11-22',sc],
-  ['Voces del Pacífico','Cidade da Cultura','2026-06-05','2026-11-29',sc],
-  ['Semana de Cinema Euroárabe Amal','Teatro Principal','2026-10-26','2026-10-30',sc]
- ]
-};
-const resources=[
- ['Ministerio de Cultura · artes visuales','Ayudas, residencias y producción. Revisar edición y plazo.','https://www.cultura.gob.es/cultura/creacion-contemporanea/becas-ayudas-y-subvenciones.html'],
- ['Rega · residencias artísticas do Gaiás','Programa gallego de residencias. Consultar futuras convocatorias.','https://xuventude.xunta.gal/es/node/3602'],
- ['Convocatorias culturales · A Coruña','Concursos y premios. Revisar bases y condiciones.','https://www.coruna.gal/informacionxuvenil/gl/convocatorias/concursos-e-premios?argIdioma=es'],
- ['Compostela Cultura · convocatorias','Proyectos expositivos. Ojo a edad, modalidad y plazos.','https://www.compostelacultura.gal/portalinstitucional/novas']
-];
-const phrases=[
- 'Hay películas que funcionan como puertas abiertas a lugares extraños.',
- 'Una canción también puede ser una pequeña arquitectura.',
- 'El mar nunca repite exactamente el mismo encuadre.',
- 'A veces la mejor exposición es la que no pensabas visitar.',
- 'No todas las ideas necesitan convertirse en algo terminado.',
- 'Hoy puede ser buen día para escuchar un disco desconocido.',
- 'Una ciudad cambia cada vez que se enciende una sala de cine.'
-];
-let bulletin=null,lastTopic='cine',cursor=0;
-function safe(u){try{const a=new URL(u,location.href);return a.protocol==='https:'?a.href:null}catch{return null}}
-function date(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Madrid',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-function line(el,t,tag='p'){const x=document.createElement(tag);x.textContent=t;el.appendChild(x)}
-function a(el,label,url){let h=safe(url);if(!h)return;const x=document.createElement('a');x.href=h;x.target='_blank';x.rel='noopener noreferrer';x.textContent=label;el.appendChild(x)}
-function say(type,cb){let article=document.createElement('article');article.className='luxChatMsg '+type;let small=document.createElement('span');small.className='luxChatFrom';small.textContent=type==='bot'?'LUX · CUADERNO':'TÚ';article.appendChild(small);if(typeof cb==='string')line(article,cb);else cb(article);log.appendChild(article);while(log.children.length>22)log.firstChild.remove();log.scrollTop=log.scrollHeight}
-function item(el,name,detail,description,links){const x=document.createElement('div');x.className='luxChatResult';line(x,name,'b');if(detail)line(x,detail,'span');if(description)line(x,description,'span');links.forEach(p=>a(x,p[0],p[1]));el.appendChild(x)}
-function searchLink(url,q){return url+encodeURIComponent(q)}
-function selection(items,q){
- const n=Number(q.match(/\b[2-5]\b/)?.[0]||3);
- let filter=null;
- if(/terror|horror/.test(q))filter='terror';
- else if(/noir|negra|polici/.test(q))filter='noir';
- else if(/ciencia|ficci|sci.fi|cyber/.test(q))filter='ciencia';
- else if(/rar|surreal|experiment|ruido/.test(q))filter='raro';
- else if(/oscura|oscur|industrial|noche|nocturn/.test(q))filter='oscura';
- else if(/electron|techno/.test(q))filter='electronica';
- else if(/guitarr|punk|rock/.test(q))filter='rock';
- else if(/calma|tranqui|suave|lento/.test(q))filter='contemplativo';
- const pool=filter?items.filter(i=>i[i.length-1].includes(filter)):items;
- const src=pool.length?pool:items,offset=(Math.floor(Date.now()/86400000)+cursor++)%src.length;
- return Array.from({length:Math.min(n,src.length)},(_,i)=>src[(offset+i)%src.length])
+const $=id=>document.getElementById(id);
+let state={messages:[],prefs:{mute:false},filter:'all',active:null,open:false,writing:false};
+function load(k,fallback){try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}}
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify(state.messages.slice(0,180)));localStorage.setItem(prefsKey,JSON.stringify(state.prefs))}catch{}}
+function idFor(v){return (v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/-$/,'').slice(0,60)}
+function mk(tuple,id,time,read=false,source='editorial'){return{id,category:tuple[0],subject:tuple[1],body:tuple[2],links:tuple.slice(3).filter(x=>Array.isArray(x)&&x.length===2),date:time||Date.now(),read,source}}
+const start=load(storageKey,null);
+const valid=v=>v&&typeof v.id==='string'&&typeof v.subject==='string'&&typeof v.body==='string'&&typeof v.category==='string'&&Array.isArray(v.links);
+state.messages=Array.isArray(start)?start.filter(valid).slice(0,180):seed.map((s,i)=>mk(s,'seed-'+i,Date.now()-(seed.length-i)*240000,false));
+state.prefs=load(prefsKey,{mute:false});
+function safe(h){try{const u=new URL(h);return u.protocol==='https:'?u.href:null}catch{return null}}
+function txt(parent,tag,content,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=content;parent.appendChild(el);return el}
+function unreadCount(){return state.messages.filter(m=>!m.read).length}
+function counts(){const n=unreadCount();$('luxMailCount').textContent=n?String(n>99?'99+':n):'';$('luxMailTotal').textContent=n+' sin leer · '+state.messages.length+' mensajes';$('luxMailToggle').setAttribute('aria-label',n?'Abrir buzón: '+n+' mensajes sin leer':'Abrir buzón cultural')}
+function buildTools(){const tools=$('luxMailTools');tools.replaceChildren();for(const [label,key] of filters){const b=txt(tools,'button',label);b.type='button';b.setAttribute('aria-pressed',String(state.filter===key));b.addEventListener('click',()=>{state.filter=key;state.active=null;render()})}
+ const read=txt(tools,'button','Marcar leídos');read.id='luxMailAllRead';read.type='button';read.addEventListener('click',()=>{state.messages.forEach(x=>x.read=true);persist();render()});
+ const mute=txt(tools,'button',state.prefs.mute?'🔇 Sonido':'♫ Sonido');mute.type='button';mute.setAttribute('aria-label',state.prefs.mute?'Activar sonido de entrada':'Silenciar mensajes');mute.addEventListener('click',()=>{state.prefs.mute=!state.prefs.mute;persist();buildTools();initAudio()});
 }
-function cine(q){say('bot',el=>{line(el,'Tres películas para perderse un rato:');selection(films,q).forEach(f=>item(el,f[0]+' ('+f[1]+')',f[2],f[3],[['FilmAffinity',searchLink('https://www.filmaffinity.com/es/search.php?stext=',f[0]+' '+f[1])],['IMDb',searchLink('https://www.imdb.com/find/?q=',f[0]+' '+f[1])]]))})}
-function musica(q){say('bot',el=>{line(el,'Tres pistas para escuchar donde prefieras:');selection(tracks,q).forEach(t=>item(el,t[0]+' — '+t[1],'',t[2],[['YouTube',searchLink('https://www.youtube.com/results?search_query=',t[0]+' '+t[1])],['Spotify',searchLink('https://open.spotify.com/search/',t[0]+' '+t[1])]]))})}
-function stamp(iso){const s=iso.split('-');return s[2]+'/'+s[1]+'/'+s[0]}
-function showNews(el,kind){const entries=bulletin?.[kind]||[];if(!entries.length)return;line(el,'Noticias recientes para consultar (confirmar fecha y condiciones):');entries.slice(0,3).forEach(x=>item(el,x.title,'Publicado '+stamp(x.date)+' · '+x.source,'',[['Fuente',x.link]]))}
-function ciudad(kind){const isA=kind==='coruna';say('bot',el=>{line(el,'Agenda cultural de '+(isA?'A Coruña':'Santiago')+'.');const act=agenda[kind].filter(v=>v[3]>=date()).slice(0,4);if(!act.length)line(el,'No tengo eventos precargados que sigan vigentes.');
- act.forEach(v=>item(el,v[0],v[1]+' · '+(v[2]>date()?'Desde '+stamp(v[2]):'Hasta '+stamp(v[3])),'',[['Agenda oficial',v[4]]]));showNews(el,kind);a(el,'Consultar más actividades',isA?'https://www.coruna.gal/cultura/es/agenda/calendario?argIdioma=es&categoriaID=1417055540843':sc)})}
-function becas(){say('bot',el=>{line(el,'Convocatorias de creación artística: no doy por abierto ningún plazo hasta comprobar bases y requisitos.');showNews(el,'becas');line(el,'Fuentes oficiales para seguir nuevas oportunidades:');resources.forEach(r=>item(el,r[0],'',r[1],[['Consultar',r[2]]]))})}
-function answer(raw,showUser=true){const text=(raw||'').trim().slice(0,220);if(!text)return;if(showUser)say('user',text);const q=text.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
- let topic=/\b(otra|otro|mas|siguiente|sorprendeme)\b/.test(q)&&q.length<35?lastTopic:
- /beca|convocat|residen|subvenc|ayuda|premio|proyecto|financia/.test(q)?'becas':
- /santiago|compostela/.test(q)?'santiago':
- /coruna|exposici|agenda|cultur|museo|evento/.test(q)?'coruna':
- /music|musica|disco|album|tema|cancion|spotify|youtube|escuchar|sonido|oscura|electronica/.test(q)?'musica':
- /cine|peli|film|affinity|imdb|terror|noir|comedia|ficcion|distopia|director/.test(q)?'cine':
- /hola|buenos|buenas|que tal/.test(q)?'nota':lastTopic;
- lastTopic=topic;
- [...$('luxChatTabs').querySelectorAll('button')].forEach(b=>{const s=b.dataset.ask.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'');b.setAttribute('aria-pressed',String((topic==='cine'&&s==='cine')||(topic==='musica'&&s==='musica')||(topic==='coruna'&&s.includes('coruna'))||(topic==='santiago'&&s.includes('santiago'))||(topic==='becas'&&s.includes('becas'))))});
- if(topic==='cine')cine(q);else if(topic==='musica')musica(q);else if(topic==='coruna'||topic==='santiago')ciudad(topic);else if(topic==='becas')becas();else say('bot',phrases[Math.floor(Date.now()/3600000)%phrases.length]+' También puedo recomendar películas, música y convocatorias culturales.');
+function niceDate(d){let date=new Date(d);return isNaN(date.getTime())?'':escapeDay(date)}
+function showDetail(m){const target=$('luxMailDetail');target.replaceChildren();if(!m){txt(target,'p','Selecciona un sobre para leer el mensaje.');return}
+ txt(target,'h3',m.subject);txt(target,'div','LUX · '+(byCategory[m.category]||'Cultura')+' · '+niceDate(m.date)+(m.source==='news'?' · Noticia enlazada':''),'luxMeta');txt(target,'p',m.body);
+ for(const entry of m.links){const href=safe(entry[1]);if(!href)continue;const link=txt(target,'a',entry[0]);link.href=href;link.target='_blank';link.rel='noopener noreferrer';}
 }
-function open(isOpen){dock.classList.toggle('open',isOpen);toggle.setAttribute('aria-expanded',String(isOpen));if(isOpen){input.focus({preventScroll:true});log.scrollTop=log.scrollHeight}}
-toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
-dock.querySelectorAll('[data-ask]').forEach(b=>b.addEventListener('click',()=>{open(true);answer(b.dataset.ask,false)}));
-$('luxChatForm').addEventListener('submit',e=>{e.preventDefault();const t=input.value;input.value='';answer(t)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dock.classList.contains('open'))open(false)});
-say('bot','Cuaderno cultural abierto. Puedo dejarte cine, música, planes en A Coruña y Santiago y pistas de becas o proyectos. ¿Por dónde empezamos?');
-function teaser(){const p=['Cine extraño para hoy','Algo nuevo en el Atlántico','Música para bajar la luz','Convocatorias en el radar','Dos ciudades, muchas historias','La próxima idea está fuera'];$('luxChatTeaser').textContent=p[Math.floor(Date.now()/480000)%p.length]}
-teaser();setInterval(teaser,90000);
-setInterval(()=>{if(dock.classList.contains('open')&&log.children.length<14)say('bot',phrases[Math.floor(Date.now()/3600000)%phrases.length])},3600000);
-async function news(){try{const resp=await fetch('/casa-lux/boletin.json?ts='+Math.floor(Date.now()/3600000),{cache:'no-store'});if(!resp.ok)return;const data=await resp.json();const clean=arr=>Array.isArray(arr)?arr.filter(v=>v&&typeof v.title==='string'&&v.title.length<200&&safe(v.link)&&/^\d{4}-\d{2}-\d{2}$/.test(v.date||'')&&(Date.now()-new Date(v.date+'T00:00:00Z').getTime())<45*86400000).slice(0,8):[];bulletin={coruna:clean(data.coruna),santiago:clean(data.santiago),becas:clean(data.becas)}}catch(err){console.info('Cuaderno: noticias sin conexión',err?.message||err)}}
-news();setInterval(news,3600000);
+function render(){buildTools();counts();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||m.category===state.filter).sort((a,b)=>b.date-a.date);
+if(!msgs.length){txt(list,'p','No hay mensajes en esta sección.','luxMailEmpty');showDetail(null);return}
+for(const m of msgs){const btn=document.createElement('button');btn.className='luxMailItem'+(m.read?'':' unread')+(state.active===m.id?' active':'');btn.type='button';btn.setAttribute('role','listitem');btn.setAttribute('aria-label',(m.read?'':'Sin leer: ')+m.subject);const dot=txt(btn,'span','','luxMailDot');dot.setAttribute('aria-hidden','true');const body=document.createElement('span');body.className='luxMailBody';txt(body,'span',m.subject,'luxMailSubject');txt(body,'span',m.body,'luxMailPreview');btn.appendChild(body);txt(btn,'time',niceDate(m.date));btn.addEventListener('click',()=>{state.active=m.id;m.read=true;persist();render();$('luxMailDetail').scrollTop=0});list.appendChild(btn)}
+showDetail(state.messages.find(m=>m.id===state.active))}
+function setOpen(value){state.open=value;dock.classList.toggle('open',value);$('luxMailToggle').setAttribute('aria-expanded',String(value));if(value){initAudio();render()}else state.active=null}
+$('luxMailToggle').addEventListener('click',()=>setOpen(!state.open));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)setOpen(false)});
+let ctx=null;
+function initAudio(){if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume().catch(()=>{})}catch{}}}
+function chime(){if(state.prefs.mute||!ctx||ctx.state!=='running')return;try{const t=ctx.currentTime;for(const [i,hz] of [[0,610],[1,820]]){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(hz,t+i*0.14);g.gain.setValueAtTime(0.0001,t+i*0.14);g.gain.exponentialRampToValueAtTime(i?0.012:0.017,t+i*0.14+0.025);g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.14+0.21);o.connect(g);g.connect(ctx.destination);o.start(t+i*0.14);o.stop(t+i*0.14+0.23)}}catch{}}
+function deliver(msg,silent=false){if(state.messages.some(m=>m.id===msg.id))return false;state.messages.unshift(msg);state.messages=state.messages.slice(0,180);persist();render();if(!silent)chime();return true}
+function writing(msg){if(state.writing||state.messages.some(m=>m.id===msg.id))return;state.writing=true;$('luxMailStatus').textContent='Lux está escribiendo una nota…';try{window.__luxShowWriting?.(14000)}catch{}setTimeout(()=>{deliver(msg);state.writing=false;$('luxMailStatus').textContent='';},4400)}
+let number=0;
+function curPick(arr){return arr[(Math.floor(Date.now()/86400000)+number++)%arr.length]}
+function daily(){const key='daily-'+datestring();if(!state.messages.some(m=>m.id===key)){const msg=mk(curPick(notes),key,Date.now());writing(msg)}}
+function periodic(){if(document.hidden)return;const key='hour-'+Math.floor(Date.now()/2100000);if(!state.messages.some(m=>m.id===key))writing(mk(curPick(notes),key,Date.now()))}
+function reply(value){const q=value.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'');if(!q)return;
+ let category='cine',tuple;
+ if(/beca|ayuda|subvencion|residencia|proyecto|convocatoria|concurso/.test(q))category='becas';
+ else if(/santiago|compostela/.test(q))category='santiago';
+ else if(/coruna|agenda|exposicion|museo|galeria|cultura/.test(q))category='coruna';
+ else if(/music|disco|escuchar|cancion|youtube|spotify|rock|electronica|sonido/.test(q))category='musica';
+ else if(/idea|nota|sorpresa/.test(q))category='idea';
+ if(category==='cine'){
+ const catalog=[
+ ['La Jetée','1962','Chris Marker','Una película hecha de fotografías y memoria.'],
+ ['After Hours','1985','Martin Scorsese','Una noche que se complica cada vez más.'],
+ ['Stalker','1979','Andréi Tarkovski','Contemplación y ciencia ficción.'],
+ ['Tetsuo: The Iron Man','1989','Shinya Tsukamoto','Un sueño metálico y ruidoso.'],
+ ['Daisies','1966','Věra Chytilová','Una aventura de collage y anarquía.'],
+ ['Videodrome','1983','David Cronenberg','La televisión se mezcla con el cuerpo.']
+ ];
+ const f=curPick(catalog);tuple=['cine','Te propongo: '+f[0],f[0]+' ('+f[1]+'), de '+f[2]+'. '+f[3],['FilmAffinity',filmUrl(f[0]+' '+f[1])],['IMDb',imdbUrl(f[0]+' '+f[1])]];
+ }else if(category==='musica'){const t=curPick(notes.filter(x=>x[0]==='música'||x[0]==='musica').concat(seed.filter(x=>x[0]==='música'||x[0]==='musica')));tuple=['musica',t[1],t[2],...t.slice(3)]}
+ else if(category==='idea'){const t=curPick(notes.filter(x=>x[0]==='idea'));tuple=t}
+ else if(category==='coruna')tuple=['coruna','Una mirada a la agenda coruñesa','Consulta lo que está pasando en A Coruña; algunas exposiciones y actividades necesitan reserva.',['Agenda de Coruña',cityA]];
+ else if(category==='santiago')tuple=['santiago','Un plan por Compostela','La programación de Santiago incluye exposiciones, cine, música y artes escénicas.',['Agenda de Santiago',cityS]];
+ else tuple=['becas','Becas y oportunidades en el radar','Consulta las ayudas y residencias; verifica siempre plazos, elegibilidad y bases antes de preparar una solicitud.',['Ministerio de Cultura',grantsUrl]];
+ const id='ask-'+Date.now()+'-'+(++number);writing(mk(tuple,id,Date.now()))
+}
+$('luxMailPrompt').addEventListener('submit',e=>{e.preventDefault();const i=$('luxMailInput');if(!i.value.trim())return;const value=i.value;i.value='';initAudio();reply(value)});
+async function fetchBulletin(){try{const response=await fetch('/casa-lux/boletin.json?cache='+Math.floor(Date.now()/3600000),{cache:'no-store'});if(!response.ok)return;const data=await response.json();
+ for(const category of ['coruna','santiago','becas']){const rows=Array.isArray(data[category])?data[category]:[];for(const r of rows.slice(0,4).reverse()){if(!r||!safe(r.link)||!r.title||! /^\d{4}-\d\d-\d\d$/.test(r.date||''))continue;
+ const when=Date.parse(r.date+'T12:00:00Z');if(!Number.isFinite(when)||when>Date.now()+86400000||Date.now()-when>30*86400000)continue;
+ const id='news-'+idFor(category+'-'+r.title);if(state.messages.some(m=>m.id===id))continue;
+ const tuple=[category,'Novedad · '+(category==='becas'?'convocatorias':category==='coruna'?'A Coruña':'Santiago'),r.title+'\n\nPublicado '+r.date+' · '+(r.source||'Fuente cultural')+'. '+(category==='becas'?'Comprueba bases y plazos.':'Comprueba fechas y lugar del evento.'),['Leer la noticia',r.link]];
+ deliver(mk(tuple,id,when,false,'news'),true);
+ }
+ }
+ }catch(e){console.info('Buzón: novedades temporalmente no disponibles',e?.message||e)}}
+persist();render();
+setTimeout(daily,18000);
+setInterval(periodic,2100000);
+setTimeout(fetchBulletin,3500);
+setInterval(fetchBulletin,3600000);
 })();
