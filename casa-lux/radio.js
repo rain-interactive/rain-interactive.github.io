@@ -51,6 +51,35 @@ dock.id='luxRadioDock';dock.setAttribute('aria-label','Radio Lu Roth · SoundClo
 dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">RADIO LU ROTH</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><div id="luxRadioNow" role="status" aria-live="polite"></div><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>NTS Radio: soul, funk, disco, house, rock y descubrimientos. Reproducción continua, con orden aleatorio.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
 document.body.appendChild(dock);
 
+// Las fuentes conviven bajo Radio Lu Roth, sin créditos ni divisiones por autor.
+// La playlist publicada de Rain utiliza el reproductor oficial de Spotify.
+const luMusicShelf=document.createElement('div');
+luMusicShelf.id='luMusicShelf';
+luMusicShelf.innerHTML='<div class="luMusicShelfNav"><button id="luMusicPlaylist" type="button" aria-expanded="false" aria-controls="luMusicPlaylistPanel">Colección musical</button><a href="https://desktop-0qpstrv.tailae0643.ts.net/web/" target="_blank" rel="noopener noreferrer" title="Abrir la biblioteca privada en Jellyfin">Archivo audiovisual</a></div><div id="luMusicPlaylistPanel" hidden><p>Una colección más de Radio Lu Roth. Spotify puede pedir que inicies sesión para escucharla completa.</p><iframe id="luMusicSpotifyFrame" title="Radio Lu Roth · colección musical" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>';
+dock.querySelector('#luxRadioPanel').insertBefore(luMusicShelf,dock.querySelector('#luxRadioActive'));
+const musicShelfButton=luMusicShelf.querySelector('#luMusicPlaylist');
+const musicShelfPanel=luMusicShelf.querySelector('#luMusicPlaylistPanel');
+const musicShelfFrame=luMusicShelf.querySelector('#luMusicSpotifyFrame');
+const musicShelfURL='https://open.spotify.com/embed/playlist/4l7Q5zlpxrBLu7yFwyJeEY?utm_source=generator';
+let musicShelfOpen=false;
+function showMusicShelf(show){
+ musicShelfOpen=Boolean(show);
+ musicShelfPanel.hidden=!musicShelfOpen;
+ musicShelfButton.setAttribute('aria-expanded',String(musicShelfOpen));
+ if(musicShelfOpen){
+  if(!musicShelfFrame.src)musicShelfFrame.src=musicShelfURL;
+  // No se oyen dos reproductores simultáneos.
+  try{widget?.pause()}catch{}
+  autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=true;
+  isPlaying=false;updateNow();
+  open(true);
+ }else if(musicShelfFrame.src){
+  // Desmontar el iframe detiene también una reproducción de Spotify.
+  musicShelfFrame.removeAttribute('src');
+ }
+}
+musicShelfButton.addEventListener('click',()=>showMusicShelf(!musicShelfOpen));
+
 const $=id=>document.getElementById(id);
 const toggle=$('luxRadioToggle'),choices=$('luxRadioChoices'),frame=$('luxRadioFrame');
 const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1';
@@ -89,6 +118,7 @@ function pickNext(){
 }
 function setMix(i,play=false){
  if(!Number.isInteger(i)||!mixes[i])return;
+ if(musicShelfOpen)showMusicShelf(false);
  selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;updateNow();
  const mix=mixes[i];
  const active=$('luxRadioActive');
@@ -228,7 +258,8 @@ function ambientChoices(mood){
  return mixes.map((m,i)=>({m,i})).filter(x=>filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
 window.__luRadio={
- getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null}),
+ getState:()=>({title:musicShelfOpen?'Colección musical':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen}),
+ openCollection:()=>showMusicShelf(true),
  // La imagen guía el próximo set, sin interrumpir jamás la sesión en marcha.
  setVisualPreference:(profile)=>{
   if(!profile||typeof profile.tone!=='string')return false;
@@ -238,6 +269,7 @@ window.__luRadio={
  // Se llama directamente desde la pulsación ON: el gesto del usuario autoriza
  // intentar reproducir SoundCloud; no podemos garantizar permisos del navegador.
  startAutonomy:(mood)=>{
+  if(musicShelfOpen)showMusicShelf(false);
   autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;visualRecent=[];
   const candidates=ambientChoices(mood);
   const choice=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:{i:selected};
