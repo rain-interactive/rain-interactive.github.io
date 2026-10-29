@@ -3,12 +3,14 @@
 // LU ROTH / Autonomía local. Sin observación fuera de esta pestaña ni acceso a dispositivos.
 const house=window.__luHouse,stage=document.getElementById('stage'),panel=document.getElementById('panel');
 if(!house||!stage||!panel)return;
-const key='lu-roth-autonomia-v1',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
-let memory={enabled:true,events:[],counts:{},lastMood:'',lastRadio:0};
+const key='lu-roth-autonomia-v2',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
+let memory={enabled:false,events:[],counts:{},lastMood:'',lastRadio:0};
 try{
- const saved=JSON.parse(localStorage.getItem(key)||'null');
+ const chosen=localStorage.getItem(key);
+ const saved=JSON.parse(chosen||localStorage.getItem('lu-roth-autonomia-v1')||'null');
  if(saved&&typeof saved==='object'){
-  memory.enabled=saved.enabled!==false;
+  // Esta nueva versión se inicia apagada; solo ON explícito activa la autonomía.
+  memory.enabled=Boolean(chosen)&&saved.enabled===true;
   memory.events=Array.isArray(saved.events)?saved.events.slice(-60).filter(e=>e&&typeof e.src==='string'):[];
   memory.counts=saved.counts&&typeof saved.counts==='object'?saved.counts:{};
   memory.lastMood=typeof saved.lastMood==='string'?saved.lastMood:'';
@@ -126,7 +128,7 @@ css.textContent=`
 `;document.head.appendChild(css);
 function render(){
  const p=sense(),mood=atmosphere(p);
- el('luBrainState').textContent=memory.enabled?'Activa · decide un plano cada tres minutos':'En pausa · selección aleatoria clásica';
+ el('luBrainState').textContent=memory.enabled?'Encendida · cambia escenas por sí sola cada tres minutos':'Apagada · modo clásico, sin decisiones autónomas';
  el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+' · Atmósfera: '+mood;
  const last=memory.events.at(-1);
  el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name:'');
