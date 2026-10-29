@@ -612,7 +612,12 @@ const nuevosPlanos=[
  {name:'Sobre sábanas blancas',group:'contemplar',time:'ambos',src:'assets/lux_46_sabanas.jpg'},
  {name:'Retrato cálido · Lux',group:'cotidiano',time:'ambos',src:'assets/lux_47_retrato_calido.jpg'},
  {name:'Lux · Lienzo negro',group:'crear',time:'ambos',src:'assets/lux_48_taller_negro.jpg'},
- {name:'Lux · Retrato fragmentado',group:'crear',time:'ambos',src:'assets/lux_49_retrato_fragmentado.jpg'}
+ {name:'Lux · Retrato fragmentado',group:'crear',time:'ambos',src:'assets/lux_49_retrato_fragmentado.jpg'},
+ {name:'Lu Roth · Escaleras y abrigo',group:'descanso',time:'noche',src:'assets/lu_roth_49_escalera_abrigo.jpg'},
+ {name:'Lu Roth · Bolso y grafitis',group:'contemplar',time:'noche',src:'assets/lu_roth_50_bolso_grafitis.jpg'},
+ {name:'Lu Roth · Bañera violeta',group:'descanso',time:'noche',src:'assets/lu_roth_51_banera_violeta.jpg'},
+ {name:'Lu Roth · Pasillo verde',group:'contemplar',time:'noche',src:'assets/lu_roth_52_pasillo_verde.jpg'},
+ {name:'Lu Roth · Baño turquesa',group:'contemplar',time:'noche',src:'assets/lu_roth_53_bano_turquesa.jpg'}
 ];
 nuevosPlanos.forEach(shot=>{
  const img=new Image();
@@ -632,17 +637,24 @@ const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s
 const pick=(pool)=>pool[rint(0,pool.length-1)];
 
 // Encuadres de autor. Por defecto el rostro y los gestos importantes quedan cerca del centro.
-// Orden: 41 escenas de los packs + 7 planos individuales existentes.
+// Orden: 41 escenas de los packs + 12 planos individuales existentes.
 const luFocus=[
 [50,42],[50,43],[50,43],[50,53],[53,35],[51,46],[50,45],[50,49],[50,40],[50,43],
 [51,40],[53,43],[50,47],[52,43],[50,49],[50,43],[50,45],[50,42],[50,44],[51,40],
 [50,45],[50,50],[50,45],[50,44],[50,45],[50,44],[51,38],[50,42],[50,47],[50,41],
 [50,42],[52,42],[50,41],[50,50],[50,44],[50,44],[50,43],[50,45],[50,49],[50,44],[50,43],
-[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40]
+[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40],[49,53],[55,52],[55,49],[49,15],[57,34]
 ];
+const luFrameFocusByFilename={
+ 'lu_roth_49_escalera_abrigo.jpg':[49,53],
+ 'lu_roth_50_bolso_grafitis.jpg':[55,52],
+ 'lu_roth_51_banera_violeta.jpg':[55,49],
+ 'lu_roth_52_pasillo_verde.jpg':[49,15],
+ 'lu_roth_53_bano_turquesa.jpg':[57,34],
+};
 const luFrameCache=new Map();
 function applyShotFraming(layer,src,index){
- const focus=luFocus[index]||[50,45];
+ const focus=(luFrameFocusByFilename[src.split('/').pop()]||luFocus[index]||[50,45]);
  layer.style.setProperty('--lu-focus-x',focus[0]+'%');
  layer.style.setProperty('--lu-focus-y',focus[1]+'%');
  // Solo cambia el encuadre; las fuentes de imagen originales permanecen intactas.
