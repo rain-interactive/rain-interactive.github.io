@@ -48,7 +48,7 @@ const notes=[
 const byCategory={cine:'Cine',musica:'Música',idea:'Notas',coruna:'A Coruña',santiago:'Santiago',becas:'Becas'};
 const filters=[['Todos','all'],['Cine','cine'],['Música','musica'],['Coruña','coruna'],['Santiago','santiago'],['Becas','becas'],['Notas','idea']];
 const dock=document.createElement('aside');dock.id='luxMailDock';dock.setAttribute('aria-label','Buzón cultural de Lux');
-dock.innerHTML='<button type="button" id="luxMailToggle" aria-label="Abrir buzón cultural" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg><span id="luxMailCount"></span></button><section id="luxMailPanel" aria-label="Mensajes culturales"><div id="luxMailHead"><div id="luxMailTitle"><strong>Correo de Lux</strong><span id="luxMailTotal"></span></div><p>Una pequeña correspondencia desde la casa.</p></div><div id="luxMailTools" role="group" aria-label="Filtrar mensajes"></div><div id="luxMailList" role="list" aria-label="Bandeja de mensajes"></div><article id="luxMailDetail" aria-live="polite"></article><form id="luxMailPrompt"><input id="luxMailInput" maxlength="180" placeholder="Pide cine, música, agenda o becas…" aria-label="Pedir una recomendación"/><button id="luxMailSend" type="submit">Pedir</button></form><p id="luxMailStatus" aria-live="polite"></p><div id="luxMailFoot">Mensajes editoriales programados; no es un chat en directo. El sonido funciona tras interactuar con la página.</div></section>';
+dock.innerHTML='<button type="button" id="luxMailToggle" aria-label="Abrir buzón cultural" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg><span id="luxMailCount"></span></button><button type="button" id="luxMailLatest" aria-label="Leer el último mensaje" aria-live="polite"><span class="luxMailLatestKicker">ÚLTIMO MENSAJE</span><strong id="luxMailLatestSubject"></strong><span id="luxMailLatestExcerpt"></span></button><section id="luxMailPanel" aria-label="Mensajes culturales"><div id="luxMailHead"><div id="luxMailTitle"><strong>Correo de Lux</strong><span id="luxMailTotal"></span></div><p>Una pequeña correspondencia desde la casa.</p></div><div id="luxMailTools" role="group" aria-label="Filtrar mensajes"></div><div id="luxMailList" role="list" aria-label="Bandeja de mensajes"></div><article id="luxMailDetail" aria-live="polite"></article><form id="luxMailPrompt"><input id="luxMailInput" maxlength="180" placeholder="Pide cine, música, agenda o becas…" aria-label="Pedir una recomendación"/><button id="luxMailSend" type="submit">Pedir</button></form><p id="luxMailStatus" aria-live="polite"></p><div id="luxMailFoot">Mensajes editoriales programados; no es un chat en directo. El sonido funciona tras interactuar con la página.</div></section>';
 document.body.appendChild(dock);
 const $=id=>document.getElementById(id);
 let state={messages:[],prefs:{mute:false},filter:'all',active:null,open:false,writing:false};
@@ -63,6 +63,15 @@ state.prefs=load(prefsKey,{mute:false});
 function safe(h){try{const u=new URL(h);return u.protocol==='https:'?u.href:null}catch{return null}}
 function txt(parent,tag,content,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=content;parent.appendChild(el);return el}
 function unreadCount(){return state.messages.filter(m=>!m.read).length}
+function newestMessage(){return state.messages.reduce((latest,m)=>!latest||m.date>latest.date?m:latest,null)}
+function updateLatestPreview(){
+ const latest=newestMessage(),preview=$('luxMailLatest');
+ preview.hidden=!latest;
+ if(!latest)return;
+ $('luxMailLatestSubject').textContent=latest.subject;
+ $('luxMailLatestExcerpt').textContent=latest.body.replace(/\s+/g,' ').trim();
+ preview.title='Leer: '+latest.subject;
+}
 function counts(){const n=unreadCount();$('luxMailCount').textContent=n?String(n>99?'99+':n):'';$('luxMailTotal').textContent=n+' sin leer · '+state.messages.length+' mensajes';$('luxMailToggle').setAttribute('aria-label',n?'Abrir buzón: '+n+' mensajes sin leer':'Abrir buzón cultural')}
 function buildTools(){const tools=$('luxMailTools');tools.replaceChildren();for(const [label,key] of filters){const b=txt(tools,'button',label);b.type='button';b.setAttribute('aria-pressed',String(state.filter===key));b.addEventListener('click',()=>{state.filter=key;state.active=null;render()})}
  const read=txt(tools,'button','Marcar leídos');read.id='luxMailAllRead';read.type='button';read.addEventListener('click',()=>{state.messages.forEach(x=>x.read=true);persist();render()});
@@ -73,7 +82,7 @@ function showDetail(m){const target=$('luxMailDetail');target.replaceChildren();
  txt(target,'h3',m.subject);txt(target,'div','LUX · '+(byCategory[m.category]||'Cultura')+' · '+niceDate(m.date)+(m.source==='news'?' · Noticia enlazada':''),'luxMeta');txt(target,'p',m.body);
  for(const entry of m.links){const href=safe(entry[1]);if(!href)continue;const link=txt(target,'a',entry[0]);link.href=href;link.target='_blank';link.rel='noopener noreferrer';}
 }
-function render(){buildTools();counts();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||m.category===state.filter).sort((a,b)=>b.date-a.date);
+function render(){buildTools();counts();updateLatestPreview();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||m.category===state.filter).sort((a,b)=>b.date-a.date);
 if(!msgs.length){state.active=null;txt(list,'p','No hay mensajes en esta sección.','luxMailEmpty');showDetail(null);return}
 // Mostrar automáticamente el mensaje más reciente al abrir o filtrar el buzón.
 if(!msgs.some(m=>m.id===state.active))state.active=msgs[0].id;
@@ -82,6 +91,12 @@ for(const m of msgs){const btn=document.createElement('button');btn.className='l
 showDetail(state.messages.find(m=>m.id===state.active))}
 function setOpen(value){state.open=value;dock.classList.toggle('open',value);$('luxMailToggle').setAttribute('aria-expanded',String(value));if(value){initAudio();render()}else state.active=null}
 $('luxMailToggle').addEventListener('click',()=>setOpen(!state.open));
+$('luxMailLatest').addEventListener('click',()=>{
+ const latest=newestMessage();if(!latest)return;
+ state.filter='all';state.active=latest.id;
+ setOpen(true);
+ $('luxMailDetail').scrollTop=0;
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)setOpen(false)});
 let ctx=null;
 function initAudio(){if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume().catch(()=>{})}catch{}}}
