@@ -88,7 +88,7 @@
 #mobileBar{z-index:35!important}
 @media(max-width:720px){#liveStrip{display:none!important}#mobileBar{display:block!important}#filmState{bottom:55px}}
 @media(min-width:721px) and (max-width:1190px){#liveStrip{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:9px}#liveStrip .value{font-size:17px}#liveStrip .detail{font-size:11px}}
-</style></head><body><div id="backdrop"></div>
+</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -559,6 +559,7 @@ function advance(force=false){
 }
 function tick(){const mins=toMinutes(new Date(Date.now()+(typeof clockSkew==='number'?clockSkew:0)));const state=applyLighting(mins);if(mins>=600&&mins<601 && stage.dataset.lastWakeDate!==new Date().toDateString()){stage.dataset.lastWakeDate=new Date().toDateString();until=0;}advance(false)
  const text=state.sleeping?'Descansando hasta las 10:00':shown<0?'Plano general · en calma':(scenes[shown]?.name||'En la habitación');$('filmDetail').textContent=text+' · Luz: '+(state.on?'encendida':'apagada')+' · Rutinas automáticas.';}
+window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
 advance(true);setInterval(tick,14000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
 })();
@@ -589,4 +590,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script></body></html>
+</script><script src="/casa-lux/chat.js?v=4" defer></script></body></html>
