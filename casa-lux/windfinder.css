@@ -1,55 +1,65 @@
-/* Casa de Lux · previsión oficial Windfinder A Coruña
-   Conserva los datos locales de mareas, luna, reloj y rutinas. */
+/* Windfinder compacto: una casilla del mismo tamaño que mareas y luna. */
 #liveStrip{
-  opacity:1!important;
-  pointer-events:auto!important;
-  grid-template-columns:minmax(0,3.3fr) repeat(4,minmax(0,1fr))!important;
-  gap:12px!important;
-  padding:11px 14px!important;
-  bottom:13px!important;
-  left:22px!important;
-  right:22px!important;
-  align-items:stretch;
+  opacity:1!important;pointer-events:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-auto-rows:minmax(93px,auto)!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  padding:9px 13px!important;
+  left:22px!important;right:22px!important;bottom:15px!important;
   background:#000e!important;
 }
-#liveStrip .metric{
-  padding:10px 12px!important;
-  border-right:1px solid #ffffff30!important;
-  min-width:0;
-}
-#liveStrip .metric:last-child{border-right:0!important}
-#liveStrip .metric .value{font-size:clamp(17px,1.35vw,27px)!important;overflow-wrap:anywhere}
-#liveStrip .metric .detail,#liveStrip .metric .tiny{font-size:11px!important}
-#liveStrip .phaseCell{gap:5px!important}
-#liveStrip #moonDisc{width:43px!important;height:43px!important}
-#liveStrip .metric .kicker{font-size:11px!important}
+#liveStrip .metric{min-width:0;padding:9px 11px!important;border-right:1px solid #ffffff3d}
+#liveStrip .metric:last-child{border-right:0}
+#liveStrip .metric .kicker{font-size:10px!important;letter-spacing:.07em!important}
+#liveStrip .metric .value{font-size:clamp(16px,1.35vw,23px)!important;line-height:1.2!important}
+#liveStrip .metric .detail,#liveStrip .metric .tiny{font-size:11px!important;line-height:1.28!important}
+#liveStrip .phaseCell{gap:7px!important}
+#liveStrip #moonDisc{width:48px!important;height:48px!important}
 .luxWeatherLegacy{display:none!important}
-#wfForecast{
-  display:flex;flex-direction:column;align-self:stretch;min-width:0;
-  margin:0;overflow:hidden;border:1px solid #ffffff55;border-radius:10px;
-  background:#000;color:#fff;
+/* casilla compacta, sin iframe abierto al iniciar */
+#wfForecast{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;
+ background:transparent!important;color:#fff!important}
+#wfForecast .kicker,#wfForecast .value,#wfForecast .detail{color:#fff!important}
+#wfOpen{
+ align-self:flex-start;
+ margin-top:4px;padding:4px 8px;
+ border:1px solid #ffffff8e;border-radius:6px;background:#050505;
+ color:#fff;font:11px system-ui,sans-serif;cursor:pointer;
 }
-#wfHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 11px 5px}
-#wfHeader strong{color:#fff;font:700 12px system-ui,sans-serif;letter-spacing:.025em}
-#wfHeader a,#wfFooter a{color:#fff!important;text-underline-offset:3px;text-decoration:underline}
-#wfHeader a{white-space:nowrap;font:11px system-ui,sans-serif}
-#wfForecast iframe{
-  display:block;width:100%;height:225px;min-height:190px;border:0;
-  background:#fff;filter:grayscale(1) invert(1);
-  color-scheme:normal;
+#wfOpen:hover,#wfOpen:focus-visible{background:#222;outline-color:#fff}
+#wfDetails{
+ position:absolute;z-index:62;
+ bottom:153px;left:26px;width:min(800px,calc(100% - 52px));
+ background:#000f;color:#fff;border:1px solid #ffffff9e;border-radius:11px;
+ box-shadow:0 17px 65px #000d;overflow:hidden;max-height:400px;
 }
-#wfFooter{padding:5px 11px 7px;color:#d9d9d9;font:10px/1.4 system-ui,sans-serif}
-#wfFooter small{font:inherit}
+#wfDetails[hidden]{display:none!important}
+#wfHeader{padding:9px 12px;display:flex;align-items:center;gap:14px}
+#wfHeader strong{color:#fff;font:700 12px system-ui,sans-serif;letter-spacing:.025em;margin-right:auto}
+#wfHeader a,#wfFooter a{color:#fff!important;text-decoration:underline;text-underline-offset:3px;font-size:11px}
+#wfClose{font:12px system-ui,sans-serif;color:#fff;background:#050505;border:1px solid #fff;border-radius:5px;padding:5px 9px;cursor:pointer}
+#wfDetails iframe{display:block;width:100%;height:286px;border:0;background:#fff;filter:grayscale(1)}
+#wfFooter{padding:5px 12px 9px;font:11px system-ui,sans-serif;color:#ddd}
 @media(min-width:721px) and (max-width:1300px){
- #liveStrip{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-height:70vh;overflow:auto}
- #wfForecast{grid-column:1/-1}
- #wfForecast iframe{height:195px}
+ #liveStrip{grid-template-columns:repeat(5,minmax(0,1fr))!important;max-height:150px!important;overflow:hidden!important}
+ #liveStrip .metric .kicker{font-size:9px!important}
+ #liveStrip .metric .value{font-size:18px!important}
+ #liveStrip .metric .detail,#liveStrip .metric .tiny{font-size:9px!important}
+ #wfDetails{bottom:145px}
 }
 @media(max-width:720px){
  #liveStrip{display:none!important}
  #mobileBar{background:#000!important}
- #wfForecast{width:100%;margin:0 0 14px}
- #wfForecast iframe{height:235px}
- #mobileBar h2{color:#fff!important}
  #mobileBar .mobgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #mobileBar #wfForecast{padding:12px;min-height:115px;border:1px solid #ffffff45;border-radius:9px}
+ #mobileBar #wfForecast .kicker{font-size:11px!important}
+ #mobileBar #wfForecast .value{font-size:19px!important}
+ #wfDetails{position:fixed;z-index:85;bottom:46vh;left:2vw;width:96vw;max-height:42vh;border-radius:8px}
+ #wfDetails iframe{height:calc(42vh - 75px)}
+ #wfHeader{gap:7px}
+ #wfHeader strong{font-size:10px}
+ #wfHeader a{font-size:10px}
 }
+@media(prefers-reduced-motion:reduce){#wfDetails{transition:none}}
