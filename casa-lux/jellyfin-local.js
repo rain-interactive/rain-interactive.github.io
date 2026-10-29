@@ -164,11 +164,20 @@ function selectAndPlay(){
  // de Jellyfin usa un enlace efímero solo dentro del reproductor de esta pestaña.
  const url=base+'/Audio/'+encodeURIComponent(item.id)+'/stream?static=true&api_key='+encodeURIComponent(token);
  audio.pause();audio.src=url;audio.load();
+ window.__luRadio?.pauseCollection?.();
  window.__luRadio?.stopAutonomy?.();
  remembered.push(item.id);remembered=remembered.slice(-20);
  audio.play().catch(()=>notice('Pulsa ▶ en el reproductor o abre esta pista en Jellyfin.'));
 }
 function disconnect(){
+ // Revoke the server session on explicit disconnect, if the browser permits it.
+ const previousToken=token;
+ if(previousToken){
+  fetch(base+'/Sessions/Logout',{
+   method:'POST',mode:'cors',credentials:'omit',
+   headers:headers(previousToken)
+  }).catch(()=>{});
+ }
  const audio=e('luMediaAudio');
  audio.pause();audio.removeAttribute('src');audio.load();
  token='';userId='';connected=false;auto=false;current=null;remembered=[];
