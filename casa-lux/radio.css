@@ -38,3 +38,7 @@
 #luxRadioChoices button{font-size:10px;padding:7px 10px;min-height:30px}
 #luxRadioIntro p{line-height:1.4}
 @media(max-height:710px){#luxRadioChoices{max-height:92px}#luxRadioFrame{height:205px}}
+
+/* El título de la playlist se muestra incluso con Radio Deluxe plegada. */
+#luxRadioNow{margin-top:5px;padding:8px 11px;min-height:31px;background:#111a21e9;border:1px solid #a2c8bd59;border-radius:9px;color:#d4f3e9;font:11px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px #0008}
+#luxRadioDock.open #luxRadioNow{display:none}
