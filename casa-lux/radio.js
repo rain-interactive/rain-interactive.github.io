@@ -32,6 +32,17 @@ const mixes=[
  {"name":"Inch of Shadow · Insomnia Berlin","short":"Dark disco / EBM","desc":"Dos horas de dark disco, EBM y electro grabadas en Berlín.","url":"https://soundcloud.com/inch-of-shadow/inch-of-shadow-insomnia-dj-set"},
  {"name":"Indie Music Nation · Dream Pop","short":"Shoegaze / Indie","desc":"Guitarras veladas, dream pop y canciones para mirar por la ventana.","url":"https://soundcloud.com/indiemusicnation/sets/dream-pop-shoegaze-april-2026"},
  {"name":"NTS · Dream Forest","short":"Jungle ambiental","desc":"Breakbeats de los noventa, neblina y nostalgia digital.","url":"https://soundcloud.com/user-202286394-991268468/dream-forest-w-barrage-250426"}
+,
+ {"name":"Minimal Schlager · TANK Mix","short":"Italo / Darkwave","desc":"Disco italiano, synth-pop inquieto, DAF, The Cure y Boy Harsher. Un salón de Lu Roth a medianoche.","url":"https://soundcloud.com/tank-magazine/tank-mix-minimal-schlager"},
+ {"name":"Demdike Stare · MovingMetals","short":"Ritual / Industrial","desc":"Collage electrónico sombrío y espectral, para las escenas nocturnas más extrañas.","url":"https://soundcloud.com/modernlove/demdike-stare-mix-movingmetals"},
+ {"name":"Skee Mask · Mixtape 001","short":"IDM / Ambient","desc":"Ambient espacial, breakbeats y techno de Munich; movimiento de cámara en cámara lenta.","url":"https://soundcloud.com/metamorphnyc/artcast001-skee-mask"},
+ {"name":"Loraine James · NTS 140426","short":"Glitch / IDM","desc":"Jazz deconstruido, IDM y detalles ambientales, todo lo imperfecto y humano de la electrónica.","url":"https://soundcloud.com/user-202286394-991268468/loraine-james-140426"},
+ {"name":"Ellen Allien · SECTION London","short":"Techno hipnótico","desc":"Sintetizadores espaciales, voces retorcidas y una sesión muy física.","url":"https://soundcloud.com/ellen-allien/ellen-alien-section-london-june-2025"},
+ {"name":"Helena Hauff · The Cover Mix","short":"Electro crudo","desc":"Electro tenso y nocturno, máquinas viejas y electricidad en las paredes.","url":"https://soundcloud.com/mixmag-1/the-cover-mix-helena-hauff"},
+ {"name":"DJ Diskord · Witch House","short":"Witch house","desc":"Salem, CRIM3S, Gesaffelstein y niebla digital para la Casa.","url":"https://soundcloud.com/morbidx-1/witch-housedark-trap-mix-by-dj-diskord"},
+ {"name":"Doctor Jeep · De School","short":"Club / Bass","desc":"Una sesión oscura de club grabada en Ámsterdam, con ritmos de bajos muy vivos.","url":"https://soundcloud.com/drjeep/doctor-jeep-live-at-de-school"},
+ {"name":"CRIM3S · selección oscura","short":"Witch / Noise","desc":"Recorrido concentrado por las canciones de CRIM3S: pulsos sucios y distorsión emocional.","url":"https://soundcloud.com/user-11160019-216054474/crim3s-mix"},
+ {"name":"Boy Harsher · Machina Dark Mix","short":"Dark synth","desc":"Synth oscuro e hipnótico de Boy Harsher para una pausa breve entre sesiones.","url":"https://soundcloud.com/boy-harsher/machina-ft-mariana-saldana-1"}
 ];
 
 /* Sonido continuo: empieza tras pulsar Play y después enlaza sesiones en orden aleatorio. */
