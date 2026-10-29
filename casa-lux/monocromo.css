@@ -1,0 +1,86 @@
+/* CASA DE LUX · interfaz monocroma. No altera fotografías ni vídeos.
+   El fondo de los paneles es negro, la tipografía blanca, los detalles grises.
+   Evitar aplicar grayscale al #stage o a .film-sharp: las fotos preservan el color. */
+:root{--accent:#fff!important;--glass:#000e!important;--line:#ffffff44!important; color-scheme:dark}
+body{background:#000;color:#fff}
+body a{color:#fff}
+#backdrop{background:#000!important}
+
+/* Datos, reloj, meteorología, mareas, luna y rutinas */
+#topLine,#topLine *,#wordmark,#smallBrand,#cornerClock,#clockLarge,#clockDate{color:#fff!important;text-shadow:0 2px 12px #000,0 0 3px #000!important}
+#liveStrip,#mobileBar,#panel,#dataStatus,#luxArchive,#luxQuietTools,#filmControls,#subtitleLux,#filmState,#alarmToast{
+  background:#000e!important;color:#fff!important;border-color:#ffffff55!important;
+  box-shadow:0 16px 45px #0009!important;
+}
+#liveStrip .metric{border-color:#ffffff33!important}
+#liveStrip .kicker,#liveStrip .value,#liveStrip .detail,#liveStrip .tiny,
+#mobileBar .kicker,#mobileBar .mobvalue,#mobileBar .mobdetail,
+#dataStatus,#atlanticoStatus,#filmDetail,#panel h2,#panel p,#panel strong,#panel label,
+#subtitleLux *,#filmState,#luxArchive h2,#luxArchive p,#luxArchiveList,
+#alarmTitle,#alarmBody{color:#fff!important}
+#liveStrip .kicker,#liveStrip .tiny,#mobileBar .kicker,#mobileBar .mobdetail,
+#panel label,#dataStatus{opacity:.83}
+#panel a,#luxArchive a{color:#fff!important;text-decoration-color:#fff!important}
+#controlsBar .ctrl,#panel button,#luxArchive button,#luxQuietTools button,#filmControls button,#mobileBar button,
+#stage .btn,#stage #luxQuoteNew,#stage #luxArchiveOpen,#stage #luxArchiveClose{
+  background:#050505!important;color:#fff!important;border:1px solid #ffffff88!important;
+  box-shadow:none!important;text-shadow:none!important;
+}
+#controlsBar .ctrl:hover,#panel button:hover,#luxQuietTools button:hover,
+#stage .btn:hover{background:#222!important}
+#moonDisc{filter:grayscale(1)!important}
+
+/* Correo: sobre y número de mensajes blancos sobre negro */
+#luxMailDock{color:#fff!important}
+#luxMailToggle{
+  background:#000!important;border-color:#fff!important;color:#fff!important;
+  box-shadow:0 10px 35px #000c!important
+}
+#luxMailToggle:hover{background:#1b1b1b!important}
+#luxMailCount{
+  background:#fff!important;color:#000!important;border:2px solid #000!important
+}
+#luxMailPanel{background:#000f!important;color:#fff!important;border-color:#ffffffb3!important}
+#luxMailHead,#luxMailTools,#luxMailDetail,#luxMailPrompt{border-color:#ffffff36!important}
+#luxMailTitle strong,#luxMailTitle span,#luxMailHead p,#luxMailSubject,
+#luxMailPreview,#luxMailItem time,#luxMailDetail h3,#luxMailDetail p,
+#luxMailDetail .luxMeta,#luxMailDetail a,#luxMailEmpty,#luxMailFoot,
+#luxMailStatus{color:#fff!important}
+#luxMailTitle span,#luxMailHead p,#luxMailPreview,#luxMailItem time,
+#luxMailDetail .luxMeta,#luxMailFoot{opacity:.76}
+#luxMailTools button{
+  color:#fff!important;background:#000!important;border-color:#777!important
+}
+#luxMailTools button[aria-pressed=true]{background:#fff!important;color:#000!important;border-color:#fff!important}
+#luxMailTools button:hover{border-color:#fff!important}
+.luxMailItem{color:#fff!important;border-color:#ffffff25!important}
+.luxMailItem.unread{background:#ffffff0a!important}
+.luxMailItem:hover,.luxMailItem.active{background:#ffffff20!important}
+.luxMailItem.unread .luxMailDot{background:#fff!important;box-shadow:0 0 9px #fff6!important}
+#luxMailDetail{background:#050505!important}
+#luxMailDetail a{color:#fff!important;text-decoration-color:#fff!important}
+#luxMailInput{background:#000!important;color:#fff!important;border-color:#ffffff8c!important}
+#luxMailInput::placeholder{color:#ccc!important}
+#luxMailSend{background:#fff!important;color:#000!important;border-color:#fff!important}
+#luxMailDock button:focus-visible,#luxMailDock a:focus-visible,#luxMailInput:focus-visible{outline-color:#fff!important}
+
+/* Música / SoundCloud: controles monocromos. El audio no se modifica. */
+#luxRadioDock{color:#fff!important}
+#luxRadioToggle,#luxRadioPanel{
+  background:#000f!important;color:#fff!important;border-color:#fff!important;
+  box-shadow:0 10px 35px #000b!important
+}
+#luxRadioToggle:hover{background:#202020!important}
+#luxRadioToggle .luxRadioNote,#luxRadioToggle .luxRadioChevron,
+#luxRadioIntro strong,#luxRadioIntro p,#luxRadioActive,#luxRadioActive strong,
+#luxRadioActive small,#luxRadioFooter,#luxRadioFooter a{color:#fff!important}
+#luxRadioIntro p,#luxRadioActive small,#luxRadioFooter{opacity:.8}
+#luxRadioChoices button{background:#000!important;border-color:#777!important;color:#fff!important}
+#luxRadioChoices button[aria-pressed=true]{background:#fff!important;color:#000!important;border-color:#fff!important}
+#luxRadioChoices button:hover{border-color:#fff!important}
+#luxRadioFrame{background:#000!important;filter:grayscale(1) contrast(1.08)!important}
+#luxRadioDock button:focus-visible,#luxRadioDock a:focus-visible{outline-color:#fff!important}
+
+/* Mantener siempre visibles los datos sobre los planos, sin tapar las fotografías más de lo necesario. */
+#liveStrip{background:#000d!important}
+@media(max-width:720px){#mobileBar{background:#000e!important}}
