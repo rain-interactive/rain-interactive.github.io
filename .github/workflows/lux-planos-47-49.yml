@@ -1,0 +1,118 @@
+name: Casa de Lux - publicar planos 47 a 49 y catalogo numerado
+on:
+  push:
+    paths:
+      - '.github/workflows/lux-planos-47-49.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar Pillow
+        run: python -m pip install pillow
+      - name: Descargar los tres planos y preparar JPG numerado
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, io, json, hashlib, re, time, urllib.request
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageFont, ImageOps
+          root=Path('casa-lux')
+          assets=root/'assets'
+          sources=[
+             ('lux_47_retrato_calido.jpg','https://cdn.shopify.com/s/files/1/0957/7352/4307/files/lux_47_retrato_calido.jpg?v=1793284753','a71fe72e7cbdb330cb910d150c8757edc1882d9d40bfffd5b353bb22138553db'),
+             ('lux_48_taller_negro.jpg','https://cdn.shopify.com/s/files/1/0957/7352/4307/files/lux_48_taller_negro.jpg?v=1793284770','faf7268f4dad9423e49641b2575df29a8f10d6345e0abf442a4f581ccfb969fc'),
+             ('lux_49_retrato_fragmentado.jpg','https://cdn.shopify.com/s/files/1/0957/7352/4307/files/lux_49_retrato_fragmentado.jpg?v=1793284778','c4de5b00b36512d33ff4f080157d771e4eefb83e49623c3429c8db342d956c96')
+          ]
+          for filename,uri,digest in sources:
+              target=assets/filename
+              if not target.exists():
+                  for attempt in range(3):
+                      try:
+                          req=urllib.request.Request(uri,headers={'User-Agent':'Mozilla/5.0 (Casa-de-Lux)'})
+                          with urllib.request.urlopen(req,timeout=45) as response: raw=response.read()
+                          target.write_bytes(raw)
+                          break
+                      except Exception:
+                          if attempt==2: raise
+                          time.sleep(3)
+              raw=target.read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==digest, f'Los bytes no coinciden: {filename}'
+              with Image.open(target) as img:
+                  assert img.size==(1920,1080), (filename,img.size)
+              print('Verificado:',filename,len(raw))
+          html=(root/'index.html').read_text('utf-8')
+          match=re.search(r'const scenes=(\[.*?\]);',html,re.S)
+          assert match,'No se encuentra el catalogo'
+          scenes=json.loads(match.group(1))
+          assert len(scenes)==42, len(scenes)
+          for filename,_,_ in sources:
+              assert filename in html, f'Falta entrada en la web: {filename}'
+          # Images 01-42 are encoded in the 21 existing JS packs.
+          images={}
+          pattern=re.compile(r'window\.__luxImages\[(\d+)\]\s*=\s*["\']data:image/[^;]+;base64,([A-Za-z0-9+/=]+)["\']')
+          for pack in sorted(assets.glob('pack_*.js')):
+              data=pack.read_text('utf-8')
+              for key,blob in pattern.findall(data):
+                  images[int(key)]=Image.open(io.BytesIO(base64.b64decode(blob))).convert('RGB')
+          assert all(i in images for i in range(24,66)), f'Faltan planos: {[i for i in range(24,66) if i not in images]}'
+          entries=[]
+          for idx,scene in enumerate(scenes):
+              entries.append((idx+1,scene['name'],images[idx+24]))
+          for i,(filename,_,_) in enumerate(sources,start=47):
+              with Image.open(assets/filename) as img:
+                  entries.append((i,filename.replace('.jpg','').replace('_',' '),img.convert('RGB')))
+          for i,filename in enumerate(['lux_43_bocetos.jpg','lux_44_dormir.jpg','lux_45_gato.jpg','lux_46_sabanas.jpg'],start=43):
+              with Image.open(assets/filename) as img:
+                  entries.insert(i-1,(i,filename.replace('.jpg','').replace('_',' '),img.convert('RGB')))
+          assert len(entries)==49 and [n for n,_,_ in entries]==list(range(1,50))
+          # Contact sheet in visible numerical order (5 columns, 10 rows).
+          cols=5
+          cardw,cardh=448,305
+          margin=20
+          nrows=(len(entries)+cols-1)//cols
+          page=Image.new('RGB',(cols*cardw+margin*2,nrows*cardh+margin*2+68),(240,237,232))
+          draw=ImageDraw.Draw(page)
+          fontpath='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+          try:
+              big=ImageFont.truetype(fontpath,32)
+              label=ImageFont.truetype(fontpath,19)
+              number=ImageFont.truetype(fontpath,28)
+          except OSError:
+              big=label=number=ImageFont.load_default()
+          draw.text((margin,12),'CASA DE LUX  /  PLANOS 01–49',font=big,fill=(21,22,25))
+          for pos,(n,title,im) in enumerate(entries):
+              c=pos%cols
+              row=pos//cols
+              x=margin+c*cardw
+              y=margin+68+row*cardh
+              draw.rounded_rectangle((x,y,x+cardw-12,y+cardh-10),radius=8,fill=(255,255,255),outline=(208,205,202),width=2)
+              thumb=ImageOps.contain(im,(cardw-28,238),method=Image.Resampling.LANCZOS)
+              tx=x+8+(cardw-28-thumb.width)//2
+              ty=y+8+(238-thumb.height)//2
+              draw.rectangle((x+8,y+8,x+cardw-20,y+246),fill=(0,0,0))
+              page.paste(thumb,(tx,ty))
+              draw.text((x+13,y+253),f'{n:02d}',font=number,fill=(26,26,29))
+              clean=' '.join(title.split())
+              if len(clean)>32: clean=clean[:30]+'…'
+              draw.text((x+58,y+258),clean,font=label,fill=(35,35,35))
+          output=root/'Casa_de_Lux_planos_01_49.jpg'
+          page.save(output,'JPEG',quality=90,optimize=True,progressive=True)
+          print('Catalogo JPG:',output, page.size,output.stat().st_size,'bytes')
+          PY
+      - name: Publicar JPG e imagenes en GitHub Pages
+        shell: bash
+        run: |
+          git config user.name 'Casa de Lux'
+          git config user.email 'actions@users.noreply.github.com'
+          git add casa-lux/assets/lux_47_retrato_calido.jpg casa-lux/assets/lux_48_taller_negro.jpg casa-lux/assets/lux_49_retrato_fragmentado.jpg casa-lux/Casa_de_Lux_planos_01_49.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publicar planos 47-49 y JPG numerado 01-49'
+            git push
+          fi
