@@ -58,6 +58,7 @@ let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=fal
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
 let autoSessionActive=false,autoPlaybackPending=false,autoStopRequested=false;
+let visualPreference=null,visualRecent=[];
 try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
@@ -113,10 +114,24 @@ function goNext(){
  if(transitioning)return;
  transitioning=true;
  const mood=document.getElementById('stage')?.dataset.luMood||'';
- const candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
+ let candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
+ if(autoSessionActive&&!luRadioManual&&visualPreference){
+  const visualFilters={
+   oscuro:/dark|ambient|industrial|drone|techno|post.punk|witch|experimental|demdike|skee|helena/i,
+   luminoso:/disco|funk|soul|boogie|house|jazz|groove/i,
+   frío:/electr|ambient|idm|wave|dub|jungle|techno|experimental/i,
+   cálido:/soul|boogie|downtempo|disco|groove|indie|funk/i,
+   neutro:/experimental|explor|indie|ambient|house/i
+  };
+  const rx=visualFilters[visualPreference.tone]||visualFilters.neutro;
+  const visual=Array.from({length:mixes.length},(_,i)=>({m:mixes[i],i}))
+   .filter(x=>x.i!==selected&&!visualRecent.includes(x.i)&&rx.test(x.m.name+' '+x.m.short+' '+x.m.desc));
+  if(visual.length)candidates=visual;
+ }
  const next=candidates.length?candidates[Math.floor(Math.random()*candidates.length)].i:pickNext();
+ visualRecent.push(next);visualRecent=visualRecent.slice(-8);
  setMix(next,true);
- // No volvemos a la misma selección hasta recorrer las restantes (con modo aleatorio).
+ // SoundCloud termina primero el set actual; las preferencias visuales guían el siguiente.
 }
 function setupWidget(){
  if(widget||!window.SC||typeof window.SC.Widget!=='function')return;
@@ -213,11 +228,17 @@ function ambientChoices(mood){
  return mixes.map((m,i)=>({m,i})).filter(x=>filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
 window.__luRadio={
- getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending}),
+ getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null}),
+ // La imagen guía el próximo set, sin interrumpir jamás la sesión en marcha.
+ setVisualPreference:(profile)=>{
+  if(!profile||typeof profile.tone!=='string')return false;
+  visualPreference={tone:profile.tone,brightness:Number(profile.brightness)||0,detail:Number(profile.detail)||0};
+  return true;
+ },
  // Se llama directamente desde la pulsación ON: el gesto del usuario autoriza
  // intentar reproducir SoundCloud; no podemos garantizar permisos del navegador.
  startAutonomy:(mood)=>{
-  autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;
+  autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;visualRecent=[];
   const candidates=ambientChoices(mood);
   const choice=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:{i:selected};
   frame.loading='eager';
