@@ -69,10 +69,17 @@ for start in range(0,42,3):
 html=SCENES_RE.sub(lambda _m:"const scenes="+json.dumps(kept,ensure_ascii=False,separators=(',',':'))+";",html,count=1)
 pack_tags="".join(f'<script src="assets/pack_{i:02d}.js"></script>\n' for i in range(1,15))
 assert len(LOAD_RE.findall(html))==29
-html=LOAD_RE.sub("",html)
+# Insertar las etiquetas en la posición de los antiguos scripts externos,
+# NUNCA dentro del script JavaScript que contiene scenes.forEach.
+replaced_tags=0
+def replace_load_tag(_match):
+    global replaced_tags
+    replaced_tags+=1
+    return pack_tags if replaced_tags==1 else ""
+html=LOAD_RE.sub(replace_load_tag,html)
+assert replaced_tags==29
 anchor="scenes.forEach((scene,i)=>{scene.src=window.__luxImages?.[i]||''});"
 assert anchor in html,"No se encontró el cargador de imágenes"
-html=html.replace(anchor,pack_tags+anchor,1)
 html=html.replace("66 planos automáticos","42 planos automáticos")
 html=html.replace("66 planos, formato","42 planos, formato")
 html=html.replace("66 encuadres","42 encuadres")
