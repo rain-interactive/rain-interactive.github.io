@@ -45,3 +45,13 @@
 @media(max-width:700px){#luxMailDock{top:68px;right:11px}#luxMailToggle{width:51px;height:51px}#luxMailToggle svg{width:25px;height:25px}#luxMailPanel{max-height:calc(100dvh - 134px);min-height:min(515px,calc(100dvh - 134px))}#luxMailList{max-height:26dvh}}
 @media(max-height:670px){#luxMailDock{top:50px}#luxMailPanel{max-height:calc(100dvh - 108px);min-height:0}#luxMailList{max-height:24vh}}
 @media(prefers-reduced-motion:reduce){#luxMailDock *{transition:none!important}}
+
+/* Último mensaje visible bajo el icono aunque el buzón esté plegado. */
+#luxMailLatest{display:flex;flex-direction:column;gap:3px;margin:7px 0 0 auto;width:min(292px,calc(100vw - 24px));padding:11px 13px;text-align:left;background:#111219ed;border:1px solid #e2c8be62;border-radius:11px;color:#f3e9e5;backdrop-filter:blur(18px);box-shadow:0 10px 30px #0008;cursor:pointer;line-height:1.35}
+#luxMailLatest[hidden],#luxMailDock.open #luxMailLatest{display:none!important}
+#luxMailLatest .luxMailLatestKicker{font:700 9px/1.4 monospace;letter-spacing:.14em;color:#e6b8ae}
+#luxMailLatest strong{font-size:12px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+#luxMailLatestExcerpt{font-size:11px;color:#c8c0c1;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow-wrap:anywhere}
+#luxMailLatest:hover{border-color:#e8b8ac;background:#1c1b25f5}
+#luxMailLatest:focus-visible{outline:2px solid #e8b8ac;outline-offset:2px}
+@media(max-width:700px){#luxMailLatest{width:min(260px,calc(100vw - 22px));padding:9px 11px;margin-top:6px}}
