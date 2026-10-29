@@ -32,14 +32,8 @@ independent = [
     ("Lu Roth · Pasillo verde", "assets/lu_roth_52_pasillo_verde.jpg"),
     ("Lu Roth · Baño turquesa", "assets/lu_roth_53_bano_turquesa.jpg")
 ]
-focus = [
-[50,42],[50,43],[50,43],[50,53],[53,35],[51,46],[50,45],[50,49],[50,40],[50,43],
-[51,40],[53,43],[50,47],[52,43],[50,49],[50,43],[50,45],[50,42],[50,44],[51,40],
-[50,45],[50,50],[50,45],[50,44],[50,45],[50,44],[51,38],[50,42],[50,47],[50,41],
-[50,42],[52,42],[50,41],[50,50],[50,44],[50,44],[50,43],[50,45],[50,49],[50,44],[50,43],
-[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40],[49,53],[55,52],[55,49],[49,15],[57,34]
-]
-assert len(scenes) == 41 and len(independent) == 12 and len(focus) == 53
+focus = [[50,42],[50,43],[50,43],[50,53],[53,35],[51,46],[50,45],[50,49],[50,40],[50,43],[51,40],[53,43],[50,47],[52,43],[50,49],[50,43],[51,38],[50,42],[50,47],[50,41],[50,42],[52,42],[50,41],[50,50],[50,44],[50,44],[50,43],[50,45],[50,49],[50,44],[50,43],[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40],[49,53],[55,52],[55,49],[49,15],[57,34]]
+assert len(scenes) == 31 and len(independent) == 12 and len(focus) == 43
 packs = {}
 for path in sorted((ROOT / "assets").glob("pack_*.js")):
     src = path.read_text(encoding="utf-8")
@@ -49,7 +43,8 @@ print("Imágenes disponibles en packs:", len(packs))
 
 def original(i):
     if i < len(scenes):
-        packid = 24 + i + (1 if i >= 37 else 0)
+        original_i = i + (10 if i >= 16 else 0)
+        packid = 24 + original_i + (1 if original_i >= 37 else 0)
         if packid not in packs:
             raise ValueError(f"Plano {i+1} sin imagen pack {packid}")
         return Image.open(io.BytesIO(packs[packid])).convert("RGB"), scenes[i]["name"]
@@ -108,7 +103,7 @@ fSub=ImageFont.truetype(regular,16)
 fNum=ImageFont.truetype(bold,16)
 fItem=ImageFont.truetype(regular,14)
 d.text((PAD,25),"CASA DE LU ROTH   /   ENCUADRES 16:9",font=fTitle,fill="#f2e7e8")
-d.text((PAD,69),"53 planos · zoom a pantalla completa · selección automática cada tres minutos",font=fSub,fill="#bdb6bd")
+d.text((PAD,69),"43 planos · zoom a pantalla completa · selección automática cada tres minutos",font=fSub,fill="#bdb6bd")
 for i in range(len(focus)):
     shot,name=original(i)
     frame=crop16x9(shot,focus[i]).resize((THUMBW,THUMBH),Image.Resampling.LANCZOS)
