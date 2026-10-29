@@ -64,6 +64,7 @@ const musicShelfURL='https://open.spotify.com/embed/playlist/4l7Q5zlpxrBLu7yFwyJ
 let musicShelfOpen=false;
 function showMusicShelf(show){
  musicShelfOpen=Boolean(show);
+ dock.classList.toggle('has-lu-collection',musicShelfOpen);
  musicShelfPanel.hidden=!musicShelfOpen;
  musicShelfButton.setAttribute('aria-expanded',String(musicShelfOpen));
  if(musicShelfOpen){
@@ -77,6 +78,7 @@ function showMusicShelf(show){
   // Desmontar el iframe detiene también una reproducción de Spotify.
   musicShelfFrame.removeAttribute('src');
  }
+ updateNow();
 }
 musicShelfButton.addEventListener('click',()=>showMusicShelf(!musicShelfOpen));
 
@@ -95,7 +97,7 @@ try {
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow=saved;
 } catch {}
 function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow))}catch{}}
-function updateNow(){const mix=mixes[selected];if(!mix)return;$('luxRadioNow').textContent=(isPlaying?'♫ Sonando · ':hasPlayed?'Pausada · ':'Playlist · ')+mix.name;}
+function updateNow(){const mix=mixes[selected];if(!mix)return;$('luxRadioNow').textContent=musicShelfOpen?'♫ Colección musical · Radio Lu Roth':(isPlaying?'♫ Sonando · ':hasPlayed?'Pausada · ':'Playlist · ')+mix.name;}
 function mixURL(mix,play){
  return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(mix.url)+
    '&auto_play='+Boolean(play)+'&color=%23ffffff&show_artwork=true&show_comments=false&show_user=true'+
