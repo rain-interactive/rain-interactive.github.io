@@ -89,3 +89,9 @@ body a{color:#fff}
 #topLine #cornerClock{display:inline-flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;background:#000!important;color:#fff!important;border:1px solid #ffffff72!important;border-radius:12px!important;padding:12px 19px 11px!important;box-shadow:0 8px 26px #0009!important;backdrop-filter:none!important;min-width:184px!important}
 #topLine #clockLarge,#topLine #clockDate{color:#fff!important;text-shadow:none!important;opacity:1!important}
 @media(max-width:720px){#topLine #cornerClock{padding:8px 12px!important;min-width:0!important;border-radius:9px!important}}
+
+/* Las fotos verticales tienen márgenes negros reales en los assets. Evitar
+   cualquier capa desenfocada detrás durante el cambio de plano. */
+#filmA,#filmB{background:#000!important}
+#filmA .film-blur,#filmB .film-blur{display:none!important}
+#filmA .film-sharp,#filmB .film-sharp{background-color:#000!important}
