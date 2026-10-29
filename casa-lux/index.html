@@ -320,6 +320,23 @@
 #luAutoPower:focus-visible{outline:2px solid #fff;outline-offset:3px}
 #luAutoPower:disabled{cursor:wait;opacity:.65}
 @media(max-width:720px){#luAutoPower{top:max(9px,env(safe-area-inset-top));left:50%;padding:8px 12px;min-height:38px;font-size:10px}}
+</style><style id="lu-subtitles-transparent-v1">
+/* Subtítulos de Lu: texto blanco sobre fotografía, sin recuadro ni placa. */
+#stage #subtitleLux span{
+ display:inline!important;
+ padding:0!important;
+ margin:0!important;
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ color:#fff!important;
+ font:normal 32px/1.38 Georgia,serif!important;
+ text-shadow:0 2px 7px rgba(0,0,0,.88),0 0 2px rgba(0,0,0,.65)!important;
+}
+@media(max-width:720px){
+ #stage #subtitleLux span{font-size:25px!important;line-height:1.35!important}
+}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
