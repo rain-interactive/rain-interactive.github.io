@@ -1,0 +1,66 @@
+name: Depurar y publicar planos Casa de Lux
+on:
+  push:
+    paths:
+      - '.github/workflows/aplicar-depuracion-lux.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: casa-lux-planos-finales
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar la última versión de Casa de Lux
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar utilidades de imágenes
+        run: python -m pip install Pillow ImageHash scipy numpy
+      - name: Eliminar duplicados y conservar solo resoluciones 1920 × 1080
+        run: python casa-lux/depurar_planos.py --apply
+      - name: Verificar las 34 imágenes FHD y el HTML
+        run: |
+          python - <<'PY'
+          import re, io, base64, json, pathlib
+          from PIL import Image
+          root=pathlib.Path('casa-lux')
+          files=list(sorted((root/'assets').glob('pack_*.js')))
+          scene_src=(root/'index.html').read_text(encoding='utf-8')
+          m=re.search(r'const scenes=(\[.*?\]);',scene_src,re.S)
+          assert m
+          scenes=json.loads(m.group(1))
+          assert len(scenes)==34,(len(scenes), "planes wrong")
+          imgs={}
+          for p in files:
+              for idx,kind,data in re.findall(r'window\.__luxImages\[(\d+)\]="data:image/([^;]+);base64,([^"]+)";',p.read_text()):
+                  buf=base64.b64decode(data)
+                  with Image.open(io.BytesIO(buf)) as im:
+                      assert im.size == (1920,1080),(idx,im.size)
+                  idx=int(idx)
+                  assert idx not in imgs
+                  imgs[idx]=True
+          assert sorted(imgs)==list(range(34)),sorted(imgs)
+          assert len(files)==12,len(files)
+          assert (root/'planos_finales.jpg').exists()
+          assert 'window.__luxShowWriting' in scene_src
+          assert 'radio.js' in scene_src and 'chat.js' in scene_src
+          print("Verified 34 FHD images, all 1920x1080; player and mailbox preserved.")
+          PY
+      - name: Publicar nueva selección y vista JPG
+        run: |
+          git config user.name "Casa de Lux"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A casa-lux/assets/ casa-lux/index.html casa-lux/planos_finales.jpg casa-lux/resultado_depuracion.json casa-lux/auditoria_planos.jpg casa-lux/auditoria_planos.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios"
+          else
+            git commit -m "Publicar 34 planos únicos y panorámicos a 1920x1080"
+            git push
+          fi
