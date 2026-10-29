@@ -153,6 +153,27 @@ async function fetchBulletin(){try{const response=await fetch('/casa-lux/boletin
  }
  }
  }catch(e){console.info('Buzón: novedades temporalmente no disponibles',e?.message||e)}}
+window.__luMail={
+ getState:()=>{
+  const latest=newestMessage();
+  return {total:state.messages.length,unread:unreadCount(),writing:state.writing,
+    latest:latest?{subject:latest.subject,body:latest.body.slice(0,250),category:latest.category}:null};
+ },
+ // El motor utiliza el buzón existente; no publica mensajes en ningún servidor.
+ observeAutonomy:(context)=>{
+  if(!context||typeof context!=='object')return false;
+  const slot=Math.floor(Date.now()/(45*60000)),id='lu-auto-'+slot;
+  if(state.messages.some(m=>m.id===id))return false;
+  const fields=[
+   context.scene?'Escena: '+String(context.scene).slice(0,100):null,
+   context.mood?'Ambiente: '+String(context.mood).slice(0,80):null,
+   context.weather&& !/consultando|no disponible|sin datos/.test(context.weather.toLowerCase())?'Tiempo: '+String(context.weather).slice(0,100):null,
+   context.tide&& !/consultando|no disponible|sin datos/.test(context.tide.toLowerCase())?'Mareas: '+String(context.tide).slice(0,100):null,
+   context.moon&& !/calculando|no disponible|sin datos/.test(context.moon.toLowerCase())?'Luna: '+String(context.moon).slice(0,80):null
+  ].filter(Boolean);
+  return deliver(mk(['idea','Registro de la Casa',fields.join(' · ')||'El motor autónomo está activo.'],id,Date.now()),true);
+ }
+};
 persist();render();
 setTimeout(daily,18000);
 setInterval(periodic,2100000);
