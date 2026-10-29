@@ -1,0 +1,46 @@
+name: Instalar 5 planos nuevos de Lu Roth en la Casa
+on:
+  push:
+    paths:
+      - 'casa-lux/Lu_Roth_Planos_49_a_53_FHD.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Integrar los 5 JPG de 1920x1080 y actualizar el catálogo
+        run: |
+          python casa-lux/instalar_5_nuevos_lu.py
+          python casa-lux/generar_catalogo_cine.py
+      - name: Verificar el registro de 53 planos y guardar en main
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          root=Path('casa-lux')
+          html=(root/'index.html').read_text('utf8')
+          assert all(f"lu_roth_{i}_" in html for i in range(49,54))
+          assert 'nextChange=now+180000' in html
+          assert "turtleQuietHours=(mins>=20*60||mins<10*60)" in html
+          for p in (root/'assets').glob('lu_roth_[45][0-9]*.jpg'):
+              with Image.open(p) as im: assert im.size==(1920,1080)
+          assert (root/'catalogo_encuadres_cine.jpg').stat().st_size>100000
+          print("Verificados cinco JPG, catálogo JPG 53 y horario de luz")
+          PY
+          git config user.name "Casa de Lu Roth"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/index.html casa-lux/generar_catalogo_cine.py casa-lux/catalogo_encuadres_cine.jpg casa-lux/assets/lu_roth_*.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Incorporar planos Lu Roth 49-53 y catalogo JPG de 53"
+            git pull --rebase origin main
+            git push origin main
+          fi
