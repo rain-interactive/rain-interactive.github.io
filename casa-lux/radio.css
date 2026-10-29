@@ -42,3 +42,9 @@
 /* El título de la playlist se muestra incluso con Radio Deluxe plegada. */
 #luxRadioNow{margin-top:5px;padding:8px 11px;min-height:31px;background:#111a21e9;border:1px solid #a2c8bd59;border-radius:9px;color:#d4f3e9;font:11px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px #0008}
 #luxRadioDock.open #luxRadioNow{display:none}
+
+/* Sesión especial documentada, enlace externo independiente del reproductor de SoundCloud */
+#luxRadioPegorer{margin:2px 12px 8px;padding:10px 12px;border:1px solid #cf8bd966;border-radius:10px;background:#311b343d}
+#luxRadioPegorer a{display:block;color:#f7dcff;font-size:11px;letter-spacing:.03em;font-weight:700;text-decoration:none}
+#luxRadioPegorer a:hover,#luxRadioPegorer a:focus-visible{text-decoration:underline;text-underline-offset:3px}
+#luxRadioPegorer small{display:block;color:#c5b6ce;font-size:10px;line-height:1.35;margin-top:4px}
