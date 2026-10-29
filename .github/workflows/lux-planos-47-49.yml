@@ -1,4 +1,4 @@
-name: Casa de Lux - publicar planos 47 a 49 y catalogo numerado
+name: Casa de Lux - actualizar catalogo y eliminar plano 38
 on:
   push:
     paths:
@@ -52,27 +52,33 @@ jobs:
           match=re.search(r'const scenes=(\[.*?\]);',html,re.S)
           assert match,'No se encuentra el catalogo'
           scenes=json.loads(match.group(1))
-          assert len(scenes)==42, len(scenes)
+          assert len(scenes)==41 and all(s['name']!='ROTH · Objects 001' for s in scenes), len(scenes)
           for filename,_,_ in sources:
               assert filename in html, f'Falta entrada en la web: {filename}'
-          # Images 01-42 are encoded in the 21 existing JS packs.
+          # Las escenas originales estan en los paquetes JS; el plano 38 antiguo se elimina.
           images={}
           pattern=re.compile(r'window\.__luxImages\[(\d+)\]\s*=\s*["\']data:image/[^;]+;base64,([A-Za-z0-9+/=]+)["\']')
           for pack in sorted(assets.glob('pack_*.js')):
               data=pack.read_text('utf-8')
               for key,blob in pattern.findall(data):
+                  if int(key)==61: continue  # Plano 38 (indice de imagen 61) retirado
                   images[int(key)]=Image.open(io.BytesIO(base64.b64decode(blob))).convert('RGB')
-          assert all(i in images for i in range(24,66)), f'Faltan planos: {[i for i in range(24,66) if i not in images]}'
+              if 'window.__luxImages[61]=' in data:
+                  purged=re.sub(r'window\.__luxImages\[61\]\s*=\s*["\x27]data:image/[^;]+;base64,[A-Za-z0-9+/=]+["\x27];?\s*','',data)
+                  assert purged!=data,'No se pudo retirar el plano 38 del paquete'
+                  pack.write_text(purged,encoding='utf-8')
+          required=[i for i in range(24,66) if i!=61]
+          assert all(i in images for i in required), f'Faltan planos: {[i for i in required if i not in images]}'
           entries=[]
           for idx,scene in enumerate(scenes):
-              entries.append((idx+1,scene['name'],images[idx+24]))
-          for i,(filename,_,_) in enumerate(sources,start=47):
+              entries.append((idx+1,scene['name'],images[idx+24+(1 if idx>=37 else 0)]))
+          for i,(filename,_,_) in enumerate(sources,start=46):
               with Image.open(assets/filename) as img:
                   entries.append((i,filename.replace('.jpg','').replace('_',' '),img.convert('RGB')))
-          for i,filename in enumerate(['lux_43_bocetos.jpg','lux_44_dormir.jpg','lux_45_gato.jpg','lux_46_sabanas.jpg'],start=43):
+          for i,filename in enumerate(['lux_43_bocetos.jpg','lux_44_dormir.jpg','lux_45_gato.jpg','lux_46_sabanas.jpg'],start=42):
               with Image.open(assets/filename) as img:
                   entries.insert(i-1,(i,filename.replace('.jpg','').replace('_',' '),img.convert('RGB')))
-          assert len(entries)==49 and [n for n,_,_ in entries]==list(range(1,50))
+          assert len(entries)==48 and [n for n,_,_ in entries]==list(range(1,49))
           # Contact sheet in visible numerical order (5 columns, 10 rows).
           cols=5
           cardw,cardh=448,305
@@ -87,7 +93,7 @@ jobs:
               number=ImageFont.truetype(fontpath,28)
           except OSError:
               big=label=number=ImageFont.load_default()
-          draw.text((margin,12),'CASA DE LUX  /  PLANOS 01–49',font=big,fill=(21,22,25))
+          draw.text((margin,12),'CASA DE LUX  /  PLANOS 01–48',font=big,fill=(21,22,25))
           for pos,(n,title,im) in enumerate(entries):
               c=pos%cols
               row=pos//cols
@@ -103,7 +109,7 @@ jobs:
               clean=' '.join(title.split())
               if len(clean)>32: clean=clean[:30]+'…'
               draw.text((x+58,y+258),clean,font=label,fill=(35,35,35))
-          output=root/'Casa_de_Lux_planos_01_49.jpg'
+          output=root/'Casa_de_Lux_planos_01_48.jpg'
           page.save(output,'JPEG',quality=90,optimize=True,progressive=True)
           print('Catalogo JPG:',output, page.size,output.stat().st_size,'bytes')
           PY
@@ -112,8 +118,9 @@ jobs:
         run: |
           git config user.name 'Casa de Lux'
           git config user.email 'actions@users.noreply.github.com'
-          git add casa-lux/assets/lux_47_retrato_calido.jpg casa-lux/assets/lux_48_taller_negro.jpg casa-lux/assets/lux_49_retrato_fragmentado.jpg casa-lux/Casa_de_Lux_planos_01_49.jpg
+          git rm -f --ignore-unmatch casa-lux/Casa_de_Lux_planos_01_49.jpg
+          git add casa-lux/assets/pack_*.js casa-lux/assets/lux_47_retrato_calido.jpg casa-lux/assets/lux_48_taller_negro.jpg casa-lux/assets/lux_49_retrato_fragmentado.jpg casa-lux/Casa_de_Lux_planos_01_48.jpg
           if ! git diff --cached --quiet; then
-            git commit -m 'Publicar planos 47-49 y JPG numerado 01-49'
+            git commit -m 'Casa de Lux: borrar escena 38 y publicar JPG renumerado 01-48'
             git push
           fi
