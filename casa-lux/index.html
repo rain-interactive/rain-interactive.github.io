@@ -337,6 +337,26 @@
 @media(max-width:720px){
  #stage #subtitleLux span{font-size:25px!important;line-height:1.35!important}
 }
+</style><style id="lu-vision-composition-v1">
+/* Experimento 02: cámara y subtítulos movidos por rasgos visuales de cada foto.
+   Respeta siempre el foco del autor y los datos permanentes. */
+#stage.lu-autonomous #subtitleLux{
+ bottom:var(--lu-vision-caption-bottom,225px)!important;
+ transition:bottom 6s ease;
+}
+#stage.lu-autonomous #filmA .film-sharp,
+#stage.lu-autonomous #filmB .film-sharp{
+ animation-duration:var(--lu-vision-duration,180s)!important;
+}
+@keyframes lu-film-breathe{
+ from{transform:translate3d(0,.18%,0) scale(1.005)}
+ to{transform:translate3d(var(--lu-motion-x,.25%),var(--lu-motion-y,-.20%),0) scale(1.07)}
+}
+@media(prefers-reduced-motion:reduce){
+ #stage.lu-autonomous #filmA .film-sharp,
+ #stage.lu-autonomous #filmB .film-sharp{animation:none!important;transform:none!important}
+ #stage.lu-autonomous #subtitleLux{transition:none}
+}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -873,6 +893,8 @@ function display(index){
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
+ // En ocasiones, la Casa decide contemplar el mismo plano otro ciclo de tres minutos.
+ if(shown>=0&&window.__luAutonomy?.shouldHold?.(shown,scenes))return shown;
  const choice=window.__luAutonomy?.choose?.(scenes,shown,recent);
  if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src){
    recent.push(choice);if(recent.length>12)recent.shift();return choice;
@@ -906,7 +928,10 @@ function advance(force=false){
  const now=Date.now();
  if(!force && now<nextChange)return;
  const next=chooseAutomatic();
- if(next!==null)display(next);
+ if(next!==null){
+  if(next===shown)window.__luAutonomy?.onHold?.(shown,scenes);
+  else display(next);
+ }
  nextChange=now+180000; // Tres minutos exactos entre elecciones.
 }
 function tick(){
@@ -952,4 +977,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=11" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=5" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=11" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/vision.js?v=1" defer></script><script src="/casa-lux/autonomia.js?v=6" defer></script></body></html>
