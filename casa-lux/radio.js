@@ -99,7 +99,7 @@ function setupWidget(){
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
   });
   widget.bind(api.Events.PLAY,()=>{
-   hasPlayed=true;transitioning=false;
+   hasPlayed=true;widgetReady=true;transitioning=false;
    widget.getCurrentSoundIndex(index=>{
     if(Number.isInteger(index))lastTrackIndex=index;
    });
