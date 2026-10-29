@@ -224,5 +224,19 @@ window.__luAutonomy={choose,onScene,toggle:toggleAutonomy,setEnabled:setAutonomy
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
+// Los datos existentes avisan en cuanto cambian, sin esperar al siguiente plano.
+let reflectionTimer=null;
+if(typeof MutationObserver==='function'){
+ const observer=new MutationObserver(()=>{
+  if(!memory.enabled||document.hidden)return;
+  clearTimeout(reflectionTimer);
+  reflectionTimer=setTimeout(()=>reflect(false),900);
+ });
+ for(const id of ['temp','weatherText','wind','tideTitle','tideNext','moonName','nextMoon','atlanticoStatus',
+                   'luxMailLatestSubject','luxMailLatestExcerpt','subtitleText']){
+  const node=el(id);
+  if(node)observer.observe(node,{childList:true,subtree:true,characterData:true});
+ }
+}
 setInterval(()=>{if(!document.hidden){reflect(false);render()}},60000);
 })();
