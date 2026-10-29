@@ -56,7 +56,7 @@ const toggle=$('luxRadioToggle'),choices=$('luxRadioChoices'),frame=$('luxRadioF
 const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1';
 let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=false;
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
-let flow={loop:true,random:true},hasPlayed=false,isPlaying=false;
+let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
 try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
@@ -170,6 +170,7 @@ mixes.forEach((mix,i)=>{
  button.type='button';button.dataset.index=String(i);button.textContent=mix.short;
  button.setAttribute('aria-pressed',String(i===selected));button.title=mix.desc;
  button.addEventListener('click',()=>{
+  luRadioManual=true;
   shuffleBag=shuffleBag.filter(x=>x!==i);
   if(!initialized)open(true);
   setMix(i,true);
@@ -183,11 +184,34 @@ $('luxRadioLoop').addEventListener('click',()=>{
 $('luxRadioRandom').addEventListener('click',()=>{
  flow.random=!flow.random;shuffleBag=[];updateControls();save();
 });
-$('luxRadioNext').addEventListener('click',()=>{open(true);goNext()});
+$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;open(true);goNext()});
 toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&dock.classList.contains('open'))open(false);
 });
+window.__luRadio={
+ getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual}),
+ // Selección de ambiente sin iniciar audio ni interrumpir una sesión elegida por el visitante.
+ suggest:(mood)=>{
+  if(luRadioManual||hasPlayed||isPlaying||transitioning)return false;
+  const filters={
+   'lluvia nocturna':/ambient|downtempo|dark|dembike|demdike|electrónica|nocturna|experimental/i,
+   insomnio:/ambient|dark|post.punk|witch|electrónica|explor/i,
+   nocturna:/post.punk|ebm|dark|techno|witch|industrial/i,
+   lluvia:/ambient|downtempo|jazz|soul|explor/i,
+   'gris atlántico':/ambient|downtempo|soul|jazz|explor/i,
+   mañana:/suave|soul|disco|funk|boogie/i,
+   taller:/house|soul|funk|ritmo|electrónica/i,
+   atardecer:/synth|indie|new wave|downtempo|disco/i
+  };
+  const filter=filters[mood]||filters.taller;
+  const candidates=mixes.map((m,i)=>({m,i})).filter(x=>x.i!==selected&&filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
+  if(!candidates.length)return false;
+  const choice=candidates[Math.floor(Math.random()*candidates.length)];
+  setMix(choice.i,false);
+  return true;
+ }
+};
 updateControls();updateNow();
 if(window.matchMedia('(min-width:801px)').matches)open(true);
 })();
