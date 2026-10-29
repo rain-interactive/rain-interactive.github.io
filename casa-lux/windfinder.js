@@ -39,8 +39,10 @@ function mount(){
   const grid=mobile.querySelector('.mobgrid');
   if(grid)grid.prepend(card);else mobile.append(card);
  }else{
-  if(legacy&&legacy.parentElement===bar)bar.insertBefore(card,legacy);
-  else bar.insertBefore(card,bar.children[1]||null);
+  // Orden estable de la franja: tiempo, mareas, luna, Windfinder, taller.
+  const workshop=bar.querySelector('#classState')?.closest('.metric');
+  if(workshop)bar.insertBefore(card,workshop);
+  else bar.appendChild(card);
  }
  if(!details.hidden)show(false);
 }
