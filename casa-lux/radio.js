@@ -57,7 +57,7 @@ const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v
 let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=false;
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
-let autoSessionActive=false,autoPlaybackPending=false;
+let autoSessionActive=false,autoPlaybackPending=false,autoStopRequested=false;
 try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
@@ -103,7 +103,7 @@ function setMix(i,play=false){
   try{widget.load(mix.url,{auto_play:!!play,color:'#ffffff',show_artwork:true,
        show_comments:false,show_user:true,show_playcount:false,
        hide_related:true,visual:false,single_active:true,
-       callback:()=>{if(play)widget.play()}})}
+       callback:()=>{if(play&&!autoStopRequested)widget.play()}})}
   catch{frame.src=mixURL(mix,play)}
  }else frame.src=mixURL(mix,play);
  frame.title='SoundCloud · '+mix.name;
@@ -112,7 +112,9 @@ function setMix(i,play=false){
 function goNext(){
  if(transitioning)return;
  transitioning=true;
- const next=pickNext();
+ const mood=document.getElementById('stage')?.dataset.luMood||'';
+ const candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
+ const next=candidates.length?candidates[Math.floor(Math.random()*candidates.length)].i:pickNext();
  setMix(next,true);
  // No volvemos a la misma selección hasta recorrer las restantes (con modo aleatorio).
 }
@@ -177,7 +179,7 @@ mixes.forEach((mix,i)=>{
  button.type='button';button.dataset.index=String(i);button.textContent=mix.short;
  button.setAttribute('aria-pressed',String(i===selected));button.title=mix.desc;
  button.addEventListener('click',()=>{
-  luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;
+  luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;
   shuffleBag=shuffleBag.filter(x=>x!==i);
   if(!initialized)open(true);
   setMix(i,true);
@@ -191,7 +193,7 @@ $('luxRadioLoop').addEventListener('click',()=>{
 $('luxRadioRandom').addEventListener('click',()=>{
  flow.random=!flow.random;shuffleBag=[];updateControls();save();
 });
-$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;open(true);goNext()});
+$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;open(true);goNext()});
 toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&dock.classList.contains('open'))open(false);
@@ -215,7 +217,7 @@ window.__luRadio={
  // Se llama directamente desde la pulsación ON: el gesto del usuario autoriza
  // intentar reproducir SoundCloud; no podemos garantizar permisos del navegador.
  startAutonomy:(mood)=>{
-  autoSessionActive=true;autoPlaybackPending=true;luRadioManual=false;
+  autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;
   const candidates=ambientChoices(mood);
   const choice=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:{i:selected};
   frame.loading='eager';
@@ -228,7 +230,7 @@ window.__luRadio={
  },
  stopAutonomy:()=>{
   const wasAuto=autoSessionActive;
-  autoSessionActive=false;autoPlaybackPending=false;
+  autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=true;
   if(!wasAuto)return;
   if(widget){try{widget.pause()}catch{}}
   else if(initialized)frame.src=mixURL(mixes[selected],false);
