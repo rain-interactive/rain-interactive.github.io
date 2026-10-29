@@ -132,17 +132,49 @@ function render(){
  el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name:'');
  el('luBrainToggle').textContent=memory.enabled?'Pausar autonomía':'Activar autonomía';
  el('luBrainToggle').setAttribute('aria-pressed',String(memory.enabled));
+ const power=el('luAutoPower');
+ if(power){
+  power.disabled=false;
+  power.dataset.enabled=memory.enabled?'on':'off';
+  power.setAttribute('aria-pressed',String(memory.enabled));
+  power.setAttribute('aria-label',memory.enabled?'Desactivar autonomía de Lu Roth':'Activar autonomía de Lu Roth');
+  power.title=memory.enabled?'Pausar autonomía de Lu Roth':'Dejar que Lu dirija la Casa';
+  const label=el('luAutoPowerText');
+  if(label)label.textContent=memory.enabled?'AUTONOMÍA ON':'AUTONOMÍA OFF';
+ }
 }
-el('luBrainToggle').addEventListener('click',()=>{
- memory.enabled=!memory.enabled;save();
- if(!memory.enabled){stage.classList.remove('lu-autonomous');stage.style.removeProperty('--lu-art-grade')}
- else cameraAndColor(sense(),atmosphere(sense()));
+function setAutonomy(enabled){
+ if(memory.enabled===enabled){render();return}
+ memory.enabled=enabled;save();
+ if(!enabled){
+  stage.classList.remove('lu-autonomous');
+  stage.style.removeProperty('--lu-art-grade');
+  for(const id of ['filmA','filmB']){
+   const sharp=el(id)?.querySelector('.film-sharp');
+   sharp?.style.removeProperty('animation-duration');
+   sharp?.style.removeProperty('animation-direction');
+  }
+  render();
+  return;
+ }
+ // ON inicia inmediatamente una elección nueva. Después el motor sigue cada tres minutos.
+ const current=house.getState(),scenes=house.getScenes();
+ const next=choose(scenes,current?.index??-1,[]);
+ if(Number.isInteger(next)&&typeof house.show==='function'&&house.show(next)){
+  // display() ya ha registrado esta decisión y actualizado la cámara.
+  render();
+  return;
+ }
+ cameraAndColor(sense(),atmosphere(sense()));
  render();
-});
+}
+function toggleAutonomy(){setAutonomy(!memory.enabled)}
+el('luBrainToggle').addEventListener('click',toggleAutonomy);
+el('luAutoPower')?.addEventListener('click',toggleAutonomy);
 el('luBrainErase').addEventListener('click',()=>{
  memory.events=[];memory.counts={};memory.lastMood='';memory.lastRadio=0;save();render();
 });
-window.__luAutonomy={choose,onScene,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
+window.__luAutonomy={choose,onScene,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
