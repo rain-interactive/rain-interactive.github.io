@@ -167,6 +167,43 @@ function onScene(index,scenes){
   }).catch(()=>{});
  }
 }
+function nextDelay(index,scenes){
+ // No hay un reloj fijo en modo autónomo. Lu elige cuánto contemplar
+ // cada plano en función de la atmósfera, el grupo y su lectura visual.
+ const scene=scenes?.[index],p=sense(),mood=atmosphere(p);
+ const ranges={
+  'lluvia nocturna':[170,850],
+  insomnio:[45,250],
+  nocturna:[110,680],
+  lluvia:[140,650],
+  'gris atlántico':[180,740],
+  mañana:[65,440],
+  taller:[60,360],
+  atardecer:[120,690]
+ };
+ const [lower,upper]=ranges[mood]||[90,580];
+ const profile=window.__luVision?.view?.(index,scenes);
+ const intimate=/contemplar|descanso|leer/.test(scene?.group||'');
+ const active=/movimiento|crear|ordenador|musica/.test(scene?.group||'');
+ // La duración se decide al cambiar de plano; el detalle conocido la matiza.
+ let factor=intimate?1.28:active?.78:1;
+ if(profile){
+  if(profile.detail<.115)factor*=1.25;
+  else if(profile.detail>.22)factor*=.78;
+  if(profile.brightness<.3&&p.night)factor*=1.16;
+ }
+ if(p.rain&&intimate)factor*=1.14;
+ // Distribución irregular; a veces una escena pasa deprisa, otras permanece.
+ const r=Math.random();
+ const weighted=r<.18?(r/.18)*.21:
+                r<.80?.21+((r-.18)/.62)*.60:
+                .81+((r-.80)/.20)*.19;
+ const seconds=Math.max(45,Math.min(900,Math.round((lower+(upper-lower)*weighted)*factor)));
+ // Memoria de la intención: sin guardar títulos o contenidos privados externos.
+ const last=memory.events.at(-1);
+ if(last&&last.id==='scene-'+index){last.dwell=seconds;save()}
+ return seconds*1000;
+}
 function shouldHold(index,scenes){
  if(!memory.enabled||index<0)return false;
  return window.__luVision?.shouldHold?.(index,scenes[index],atmosphere(sense()))===true;
@@ -224,7 +261,7 @@ css.textContent=`
 `;document.head.appendChild(css);
 function render(){
  const p=sense(),mood=atmosphere(p);
- el('luBrainState').textContent=memory.enabled?'Encendida · cambia escenas por sí sola cada tres minutos':'Apagada · modo clásico, sin decisiones autónomas';
+ el('luBrainState').textContent=memory.enabled?'Encendida · Lu elige los planos y cuándo cambiarlos, sin intervalo fijo':'Apagada · modo clásico, cambio cada tres minutos';
  el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+' · Atmósfera: '+mood;
  const mailInfo=p.mail?'Mensajes: '+p.mail.total+' · '+(p.mail.latest?.subject||'sin asunto'):'Buzón: esperando datos';
  const audioInfo=p.radio?.playing?'Radio: sonando · '+p.radio.title:p.radio?.autoPlaybackPending?'Radio: intentando reproducir · '+p.radio.title:'Radio: '+(p.radio?.title||'sin sesión');
@@ -261,6 +298,8 @@ function setAutonomy(enabled){
   window.__luRadio?.stopAutonomy?.();
   window.__luJellyfin?.stop?.();
   window.__luNotes?.stop?.();
+  // Al apagar: el reloj clásico vuelve a contar tres minutos exactos.
+  house.reschedule?.();
   stage.classList.remove('lu-autonomous');
   stage.style.removeProperty('--lu-art-grade');
   for(const id of ['filmA','filmB']){
@@ -280,7 +319,7 @@ function setAutonomy(enabled){
  else window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
  // Las lecturas del Atlántico se refrescan y los nuevos datos alimentan el motor.
  window.__luClimateRefresh?.();
- // ON inicia inmediatamente una escena nueva. Después sigue cada tres minutos.
+ // ON inicia una escena nueva; a partir de ahí Lu elige las duraciones.
  const current=house.getState(),scenes=house.getScenes();
  const next=choose(scenes,current?.index??-1,[]);
  if(Number.isInteger(next)&&typeof house.show==='function'&&house.show(next)){
@@ -289,6 +328,7 @@ function setAutonomy(enabled){
   render();
   return;
  }
+ house.reschedule?.();
  cameraAndColor(sense(),atmosphere(sense()));
  reflect(true);
  render();
@@ -299,7 +339,7 @@ el('luAutoPower')?.addEventListener('click',toggleAutonomy);
 el('luBrainErase').addEventListener('click',()=>{
  memory.events=[];memory.counts={};memory.lastMood='';memory.lastRadio=0;save();render();
 });
-window.__luAutonomy={choose,onScene,onHold,shouldHold,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
+window.__luAutonomy={choose,onScene,onHold,shouldHold,nextDelay,isEnabled:()=>memory.enabled,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
