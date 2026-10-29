@@ -19,7 +19,19 @@ const mixes=[
  {name:'NTS · GiGi FM Production Mix',short:'Jungle / Dub',desc:'Jungle, techno, poesía y paisajes sonoros. Para la parte más exploradora del día.',url:'https://soundcloud.com/gigi-fm/nts-radio-gigi-fm-production-mix-21052025'},
  {name:'NTS · Orpheu The Wizard',short:'Electrónica rara',desc:'Selección de house, electrónica, disco oblicuo y hallazgos menos previsibles.',url:'https://soundcloud.com/user-643553014/orpheu-the-wizard-140624'},
  {name:'NTS · David August',short:'Club / Ritmo',desc:'Sesión acelerada de club con 45 temas y edits en 56 minutos.',url:'https://soundcloud.com/davidaugust/nts-radio-16012025'},
- {name:'NTS · IMOGEN Production Mix',short:'Techno / Club',desc:'Producción propia y atmósfera nocturna para cuando apetezca más intensidad.',url:'https://soundcloud.com/imogensmusic/nts-radio-100-production-mix'}
+ {name:'NTS · IMOGEN Production Mix',short:'Techno / Club',desc:'Producción propia y atmósfera nocturna para cuando apetezca más intensidad.',url:'https://soundcloud.com/imogensmusic/nts-radio-100-production-mix'},
+ {"name":"Vox Sinistra · Samo Mix 85","short":"Darkwave · EBM","desc":"Sintes oscuros, EBM y new beat. Mi elección para la noche de luces verdes.","url":"https://soundcloud.com/samorecords/samo-mix-85-vox-sinistra"},
+ {"name":"Arnaud Rebotini · EBM Selection","short":"EBM francés","desc":"Máquinas analógicas y pulso industrial. Rebotini, The Hacker y Schwefelgelb.","url":"https://soundcloud.com/arnaudrebotini/a-modern-ebm-and-techno-selection-fevrier-2025-mix"},
+ {"name":"CURVE X · Alien Planet","short":"Acid / Post-punk","desc":"Un viaje de vinilo desde Barcelona: post-punk, acid, techno y experimentación.","url":"https://soundcloud.com/from-hell-to-disco/from-hell-to-disco-03-curve-x"},
+ {"name":"Local Suicide · Blank Wave","short":"Disco oscuro","desc":"Indie dance, italo, new wave y el lado más nocturno de Berlín.","url":"https://soundcloud.com/shialabiff/blank-wave-guest-mix-117-local-suicide"},
+ {"name":"Huerco S · RA.658","short":"Ambient inquietante","desc":"Paisajes ambientales, extraños y envolventes; para mirar la Casa en silencio.","url":"https://soundcloud.com/resident-advisor/ra658-huerco-s"},
+ {"name":"GiGi FM + Shoal · NTS","short":"Ambient / Texturas","desc":"Síntesis cruda y paisajes sonoros contemplativos; tecnología y naturaleza.","url":"https://soundcloud.com/gigi-fm/nts-radio-gigi-fm-presents-1"},
+ {"name":"GiGi FM · F_LORAL","short":"Ambient íntimo","desc":"Música atmosférica luminosa para las horas de descanso.","url":"https://soundcloud.com/gigi-fm/gigi-fm-presents-f_loral-nts-radio-january-2026"},
+ {"name":"DJ Stingray · Zone 313","short":"Electro futurista","desc":"Electro de Detroit, energía sintética y ritmos rápidos.","url":"https://soundcloud.com/rinsefm/djstingray260126"},
+ {"name":"Buttechno · NTS enero 2026","short":"Ambient / Extraño","desc":"Pavel Milyakov: atmósferas melancólicas y experimentales.","url":"https://soundcloud.com/buttechno/nts-12012026"},
+ {"name":"Inch of Shadow · Insomnia Berlin","short":"Dark disco / EBM","desc":"Dos horas de dark disco, EBM y electro grabadas en Berlín.","url":"https://soundcloud.com/inch-of-shadow/inch-of-shadow-insomnia-dj-set"},
+ {"name":"Indie Music Nation · Dream Pop","short":"Shoegaze / Indie","desc":"Guitarras veladas, dream pop y canciones para mirar por la ventana.","url":"https://soundcloud.com/indiemusicnation/sets/dream-pop-shoegaze-april-2026"},
+ {"name":"NTS · Dream Forest","short":"Jungle ambiental","desc":"Breakbeats de los noventa, neblina y nostalgia digital.","url":"https://soundcloud.com/user-202286394-991268468/dream-forest-w-barrage-250426"}
 ];
 
 /* Sonido continuo: empieza tras pulsar Play y después enlaza sesiones en orden aleatorio. */
@@ -27,6 +39,19 @@ const dock=document.createElement('aside');
 dock.id='luxRadioDock';dock.setAttribute('aria-label','Radio Lu Roth · SoundCloud NTS Radio');
 dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">RADIO LU ROTH</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><div id="luxRadioNow" role="status" aria-live="polite"></div><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>NTS Radio: soul, funk, disco, house, rock y descubrimientos. Reproducción continua, con orden aleatorio.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><a href="https://www.nts.live/" target="_blank" rel="noopener noreferrer">Escuchar NTS en directo</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
 document.body.appendChild(dock);
+
+// Invitada especial: sesión verificada en HÖR, fuera de SoundCloud.
+const pegorerFeature=document.createElement('div');
+pegorerFeature.id='luxRadioPegorer';
+const pegorerLink=document.createElement('a');
+pegorerLink.href='https://hoer.live/roberta-deflorio-b2b-valentina-pegorer-hor-march-17-2025/';
+pegorerLink.target='_blank';pegorerLink.rel='noopener noreferrer';
+pegorerLink.textContent='★ VALENTINA PEGORER · sesión HÖR ↗';
+const pegorerCaption=document.createElement('small');
+pegorerCaption.textContent='Con Roberta Deflorio · EBM, darkwave, synth-pop e indie dance. Se abre en HÖR.';
+pegorerFeature.append(pegorerLink,pegorerCaption);
+dock.querySelector('#luxRadioIntro').after(pegorerFeature);
+
 const $=id=>document.getElementById(id);
 const toggle=$('luxRadioToggle'),choices=$('luxRadioChoices'),frame=$('luxRadioFrame');
 const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1';
