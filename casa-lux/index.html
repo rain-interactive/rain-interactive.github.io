@@ -181,6 +181,21 @@
  to{transform:translate3d(.28%,-.28%,0) scale(1.082)}
 }
 @media(prefers-reduced-motion:reduce){#filmA .film-sharp,#filmB .film-sharp{animation:none!important;transform:none!important}}
+</style><style id="lu-turtle-evening-v1">
+/* Luz tenue 20:00–10:00, hora de A Coruña, en sincronía con el horario de la tortuga.
+   Filtrado únicamente sobre las escenas; los datos, el reloj y los controles siguen legibles. */
+#stage::after{
+  content:"";position:absolute;inset:0;z-index:9;pointer-events:none;
+  background:rgba(5,7,17,var(--lu-turtle-shade,0));
+  transition:background-color 12s ease;
+}
+/* La antigua regla de sueño bajaba el brillo un 56% adicional: en combinación con
+   el nuevo ambiente era demasiado oscura. Dejamos actuar la gradación nocturna. */
+#stage[data-lux-asleep="yes"] #filmA .film-sharp,
+#stage[data-lux-asleep="yes"] #filmB .film-sharp{
+  filter:var(--lux-grade,brightness(1) saturate(1))!important;
+}
+@media(prefers-reduced-motion:reduce){#stage::after{transition:none}}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -694,6 +709,9 @@ function applyLighting(mins){
  const sunset=([11,12,1,2].includes(+month)?18:([3,4,9,10].includes(+month)?20:21))*60;
  const sleeping=(mins<600&&mins>=90);
  const night=mins>=sunset||mins<420;
+ const turtleQuietHours=(mins>=20*60||mins<10*60); // 20:00–10:00, Europe/Madrid
+ stage.dataset.luTurtleDim=turtleQuietHours?'yes':'no';
+ stage.style.setProperty('--lu-turtle-shade',turtleQuietHours?'0.22':'0');
  const on=night&&!sleeping;
  $('luxLightFx').style.opacity=on?'.95':'0';
  $('luxDayLamp').style.opacity=!on?'.7':'0';
@@ -731,7 +749,7 @@ function grade(){
  const t=num(val('temp'));const w=val('weatherText').toLowerCase();
  const tide=(val('tideTitle')+' '+val('tideNext')).toLowerCase();const luna=val('moonName').toLowerCase();
  const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',hour12:false}).format(new Date());
- const h=+time%24,night=h<8||h>=20;
+ const h=+time%24,night=h<10||h>=20;
  const temp=Number.isFinite(t)?t:15;
  const cloud=/nube|cubierto|lluv|torment|niebla|overcast|rain|cloud/.test(w);
  const rising=/sub|plea|crec/.test(tide);const waning=/mengu/.test(luna);
