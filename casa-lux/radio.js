@@ -57,6 +57,7 @@ const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v
 let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=false;
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
+let autoSessionActive=false,autoPlaybackPending=false;
 try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
@@ -121,10 +122,16 @@ function setupWidget(){
   const api=window.SC.Widget;widget=api(frame);
   widget.bind(api.Events.READY,()=>{
    widgetReady=true;
+   // Si el visitante ha encendido la Casa antes de que cargase SoundCloud,
+   // se solicita reproducción al estar listo el widget (puede requerir Play).
+   if(autoSessionActive&&autoPlaybackPending){
+    autoPlaybackPending=false;
+    try{widget.play()}catch{}
+   }
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
   });
   widget.bind(api.Events.PLAY,()=>{
-   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;updateNow();
+   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;autoPlaybackPending=false;updateNow();
    widget.getCurrentSoundIndex(index=>{
     if(Number.isInteger(index))lastTrackIndex=index;
    });
@@ -170,7 +177,7 @@ mixes.forEach((mix,i)=>{
  button.type='button';button.dataset.index=String(i);button.textContent=mix.short;
  button.setAttribute('aria-pressed',String(i===selected));button.title=mix.desc;
  button.addEventListener('click',()=>{
-  luRadioManual=true;
+  luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;
   shuffleBag=shuffleBag.filter(x=>x!==i);
   if(!initialized)open(true);
   setMix(i,true);
@@ -184,16 +191,53 @@ $('luxRadioLoop').addEventListener('click',()=>{
 $('luxRadioRandom').addEventListener('click',()=>{
  flow.random=!flow.random;shuffleBag=[];updateControls();save();
 });
-$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;open(true);goNext()});
+$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;open(true);goNext()});
 toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&dock.classList.contains('open'))open(false);
 });
+function ambientChoices(mood){
+ const filters={
+  'lluvia nocturna':/ambient|downtempo|dark|dembike|demdike|electrónica|nocturna|experimental/i,
+  insomnio:/ambient|dark|post.punk|witch|electrónica|explor/i,
+  nocturna:/post.punk|ebm|dark|techno|witch|industrial/i,
+  lluvia:/ambient|downtempo|jazz|soul|explor/i,
+  'gris atlántico':/ambient|downtempo|soul|jazz|explor/i,
+  mañana:/suave|soul|disco|funk|boogie/i,
+  taller:/house|soul|funk|ritmo|electrónica/i,
+  atardecer:/synth|indie|new wave|downtempo|disco/i
+ };
+ const filter=filters[mood]||filters.taller;
+ return mixes.map((m,i)=>({m,i})).filter(x=>filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
+}
 window.__luRadio={
- getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual}),
+ getState:()=>({title:mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending}),
+ // Se llama directamente desde la pulsación ON: el gesto del usuario autoriza
+ // intentar reproducir SoundCloud; no podemos garantizar permisos del navegador.
+ startAutonomy:(mood)=>{
+  autoSessionActive=true;autoPlaybackPending=true;luRadioManual=false;
+  const candidates=ambientChoices(mood);
+  const choice=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:{i:selected};
+  frame.loading='eager';
+  open(true);
+  setMix(choice.i,true);
+  loadSDK();
+  if(widgetReady&&widget){try{widget.play();autoPlaybackPending=false}catch{}}
+  $('luxRadioHint').textContent='Autonomía ON: solicitando reproducción. Si SoundCloud la bloquea, pulsa Play en el reproductor.';
+  return mixes[selected]?.name||'';
+ },
+ stopAutonomy:()=>{
+  const wasAuto=autoSessionActive;
+  autoSessionActive=false;autoPlaybackPending=false;
+  if(!wasAuto)return;
+  if(widget){try{widget.pause()}catch{}}
+  else if(initialized)frame.src=mixURL(mixes[selected],false);
+  isPlaying=false;updateNow();
+  $('luxRadioHint').textContent='Autonomía apagada: radio en pausa. Puedes reproducirla manualmente.';
+ },
  // Selección de ambiente sin iniciar audio ni interrumpir una sesión elegida por el visitante.
  suggest:(mood)=>{
-  if(luRadioManual||hasPlayed||isPlaying||transitioning)return false;
+  if(luRadioManual||hasPlayed||isPlaying||transitioning||autoSessionActive)return false;
   const filters={
    'lluvia nocturna':/ambient|downtempo|dark|dembike|demdike|electrónica|nocturna|experimental/i,
    insomnio:/ambient|dark|post.punk|witch|electrónica|explor/i,
