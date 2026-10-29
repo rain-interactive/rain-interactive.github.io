@@ -1,0 +1,82 @@
+name: Casa de Lux · retirar planos 01 a 24
+on:
+  push:
+    paths:
+      - '.github/workflows/lux-retirar-primeros-24.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lux-retirar-primeros-24
+  cancel-in-progress: false
+jobs:
+  depurar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar Casa de Lux
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Eliminar planos 1 a 24 y renumerar los restantes
+        run: python casa-lux/retirar_primeros_24.py
+      - name: Comprobar 42 fotografías, JPG y widgets
+        run: |
+          python - <<'PY'
+          import re,base64,io,json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('casa-lux')
+          page=(root/'index.html').read_text('utf8')
+          report=json.loads((root/'seleccion_actual_42.json').read_text('utf8'))
+          scenes=json.loads(re.search(r'const scenes=(\[.*?\]);',page,re.S).group(1))
+          assert report['removed_original_numbers']==list(range(1,25))
+          assert report['remaining_original_numbers']==list(range(25,67))
+          assert len(scenes)==42
+          assert scenes[0]['name']=='Pensar delante del ordenador'
+          assert scenes[-1]['name']=='Una tarde en el taller'
+          assert '42 planos automáticos' in page
+          assert all(t in page for t in ['windfinder.js','radio.js','chat.js','monocromo.css','cornerClock'])
+          tags=re.findall(r'<script src="assets/pack_(\d{2})\.js"></script>',page)
+          assert tags==[f'{i:02}' for i in range(1,15)],tags
+          packs=sorted((root/'assets').glob('pack_*.js'))
+          assert len(packs)==14,len(packs)
+          images={}
+          for p in packs:
+              for idx,kind,b64 in re.findall(r'window\.__luxImages\[(\d+)\]="data:image/([^;]+);base64,([A-Za-z0-9+/=]+)";',p.read_text('utf8')):
+                  idx=int(idx)
+                  assert idx not in images and kind=='webp'
+                  with Image.open(io.BytesIO(base64.b64decode(b64))) as im:
+                      assert im.size==(1920,1080),(idx,im.size)
+                      im.verify()
+                  images[idx]=True
+          assert sorted(images)==list(range(42)),sorted(images)
+          jpg=root/'Casa_de_Lux_42_planos_numerados.jpg'
+          assert jpg.exists()
+          with Image.open(jpg) as im:
+              assert im.width>=2100 and im.height>=1800,im.size
+              im.verify()
+          assert not (root/'Casa_de_Lux_66_planos_numerados.jpg').exists()
+          print('OK · 42 planos únicos a 1920 x 1080, índices 00–41; 14 packs; nuevo JPG.')
+          PY
+          python - <<'PY'
+          import re, subprocess
+          from pathlib import Path
+          html=Path('casa-lux/index.html').read_text('utf8')
+          for part in re.findall(r'<script(?![^>]*src)[^>]*>([\s\S]*?)</script>',html):
+              check=subprocess.run(['node','--check'],input=part,text=True,capture_output=True)
+              assert check.returncode==0,check.stderr
+          print('JS inline válido')
+          PY
+      - name: Publicar solo la colección nueva
+        run: |
+          git config user.name "Casa de Lux"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A casa-lux/assets/ casa-lux/index.html casa-lux/Casa_de_Lux_42_planos_numerados.jpg casa-lux/Casa_de_Lux_66_planos_numerados.jpg casa-lux/seleccion_actual_42.json
+          if git diff --cached --quiet; then
+            echo 'No hay cambios'
+          else
+            git commit -m "Quitar planos 1–24 y publicar 42 restantes renumerados"
+            git push
+          fi
