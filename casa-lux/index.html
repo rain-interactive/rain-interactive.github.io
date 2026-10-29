@@ -808,9 +808,14 @@ function display(index){
  if(sharp){sharp.style.animation='none';void sharp.offsetWidth;sharp.style.animation='';}
  l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;
  $('filmState').textContent=scenes[index].name;
+ window.__luAutonomy?.onScene?.(index,scenes);
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
+ const choice=window.__luAutonomy?.choose?.(scenes,shown,recent);
+ if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src){
+   recent.push(choice);if(recent.length>12)recent.shift();return choice;
+ }
  let candidates=scenes.map((s,i)=>({s,i})).filter(({s,i})=>s.src&&i!==shown).map(({i})=>i);
  if(!candidates.length)return null;
  const fresh=candidates.filter(i=>!recent.includes(i));
@@ -851,6 +856,11 @@ function tick(){
  $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+' · Cambio aleatorio cada 3 minutos.';
 }
 window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
+window.__luHouse={
+ getScenes:()=>scenes.map(s=>({...s})),
+ getState:()=>({index:shown,active,scene:scenes[shown]?.name||'',sleeping:stage.dataset.luxAsleep==='yes',lights:stage.dataset.luxLamps||'off'}),
+ show:(index)=>{if(!Number.isInteger(index)||index<0||!scenes[index]?.src)return false;display(index);nextChange=Date.now()+180000;return true}
+};
 advance(true);setInterval(tick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
 })();
@@ -881,4 +891,4 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=4" defer></script><script src="/casa-lux/radio.js?v=9" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=4" defer></script><script src="/casa-lux/radio.js?v=9" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=1" defer></script></body></html>
