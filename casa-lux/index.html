@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#121119"><title>CASA DE LUX · 42 planos automáticos</title><style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#121119"><title>CASA DE LUX · Planos automáticos</title><style>
 :root{color-scheme:dark;--accent:#ef9a91;--glass:#100f16bf;--line:#ffffff30}
 *{box-sizing:border-box}body{margin:0;background:#080a10;color:#f8eeee;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button,input{font:inherit}button{cursor:pointer}a{color:#d6b5c8}
 #backdrop{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,#1b1626,#090a11 75%)}
@@ -51,7 +51,7 @@
 #filmA,#filmB{position:absolute;inset:0;z-index:8;opacity:0;pointer-events:none;transition:opacity 6.5s ease;overflow:hidden;background:#090b12}
 .film-blur,.film-sharp{position:absolute;inset:-5%;background-image:var(--shot);background-size:cover;background-position:50% 48%;background-repeat:no-repeat}
 .film-blur{filter:blur(55px) brightness(.42) saturate(.86);transform:scale(1.13)}
-.film-sharp{inset:0;background-size:contain;filter:contrast(1.02);animation:luxSlowFrame 80s ease-in-out infinite alternate}
+.film-sharp{inset:0;background-size:cover;filter:contrast(1.02);animation:luxSlowFrame 80s ease-in-out infinite alternate}
 @keyframes luxSlowFrame {from{transform:scale(1.005)}to{transform:scale(1.045)}}
 #luxLightFx{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity 5s;background:radial-gradient(ellipse 22% 34% at 6% 44%,rgba(251,82,47,.23),transparent 95%),radial-gradient(ellipse 17% 26% at 75% 38%,rgba(255,188,99,.14),transparent 100%)}
 #luxDayLamp{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity 5s;background:radial-gradient(ellipse 6% 9% at 6.5% 35%,rgba(15,16,22,.47),transparent 95%)}
@@ -111,7 +111,7 @@
  </main></div>
  <nav id="controlsBar" aria-label="Información y pantalla"><button class="ctrl" id="infoBtn" title="Ver estado automático">ⓘ</button><button class="ctrl" id="fullBtn" title="Pantalla completa">⛶</button></nav>
  <aside id="panel" aria-label="Estado de la instalación"><h2>Casa de Lux · en automático</h2>
- <p>Instalación cinematográfica · 42 planos, formato 1920 × 1080. Sin selector de escenas: la cámara cambia según las rutinas y las horas de A Coruña, con transiciones lentas y pausas.</p>
+ <p>Instalación cinematográfica · planos en formato 1920 × 1080. Sin selector de escenas: la cámara cambia según las rutinas y las horas de A Coruña, con transiciones lentas y pausas.</p>
  <p><strong>Rutina:</strong> descanso de madrugada; despierta a las 10:00. Las luces se apagan de día, se encienden por la noche y se atenúan al dormir.</p>
  <label>Atlántico · lectura automática</label>
  <p id="atlanticoStatus">Consultando cámaras y oleaje…</p><p id="atlanticoColor">Paleta en espera</p>
@@ -496,13 +496,25 @@ chooseScene();autoBaseScene();updateMoon();clockTick();syncClock();loadWeather()
 (()=>{'use strict';
 const scenes=[{"name":"Pensar delante del ordenador","group":"ordenador","time":"ambos","src":"","width":1920,"height":1080,"orig":"adaptado de un plano previo"},{"name":"Después de la lluvia","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Estudio de medianoche","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Un descanso en el suelo","group":"descanso","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"El rostro en primer plano","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"La sala vacía detrás","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Un gesto sobre el lienzo","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Tinta y piel","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Rosas de madrugada","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Pensar junto a la ventana","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Lucía · estudio negro","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Leopardo verde · retrato","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Aerógrafo · jardín lunar","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Escultura · espinas","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Contactos fotográficos","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Alas al contraluz","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Convergencia radial","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · El origen","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · La paradoja","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · La máscara","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · La armadura","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · El vestido","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · La mercancía","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · El salón","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · La frecuencia","group":"musica","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"VLTRABRVTALISMA · El manifiesto","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Retrato en blanco y negro","group":"leer","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Noche junto al lobo","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Descanso sobre sábanas azules","group":"descanso","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Luz oblicua en blanco y negro","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Camiseta Slayer","group":"musica","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Un día de sol","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"El espejo velado","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"En el agua · blanco y negro","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Café en la cocina","group":"cotidiano","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"En el escritorio, de noche","group":"ordenador","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Cuaderno, cerveza y perro","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"ROTH · Objects 001","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"The Velvet Underground & Nico","group":"musica","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Lienzo blanco · estudio","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Día de estudio en blanco y negro","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Una tarde en el taller","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"}];
 scenes.forEach((scene,i)=>{scene.src=window.__luxImages?.[i+24]||''});
+// Nuevos planos de Lux: se añaden solo cuando el archivo está publicado y es decodificable.
+const nuevosPlanos=[
+ {name:'Auriculares y cuaderno',group:'musica',time:'ambos',src:'assets/lux_43_bocetos.jpg'},
+ {name:'Descanso bajo el edredón',group:'descanso',time:'ambos',src:'assets/lux_44_dormir.jpg'},
+ {name:'Con el gato negro',group:'descanso',time:'ambos',src:'assets/lux_45_gato.jpg'},
+ {name:'Sobre sábanas blancas',group:'contemplar',time:'ambos',src:'assets/lux_46_sabanas.jpg'}
+];
+nuevosPlanos.forEach(shot=>{
+ const img=new Image();
+ img.onload=()=>{scenes.push({...shot,width:1920,height:1080,orig:'Plano aportado para la casa de Lux'});};
+ img.src=shot.src;
+});
 const $=id=>document.getElementById(id),stage=$('stage');
 const layers=[$('filmA'),$('filmB')];
 const timefmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',hour12:false});
 const weekfmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:'short'});
 const nightGroups=['cine','descanso','musica','leer','contemplar','crear','ordenador'];
 const dayGroups=['leer','ordenador','crear','movimiento','cotidiano','contemplar','musica','descanso'];
-let shown=-2,active=0,until=0,recent=[];
+let shown=-2,active=0,until=0,recent=[],nextChange=0;
 const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]=x.value);return (+v.hour%24)*60+(+v.minute)};
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s.time==='ambos'||x.s.time===when)).map(x=>x.i);
@@ -515,23 +527,14 @@ function display(index){
  $('filmState').textContent=scenes[index].name;
   // La elección del plano es siempre automática.
 }
-function chooseAutomatic(mins){
- const wake=mins>=600&&mins<700;
- const sleeping=mins>=90&&mins<600;
- const morning=mins>=700&&mins<840;
- const afternoon=mins>=840&&mins<1140;
- let groups=sleeping?['descanso']:wake?['cotidiano','contemplar','movimiento','descanso']:
- morning?['crear','leer','ordenador','cotidiano','contemplar']:
- afternoon?['crear','ordenador','cotidiano','contemplar','musica']:
- ['contemplar','cine','musica','descanso','crear','leer'];
- const when=(mins>=1140||mins<600)?'noche':'dia';
- let candidates=scenes.map((scene,i)=>({scene,i})).filter(({scene})=>
-   (scene.time==='ambos'||scene.time===when)&&groups.includes(scene.group)).map(({i})=>i);
- if(!candidates.length)candidates=scenes.map((_,i)=>i);
- const alternatives=candidates.filter(i=>i!==shown&&!recent.includes(i));
- if(alternatives.length)candidates=alternatives;
- else {const next=candidates.filter(i=>i!==shown);if(next.length)candidates=next;}
- const sel=pick(candidates);recent.push(sel);if(recent.length>12)recent.shift();return sel;
+function chooseAutomatic(){
+ let candidates=scenes.map((s,i)=>({s,i})).filter(({s,i})=>s.src&&i!==shown).map(({i})=>i);
+ if(!candidates.length)return null;
+ const fresh=candidates.filter(i=>!recent.includes(i));
+ const sel=pick(fresh.length?fresh:candidates);
+ recent.push(sel);
+ if(recent.length>12)recent.shift();
+ return sel;
 }
 function applyLighting(mins){
  // The sun sets approximately between 18–22h depending on the season, for a soft visual draft.
@@ -548,23 +551,21 @@ function applyLighting(mins){
 }
 function hold(minutes){until=Date.now()+minutes*60000;}
 function advance(force=false){
- const n=new Date(Date.now()+(typeof clockSkew==='number'?clockSkew:0));
- const mins=toMinutes(n),state=applyLighting(mins);
- if(!force && Date.now()<until)return;
-  // Sin pausa ni control manual de programación.
- if(state.sleeping){display(chooseAutomatic(mins));hold(rint(50,110));return;}
- // Sometimes the room is simply left as a long shot, with no cinematic close-up.
- if(!force && Math.random()<.28){display(-1);hold(rint(13,38));return;}
- let next=chooseAutomatic(mins);
- if(next===shown && Math.random()<.8)next=chooseAutomatic(mins);
- display(next);
- let duration=next<0?rint(10,38):(['contemplar','leer','crear','cine','descanso'].includes(scenes[next].group)?rint(22,54):rint(14,35));
- hold(duration);
+ const now=Date.now();
+ if(!force && now<nextChange)return;
+ const next=chooseAutomatic();
+ if(next!==null)display(next);
+ nextChange=now+180000; // Tres minutos exactos entre elecciones.
 }
-function tick(){const mins=toMinutes(new Date(Date.now()+(typeof clockSkew==='number'?clockSkew:0)));const state=applyLighting(mins);if(mins>=600&&mins<601 && stage.dataset.lastWakeDate!==new Date().toDateString()){stage.dataset.lastWakeDate=new Date().toDateString();until=0;}advance(false)
- const text=state.sleeping?'Descansando hasta las 10:00':shown<0?'Plano general · en calma':(scenes[shown]?.name||'En la habitación');$('filmDetail').textContent=text+' · Luz: '+(state.on?'encendida':'apagada')+' · Rutinas automáticas.';}
+function tick(){
+ const mins=toMinutes(new Date(Date.now()+(typeof clockSkew==='number'?clockSkew:0)));
+ const state=applyLighting(mins);
+ advance(false);
+ const txt=state.sleeping?'Descansando hasta las 10:00':shown<0?'Habitación tranquila':(scenes[shown]?.name||'En la habitación');
+ $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+' · Cambio aleatorio cada 3 minutos.';
+}
 window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
-advance(true);setInterval(tick,14000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
+advance(true);setInterval(tick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
 })();
 </script>
@@ -582,7 +583,7 @@ function grade(){
  const temp=Number.isFinite(t)?t:15;
  const cloud=/nube|cubierto|lluv|torment|niebla|overcast|rain|cloud/.test(w);
  const rising=/sub|plea|crec/.test(tide);const waning=/mengu/.test(luna);
- // Every readout influences all 42 photographs: changing hue, luminance and saturation.
+ // Every readout influences all available photographs: changing hue, luminance and saturation.
  const bright=clamp((night?.78:1.02)+(temp-15)*.007-(cloud?.08:0)+(rising?.025:-.015),.60,1.13);
  const sat=clamp((night?.83:1.05)+(temp-15)*.009+(waning?-.045:.045)-(cloud?.13:0),.60,1.27);
  const hue=clamp((night?8:-5)+(rising?6:-6)+(waning?-3:4),-18,20);
