@@ -63,6 +63,8 @@ const musicShelfFrame=luMusicShelf.querySelector('#luMusicSpotifyFrame');
 const musicShelfURL='https://open.spotify.com/embed/playlist/4l7Q5zlpxrBLu7yFwyJeEY?utm_source=generator';
 let musicShelfOpen=false;
 function showMusicShelf(show){
+ // Inicializar primero SoundCloud para que la colección no se cierre al cargar.
+ if(show&&!initialized)open(true);
  musicShelfOpen=Boolean(show);
  dock.classList.toggle('has-lu-collection',musicShelfOpen);
  musicShelfPanel.hidden=!musicShelfOpen;
