@@ -144,8 +144,7 @@ function suggest(mood){
  if(!group.length)return;
  current=weighted(group,lastMood);
  e('luMediaSuggestion').textContent=current?
-   'Lu propone · '+current.name+(current.artist?' — '+current.artist:'')+
-   (current.album?' · '+current.album:''):'Sin títulos disponibles';
+   'Lu propone · '+current.name:'Sin títulos disponibles';
  e('luMediaPlay').textContent=songs.length?'Escuchar canción':'Abrir en Jellyfin';
  if(current){
   const details=base+'/web/#/details?id='+encodeURIComponent(current.id);
