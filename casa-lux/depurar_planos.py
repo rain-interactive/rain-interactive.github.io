@@ -59,7 +59,7 @@ def analyze(data,scenes):
     (ROOT/"auditoria_planos.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n","utf-8")
     return report
 
-def preview(data,scenes,report):
+def preview(data,scenes,report,numbers=None,output=None):
     width=260
     height=146
     cell_h=177
@@ -75,10 +75,10 @@ def preview(data,scenes,report):
         col=i%cols;row=i//cols;x=gap+col*(width+gap);y=gap+52+row*(cell_h+gap)
         im=ImageOps.contain(data[k]["image"],(width,height))
         out.paste(im,(x+(width-im.width)//2,y+(height-im.height)//2))
-        draw.text((x,y+height+4),f'{k+1:02d} · {scenes[k]["name"][:27]}',font=font,fill="#f6ece8")
+        draw.text((x,y+height+4),f'{(numbers[i] if numbers is not None else k+1):02d} · {scenes[k]["name"][:27]}',font=font,fill="#f6ece8")
         if data[k]["image"].size!=(1920,1080):
             draw.text((x+6,y+6),"NO FHD",font=font,fill="#ff7777",stroke_width=2,stroke_fill="#15151a")
-    out.save(ROOT/"auditoria_planos.jpg",quality=88,optimize=True)
+    out.save(output or ROOT/"auditoria_planos.jpg",quality=91,optimize=True)
 
 def apply(data,scenes,html,report):
     # No elimina duplicados por contenido estético sin una revisión previa explícita:
@@ -117,7 +117,7 @@ def apply(data,scenes,html,report):
     html=html.replace('los 50',f'los {len(keep)}')
     html=html.replace('las 50',f'las {len(keep)}')
     (ROOT/"index.html").write_text(html,"utf-8")
-    preview({i:data[i] for i in keep},scenes,report)
+    preview({i:data[i] for i in keep},scenes,report,numbers=list(range(1,len(keep)+1)),output=ROOT/"planos_finales.jpg")
     audit={"originales":len(data),"conservados":len(keep),"eliminados":len(data)-len(keep),
            "kept_original_numbers":[i+1 for i in keep],"removed":[i+1 for i in sorted(data) if i not in keep],
            "required_size":[1920,1080]}
