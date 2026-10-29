@@ -163,6 +163,24 @@
  #wfDetails{bottom:185px!important;max-height:40dvh!important}
 }
 @media(prefers-reduced-motion:reduce){#filmA,#filmB{transition-duration:.2s!important}}
+</style><style id="lux-cinema-crops-v1">
+/* Encuadres 16:9 seleccionados para cada fotografía, sin deformación ni bandas negras.
+   Detecta márgenes negros ya incrustados en los antiguos ficheros y amplía hasta el detalle central.
+   El movimiento dura exactamente el tiempo de permanencia del plano. */
+#filmA .film-sharp,#filmB .film-sharp{
+ inset:0!important;background-repeat:no-repeat!important;
+ background-position:var(--lu-focus-x,50%) var(--lu-focus-y,45%)!important;
+ background-size:var(--lu-image-size,105%) auto!important;
+ transform-origin:var(--lu-focus-x,50%) var(--lu-focus-y,45%)!important;
+ animation:lu-film-breathe 180s linear both!important;
+ will-change:transform;
+}
+#filmA .film-blur,#filmB .film-blur{display:none!important}
+@keyframes lu-film-breathe{
+ from{transform:translate3d(-.12%,.22%,0) scale(1.005)}
+ to{transform:translate3d(.28%,-.28%,0) scale(1.082)}
+}
+@media(prefers-reduced-motion:reduce){#filmA .film-sharp,#filmB .film-sharp{animation:none!important;transform:none!important}}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -597,10 +615,66 @@ const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s.time==='ambos'||x.s.time===when)).map(x=>x.i);
 const pick=(pool)=>pool[rint(0,pool.length-1)];
+
+// Encuadres de autor. Por defecto el rostro y los gestos importantes quedan cerca del centro.
+// Orden: 41 escenas de los packs + 7 planos individuales existentes.
+const luFocus=[
+[50,42],[50,43],[50,43],[50,53],[53,35],[51,46],[50,45],[50,49],[50,40],[50,43],
+[51,40],[53,43],[50,47],[52,43],[50,49],[50,43],[50,45],[50,42],[50,44],[51,40],
+[50,45],[50,50],[50,45],[50,44],[50,45],[50,44],[51,38],[50,42],[50,47],[50,41],
+[50,42],[52,42],[50,41],[50,50],[50,44],[50,44],[50,43],[50,45],[50,49],[50,44],[50,43],
+[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40]
+];
+const luFrameCache=new Map();
+function applyShotFraming(layer,src,index){
+ const focus=luFocus[index]||[50,45];
+ layer.style.setProperty('--lu-focus-x',focus[0]+'%');
+ layer.style.setProperty('--lu-focus-y',focus[1]+'%');
+ // Solo cambia el encuadre; las fuentes de imagen originales permanecen intactas.
+ function setZoom(zoom){
+  if(layer.dataset.luCurrentSrc!==src)return;
+  layer.style.setProperty('--lu-image-size',(zoom*100).toFixed(2)+'%');
+ }
+ setZoom(luFrameCache.get(src)||1.045);
+ if(luFrameCache.has(src))return;
+ const img=new Image();
+ img.onload=()=>{
+  let zoom=1.045;
+  try{
+   const c=document.createElement('canvas');c.width=240;c.height=135;
+   const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0,240,135);
+   const d=ctx.getImageData(0,0,240,135).data;
+   function isBar(x){
+    let near=0,total=0;
+    for(let y=17;y<121;y+=7){
+     const k=(y*240+x)*4;
+     if(Math.max(d[k],d[k+1],d[k+2])<=8)near++;
+     total++;
+    }
+    return near/total>=.94;
+   }
+   let left=0,right=0;
+   while(left<105&&isBar(left))left++;
+   while(right<105&&isBar(239-right))right++;
+   const symmetric=Math.abs(left-right)<17;
+   if(left>=14&&right>=14&&symmetric&&(240-left-right)>=40){
+    zoom=Math.min(4.4,240/(240-left-right)*1.035);
+   }
+  }catch(err){zoom=1.045;}
+  luFrameCache.set(src,zoom);setZoom(zoom);
+ };
+ img.onerror=()=>{luFrameCache.set(src,1.045)};
+ img.src=src;
+}
 function display(index){
  if(index===shown)return;
  if(index<0){layers.forEach(l=>l.style.opacity='0');shown=-1;$('filmState').textContent='Habitación tranquila';return;}
- const l=layers[1-active];l.style.setProperty('--shot',`url("${scenes[index].src}")`);
+ const l=layers[1-active],src=scenes[index].src;
+ l.style.setProperty('--shot',`url("${src}")`);
+ l.dataset.luCurrentSrc=src;
+ applyShotFraming(l,src,index);
+ const sharp=l.querySelector('.film-sharp');
+ if(sharp){sharp.style.animation='none';void sharp.offsetWidth;sharp.style.animation='';}
  l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;
  $('filmState').textContent=scenes[index].name;
   // La elección del plano es siempre automática.
