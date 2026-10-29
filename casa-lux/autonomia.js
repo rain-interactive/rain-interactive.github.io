@@ -24,7 +24,10 @@ function sense(){
  const weather=txt('weatherText').toLowerCase(),moon=txt('moonName').toLowerCase(),tide=(txt('tideTitle')+' '+txt('tideNext')).toLowerCase();
  const tmp=Number((txt('temp').replace(',','.').match(/-?\d+(?:\.\d+)?/)||[])[0]);
  const radio=window.__luRadio?.getState?.()||null;
- return {hour,night:hour<10||hour>=20,weather,moon,tide,temp:Number.isFinite(tmp)?tmp:null,
+ const mail=window.__luMail?.getState?.()||null;
+ const subtitle=window.__luNotes?.getState?.()||{text:txt('subtitleText'),visible:!!el('subtitleLux')?.classList.contains('visible')};
+ const wind=txt('wind'),nextMoon=txt('nextMoon'),atlantico=txt('atlanticoStatus'),workshop=txt('classStatus');
+ return {mail,subtitle,wind,nextMoon,atlantico,workshop,hour,night:hour<10||hour>=20,weather,moon,tide,temp:Number.isFinite(tmp)?tmp:null,
   cloudy:/nub|cubiert|cloud|overcast|niebla|fog|bruma/.test(weather),
   rain:/lluv|rain|torment|storm|chubasco/.test(weather),
   rising:/sub|crec|plea|flood/.test(tide),
@@ -111,6 +114,34 @@ function onScene(index,scenes){
  if(!memory.enabled){stage.classList.remove('lu-autonomous');return}
  record(index,scenes);
 }
+// El motor sigue cambios reales en el clima, mareas, luna, mensajes y subtítulos.
+// No inventa mediciones y no guarda contenido privado fuera del navegador.
+let lastPerception='',lastCaptionAt=0;
+function reflect(force=false){
+ if(!memory.enabled||document.hidden)return;
+ const p=sense(),mood=atmosphere(p);
+ const fingerprint=[p.hour,p.weather,p.tide,p.moon,p.wind,p.nextMoon,p.atlantico,
+   p.mail?.latest?.subject||'',p.subtitle?.text||''].join('|');
+ if(!force&&fingerprint===lastPerception)return;
+ lastPerception=fingerprint;
+ cameraAndColor(p,mood);
+ const timeOkay=Date.now()-lastCaptionAt>20*60*1000;
+ if(force||timeOkay){
+  const description=[];
+  if(p.rain)description.push('Llueve sobre el Atlántico.');
+  else if(p.cloudy)description.push('El cielo de A Coruña está cubierto.');
+  else if(p.weather&&!/consultando|no disponible|sin datos/.test(p.weather))description.push('Tiempo: '+p.weather+'.');
+  if(p.tide&&!/consultando|no disponible|sin datos/.test(p.tide))description.push('La marea: '+p.tide+'.');
+  if(p.moon&&!/calculando|no disponible|sin datos/.test(p.moon))description.push('La luna: '+p.moon+'.');
+  const prose=description.length?description.join(' '):'La Casa sigue atenta a la hora, al clima y al ritmo de las mareas.';
+  const message='Lu Roth · '+prose;
+  window.__luNotes?.say?.(message,'observación');
+  window.__luMail?.observeAutonomy?.({scene:p.scene,mood,weather:p.weather,tide:p.tide,moon:p.moon});
+  lastCaptionAt=Date.now();
+ }
+ render();
+}
+
 const section=document.createElement('section');section.id='luBrainPanel';
 section.innerHTML='<label>LU ROTH · SISTEMA AUTÓNOMO</label><p id="luBrainState" role="status"></p><p id="luBrainSense"></p><p id="luBrainMemory"></p><div class="luBrainActions"><button type="button" id="luBrainToggle"></button><button type="button" id="luBrainErase">Borrar memoria local</button></div><p class="luBrainFoot">Decisiones programadas a partir del estado de la pantalla. Memoria guardada solo en este navegador. Sin acceso al ordenador ni observación cuando la página está cerrada.</p>';
 panel.insertBefore(section,el('closePanel'));
@@ -130,6 +161,10 @@ function render(){
  const p=sense(),mood=atmosphere(p);
  el('luBrainState').textContent=memory.enabled?'Encendida · cambia escenas por sí sola cada tres minutos':'Apagada · modo clásico, sin decisiones autónomas';
  el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+' · Atmósfera: '+mood;
+ const mailInfo=p.mail?'Mensajes: '+p.mail.total+' · '+(p.mail.latest?.subject||'sin asunto'):'Buzón: esperando datos';
+ const audioInfo=p.radio?.playing?'Radio: sonando · '+p.radio.title:p.radio?.autoPlaybackPending?'Radio: intentando reproducir · '+p.radio.title:'Radio: '+(p.radio?.title||'sin sesión');
+ el('luBrainState').textContent+=(memory.enabled?' · '+audioInfo:'');
+ el('luBrainMemory').title=mailInfo+' · Subtítulo: '+(p.subtitle?.text||'sin subtítulo');
  const last=memory.events.at(-1);
  el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name:'');
  el('luBrainToggle').textContent=memory.enabled?'Pausar autonomía':'Activar autonomía';
@@ -149,6 +184,8 @@ function setAutonomy(enabled){
  if(memory.enabled===enabled){render();return}
  memory.enabled=enabled;save();
  if(!enabled){
+  window.__luRadio?.stopAutonomy?.();
+  window.__luNotes?.stop?.();
   stage.classList.remove('lu-autonomous');
   stage.style.removeProperty('--lu-art-grade');
   for(const id of ['filmA','filmB']){
@@ -159,15 +196,22 @@ function setAutonomy(enabled){
   render();
   return;
  }
- // ON inicia inmediatamente una elección nueva. Después el motor sigue cada tres minutos.
+ // Comienza el audio directamente en el gesto ON (permiso sujeto a SoundCloud/navegador).
+ const initialPerception=sense();
+ window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
+ // Las lecturas del Atlántico se refrescan y los nuevos datos alimentan el motor.
+ window.__luClimateRefresh?.();
+ // ON inicia inmediatamente una escena nueva. Después sigue cada tres minutos.
  const current=house.getState(),scenes=house.getScenes();
  const next=choose(scenes,current?.index??-1,[]);
  if(Number.isInteger(next)&&typeof house.show==='function'&&house.show(next)){
   // display() ya ha registrado esta decisión y actualizado la cámara.
+  reflect(true);
   render();
   return;
  }
  cameraAndColor(sense(),atmosphere(sense()));
+ reflect(true);
  render();
 }
 function toggleAutonomy(){setAutonomy(!memory.enabled)}
@@ -180,5 +224,5 @@ window.__luAutonomy={choose,onScene,toggle:toggleAutonomy,setEnabled:setAutonomy
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
-setInterval(()=>{if(!document.hidden)render()},60000);
+setInterval(()=>{if(!document.hidden){reflect(false);render()}},60000);
 })();
