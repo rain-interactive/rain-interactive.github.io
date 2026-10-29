@@ -102,6 +102,18 @@ let ctx=null;
 function initAudio(){if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume().catch(()=>{})}catch{}}}
 function chime(){if(state.prefs.mute||!ctx||ctx.state!=='running')return;try{const t=ctx.currentTime;for(const [i,hz] of [[0,610],[1,820]]){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(hz,t+i*0.14);g.gain.setValueAtTime(0.0001,t+i*0.14);g.gain.exponentialRampToValueAtTime(i?0.012:0.017,t+i*0.14+0.025);g.gain.exponentialRampToValueAtTime(0.0001,t+i*0.14+0.21);o.connect(g);g.connect(ctx.destination);o.start(t+i*0.14);o.stop(t+i*0.14+0.23)}}catch{}}
 function deliver(msg,silent=false){if(state.messages.some(m=>m.id===msg.id))return false;state.messages.unshift(msg);state.messages=state.messages.slice(0,180);if(state.filter==='all'||state.filter===msg.category)state.active=msg.id;persist();render();if(!silent)chime();return true}
+window.__luMail={
+ getState:()=>{
+  const latest=newestMessage();
+  return {total:state.messages.length,unread:unreadCount(),latest:latest?{id:latest.id,category:latest.category,subject:latest.subject,body:latest.body,date:latest.date}:null};
+ },
+ post:(subject,body,category='idea',id='')=>{
+  if(typeof subject!=='string'||typeof body!=='string'||!subject.trim()||!body.trim())return false;
+  const safeCategory=byCategory[category]?category:'idea';
+  const entry=mk([safeCategory,subject.slice(0,110),body.slice(0,800)],id||('lu-house-'+Date.now()),Date.now(),false,'house');
+  return deliver(entry,true);
+ }
+};
 function writing(msg){if(state.writing||state.messages.some(m=>m.id===msg.id))return;state.writing=true;$('luxMailStatus').textContent='Lux está escribiendo una nota…';try{window.__luxShowWriting?.(14000)}catch{}setTimeout(()=>{deliver(msg);state.writing=false;$('luxMailStatus').textContent='';},4400)}
 let number=0;
 function curPick(arr){return arr[(Math.floor(Date.now()/86400000)+number++)%arr.length]}
