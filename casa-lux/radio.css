@@ -32,3 +32,9 @@
 #luxRadioDock{top:24px;left:29px}
 @media(max-width:800px){#luxRadioDock{top:11px;left:10px}}
 @media(max-height:690px){#luxRadioDock{top:11px}}
+
+/* La colección NTS es amplia: mantener el reproductor visible y la lista desplazable */
+#luxRadioChoices{max-height:145px;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#777 #000;align-content:flex-start}
+#luxRadioChoices button{font-size:10px;padding:7px 10px;min-height:30px}
+#luxRadioIntro p{line-height:1.4}
+@media(max-height:710px){#luxRadioChoices{max-height:92px}#luxRadioFrame{height:205px}}
