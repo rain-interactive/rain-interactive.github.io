@@ -263,31 +263,16 @@ function onHold(index,scenes){
  memory.events=memory.events.slice(-60);
  save();render();
 }
-// El motor sigue cambios reales en el clima, mareas, luna, mensajes y subtítulos.
-// No inventa mediciones y no guarda contenido privado fuera del navegador.
-let lastPerception='',lastCaptionAt=0;
+// La percepción altera la cámara y la atmósfera, no genera textos repetitivos.
+let lastPerception='';
 function reflect(force=false){
  if(!memory.enabled||document.hidden)return;
  const p=sense(),mood=atmosphere(p);
- const fingerprint=[p.hour,p.weather,p.tide,p.moon,p.wind,p.nextMoon,p.atlantico,p.outdoorHumidity,p.sky?.fingerprint||'',
-   p.mail?.latest?.subject||'',p.subtitle?.text||''].join('|');
+ const fingerprint=[p.hour,p.weather,p.tide,p.moon,p.wind,p.nextMoon,p.atlantico,
+  p.outdoorHumidity,p.sky?.fingerprint||''].join('|');
  if(!force&&fingerprint===lastPerception)return;
  lastPerception=fingerprint;
  cameraAndColor(p,mood);
- const timeOkay=Date.now()-lastCaptionAt>35*60*1000;
- if(force||timeOkay){
-  const description=[];
-  if(p.rain)description.push('Llueve sobre el Atlántico.');
-  else if(p.cloudy)description.push('El cielo de A Coruña está cubierto.');
-  else if(p.weather&&!/consultando|no disponible|sin datos/.test(p.weather))description.push('Tiempo: '+p.weather+'.');
-  if(p.tide&&!/consultando|no disponible|sin datos/.test(p.tide))description.push('La marea: '+p.tide+'.');
-  if(p.moon&&!/calculando|no disponible|sin datos/.test(p.moon))description.push('La luna: '+p.moon+'.');
-  const prose=description.length?description.join(' '):'La Casa sigue atenta a la hora, al clima y al ritmo de las mareas.';
-  const message='Lu Roth · '+prose;
-  window.__luNotes?.say?.(message,'observación');
-  window.__luMail?.observeAutonomy?.({scene:p.scene,mood,weather:p.weather,tide:p.tide,moon:p.moon});
-  lastCaptionAt=Date.now();
- }
  render();
 }
 
@@ -316,7 +301,7 @@ function render(){
  const mailInfo=p.mail?'Mensajes: '+p.mail.total+' · '+(p.mail.latest?.subject||'sin asunto'):'Buzón: esperando datos';
  const audioInfo=p.radio?.playing?'Radio: sonando · '+p.radio.title:p.radio?.autoPlaybackPending?'Radio: intentando reproducir · '+p.radio.title:'Radio: '+(p.radio?.title||'sin sesión');
  el('luBrainState').textContent+=(memory.enabled?' · '+audioInfo:'');
- el('luBrainMemory').title=mailInfo+' · Subtítulo: '+(p.subtitle?.text||'sin subtítulo');
+ el('luBrainMemory').title=mailInfo;
  const last=memory.events.at(-1);
  const habitual=memory.ritual[mood];
  const habitualIndex=habitual?Number(habitual.split('-')[1]):-1;

@@ -51,7 +51,7 @@
 #filmA,#filmB{position:absolute;inset:0;z-index:8;opacity:0;pointer-events:none;transition:opacity 6.5s ease;overflow:hidden;background:#090b12}
 .film-blur,.film-sharp{position:absolute;inset:-5%;background-image:var(--shot);background-size:cover;background-position:50% 48%;background-repeat:no-repeat}
 .film-blur{filter:blur(55px) brightness(.42) saturate(.86);transform:scale(1.13)}
-#filmA.ambient-shot .film-sharp,#filmB.ambient-shot .film-sharp{background-size:100% 100%!important;background-position:center!important;animation:none!important;transform:none!important}
+#filmA.ambient-shot .film-sharp,#filmB.ambient-shot .film-sharp{background-size:cover!important;background-position:var(--lu-focus-x,50%) var(--lu-focus-y,50%)!important;animation:none!important;transform:none!important}
 .film-sharp{inset:0;background-size:cover;filter:contrast(1.02);animation:luxSlowFrame 80s ease-in-out infinite alternate}
 @keyframes luxSlowFrame {from{transform:scale(1.005)}to{transform:scale(1.045)}}
 #luxLightFx{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity 5s;background:radial-gradient(ellipse 22% 34% at 6% 44%,rgba(251,82,47,.23),transparent 95%),radial-gradient(ellipse 17% 26% at 75% 38%,rgba(255,188,99,.14),transparent 100%)}
@@ -563,7 +563,43 @@
   #stage #liveStrip{transition:none!important}
 }
 </style>
-</head><body><div id="backdrop"></div>
+<style id="lu-proporciones-y-buzon-fijo">
+/* En los planos ambientales se recorta, nunca se estira. La foto original no se modifica. */
+#stage #filmA.ambient-shot .film-sharp,#stage #filmB.ambient-shot .film-sharp{
+ background-size:cover!important;
+ background-position:var(--lu-focus-x,50%) var(--lu-focus-y,50%)!important;
+ background-repeat:no-repeat!important;
+ animation:none!important;
+ transform:none!important;
+}
+/* Sin subtítulos, rótulos narrativos ni mensajes flotantes. */
+#stage #subtitleLux,#subtitleLux{display:none!important}
+/* Indicador permanente de mensajes sin leer bajo el reloj, sin panel desplegable. */
+#luxMailPanel,#luxMailLatest{display:none!important}
+#luxMailDock{top:94px!important;right:22px!important;pointer-events:none!important}
+#luxMailToggle{
+ width:auto!important;height:41px!important;min-height:41px!important;
+ padding:8px 12px!important;gap:9px!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;
+ background:rgba(7,9,13,.73)!important;
+ border:1px solid rgba(255,255,255,.3)!important;
+ border-radius:7px!important;box-shadow:none!important;
+ color:#fff!important;cursor:default!important;
+ font:600 12px/1 system-ui,sans-serif!important;
+}
+#luxMailToggle svg{width:22px!important;height:22px!important;flex:none!important}
+#luxMailCount{
+ position:static!important;display:inline!important;min-width:0!important;
+ height:auto!important;padding:0!important;background:none!important;
+ border:0!important;border-radius:0!important;color:white!important;
+ font:750 14px/1 system-ui,sans-serif!important;
+}
+#luxMailToggle .luxUnreadLabel{white-space:nowrap!important;font:500 12px/1 system-ui,sans-serif!important}
+@media(max-width:720px){
+ #luxMailDock{top:78px!important;right:12px!important}
+ #luxMailToggle{height:36px!important;min-height:36px!important;padding:7px 10px!important}
+}
+</style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -733,34 +769,14 @@ window.__luClimateRefresh=()=>{
 };
 chooseScene();autoBaseScene();updateMoon();clockTick();syncClock();loadWeather();setInterval(()=>{clockTick();autoBaseScene()},1000);setInterval(updateMoon,60000);setInterval(showTides,60000);setInterval(autoAtmosphere,60000);setInterval(loadWeather,15*60000);setInterval(loadTides,60*60000);setInterval(syncClock,60*60000);
 </script>
-<script id="lu-unified-captions">
-/* Un solo canal visual: los mensajes pasan por subtítulos y el archivo vive en el buzón. */
-(()=>{
- 'use strict';
- const subtitle=document.getElementById('subtitleLux'), line=document.getElementById('subtitleText');
- let hideTimer=0,lastText='';
- function show(message,origin='mail'){
-  if(typeof message!=='string'||!message.trim())return false;
-  const full=message.replace(/\s+/g,' ').trim();
-  lastText=full;
-  line.textContent=full.length>205?full.slice(0,202).trimEnd()+'…':full;
-  subtitle.classList.add('visible');
-  subtitle.dataset.luAuto=origin==='auto'?'yes':'mail';
-  clearTimeout(hideTimer);
-  hideTimer=setTimeout(()=>{subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'},Math.min(17000,Math.max(9000,full.length*100)));
-  return true;
- }
- window.__luNotes={
-  getState:()=>({text:lastText,visible:subtitle.classList.contains('visible'),count:window.__luMail?.getState?.().total||0}),
-  showMessage:(message)=>show(message,'mail'),
-  say:(message,tag='ambiente')=>{
-   if(!show(message,'auto'))return false;
-   window.__luMail?.post?.('Nota de Lu',message.trim().slice(0,320),'idea','lu-note-'+Date.now()+'-'+Math.floor(Math.random()*1000000));
-   return true;
-  },
-  stop:()=>{if(subtitle.dataset.luAuto==='yes'){clearTimeout(hideTimer);subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'}}
- };
-})();
+<script id="lu-no-subtitles">
+/* Sin subtítulos ni notas flotantes. Se mantienen los indicadores de la interfaz. */
+window.__luNotes={
+ getState:()=>({text:'',visible:false,count:window.__luMail?.getState?.().total||0}),
+ showMessage:()=>false,
+ say:()=>false,
+ stop:()=>{}
+};
 </script>
 <script>
 /* CASA DE LUX — Atlántico cromático. Las cámaras se analizan, nunca se muestran. */
@@ -1026,6 +1042,46 @@ const ambientalesBase=[
  ["Televisores CRT · neón","ambient_06_crt_neon.jpg"],
  ["Habitación de monitores","ambient_07_muro_monitores.jpg"]
 ];
+function elegirFocoAmbiental(image){
+ // Selecciona el fragmento con más estructura y detalle, sin alterar la relación de aspecto.
+ try{
+  const iw=image.naturalWidth,ih=image.naturalHeight,aspecto=16/9;
+  if(!iw||!ih||Math.abs(iw/ih-aspecto)<.03)return [50,50];
+  const scale=Math.min(1,216/Math.max(iw,ih));
+  const w=Math.max(8,Math.round(iw*scale)),h=Math.max(8,Math.round(ih*scale));
+  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+  if(!ctx)return [50,50];
+  ctx.drawImage(image,0,0,w,h);
+  const pixels=ctx.getImageData(0,0,w,h).data;
+  const vertical=(w/h)<aspecto;
+  const cropW=vertical?w:Math.min(w,Math.round(h*aspecto));
+  const cropH=vertical?Math.min(h,Math.round(w/aspecto)):h;
+  const overflow=vertical?h-cropH:w-cropW;
+  if(overflow<3)return [50,50];
+  let topScore=-Infinity,best=.5;
+  for(let i=0;i<=8;i++){
+   const t=i/8,offset=Math.round(overflow*t);
+   const x0=vertical?0:offset,y0=vertical?offset:0;
+   let details=0,count=0;
+   for(let y=y0+3;y<y0+cropH-4;y+=5){
+    for(let x=x0+3;x<x0+cropW-4;x+=5){
+     const p=4*(y*w+x),pr=p+12,pd=p+12*w;
+     const lum=(3*pixels[p]+6*pixels[p+1]+pixels[p+2])/10;
+     const right=(3*pixels[pr]+6*pixels[pr+1]+pixels[pr+2])/10;
+     const down=(3*pixels[pd]+6*pixels[pd+1]+pixels[pd+2])/10;
+     const saturation=Math.max(pixels[p],pixels[p+1],pixels[p+2])-Math.min(pixels[p],pixels[p+1],pixels[p+2]);
+     details+=Math.abs(lum-right)+Math.abs(lum-down)+saturation*.04;
+     count++;
+    }
+   }
+   const score=details/Math.max(1,count)-4*Math.abs(t-.5);
+   if(score>topScore){topScore=score;best=t}
+  }
+  best=Math.max(.08,Math.min(.92,best));
+  return vertical?[50,Math.round(100*best)]:[Math.round(100*best),50];
+ }catch{return [50,50]}
+}
 const ambientRegistrados=new Set();
 function registrarAmbiente(name,filename){
  if(typeof filename!=='string'||!/^[^/\\]+\.(?:jpe?g|png|webp)$/i.test(filename)||ambientRegistrados.has(filename))return;
@@ -1034,7 +1090,7 @@ function registrarAmbiente(name,filename){
  const scene={name:String(name||filename),group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Archivo ambiental, industrial / glitch / años 2000'};
  scenes.push(scene);
  const img=new Image();
- img.onload=()=>{scene.src=url};
+ img.onload=()=>{scene.focus=elegirFocoAmbiental(img);scene.src=url};
  img.onerror=()=>{scene.src=''};
  img.src=url;
 }
@@ -1073,7 +1129,10 @@ const luFrameFocusByFilename={
 const luFrameCache=new Map();
 function applyShotFraming(layer,src,index){
  if(scenes[index]?.type==='ambiente'){
-  layer.style.setProperty('--lu-focus-x','50%');layer.style.setProperty('--lu-focus-y','50%');layer.style.setProperty('--lu-image-size','100%');return;
+  const focus=scenes[index].focus||[50,50];
+  layer.style.setProperty('--lu-focus-x',focus[0]+'%');
+  layer.style.setProperty('--lu-focus-y',focus[1]+'%');
+  return;
  }
  const focus=(luFrameFocusByFilename[src.split('/').pop()]||luFocus[index]||[50,45]);
  layer.style.setProperty('--lu-focus-x',focus[0]+'%');
@@ -1244,4 +1303,4 @@ grade();setInterval(grade,120000);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
  }
 })();
-</script><script src="/casa-lux/chat.js?v=6" defer></script><script src="/casa-lux/radio.js?v=18" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=12" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=18" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=13" defer></script></body></html>
