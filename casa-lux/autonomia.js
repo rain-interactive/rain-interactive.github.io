@@ -3,11 +3,13 @@
 // LU ROTH / Autonomía local. Sin observación fuera de esta pestaña ni acceso a dispositivos.
 const house=window.__luHouse,stage=document.getElementById('stage'),panel=document.getElementById('panel');
 if(!house||!stage||!panel)return;
-const key='lu-roth-autonomia-v3',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
-let memory={enabled:false,events:[],counts:{},lastMood:'',lastRadio:0};
+const key='lu-roth-autonomia-v4',zone='Europe/Madrid',el=id=>document.getElementById(id),txt=id=>(el(id)?.textContent||'').trim();
+let memory={enabled:false,events:[],counts:{},ritual:{},longLooks:{},lastDay:'',lastMood:'',lastRadio:0};
 try{
  const chosen=localStorage.getItem(key);
- const previous=chosen?null:(localStorage.getItem('lu-roth-autonomia-v2')||localStorage.getItem('lu-roth-autonomia-v1'));
+ const v3=!chosen?localStorage.getItem('lu-roth-autonomia-v3'):null;
+ const previous=chosen?null:(v3||localStorage.getItem('lu-roth-autonomia-v2')||localStorage.getItem('lu-roth-autonomia-v1'));
+ const alreadyRenumbered=Boolean(chosen||v3);
  const saved=JSON.parse(chosen||previous||'null');
  // Migrate old scene IDs without confusing removed 17–26 with current 17–26.
  const remap=(id)=>{
@@ -16,7 +18,7 @@ try{
   if(!match)return '';
   const oldIndex=Number(match[1]);
   if(!Number.isInteger(oldIndex)||oldIndex<0)return '';
-  if(chosen)return oldIndex<43?'scene-'+oldIndex:'';
+  if(alreadyRenumbered)return oldIndex<43?'scene-'+oldIndex:'';
   if(oldIndex>=16&&oldIndex<=25)return '';
   const currentIndex=oldIndex>25?oldIndex-10:oldIndex;
   return currentIndex<43?'scene-'+currentIndex:'';
@@ -38,6 +40,20 @@ try{
   }
   memory.lastMood=typeof saved.lastMood==='string'?saved.lastMood:'';
   memory.lastRadio=Number(saved.lastRadio)||0;
+  // Solo se conservan hábitos de esta versión; nunca se fabrican recuerdos retroactivos.
+  const validScene=id=>typeof id==='string'&&/^scene-\d+$/.test(id)&&Number(id.slice(6))<43;
+  const habits=chosen&&saved.ritual&&typeof saved.ritual==='object'?saved.ritual:{};
+  memory.ritual={};
+  for(const [m,id] of Object.entries(habits)){
+   if(validScene(id)&&m.length<60)memory.ritual[m]=id;
+  }
+  const looks=chosen&&saved.longLooks&&typeof saved.longLooks==='object'?saved.longLooks:{};
+  memory.longLooks={};
+  for(const [id,n] of Object.entries(looks)){
+   if(validScene(id)&&Number.isFinite(Number(n)))memory.longLooks[id]=Math.max(0,Math.min(9,Number(n)));
+  }
+  memory.lastDay=chosen&&typeof saved.lastDay==='string'?saved.lastDay.slice(0,12):'';
+
  }
 }catch{}
 const save=()=>{try{localStorage.setItem(key,JSON.stringify(memory))}catch{}};
@@ -96,6 +112,9 @@ function choose(scenes,shown,recent){
   const id='scene-'+index;
   if(tail.includes(id)||recent.includes(index))w*=.035;
   w/=Math.sqrt(1+(Number(memory.counts[id])||0)*.45);
+  // Un lugar recurrente puede reaparecer días después sin dominar el pase.
+  if(memory.ritual[mood]===id)w*=1.9;
+  if(memory.longLooks[id])w*=1+Math.min(.35,memory.longLooks[id]*.08);
   w*=window.__luVision?.score?.(index,s,mood,shown,scenes)||1;
   // La posición astronómica real matiza ligeramente el criterio artístico.
   if(p.sky?.dark){
@@ -141,6 +160,13 @@ function record(index,scenes){
  const id='scene-'+index;
  memory.events.push({id,name:s.name,at:Date.now(),mood,hold:false});memory.events=memory.events.slice(-60);
  memory.counts[id]=(Number(memory.counts[id])||0)+1;
+ // Los lugares recurrentes se conservan por día, pero también pueden cambiar.
+ const day=new Intl.DateTimeFormat('sv-SE',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ if(day!==memory.lastDay){
+  memory.lastDay=day;
+  for(const m of Object.keys(memory.ritual))if(Math.random()<.16)delete memory.ritual[m];
+ }
+ if(!memory.ritual[mood]||Math.random()<.055)memory.ritual[mood]=id;
  window.__luVision?.remember?.(index,mood,false);
  if(Object.keys(memory.counts).length>120)memory.counts={};
  if(Math.max(0,...Object.values(memory.counts).map(Number))>150){
@@ -214,7 +240,10 @@ function nextDelay(index,scenes){
  const weighted=r<.18?(r/.18)*.21:
                 r<.80?.21+((r-.18)/.62)*.60:
                 .81+((r-.80)/.20)*.19;
- const seconds=Math.max(45,Math.min(900,Math.round((lower+(upper-lower)*weighted)*factor)));
+ const slowMoment=intimate&&Math.random()<.085;
+ const seconds=slowMoment?
+  Math.round(600+Math.random()*570): // Una contemplación de 10 a 19,5 minutos.
+  Math.max(45,Math.min(900,Math.round((lower+(upper-lower)*weighted)*factor)));
  // Memoria de la intención: sin guardar títulos o contenidos privados externos.
  const last=memory.events.at(-1);
  if(last&&last.id==='scene-'+index){last.dwell=seconds;save()}
@@ -228,7 +257,9 @@ function onHold(index,scenes){
  if(!memory.enabled||!scenes[index])return;
  const mood=atmosphere(sense());
  window.__luVision?.remember?.(index,mood,true);
- memory.events.push({id:'scene-'+index,name:scenes[index].name,at:Date.now(),mood,hold:true});
+ const id='scene-'+index;
+ memory.events.push({id,name:scenes[index].name,at:Date.now(),mood,hold:true});
+ memory.longLooks[id]=Math.min(9,(Number(memory.longLooks[id])||0)+1);
  memory.events=memory.events.slice(-60);
  save();render();
 }
@@ -287,7 +318,11 @@ function render(){
  el('luBrainState').textContent+=(memory.enabled?' · '+audioInfo:'');
  el('luBrainMemory').title=mailInfo+' · Subtítulo: '+(p.subtitle?.text||'sin subtítulo');
  const last=memory.events.at(-1);
- el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name+(last.hold?' (mantener)':''):'');
+ const habitual=memory.ritual[mood];
+ const habitualIndex=habitual?Number(habitual.split('-')[1]):-1;
+ const habitualName=house.getScenes()[habitualIndex]?.name||'';
+ el('luBrainMemory').textContent='Memoria: '+memory.events.length+' decisiones recientes'+(last?' · Última: '+last.name+(last.hold?' (mantener)':''):'')+
+  (habitualName?' · Lugar recurrente: '+habitualName:'');
  const vision=window.__luVision;
  const visionStatus=vision?.status?.();
  const state=house.getState();
@@ -356,9 +391,9 @@ function toggleAutonomy(){setAutonomy(!memory.enabled)}
 el('luBrainToggle').addEventListener('click',toggleAutonomy);
 el('luAutoPower')?.addEventListener('click',toggleAutonomy);
 el('luBrainErase').addEventListener('click',()=>{
- memory.events=[];memory.counts={};memory.lastMood='';memory.lastRadio=0;save();render();
+ memory.events=[];memory.counts={};memory.ritual={};memory.longLooks={};memory.lastDay='';memory.lastMood='';memory.lastRadio=0;save();render();
 });
-window.__luAutonomy={choose,onScene,onHold,shouldHold,nextDelay,isEnabled:()=>memory.enabled,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood}})};
+window.__luAutonomy={choose,onScene,onHold,shouldHold,nextDelay,isEnabled:()=>memory.enabled,toggle:toggleAutonomy,setEnabled:setAutonomy,getState:()=>({enabled:memory.enabled,observed:sense(),memory:{events:memory.events.slice(),lastMood:memory.lastMood,ritual:{...memory.ritual},longLooks:{...memory.longLooks}}})};
 const initial=house.getState();
 if(initial?.index>=0&&memory.enabled)onScene(initial.index,house.getScenes());
 else render();
