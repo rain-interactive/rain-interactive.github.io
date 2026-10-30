@@ -1,0 +1,39 @@
+/* CASA DE LU ROTH · CIELO A CORUÑA + HUMEDAD CERÁMICA */
+/* Se carga al final de <head> para conservar la pantalla sin tarjetas. */
+#liveStrip,#stage.show-data #liveStrip{
+ grid-template-columns:repeat(6,minmax(0,1fr))!important;
+ column-gap:15px!important;
+}
+#liveStrip #luSkyMetric{align-self:end!important;min-width:0!important}
+#luSkyMetric .luSkyTitle{
+ font:500 15px/1.23 system-ui,-apple-system,Segoe UI,sans-serif!important;
+ color:#fff!important;text-shadow:0 1px 5px #000,0 2px 12px #000c!important;
+ overflow-wrap:anywhere;
+}
+#luSkyMetric #luSkyMap{display:block;width:100%;max-width:225px;height:95px;margin-top:5px;background:transparent!important;opacity:.96}
+#luSkyMetric .tiny{font-size:10px!important;white-space:normal}
+#liveStrip #humidityMetric{align-self:end!important}
+#humidityValue{font-size:23px!important;font-variant-numeric:tabular-nums}
+#humidityMetric .detail{font-size:11px!important}
+#humidityMetric .tiny{font-size:10px!important}
+#luSkyDetails{margin:18px 0;border-top:1px solid #ffffff3b;padding-top:8px}
+#luSkyDetails p{font-size:12px;line-height:1.45}
+#luSkyDetailedMap{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:transparent;margin:4px auto 9px}
+#luSkyDetailRows{display:grid;gap:4px;margin:10px 0}
+#luSkyDetailRows .luSkyBodyRow{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font:11px/1.35 system-ui,sans-serif;border-bottom:1px solid #ffffff1a;padding:5px 0}
+#luSkyDetailRows .luSkyBodyRow span:last-child{text-align:right;color:#e8dede}
+#luSkyDetails .luSkySource{font-size:10px;opacity:.82}
+#luSkyDetails .luSkyStars{font-size:11px}
+@media(min-width:721px) and (max-width:1300px){
+ #liveStrip,#stage.show-data #liveStrip{grid-template-columns:repeat(6,minmax(0,1fr))!important;column-gap:9px!important}
+ #luSkyMetric .luSkyTitle{font-size:12px!important}
+ #luSkyMetric #luSkyMap{max-width:175px;height:80px}
+ #humidityValue{font-size:19px!important}
+}
+@media(max-width:720px){
+ #liveStrip,#stage.show-data #liveStrip{display:none!important}
+ #mobileBar .mobgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #mobileBar #luSkyMobile,#mobileBar #mHumidityCell{background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}
+ #luSkyMobileMap{display:block;width:min(100%,220px);height:98px;margin:3px 0}
+ #luSkyMobile .mobvalue,#mHumidityCell .mobvalue{font-size:15px!important;color:white!important}
+}
