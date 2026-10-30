@@ -4,7 +4,7 @@ Archivo de ambientes sin personajes: arquitectura industrial, lugares abandonado
 
 **Resolución mínima: 700 píxeles de ancho y 700 píxeles de alto.** Si cualquiera de las dimensiones es inferior a 700 píxeles, el archivo se elimina automáticamente con GitHub Actions al subirlo. Las imágenes que cumplen el mínimo se conservan, aunque no lleguen a Full HD.
 
-Para añadir planos, sube JPG, PNG o WebP directamente a esta carpeta. El catálogo se actualiza automáticamente y la Casa los intercala con las fotografías de Lu Roth (aproximadamente una imagen ambiental por cada tres o cuatro retratos).
+Para añadir planos, sube JPG, PNG o WebP directamente a esta carpeta. El catálogo se actualiza automáticamente y la Casa los intercala con las fotografías de Lu Roth (75 % planos ambientales y 25 % retratos de Lu Roth; tres ambientes y una aparición de Lu por cada cuatro planos, en orden variable).
 
 Las imágenes se muestran **sin deformación**: la Casa recorta el encuadre para llenar la pantalla. Si un archivo ya contiene bandas negras incorporadas, el visor las elimina visualmente mediante un zoom proporcional sin alterar la fotografía original. En los planos que incluyen mujeres, debe aparecer siempre Lu Roth.
 

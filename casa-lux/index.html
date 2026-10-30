@@ -1189,7 +1189,9 @@ const weekfmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:
 const nightGroups=['cine','descanso','musica','leer','contemplar','crear','ordenador'];
 const dayGroups=['leer','ordenador','crear','movimiento','cotidiano','contemplar','musica','descanso'];
 let shown=-2,active=0,until=0,recent=[],nextChange=0,lastSceneAt=0;
-let fotosDesdeAmbiente=0,espaciadoAmbiental=3+Math.floor(Math.random()*2);
+// Montaje por grupos de 4: 3 planos ambientales y 1 aparición de Lu.
+ // El momento de su aparición cambia en cada bloque, sin repetir dos Lu consecutivas.
+ let montajePendiente=[];
 const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]=x.value);return (+v.hour%24)*60+(+v.minute)};
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s.time==='ambos'||x.s.time===when)).map(x=>x.i);
@@ -1264,29 +1266,57 @@ function display(index){
  const sharp=l.querySelector('.film-sharp');
  if(sharp){sharp.style.animation='none';void sharp.offsetWidth;sharp.style.animation='';}
  l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;lastSceneAt=Date.now();
- if(scenes[index].type==='ambiente'){fotosDesdeAmbiente=0;espaciadoAmbiental=3+Math.floor(Math.random()*2)}else fotosDesdeAmbiente++;
+ // La proporción entre series se decide en chooseAutomatic(), no al mostrar un plano.
  $('filmState').textContent=scenes[index].name;
  window.__luAutonomy?.onScene?.(index,scenes);
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
- const ambiente=scenes.map((s,i)=>({s,i})).filter(({s})=>s.type==='ambiente'&&s.src).map(({i})=>i);
- if(ambiente.length&&fotosDesdeAmbiente>=espaciadoAmbiental){
-  const novistos=ambiente.filter(i=>!recent.includes(i));
-  const elegido=pick(novistos.length?novistos:ambiente);
-  recent.push(elegido);if(recent.length>12)recent.shift();return elegido;
+ const ambientes=scenes.map((s,i)=>({s,i}))
+  .filter(({s,i})=>s.type==='ambiente'&&s.src&&i!==shown).map(({i})=>i);
+ const retratos=scenes.map((s,i)=>({s,i}))
+  .filter(({s,i})=>s.type!=='ambiente'&&s.src&&i!==shown).map(({i})=>i);
+ // Si una familia todavía no está disponible (p. ej. cargando el catálogo),
+ // se muestra la otra, sin consumir los turnos del montaje 75/25.
+ if(!ambientes.length||!retratos.length){
+  const disponibles=ambientes.length?ambientes:retratos;
+  if(!disponibles.length)return null;
+  const nuevos=disponibles.filter(i=>!recent.includes(i));
+  const elegido=pick(nuevos.length?nuevos:disponibles);
+  recent.push(elegido);if(recent.length>12)recent.shift();
+  return elegido;
  }
- const choice=window.__luAutonomy?.choose?.(scenes,shown,recent);
- if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src&&scenes[choice].type!=='ambiente'){
-   recent.push(choice);if(recent.length>12)recent.shift();return choice;
+ if(!montajePendiente.length){
+  // Un único retrato por cada cuatro planos: posición 2, 3 o 4.
+  // La primera posición es siempre ambiente para evitar retratos contiguos
+  // incluso cuando una aparición cae al final del bloque precedente.
+  const posicionLu=rint(1,3);
+  montajePendiente=Array.from({length:4},(_,i)=>i===posicionLu?'lu':'ambiente');
  }
- let candidates=scenes.map((s,i)=>({s,i})).filter(({s,i})=>s.src&&s.type!=='ambiente'&&i!==shown).map(({i})=>i);
- if(!candidates.length)return null;
- const fresh=candidates.filter(i=>!recent.includes(i));
- const sel=pick(fresh.length?fresh:candidates);
- recent.push(sel);
+ let tipo=montajePendiente.shift();
+ // La elección manual de un retrato no debe provocar dos seguidos.
+ if(tipo==='lu'&&scenes[shown]?.type!=='ambiente'){
+  montajePendiente.unshift('lu');
+  tipo='ambiente';
+ }
+ let elegido=null;
+ if(tipo==='lu'){
+  // La autonomía conserva sus preferencias de luz, clima y encuadre,
+  // pero solo elige entre retratos en este turno.
+  const sugerido=window.__luAutonomy?.choose?.(scenes.map(s=>
+   s.type==='ambiente'?{...s,src:''}:s),shown,recent);
+  if(Number.isInteger(sugerido)&&retratos.includes(sugerido)&&!recent.includes(sugerido))elegido=sugerido;
+  if(elegido===null){
+   const nuevos=retratos.filter(i=>!recent.includes(i));
+   elegido=pick(nuevos.length?nuevos:retratos);
+  }
+ }else{
+  const nuevos=ambientes.filter(i=>!recent.includes(i));
+  elegido=pick(nuevos.length?nuevos:ambientes);
+ }
+ recent.push(elegido);
  if(recent.length>12)recent.shift();
- return sel;
+ return elegido;
 }
 function applyLighting(mins){
  // The sun sets approximately between 18–22h depending on the season, for a soft visual draft.
