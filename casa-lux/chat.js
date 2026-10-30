@@ -48,8 +48,14 @@ const notes=[
 const byCategory={cine:'Cine',musica:'Música',idea:'Notas',coruna:'A Coruña',santiago:'Santiago',becas:'Becas'};
 const filters=[['Todos','all'],['Sin leer','unread'],['Cine','cine'],['Música','musica'],['Coruña','coruna'],['Santiago','santiago'],['Becas','becas'],['Notas','idea']];
 const dock=document.createElement('aside');dock.id='luxMailDock';dock.setAttribute('aria-label','Buzón cultural de Lux');
-dock.innerHTML='<div id="luxMailToggle" role="status" aria-live="polite" aria-atomic="true" aria-label="Mensajes sin leer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg><strong id="luxMailCount">0</strong><span class="luxUnreadLabel">sin leer</span></div><button type="button" id="luxMailLatest" aria-label="Leer el último mensaje" aria-live="polite"><span class="luxMailLatestKicker">ÚLTIMO MENSAJE</span><strong id="luxMailLatestSubject"></strong><span id="luxMailLatestExcerpt"></span></button><section id="luxMailPanel" aria-label="Mensajes culturales"><div id="luxMailHead"><div id="luxMailTitle"><strong>Correo de Lux</strong><span id="luxMailTotal"></span></div><p>Una pequeña correspondencia desde la casa.</p></div><div id="luxMailTools" role="group" aria-label="Filtrar mensajes"></div><div id="luxMailList" role="list" aria-label="Bandeja de mensajes"></div><article id="luxMailDetail" aria-live="polite"></article><form id="luxMailPrompt"><input id="luxMailInput" maxlength="180" placeholder="Pide cine, música, agenda o becas…" aria-label="Pedir una recomendación"/><button id="luxMailSend" type="submit">Pedir</button></form><p id="luxMailStatus" aria-live="polite"></p><div id="luxMailFoot">Mensajes editoriales programados; no es un chat en directo. El sonido funciona tras interactuar con la página.</div></section>';
+dock.innerHTML='<button type="button" id="luxMailToggle" aria-expanded="true" aria-controls="luxMailRecent" aria-label="Plegar o desplegar los últimos mensajes"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg><strong id="luxMailCount">0</strong><span class="luxUnreadLabel">sin leer</span></button><button type="button" id="luxMailLatest" aria-label="Leer el último mensaje" aria-live="polite"><span class="luxMailLatestKicker">ÚLTIMO MENSAJE</span><strong id="luxMailLatestSubject"></strong><span id="luxMailLatestExcerpt"></span></button><section id="luxMailPanel" aria-label="Mensajes culturales"><div id="luxMailHead"><div id="luxMailTitle"><strong>Correo de Lux</strong><span id="luxMailTotal"></span></div><p>Una pequeña correspondencia desde la casa.</p></div><div id="luxMailTools" role="group" aria-label="Filtrar mensajes"></div><div id="luxMailList" role="list" aria-label="Bandeja de mensajes"></div><article id="luxMailDetail" aria-live="polite"></article><form id="luxMailPrompt"><input id="luxMailInput" maxlength="180" placeholder="Pide cine, música, agenda o becas…" aria-label="Pedir una recomendación"/><button id="luxMailSend" type="submit">Pedir</button></form><p id="luxMailStatus" aria-live="polite"></p><div id="luxMailFoot">Mensajes editoriales programados; no es un chat en directo. El sonido funciona tras interactuar con la página.</div></section>';
 document.body.appendChild(dock);
+// Lectura visible: mensajes recientes en el lateral, independientes del archivo previo.
+const recent=document.createElement('section');
+recent.id='luxMailRecent';
+recent.setAttribute('aria-label','Últimos mensajes de Lu');
+recent.innerHTML='<div id="luxRecentHead"><strong>MENSAJES DE LU</strong><span id="luxRecentAmount">Últimos mensajes</span></div><div id="luxMailRecentList" role="list"></div><p id="luxRecentFoot">Notas de la Casa guardadas en este navegador.</p>';
+dock.appendChild(recent);
 const $=id=>document.getElementById(id);
 let state={messages:[],prefs:{mute:false},filter:'all',active:null,open:false,writing:false};
 function load(k,fallback){try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}}
@@ -74,6 +80,7 @@ try{
  }
 }catch{}
 state.prefs=load(prefsKey,{mute:false});
+if(typeof state.prefs.recentOpen!=='boolean')state.prefs.recentOpen=true;
 function safe(h){try{const u=new URL(h);return u.protocol==='https:'?u.href:null}catch{return null}}
 function txt(parent,tag,content,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=content;parent.appendChild(el);return el}
 function unreadCount(){return state.messages.filter(m=>!m.read).length}
@@ -96,20 +103,43 @@ function showDetail(m){const target=$('luxMailDetail');target.replaceChildren();
  txt(target,'h3',m.subject);txt(target,'div','LUX · '+(byCategory[m.category]||'Cultura')+' · '+niceDate(m.date)+(m.source==='news'?' · Noticia enlazada':''),'luxMeta');txt(target,'p',m.body);
  for(const entry of m.links){const href=safe(entry[1]);if(!href)continue;const link=txt(target,'a',entry[0]);link.href=href;link.target='_blank';link.rel='noopener noreferrer';}
 }
-function render(){buildTools();counts();updateLatestPreview();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||(state.filter==='unread'?!m.read:m.category===state.filter)).sort((a,b)=>Number(a.read)-Number(b.read)||b.date-a.date);
+function render(){buildTools();counts();updateLatestPreview();renderRecent();const list=$('luxMailList');list.replaceChildren();const msgs=state.messages.filter(m=>state.filter==='all'||(state.filter==='unread'?!m.read:m.category===state.filter)).sort((a,b)=>Number(a.read)-Number(b.read)||b.date-a.date);
 if(!msgs.length){state.active=null;txt(list,'p','No hay mensajes en esta sección.','luxMailEmpty');showDetail(null);return}
 // Solo se marca leído tras pulsar expresamente un mensaje.
 if(!msgs.some(m=>m.id===state.active))state.active=null;
 for(const m of msgs){const btn=document.createElement('button');btn.className='luxMailItem'+(m.read?'':' unread')+(state.active===m.id?' active':'');btn.type='button';btn.setAttribute('role','listitem');btn.setAttribute('aria-label',(m.read?'':'Sin leer: ')+m.subject);const dot=txt(btn,'span','','luxMailDot');dot.setAttribute('aria-hidden','true');const body=document.createElement('span');body.className='luxMailBody';txt(body,'span',m.subject,'luxMailSubject');txt(body,'span',m.body,'luxMailPreview');btn.appendChild(body);txt(btn,'time',niceDate(m.date));btn.addEventListener('click',()=>{state.active=m.id;m.read=true;persist();render();$('luxMailDetail').scrollTop=0});list.appendChild(btn)}
 showDetail(state.messages.find(m=>m.id===state.active))}
-function setOpen(){state.open=false;dock.classList.remove('open');state.active=null}
-// Indicador fijo de solo lectura. No hay desplegable ni control para abrirlo.
-$('luxMailLatest').addEventListener('click',()=>{
- const latest=newestMessage();if(!latest)return;
- state.filter='all';state.active=latest.id;
- setOpen(true);
- $('luxMailDetail').scrollTop=0;
-});
+function renderRecent(){
+ const list=$('luxMailRecentList');list.replaceChildren();
+ const messages=[...state.messages].sort((a,b)=>b.date-a.date).slice(0,5);
+ $('luxRecentAmount').textContent=messages.length+' recientes · '+unreadCount()+' sin leer';
+ if(!messages.length){txt(list,'p','Todavía no hay mensajes.','luxRecentEmpty');return}
+ for(const m of messages){
+  const item=document.createElement('article');item.className='luxRecentItem'+(m.read?'':' unread');
+  item.setAttribute('role','listitem');
+  const head=document.createElement('div');head.className='luxRecentItemHead';
+  txt(head,'strong',m.subject);
+  txt(head,'time',niceDate(m.date));
+  item.appendChild(head);
+  txt(item,'p',m.body,'luxRecentText');
+  for(const entry of m.links){
+   const url=safe(entry[1]);if(!url)continue;
+   const a=txt(item,'a',entry[0]);
+   a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+  }
+  list.appendChild(item);
+ }
+}
+function setOpen(open){
+ state.open=Boolean(open);
+ dock.classList.toggle('open',state.open);
+ $('luxMailToggle').setAttribute('aria-expanded',String(state.open));
+ $('luxMailToggle').setAttribute('aria-label',state.open?'Plegar mensajes':'Desplegar últimos mensajes');
+ state.prefs.recentOpen=state.open;
+ persist();
+}
+$('luxMailToggle').addEventListener('click',()=>setOpen(!state.open));
+$('luxMailLatest').addEventListener('click',()=>setOpen(true));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)setOpen(false)});
 let ctx=null;
 function initAudio(){if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume().catch(()=>{})}catch{}}}
@@ -187,7 +217,7 @@ Object.assign(window.__luMail,{
   return deliver(mk(['idea','Registro de la Casa',fields.join(' · ')||'El motor autónomo está activo.'],id,Date.now()),true);
  }
 });
-persist();render();
+persist();render();setOpen(state.prefs.recentOpen);
 setTimeout(daily,18000);
 setInterval(periodic,2100000);
 setTimeout(fetchBulletin,3500);
