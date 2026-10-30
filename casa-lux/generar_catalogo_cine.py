@@ -30,10 +30,15 @@ independent = [
     ("Lu Roth · Bolso y grafitis", "assets/lu_roth_50_bolso_grafitis.jpg"),
     ("Lu Roth · Bañera violeta", "assets/lu_roth_51_banera_violeta.jpg"),
     ("Lu Roth · Pasillo verde", "assets/lu_roth_52_pasillo_verde.jpg"),
-    ("Lu Roth · Baño turquesa", "assets/lu_roth_53_bano_turquesa.jpg")
+    ("Lu Roth · Baño turquesa", "assets/lu_roth_53_bano_turquesa.jpg"),
+    ("La gravedad es una opinión", "assets/lu_roth_54_gravedad_pintura.jpg"),
+    ("Mala postura · cerámica", "assets/lu_roth_55_mala_postura_ceramica.jpg"),
+    ("Televisor · señal perdida", "assets/lu_roth_56_televisor_estatica.jpg"),
+    ("Tienda de madrugada", "assets/lu_roth_57_tienda_nocturna.jpg")
 ]
 focus = [[50,42],[50,43],[50,43],[50,53],[53,35],[51,46],[50,45],[50,49],[50,40],[50,43],[51,40],[53,43],[50,47],[52,43],[50,49],[50,43],[51,38],[50,42],[50,47],[50,41],[50,42],[52,42],[50,41],[50,50],[50,44],[50,44],[50,43],[50,45],[50,49],[50,44],[50,43],[51,43],[50,46],[50,38],[51,46],[50,41],[50,47],[50,40],[49,53],[55,52],[55,49],[49,15],[57,34]]
-assert len(scenes) == 31 and len(independent) == 12 and len(focus) == 43
+focus.extend([[50,50],[50,50],[52,48],[52,43]])
+assert len(scenes) == 31 and len(independent) == 16 and len(focus) == 47
 packs = {}
 for path in sorted((ROOT / "assets").glob("pack_*.js")):
     src = path.read_text(encoding="utf-8")
@@ -103,7 +108,7 @@ fSub=ImageFont.truetype(regular,16)
 fNum=ImageFont.truetype(bold,16)
 fItem=ImageFont.truetype(regular,14)
 d.text((PAD,25),"CASA DE LU ROTH   /   ENCUADRES 16:9",font=fTitle,fill="#f2e7e8")
-d.text((PAD,69),"43 planos · zoom a pantalla completa · selección automática cada tres minutos",font=fSub,fill="#bdb6bd")
+d.text((PAD,69),f"{len(focus)} planos · zoom a pantalla completa · selección automática cada tres minutos",font=fSub,fill="#bdb6bd")
 for i in range(len(focus)):
     shot,name=original(i)
     frame=crop16x9(shot,focus[i]).resize((THUMBW,THUMBH),Image.Resampling.LANCZOS)
