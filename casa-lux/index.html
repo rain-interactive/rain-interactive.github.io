@@ -643,6 +643,8 @@
 #stage[data-lu-music-energy="alta"] #filmA,#stage[data-lu-music-energy="alta"] #filmB{transition-duration:2.8s!important}
 #stage[data-lu-music-energy="baja"] #filmA,#stage[data-lu-music-energy="baja"] #filmB{transition-duration:6.5s!important}
 @media(prefers-reduced-motion:reduce){#stage #filmA,#stage #filmB{transition-duration:.2s!important}}
+</style><style id="solo-ambientes-taller-v1">
+#stage #still{display:none!important;background-image:none!important}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -739,7 +741,7 @@ function normalizeTides(raw){let packs=[],seen=new Set();function walk(n,depth){
 async function loadTides(){const d=now(),a=encodeURIComponent(shiftDate(d,-1)),b=encodeURIComponent(shiftDate(d,1)),url=`https://servizos.meteogalicia.gal/mgrss/predicion/mareas/jsonMareas.action?dataIni=${a}&dataFin=${b}&idPorto=1`;
  try{let ctl=new AbortController(),tt=setTimeout(()=>ctl.abort(),11000),r=await fetch(url,{signal:ctl.signal,cache:'no-store'});clearTimeout(tt);if(!r.ok)throw Error('HTTP '+r.status);let data=await r.json();let list=normalizeTides(data);if(list.length<2)throw Error('respuesta sin pleamares/bajamares interpretables');tideEvents=list;showTides();setCopy('tideSource','MeteoGalicia · puerto 1 · datos oficiales');}catch(e){tideEvents=[];setCopy('tideTitle','No disponible');setCopy('tideNext','No se pudo consultar MeteoGalicia');setCopy('tideSource','Ver tabla oficial en ⚙');setCopy('mTide','Sin conexión');setCopy('mTideD','Consultar tabla del puerto');}}
 function showTides(){if(tideEvents.length<2)return;const n=now(),idx=tideEvents.findIndex(e=>e.when>n);let prev=idx>0?tideEvents[idx-1]:null,next=idx>=0?tideEvents[idx]:null;let state=prev&&next?(next.high?'Subiendo ↑':'Bajando ↓'):'Cambio de marea';let time=next?`${next.high?'Pleamar':'Bajamar'} ${shortHour.format(next.when)}`:'Sin próximas mareas';let height=next?.height!=null?` · ${next.height.toFixed(2).replace('.',',')} m`:'';setCopy('tideTitle',state);setCopy('tideNext',time+height);setCopy('mTide',state);setCopy('mTideD',time+height);}
-function chooseScene(){const still=$('still');const src=window.__luxImages?.[sleep?26:24]||'';still.style.backgroundImage=src?`url("${src}")`:'none';$('windowCut').style.backgroundImage='none';}
+function chooseScene(){ $('still').style.backgroundImage='none';$('windowCut').style.backgroundImage='none'; } // Sin retratos de fondo
 function fit(){let stage=$('stage'),outer=$('view');let scale=Math.max(outer.clientWidth/1920,outer.clientHeight/1080);stage.style.transform=`scale(${scale})`;}window.addEventListener('resize',fit);fit();
 function setSea(mode){seaMode=mode;let active=mode!=='photo';$('sky').style.display=active?'block':'none';$('windowCut').style.opacity=active?'1':'0';$('still').style.opacity=active?'0':'1';if(active){$('seaVideo').style.display=mode==='video'?'block':'none';if(mode==='video')$('seaVideo').play().catch(()=>{});else $('seaVideo').pause();}else $('seaVideo').pause();}
 $('infoBtn').onclick=()=>{$('panel').classList.toggle('open')};
@@ -1049,33 +1051,9 @@ window.__luNotes={
 <script id="lux-film-engine">
 // Simulación narrativa local; no es una IA consciente ni un chat de ChatGPT.
 (()=>{'use strict';
-const scenes=[{"name":"Pensar delante del ordenador","group":"ordenador","time":"ambos","src":"","width":1920,"height":1080,"orig":"adaptado de un plano previo"},{"name":"Después de la lluvia","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Estudio de medianoche","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Un descanso en el suelo","group":"descanso","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"El rostro en primer plano","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"La sala vacía detrás","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Un gesto sobre el lienzo","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Tinta y piel","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Rosas de madrugada","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Pensar junto a la ventana","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"encuadre de fotografía de referencia"},{"name":"Lucía · estudio negro","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Leopardo verde · retrato","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Aerógrafo · jardín lunar","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Escultura · espinas","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Contactos fotográficos","group":"crear","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Alas al contraluz","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Retrato en blanco y negro","group":"leer","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Noche junto al lobo","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Descanso sobre sábanas azules","group":"descanso","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Luz oblicua en blanco y negro","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Camiseta Slayer","group":"musica","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"Un día de sol","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"El espejo velado","group":"contemplar","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía aportada, enmarcada a Full HD, sin duplicados"},{"name":"En el agua · blanco y negro","group":"contemplar","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Café en la cocina","group":"cotidiano","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"En el escritorio, de noche","group":"ordenador","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Cuaderno, cerveza y perro","group":"crear","time":"noche","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"The Velvet Underground & Nico","group":"musica","time":"ambos","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Lienzo blanco · estudio","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Día de estudio en blanco y negro","group":"crear","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"},{"name":"Una tarde en el taller","group":"contemplar","time":"dia","src":"","width":1920,"height":1080,"orig":"Fotografía enviada por el usuario, adaptada a Full HD sin recortes"}];
-scenes.forEach((scene,i)=>{
- const previousIndex=i+(i>=16?10:0); // Antiguos planos 17–26 retirados.
- scene.src=window.__luxImages?.[previousIndex+24+(previousIndex>=37?1:0)]||'';
-}); // Plano original 38 ya estaba retirado.
-// Nuevos planos de Lux: se añaden solo cuando el archivo está publicado y es decodificable.
-const nuevosPlanos=[
- {name:'Auriculares y cuaderno',group:'musica',time:'ambos',src:'assets/lux_43_bocetos.jpg'},
- {name:'Descanso bajo el edredón',group:'descanso',time:'ambos',src:'assets/lux_44_dormir.jpg'},
- {name:'Con el gato negro',group:'descanso',time:'ambos',src:'assets/lux_45_gato.jpg'},
- {name:'Sobre sábanas blancas',group:'contemplar',time:'ambos',src:'assets/lux_46_sabanas.jpg'},
- {name:'Retrato cálido · Lux',group:'cotidiano',time:'ambos',src:'assets/lux_47_retrato_calido.jpg'},
- {name:'Lux · Lienzo negro',group:'crear',time:'ambos',src:'assets/lux_48_taller_negro.jpg'},
- {name:'Lux · Retrato fragmentado',group:'crear',time:'ambos',src:'assets/lux_49_retrato_fragmentado.jpg'},
- {name:'Lu Roth · Escaleras y abrigo',group:'descanso',time:'noche',src:'assets/lu_roth_49_escalera_abrigo.jpg'},
- {name:'Lu Roth · Bolso y grafitis',group:'contemplar',time:'noche',src:'assets/lu_roth_50_bolso_grafitis.jpg'},
- {name:'Lu Roth · Bañera violeta',group:'descanso',time:'noche',src:'assets/lu_roth_51_banera_violeta.jpg'},
- {name:'Lu Roth · Pasillo verde',group:'contemplar',time:'noche',src:'assets/lu_roth_52_pasillo_verde.jpg'},
- {name:'Lu Roth · Baño turquesa',group:'contemplar',time:'noche',src:'assets/lu_roth_53_bano_turquesa.jpg'},
- {name:"La gravedad es una opinión",group:"crear",time:"ambos",src:"assets/lu_roth_54_gravedad_pintura.jpg"},
- {name:"Mala postura · cerámica",group:"crear",time:"ambos",src:"assets/lu_roth_55_mala_postura_ceramica.jpg"},
- {name:"Televisor · señal perdida",group:"contemplar",time:"noche",src:"assets/lu_roth_56_televisor_estatica.jpg"},
- {name:"Tienda de madrugada",group:"cotidiano",time:"ambos",src:"assets/lu_roth_57_tienda_nocturna.jpg"}
-];
-// El orden debe ser fijo para que el número del catálogo siempre corresponda al plano real.
-nuevosPlanos.forEach(shot=>scenes.push({...shot,width:1920,height:1080,orig:'Plano aportado para la casa de Lux'}));
-// Los personajes femeninos de la instalación son siempre Lu Roth.
+// Solo referencias artísticas para el taller.
+// Los retratos de Lu siguen archivados en assets, pero no forman parte del pase.
+const scenes=[];
 // Planos ambientales y tecnología vintage: carpeta separada y catálogo extensible.
 const ambientalesBase=[
  // Archivo curado para el taller: arte digital e instalaciones, no fotos corrientes.
@@ -1166,6 +1144,10 @@ function registrarAmbiente(name,filename){
   scene.focus=black?.focus||elegirFocoAmbiental(img);
   scene.ambientSize=black?.size||'cover';
   scene.src=url;
+   // El primer ambiente se presenta inmediatamente sin mostrar retratos.
+   if(window.__luHouse?.getState?.()?.index<0){
+    window.__luHouse.show(scenes.indexOf(scene));
+   }
  };
  img.onerror=()=>{scene.src=''};
  img.src=url;
@@ -1186,9 +1168,7 @@ const weekfmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:
 const nightGroups=['cine','descanso','musica','leer','contemplar','crear','ordenador'];
 const dayGroups=['leer','ordenador','crear','movimiento','cotidiano','contemplar','musica','descanso'];
 let shown=-2,active=0,until=0,recent=[],nextChange=0,lastSceneAt=0;
-// Montaje por grupos de 4: 3 planos ambientales y 1 aparición de Lu.
- // El momento de su aparición cambia en cada bloque, sin repetir dos Lu consecutivas.
- let montajePendiente=[];
+// Archivo artístico completo: ninguna aparición de retratos.
 const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]=x.value);return (+v.hour%24)*60+(+v.minute)};
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s.time==='ambos'||x.s.time===when)).map(x=>x.i);
@@ -1269,48 +1249,12 @@ function display(index){
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
- const ambientes=scenes.map((s,i)=>({s,i}))
-  .filter(({s,i})=>s.type==='ambiente'&&s.src&&i!==shown).map(({i})=>i);
- const retratos=scenes.map((s,i)=>({s,i}))
-  .filter(({s,i})=>s.type!=='ambiente'&&s.src&&i!==shown).map(({i})=>i);
- // Si una familia todavía no está disponible (p. ej. cargando el catálogo),
- // se muestra la otra, sin consumir los turnos del montaje 75/25.
- if(!ambientes.length||!retratos.length){
-  const disponibles=ambientes.length?ambientes:retratos;
-  if(!disponibles.length)return null;
-  const nuevos=disponibles.filter(i=>!recent.includes(i));
-  const elegido=pick(nuevos.length?nuevos:disponibles);
-  recent.push(elegido);if(recent.length>12)recent.shift();
-  return elegido;
- }
- if(!montajePendiente.length){
-  // Un único retrato por cada cuatro planos: posición 2, 3 o 4.
-  // La primera posición es siempre ambiente para evitar retratos contiguos
-  // incluso cuando una aparición cae al final del bloque precedente.
-  const posicionLu=rint(1,3);
-  montajePendiente=Array.from({length:4},(_,i)=>i===posicionLu?'lu':'ambiente');
- }
- let tipo=montajePendiente.shift();
- // La elección manual de un retrato no debe provocar dos seguidos.
- if(tipo==='lu'&&scenes[shown]?.type!=='ambiente'){
-  montajePendiente.unshift('lu');
-  tipo='ambiente';
- }
- let elegido=null;
- if(tipo==='lu'){
-  // La autonomía conserva sus preferencias de luz, clima y encuadre,
-  // pero solo elige entre retratos en este turno.
-  const sugerido=window.__luAutonomy?.choose?.(scenes.map(s=>
-   s.type==='ambiente'?{...s,src:''}:s),shown,recent);
-  if(Number.isInteger(sugerido)&&retratos.includes(sugerido)&&!recent.includes(sugerido))elegido=sugerido;
-  if(elegido===null){
-   const nuevos=retratos.filter(i=>!recent.includes(i));
-   elegido=pick(nuevos.length?nuevos:retratos);
-  }
- }else{
-  const nuevos=ambientes.filter(i=>!recent.includes(i));
-  elegido=pick(nuevos.length?nuevos:ambientes);
- }
+ const candidatos=scenes.map((s,i)=>({s,i}))
+  .filter(({s,i})=>s.type==='ambiente'&&Boolean(s.src)&&i!==shown)
+  .map(({i})=>i);
+ if(!candidatos.length)return null;
+ const distintos=candidatos.filter(i=>!recent.includes(i));
+ const elegido=pick(distintos.length?distintos:candidatos);
  recent.push(elegido);
  if(recent.length>12)recent.shift();
  return elegido;
@@ -1364,13 +1308,13 @@ function tick(){
  $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+
  (isAutonomous()?' · Ritmo visual adaptado a la radio.':' · Rotación ágil de planos.');
 }
-window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
+window.__luxShowWriting=()=>{const i=scenes.findIndex(s=>s.type==='ambiente'&&s.src);if(i>=0){display(i);nextChange=Date.now()+planNext(i)}};
 window.__luHouse={
  getScenes:()=>scenes.map(s=>({...s})),
  getState:()=>({index:shown,active,scene:scenes[shown]?.name||'',sleeping:stage.dataset.luxAsleep==='yes',lights:stage.dataset.luxLamps||'off',nextChange}),
  reschedule:()=>{nextChange=Date.now()+planNext(shown);return nextChange},
  show:(index)=>{
-  if(!Number.isInteger(index)||index<0||!scenes[index]?.src)return false;
+  if(!Number.isInteger(index)||index<0||scenes[index]?.type!=='ambiente'||!scenes[index]?.src)return false;
   display(index);nextChange=Date.now()+planNext(shown);return true;
  }
 };
