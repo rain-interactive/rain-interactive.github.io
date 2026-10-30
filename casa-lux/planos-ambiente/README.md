@@ -1,11 +1,13 @@
-# Planos ambiente — Casa de Lu Roth
+# Archivo de referencias artísticas para O Raposo Púrpura
 
-Archivo de ambientes sin personajes: arquitectura industrial, lugares abandonados, brutalismo, fotografías de los 2000, CRT y errores digitales.
+Esta carpeta se usa en la **Casa de Lu Roth** como repertorio visual para el taller de arte.
 
-**Resolución mínima: 700 píxeles de ancho y 700 píxeles de alto.** Si cualquiera de las dimensiones es inferior a 700 píxeles, el archivo se elimina automáticamente con GitHub Actions al subirlo. Las imágenes que cumplen el mínimo se conservan, aunque no lleguen a Full HD.
+Se conservan **dibujos, pinturas, ilustraciones, collage, obra digital intervenida, esculturas e instalaciones artísticas** (incluidas las instalaciones con CRT). No se incorporan fotografías corrientes de animales, plantas, edificios, paisajes o interiores.
 
-Para añadir planos, sube JPG, PNG o WebP directamente a esta carpeta. El catálogo se actualiza automáticamente y la Casa los intercala con las fotografías de Lu Roth (75 % planos ambientales y 25 % retratos de Lu Roth; tres ambientes y una aparición de Lu por cada cuatro planos, en orden variable).
+La curaduría inicial del 30 de octubre de 2026 seleccionó **41 obras** de 64 imágenes. Las 23 fotografías apartadas se guardaron en `/casa-lux/ambientes-descartados/` para poder recuperarlas sin perder los originales.
 
-Las imágenes se muestran **sin deformación**: la Casa recorta el encuadre para llenar la pantalla. Si un archivo ya contiene bandas negras incorporadas, el visor las elimina visualmente mediante un zoom proporcional sin alterar la fotografía original. En los planos que incluyen mujeres, debe aparecer siempre Lu Roth.
+**Filtro técnico independiente:** mínimo 700 píxeles tanto de ancho como de alto. El flujo automático elimina los archivos por debajo del tamaño y actualiza el catálogo. El criterio artístico de futuras imágenes requiere revisión visual; no se puede inferir solo por resolución.
 
-En las imágenes con menos resolución, ampliar para llenar la pantalla puede reducir la nitidez; el límite de 700 píxeles es el criterio acordado para conservar o retirar archivos.
+La rotación conserva la proporción **75 % referencias artísticas / 25 % retratos de Lu Roth**, con una aparición de Lu por cada cuatro planos, en posición variable. La imagen se recorta para llenar la pantalla sin deformarse.
+
+La hoja de contactos actualizada está en `/casa-lux/catalogo-ambientes.jpg` y `/casa-lux/catalogo-obras-taller.jpg`.

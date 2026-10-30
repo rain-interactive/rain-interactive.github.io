@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/crear-jpg-contactos-ambientes.yml'
+      - 'casa-lux/planos-ambiente/catalogo.json'
   workflow_dispatch:
 permissions:
   contents: write
@@ -43,8 +44,8 @@ jobs:
           subfont=ImageFont.truetype(path,20)
           numberfont=ImageFont.truetype(bold,21)
           filefont=ImageFont.truetype(path,14)
-          draw.text((left,25),'CASA DE LU ROTH / ARCHIVO AMBIENTAL',font=headline,fill='#ffffff')
-          draw.text((left,88),f'{len(entries)} planos  ·  solo ambientes, sin retratos  ·  numerados para revisión',font=subfont,fill='#b6bec9')
+          draw.text((left,25),'REFERENCIAS ARTISTICAS / O RAPOSO PURPURA',font=headline,fill='#ffffff')
+          draw.text((left,88),f'{len(entries)} planos  ·  dibujos y obras de arte  ·  sin retratos de Lu  ·  catálogo curado',font=subfont,fill='#b6bec9')
           for ix,entry in enumerate(entries):
               file=base/entry['file']
               if not file.is_file():
@@ -62,9 +63,10 @@ jobs:
               short=entry['file']
               if len(short)>21:short=short[:18]+'…'
               draw.text((x+60,y+191),short,font=filefont,fill='#9da8b8')
-          draw.text((left,height-40),'CASA LU ROTH  /  PLANOS AMBIENTE  /  CATALOGO AUTOMATICO',font=subfont,fill='#778496')
+          draw.text((left,height-40),'O RAPOSO PURPURA  /  ARCHIVO ARTISTICO  /  CASA DE LU ROTH',font=subfont,fill='#778496')
           out=Path('casa-lux/catalogo-ambientes.jpg')
           sheet.save(out,'JPEG',quality=86,subsampling=0,optimize=True,progressive=True)
+          sheet.save('casa-lux/catalogo-obras-taller.jpg','JPEG',quality=86,subsampling=0,optimize=True,progressive=True)
           print(f'Creado {out}: {width} x {height}, {len(entries)} ambientes, {out.stat().st_size} bytes')
           PY
       - name: Publicar JPG
@@ -72,7 +74,7 @@ jobs:
         run: |
           git config user.name "Casa de Lu Roth"
           git config user.email "actions@users.noreply.github.com"
-          git add casa-lux/catalogo-ambientes.jpg
+          git add casa-lux/catalogo-ambientes.jpg casa-lux/catalogo-obras-taller.jpg
           if ! git diff --cached --quiet; then
             git commit -m "Casa Lu: publicar JPG numerado con todos los planos ambientales"
             git pull --rebase origin main
