@@ -736,6 +736,129 @@
 }
 @media(prefers-reduced-motion:reduce){#luxRadioDock #luxRadioEQ i{animation:none!important}}
 </style>
+
+<style id="lu-datos-izquierda-radio-centro-v2">
+/* Casa de Lu Roth — 30-10-2026. Lecturas a la izquierda, radio centrada al pie.
+   Las escenas y los datos vivos se mantienen intactos. */
+@media(min-width:721px){
+ #stage #liveStrip,
+ #stage.show-data #liveStrip,
+ #stage #liveStrip.lu-open,
+ #stage #liveStrip:hover,
+ #stage #liveStrip:focus-within{
+   position:absolute!important;top:99px!important;left:19px!important;
+   right:auto!important;bottom:auto!important;
+   display:flex!important;flex-direction:column!important;
+   align-items:stretch!important;justify-content:flex-start!important;
+   grid-template-columns:none!important;gap:0!important;
+   width:350px!important;min-width:0!important;max-width:350px!important;
+   height:auto!important;min-height:0!important;max-height:calc(100% - 190px)!important;
+   padding:26px 13px 14px!important;margin:0!important;
+   overflow-y:auto!important;overflow-x:hidden!important;
+   opacity:1!important;visibility:visible!important;
+   border:0!important;border-radius:8px!important;
+   box-shadow:none!important;backdrop-filter:none!important;
+   background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.46) 73%,rgba(0,0,0,.14) 100%)!important;
+   transform:none!important;pointer-events:auto!important;
+   scrollbar-width:thin;scrollbar-color:#ffffff55 transparent;
+ }
+ #stage #liveStrip .luDataHandle{
+   position:absolute!important;top:5px!important;left:17px!important;
+   transform:none!important;display:block!important;margin:0!important;
+   padding:1px 0!important;min-height:16px!important;
+   text-align:left!important;font-size:14px!important;letter-spacing:.1em!important;
+   color:#fff!important;opacity:.8!important;
+ }
+ #stage #liveStrip .metric,
+ #stage #liveStrip>.metric:nth-child(2),
+ #stage #liveStrip #luSkyMetric,
+ #stage #liveStrip #wfForecast{
+   display:flex!important;position:relative!important;
+   flex-direction:column!important;align-items:flex-start!important;
+   justify-content:center!important;
+   min-height:0!important;min-width:0!important;
+   width:100%!important;margin:0!important;
+   padding:9px 9px 10px 11px!important;gap:3px!important;
+   border:0!important;border-bottom:1px solid #ffffff35!important;
+   background:transparent!important;
+ }
+ #stage #liveStrip .metric:last-child{border-bottom:0!important}
+ #stage #liveStrip .metric .kicker,#stage #liveStrip #wfForecast .kicker{
+   margin:0!important;color:#ddd!important;
+   font:650 15px/1.25 system-ui,sans-serif!important;
+   letter-spacing:.07em!important;
+ }
+ #stage #liveStrip .metric .value,
+ #stage #liveStrip #wfForecast .value,
+ #stage #liveStrip #humidityValue,
+ #stage #liveStrip #moonName{
+   color:#fff!important;letter-spacing:0!important;
+   font:550 27px/1.15 system-ui,sans-serif!important;
+   overflow-wrap:anywhere!important;
+ }
+ #stage #liveStrip .metric .detail,
+ #stage #liveStrip .metric .tiny,
+ #stage #liveStrip #wind,
+ #stage #liveStrip #wfForecast .detail,
+ #stage #liveStrip.lu-open .metric .detail,
+ #stage #liveStrip:hover .metric .detail{
+   display:block!important;margin:0!important;opacity:.83!important;
+   font:400 13px/1.22 system-ui,sans-serif!important;
+   white-space:normal!important;
+   overflow:hidden!important;max-height:2.5em!important;
+ }
+ #stage #liveStrip .phaseCell{gap:10px!important;align-items:center!important}
+ #stage #liveStrip #moonDisc{width:49px!important;height:49px!important}
+ #stage #liveStrip #luSkyMetric #luSkyMap{
+   width:100%!important;max-width:235px!important;height:57px!important;
+ }
+ #stage #liveStrip.lu-open,#stage #liveStrip:hover{max-height:calc(100% - 190px)!important}
+}
+#luxRadioDock{
+  top:auto!important;left:50%!important;right:auto!important;
+  bottom:14px!important;width:min(620px,calc(100vw - 32px))!important;
+  max-width:calc(100vw - 32px)!important;
+  transform:translateX(-50%)!important;
+}
+#luxRadioBar{min-height:43px}
+#luxRadioPanel{bottom:calc(100% + 7px)!important;top:auto!important}
+@media(max-width:720px){
+  /* Una columna de lecturas compacta en vez de la antigua franja inferior. */
+  #mobileBar,#mobileBar.lu-open,body.lu-immersive #mobileBar,
+  body.lu-immersive #mobileBar.lu-open{
+    position:fixed!important;top:112px!important;bottom:auto!important;
+    left:8px!important;right:auto!important;
+    width:min(170px,43vw)!important;min-width:0!important;
+    max-height:calc(100dvh - 190px)!important;
+    height:auto!important;padding:26px 8px 8px!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    display:block!important;visibility:visible!important;opacity:1!important;
+    transform:none!important;
+    background:linear-gradient(90deg,#000b,#0007)!important;
+    border:0!important;border-radius:6px!important;box-shadow:none!important;
+  }
+  #mobileBar h2{display:none!important}
+  #mobileBar .mobgrid{display:flex!important;flex-direction:column!important;gap:0!important}
+  #mobileBar .mobcell{min-width:0!important;padding:7px 4px!important;
+    border-bottom:1px solid #ffffff36!important;background:transparent!important}
+  #mobileBar .kicker{font-size:9px!important;letter-spacing:.02em!important}
+  #mobileBar .mobvalue{font-size:13px!important;line-height:1.2!important}
+  #mobileBar .mobdetail{display:none!important}
+  #mobileBar .luDataHandle{
+    top:4px!important;left:6px!important;transform:none!important;
+    font-size:9px!important;white-space:nowrap!important;
+    padding:2px 0!important;
+  }
+  #luxRadioDock{
+    width:min(510px,calc(100vw - 20px))!important;
+    max-width:calc(100vw - 20px)!important;
+    bottom:9px!important;left:50%!important;right:auto!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #stage #liveStrip,#mobileBar{transition:none!important}
+}
+</style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
