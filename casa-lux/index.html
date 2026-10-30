@@ -859,6 +859,177 @@
   #stage #liveStrip,#mobileBar{transition:none!important}
 }
 </style>
+
+<style id="lu-paneles-legibles-v3">
+/* Casa de Lu Roth · dos paneles independientes, todos los textos legibles. */
+@media(min-width:721px){
+  #stage #liveStrip,#stage.show-data #liveStrip,
+  #stage #liveStrip.lu-open,#stage #liveStrip:hover,#stage #liveStrip:focus-within{
+    top:90px!important;left:18px!important;right:auto!important;bottom:auto!important;
+    width:440px!important;max-width:440px!important;min-width:0!important;
+    height:auto!important;min-height:0!important;max-height:calc(100% - 165px)!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+    padding:32px 15px 13px!important;
+    box-sizing:border-box!important;align-items:stretch!important;
+    gap:0!important;display:flex!important;flex-direction:column!important;
+    scrollbar-width:thin!important;scrollbar-color:#ffffff60 transparent!important;
+    background:linear-gradient(90deg,rgba(0,0,0,.80),rgba(0,0,0,.58) 75%,rgba(0,0,0,.28))!important;
+  }
+  #stage #liveStrip .luDataHandle{
+    position:sticky!important;top:0!important;left:0!important;z-index:2!important;
+    flex:0 0 auto!important;display:block!important;width:100%!important;
+    margin:-29px 0 7px!important;padding:10px 6px!important;
+    text-align:left!important;background:#090909d9!important;border:0!important;
+    border-bottom:1px solid #ffffff60!important;
+    color:#fff!important;font:700 15px/1.1 system-ui,sans-serif!important;
+    letter-spacing:.1em!important;cursor:pointer!important;
+  }
+  #stage #liveStrip .metric,#stage #liveStrip>.metric:nth-child(2),
+  #stage #liveStrip #luSkyMetric,#stage #liveStrip #wfForecast{
+    display:flex!important;flex:0 0 auto!important;
+    flex-direction:column!important;justify-content:flex-start!important;
+    align-items:flex-start!important;box-sizing:border-box!important;
+    width:100%!important;min-width:0!important;min-height:0!important;
+    padding:7px 8px 9px!important;margin:0!important;gap:2px!important;
+    overflow:visible!important;position:relative!important;
+    border-bottom:1px solid #ffffff36!important;
+  }
+  #stage #liveStrip .metric .kicker,#stage #liveStrip #wfForecast .kicker{
+    display:block!important;max-height:none!important;white-space:normal!important;
+    overflow:visible!important;overflow-wrap:anywhere!important;
+    font:650 15px/1.3 system-ui,sans-serif!important;
+  }
+  #stage #liveStrip .metric .value,#stage #liveStrip #wfForecast .value,
+  #stage #liveStrip #humidityValue,#stage #liveStrip #moonName{
+    display:block!important;max-height:none!important;white-space:normal!important;
+    overflow:visible!important;overflow-wrap:anywhere!important;
+    font:550 24px/1.25 system-ui,sans-serif!important;
+  }
+  #stage #liveStrip .metric .detail,#stage #liveStrip .metric .tiny,
+  #stage #liveStrip #wind,#stage #liveStrip #wfForecast .detail,
+  #stage #liveStrip.lu-open .metric .detail,#stage #liveStrip:hover .metric .detail{
+    display:block!important;max-height:none!important;min-height:0!important;
+    height:auto!important;white-space:normal!important;overflow:visible!important;
+    overflow-wrap:anywhere!important;text-overflow:clip!important;
+    -webkit-line-clamp:unset!important;line-clamp:unset!important;
+    margin:2px 0 0!important;font:400 14px/1.35 system-ui,sans-serif!important;
+  }
+  #stage #liveStrip #moonDisc{flex:0 0 48px!important}
+  #stage #liveStrip.lu-collapsed,#stage.show-data #liveStrip.lu-collapsed,
+  #stage #liveStrip.lu-collapsed:hover,#stage #liveStrip.lu-collapsed:focus-within{
+    width:270px!important;max-width:270px!important;
+    min-height:40px!important;max-height:40px!important;height:40px!important;
+    padding:3px 7px!important;overflow:hidden!important;
+    background:#050505d9!important;border:1px solid #ffffff55!important;
+    border-radius:7px!important;
+  }
+  #stage #liveStrip.lu-collapsed .metric,
+  #stage #liveStrip.lu-collapsed #luSkyMetric,
+  #stage #liveStrip.lu-collapsed #wfForecast{display:none!important}
+  #stage #liveStrip.lu-collapsed .luDataHandle{
+    position:static!important;top:auto!important;margin:0!important;
+    border:0!important;padding:7px 5px!important;background:transparent!important;
+  }
+}
+/* Rain Radio, ligeramente más larga, sin perder su posición al centro. */
+#luxRadioDock{
+  left:50%!important;right:auto!important;
+  width:min(680px,calc(100vw - 24px))!important;
+  max-width:calc(100vw - 24px)!important;transform:translateX(-50%)!important;
+}
+#luxRadioBar{min-height:48px!important;padding:5px 9px!important}
+/* Botones utilitarios abajo a la derecha, lejos de la radio y los mensajes. */
+#controlsBar{
+  position:fixed!important;top:auto!important;left:auto!important;
+  bottom:14px!important;right:13px!important;transform:none!important;
+  flex-direction:row!important;gap:7px!important;opacity:.93!important;z-index:105!important;
+}
+#controlsBar .ctrl{min-width:39px!important;height:39px!important;min-height:0!important;
+  padding:6px 8px!important;border-radius:7px!important;
+  background:#050505dd!important;border:1px solid #ffffff79!important;color:#fff!important}
+#panel{
+  top:auto!important;bottom:67px!important;right:13px!important;
+  transform:none!important;max-height:min(70dvh,700px)!important;
+}
+/* El antiguo icono vuelve a ser un interruptor real. */
+#luxMailDock{
+  top:94px!important;right:22px!important;
+  width:min(365px,calc(100vw - 28px))!important;
+  z-index:100!important;pointer-events:auto!important;
+}
+#luxMailToggle{
+  margin-left:auto!important;cursor:pointer!important;
+  min-height:41px!important;pointer-events:auto!important;
+}
+#luxMailToggle:focus-visible,#luxMailRecent a:focus-visible{outline:2px solid #fff!important;outline-offset:2px}
+#luxMailRecent{
+  display:none!important;flex-direction:column!important;
+  width:100%!important;max-height:min(630px,calc(100dvh - 230px))!important;
+  min-height:0!important;margin-top:8px!important;
+  background:linear-gradient(270deg,rgba(0,0,0,.86),rgba(0,0,0,.65))!important;
+  border:1px solid #ffffff55!important;border-radius:8px!important;
+  color:#fff!important;box-shadow:0 11px 30px #0009!important;overflow:hidden!important;
+  backdrop-filter:blur(10px)!important;
+}
+#luxMailDock.open #luxMailRecent{display:flex!important}
+#luxRecentHead{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:11px 14px;border-bottom:1px solid #ffffff48;gap:10px;
+}
+#luxRecentHead strong{color:#fff;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:.12em}
+#luxRecentAmount{font:500 10px/1.2 system-ui,sans-serif;color:#d7d7d7;white-space:nowrap}
+#luxMailRecentList{
+  flex:1 1 auto;min-height:0;max-height:100%;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#ffffff73 transparent;
+  overscroll-behavior:contain;
+}
+.luxRecentItem{padding:12px 14px 13px;border-bottom:1px solid #ffffff2e;background:transparent}
+.luxRecentItem:last-child{border-bottom:0}
+.luxRecentItem.unread{background:#ffffff08}
+.luxRecentItemHead{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.luxRecentItemHead strong{font:650 13px/1.35 system-ui,sans-serif;color:#fff;overflow-wrap:anywhere}
+.luxRecentItemHead time{font:500 10px/1.3 system-ui,sans-serif;color:#ccc;white-space:nowrap;flex:0 0 auto}
+.luxRecentText{font:400 12.5px/1.5 system-ui,sans-serif;color:#eee;
+  margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:none!important;
+  overflow:visible!important;display:block!important}
+.luxRecentItem a{display:inline-block;margin-top:7px;margin-right:9px;color:#fff;
+  text-decoration:underline;text-underline-offset:3px;font-size:11px}
+#luxRecentFoot{flex:0 0 auto;margin:0;padding:7px 13px;border-top:1px solid #ffffff32;
+  font:400 10px/1.3 system-ui,sans-serif;color:#bbb}
+.luxRecentEmpty{padding:10px 14px;color:#eee;font-size:12px}
+@media(max-width:720px){
+ #mobileBar,#mobileBar.lu-open,body.lu-immersive #mobileBar,body.lu-immersive #mobileBar.lu-open{
+   overflow-y:auto!important;overflow-x:hidden!important;
+   max-height:calc(100dvh - 177px)!important;box-sizing:border-box!important;
+ }
+ #mobileBar .mobcell{flex:0 0 auto!important;overflow:visible!important;
+   overflow-wrap:anywhere!important}
+ #mobileBar .mobdetail{display:block!important;white-space:normal!important;
+   max-height:none!important;overflow:visible!important;font-size:10px!important}
+ #mobileBar.lu-collapsed,body.lu-immersive #mobileBar.lu-collapsed{
+   width:min(170px,43vw)!important;height:33px!important;max-height:33px!important;
+   min-height:33px!important;padding:4px!important;overflow:hidden!important;
+ }
+ #mobileBar.lu-collapsed .mobgrid,#mobileBar.lu-collapsed h2{display:none!important}
+ #mobileBar.lu-collapsed .luDataHandle{position:static!important;display:block!important;
+   width:100%!important;top:auto!important;left:auto!important;transform:none!important}
+ #luxMailDock{top:78px!important;right:10px!important;width:min(220px,50vw)!important}
+ #luxMailRecent{max-height:calc(100dvh - 255px)!important}
+ #luxRecentHead{padding:8px 9px!important}
+ #luxRecentHead strong{font-size:10px!important}
+ #luxRecentAmount{font-size:9px!important}
+ .luxRecentItem{padding:9px!important}
+ .luxRecentItemHead strong{font-size:11px!important}
+ .luxRecentItemHead time{font-size:9px!important}
+ .luxRecentText{font-size:11px!important;line-height:1.38!important}
+ #luxRadioDock{width:min(680px,calc(100vw - 20px))!important;max-width:calc(100vw - 20px)!important}
+ #luxRadioBar{min-height:45px!important}
+ #controlsBar{bottom:62px!important;right:10px!important;gap:5px!important}
+ #controlsBar .ctrl{min-width:33px!important;height:33px!important;padding:4px!important}
+ #panel{bottom:105px!important;right:10px!important;width:min(320px,calc(100vw - 20px))!important}
+}
+@media(prefers-reduced-motion:reduce){#luxMailRecent *{transition:none!important}}
+</style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1566,18 +1737,33 @@ grade();setInterval(grade,120000);
 </script><script id="lu-folded-data-events">
 (()=>{
  'use strict';
- for(const [panelId,buttonId] of [['liveStrip','luDataHandle'],['mobileBar','luDataHandleMobile']]){
+ // Independientes de Rain Radio y del buzón. Estado persistente por navegador.
+ let expanded=true;
+ try{expanded=localStorage.getItem('lu-datos-open-v3')!=='0'}catch{}
+ const panels=[['liveStrip','luDataHandle'],['mobileBar','luDataHandleMobile']];
+ for(const [panelId,buttonId] of panels){
   const panel=document.getElementById(panelId),button=document.getElementById(buttonId);
   if(!panel||!button)continue;
-  let pinned=false;
-  const setOpen=(open)=>{panel.classList.toggle('lu-open',open);button.setAttribute('aria-expanded',String(open));button.textContent=(open?'⌄':'⌃')+'   DATOS · ATLÁNTICO'};
-  button.addEventListener('click',()=>{pinned=!pinned;setOpen(pinned)});
-  if(panelId==='liveStrip'){
-   panel.addEventListener('mouseenter',()=>setOpen(true));
-   panel.addEventListener('mouseleave',()=>{if(!pinned)setOpen(false)});
-   panel.addEventListener('focusout',()=>{requestAnimationFrame(()=>{if(!panel.contains(document.activeElement)&&!pinned)setOpen(false)})});
-  }
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
+  const setOpen=(visible)=>{
+   panel.classList.toggle('lu-open',visible);
+   panel.classList.toggle('lu-collapsed',!visible);
+   button.setAttribute('aria-expanded',String(visible));
+   button.textContent=(visible?'⌃':'⌄')+'   DATOS · ATLÁNTICO';
+   button.setAttribute('aria-label',visible?'Plegar datos del Atlántico':'Desplegar datos del Atlántico');
+  };
+  setOpen(expanded);
+  button.addEventListener('click',()=>{
+   expanded=panel.classList.contains('lu-collapsed');
+   for(const [id,bid] of panels){
+    const el=document.getElementById(id),bt=document.getElementById(bid);
+    if(!el||!bt)continue;
+    el.classList.toggle('lu-open',expanded);el.classList.toggle('lu-collapsed',!expanded);
+    bt.setAttribute('aria-expanded',String(expanded));
+    bt.textContent=(expanded?'⌃':'⌄')+'   DATOS · ATLÁNTICO';
+    bt.setAttribute('aria-label',expanded?'Plegar datos del Atlántico':'Desplegar datos del Atlántico');
+   }
+   try{localStorage.setItem('lu-datos-open-v3',expanded?'1':'0')}catch{}
+  });
  }
 })();
-</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=24" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=8" defer></script><script src="/casa-lux/radio.js?v=24" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
