@@ -1,7 +1,10 @@
 /* CASA DE LU ROTH · CIELO A CORUÑA + HUMEDAD CERÁMICA */
 /* Se carga al final de <head> para conservar la pantalla sin tarjetas. */
+/* Windfinder ocultaba la temperatura original: mostrarla de nuevo junto a la nueva humedad. */
+#liveStrip .metric.luxWeatherLegacy{display:block!important}
+#mobileBar .mobcell.luxWeatherLegacy{display:block!important}
 #liveStrip,#stage.show-data #liveStrip{
- grid-template-columns:repeat(6,minmax(0,1fr))!important;
+ grid-template-columns:repeat(7,minmax(0,1fr))!important;
  column-gap:15px!important;
 }
 #liveStrip #luSkyMetric{align-self:end!important;min-width:0!important}
@@ -25,7 +28,7 @@
 #luSkyDetails .luSkySource{font-size:10px;opacity:.82}
 #luSkyDetails .luSkyStars{font-size:11px}
 @media(min-width:721px) and (max-width:1300px){
- #liveStrip,#stage.show-data #liveStrip{grid-template-columns:repeat(6,minmax(0,1fr))!important;column-gap:9px!important}
+ #liveStrip,#stage.show-data #liveStrip{grid-template-columns:repeat(7,minmax(0,1fr))!important;column-gap:9px!important}
  #luSkyMetric .luSkyTitle{font-size:12px!important}
  #luSkyMetric #luSkyMap{max-width:175px;height:80px}
  #humidityValue{font-size:19px!important}
