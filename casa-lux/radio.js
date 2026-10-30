@@ -57,7 +57,20 @@ const mixes=[
  {"name":"Tokyo Nightdrive · City Pop","short":"City Pop / Boogie","desc":"City pop japonés de los ochenta: fusión, funk, sintetizadores y el brillo de una ciudad imaginaria.","url":"https://soundcloud.com/flotonium_berlin/tokyo-nightdrive-japanese-city-pop-vinyl-mix","moods":["mañana","atardecer","taller","nocturna"],"discovery":true},
  {"name":"Punk y grunge · DJ Greg J","short":"Punk / Grunge","desc":"Punk rock reciente con guitarras urgentes y grunge. Una sacudida cuando la Casa esté demasiado tranquila.","url":"https://soundcloud.com/djgregj/new-punk-mix-2023-2025","moods":["taller","nocturna","insomnio"],"discovery":true},
  {"name":"PSEUDO AG · Ambient / IDM","short":"IDM / Lo-fi","desc":"Electrónica de pensamiento, ambient, experimental, lo-fi y fragmentos de techno oblicuo.","url":"https://soundcloud.com/pseudo-ag/experimental-ambient-idm-multi","moods":["lluvia nocturna","insomnio","lluvia","gris atlántico","nocturna"],"discovery":true},
- {"name":"Craig · Footwork Connection","short":"Juke / Chicago","desc":"Footwork y juke de Chicago, ritmos veloces, swing artificial y una energía casi imposible.","url":"https://soundcloud.com/craig/mix-for-footwork-connection-1252026","moods":["taller","nocturna","atardecer"],"discovery":true}
+ {"name":"Craig · Footwork Connection","short":"Juke / Chicago","desc":"Footwork y juke de Chicago, ritmos veloces, swing artificial y una energía casi imposible.","url":"https://soundcloud.com/craig/mix-for-footwork-connection-1252026","moods":["taller","nocturna","atardecer"],"discovery":true},
+ {"name":"Xander Milne · French Touch en cinta","short":"French Touch / 90s","desc":"Cassius, Daft Punk, Roulé y filtro disco: house francés analógico para sacudir el salón.","url":"https://soundcloud.com/xandermilne/french-house-dj-mix-on-tape-daft-punk-roule-cassius-french-touch","energy":"alta","moods":["mañana","taller","atardecer","nocturna"]},
+ {"name":"Mike Sandcastle · Disco House 90s","short":"Disco house / Groove","desc":"Vinilos de Le Knight Club, DJ Falcon, Mr Oizo y más. Para dibujar con el pie moviéndose.","url":"https://soundcloud.com/mikesandcastle/disco-house-classic-90s-french-touch-vinyl-mix","energy":"alta","moods":["mañana","taller","atardecer","nocturna"]},
+ {"name":"Funky Breaks · B-Boy y B-Girl","short":"Funk / Breaks","desc":"Colección de breakbeats, funk setentero y electro-boogie; una dosis de ritmo y diversión.","url":"https://soundcloud.com/user-670790100/sets/funky-breaks","energy":"alta","moods":["mañana","taller","atardecer"]},
+ {"name":"SPLIFF · Feel Good UK Garage","short":"UK Garage / House","desc":"Garage ligero, voces y bajos saltarines; una mezcla concebida para levantar el ánimo.","url":"https://soundcloud.com/spliffinthemix/a-feel-good-uk-garagehouse-mix","energy":"alta","moods":["mañana","taller","atardecer","nocturna"]},
+ {"name":"DJ Q · UK Garage","short":"2-Step / Garage","desc":"Bajo, swing y 2-step londinense para que la casa no se quede quieta.","url":"https://soundcloud.com/djqmusic/dj-q-2022-uk-garage-mix","energy":"alta","moods":["taller","atardecer","nocturna"]},
+ {"name":"DJ Nate · Carnaval 2025","short":"Soca / Dancehall","desc":"Carnaval de Notting Hill: dancehall, soca y sonidos de los sound systems caribeños.","url":"https://soundcloud.com/djnate/carnival2025","energy":"alta","moods":["mañana","taller","atardecer","nocturna"]},
+ {"name":"RaeTooTrill · Afrobeats y Amapiano","short":"Amapiano / Afrobeats","desc":"Afrobeats, amapiano, voces cálidas y ediciones con mucho movimiento.","url":"https://soundcloud.com/raetootrill/afrobeats-amapiano-edits-mix","energy":"alta","moods":["mañana","taller","atardecer"]},
+ {"name":"DJ Pinky Pink · Cumbia Party","short":"Cumbia / Tropical","desc":"Clásicos de cumbia y cruces tropicales electrónicos; alegría sin solemnidad.","url":"https://soundcloud.com/pinky1347/cumbia-mix-latin-vibes","energy":"alta","moods":["mañana","taller","atardecer","nocturna"]},
+ {"name":"OK.DJ · Jungle a 160","short":"Jungle / Rave","desc":"Jungle, breaks acelerados y algo de happy hardcore: energía pura.","url":"https://soundcloud.com/ok_dj/jungle-160-mini-mix","energy":"alta","moods":["taller","atardecer","nocturna"]},
+ {"name":"Nina Azucar · Armada Fania","short":"Salsa / Boogaloo","desc":"Salsa y boogaloo de la órbita Fania; metales, percusión y pista de baile.","url":"https://soundcloud.com/ninavicious/nina-azucar-armada-fania-mix-remastered","energy":"alta","moods":["mañana","taller","atardecer"]},
+ {"name":"AJACENT · Baile Funk y Jersey Club","short":"Baile Funk / Jersey","desc":"Set de fiesta con baile funk brasileño, hip-hop y Jersey club de alto voltaje.","url":"https://soundcloud.com/dj-ajacent/live-set-spring-summer-2025-mix-hip-hop-baile-funk-jersey-club","energy":"alta","moods":["taller","atardecer","nocturna"]},
+ {"name":"Natsu Summer · City Pop 80s","short":"City Pop / Japonés","desc":"Pop japonés ochentero y melodías soleadas en una sesión para la mañana.","url":"https://soundcloud.com/kidcal/natsu-summers-80s-japanese-city-pop-mix","energy":"alta","moods":["mañana","taller","atardecer"]},
+ {"name":"DJ BMF · Latin Jazzy Mix","short":"Latin Funk / Boogaloo","desc":"Salsa, boogaloo y funk latino con Willie Colón y Héctor Lavoe; swing para trabajar.","url":"https://soundcloud.com/dj-bmf/latinjazzymix","energy":"alta","moods":["mañana","taller","atardecer"]}
 ];
 
 /* Autonomía ON: música continua, sin pausas deliberadas. */
@@ -131,6 +144,17 @@ function updateControls(){
  $('luxRadioLoop').textContent=flow.loop?'↻ Bucle: sí':'↻ Bucle: no';
  $('luxRadioRandom').textContent=flow.random?'⤨ Aleatorio: sí':'⤨ Aleatorio: no';
 }
+// Prioridad editorial: la Casa conserva lo raro, pero la radio debe tener pulso.
+function upbeatChoices(exclude=selected){
+ const bright=/disco|funk|boogie|soul|house|garage|soca|salsa|cumbia|afrobeat|highlife|chicha|footwork|bass|juke|club|brasil|city pop|breaks|jungle|dancehall|ska|happy hardcore|punk|grunge|jazz|groove|italo/i;
+ const mournful=/ambient|melanc|dark|witch|industrial|shoegaze|drone|concreta|idm|noise|experimental/i;
+ return mixes.map((m,i)=>({m,i})).filter(x=>{
+  if(x.i===exclude||visualRecent.includes(x.i))return false;
+  if(x.m.energy==='alta')return true;
+  const label=x.m.name+' '+x.m.short;
+  return bright.test(label)&&!mournful.test(label);
+ });
+}
 function pickNext(){
  if(!flow.random)return (selected+1)%mixes.length;
  if(!shuffleBag.length){
@@ -189,6 +213,11 @@ function goNext(){
   const visual=Array.from({length:mixes.length},(_,i)=>({m:mixes[i],i}))
    .filter(x=>x.i!==selected&&!visualRecent.includes(x.i)&&rx.test(x.m.name+' '+x.m.short+' '+x.m.desc));
   if(visual.length)candidates=visual;
+ }
+ // Cuatro de cada cinco cambios favorecen música rítmica, incluso de noche.
+ if((autoSessionActive||flow.random)&&Math.random()<.82){
+  const lively=upbeatChoices();
+  if(lively.length)candidates=lively;
  }
  const next=candidates.length?candidates[Math.floor(Math.random()*candidates.length)].i:pickNext();
  visualRecent.push(next);visualRecent=visualRecent.slice(-8);
@@ -312,14 +341,23 @@ window.__luRadio={
   // Si SoundCloud ya está listo, reanudar la sesión dentro del mismo gesto ON.
   if(widgetReady&&widget&&initialized){
    frame.loading='eager';open(true);
-   if(!isPlaying){autoPlaybackPending=true;try{widget.play()}catch{}}
+   if(!isPlaying){
+    autoPlaybackPending=true;
+    const lively=upbeatChoices();
+    if(lively.length&&Math.random()<.85){
+     const choice=lively[Math.floor(Math.random()*lively.length)];
+     setMix(choice.i,true);
+    }else{try{widget.play()}catch{}}
+   }
    $('luxRadioHint').textContent='Autonomía ON: música continua, sin pausas programadas.';
    updateNow();return mixes[selected]?.name||'';
   }
   autoPlaybackPending=true;
   const candidates=ambientChoices(mood);
-  // También el primer tema puede ser un descubrimiento fuera del estilo esperado.
-  const pool=Math.random()<.22?mixes.map((m,i)=>({m,i})).filter(x=>x.m.discovery):candidates;
+  // Al arrancar, la mayor parte de las veces elegimos un set enérgico.
+  const lively=upbeatChoices();
+  const pool=(lively.length&&Math.random()<.85)?lively:
+   (Math.random()<.22?mixes.map((m,i)=>({m,i})).filter(x=>x.m.discovery):candidates);
   const choice=pool.length?pool[Math.floor(Math.random()*pool.length)]:{i:selected};
   frame.loading='eager';
   open(true);
@@ -354,7 +392,9 @@ window.__luRadio={
   const filter=filters[mood]||filters.taller;
   const candidates=mixes.map((m,i)=>({m,i})).filter(x=>x.i!==selected&&filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
   if(!candidates.length)return false;
-  const choice=candidates[Math.floor(Math.random()*candidates.length)];
+  const lively=upbeatChoices();
+  const pool=(lively.length&&Math.random()<.85)?lively:candidates;
+  const choice=pool[Math.floor(Math.random()*pool.length)];
   setMix(choice.i,false);
   return true;
  }
