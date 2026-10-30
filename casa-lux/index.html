@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="lux-release" content="casa-lux-release-20261030-atlantico-alineado-v5"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#121119"><title>CASA DE LUX · Planos automáticos</title><style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="lux-release" content="casa-lux-20261030-editorial-v6"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#121119"><title>CASA DE LUX · Planos automáticos</title><style>
 :root{color-scheme:dark;--accent:#ef9a91;--glass:#100f16bf;--line:#ffffff30}
 *{box-sizing:border-box}body{margin:0;background:#080a10;color:#f8eeee;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button,input{font:inherit}button{cursor:pointer}a{color:#d6b5c8}
 #backdrop{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,#1b1626,#090a11 75%)}
@@ -1030,6 +1030,183 @@
 }
 @media(prefers-reduced-motion:reduce){#luxMailRecent *{transition:none!important}}
 </style>
+
+<style id="lu-casa-cinematografica-v6">
+/* Refinamiento editorial. Sin cambiar posiciones, estado, fotos ni autonomía. */
+
+/* 1 · Lecturas integradas en el plano con fondo gradual y contrastes reales. */
+@media(min-width:721px){
+ #stage #liveStrip,#stage.show-data #liveStrip,
+ #stage #liveStrip.lu-open,#stage #liveStrip:hover,#stage #liveStrip:focus-within{
+  background:linear-gradient(90deg,
+   rgba(0,0,0,.67) 0%,rgba(0,0,0,.50) 62%,
+   rgba(0,0,0,.27) 87%,rgba(0,0,0,.10) 100%)!important;
+  border:0!important;box-shadow:none!important;
+  backdrop-filter:none!important;
+ }
+ #stage #liveStrip .luDataHandle{
+  background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.28))!important;
+  border-bottom:1px solid rgba(255,255,255,.30)!important;
+  font-weight:650!important;letter-spacing:.12em!important;
+ }
+ #stage #liveStrip .metric,#stage #liveStrip>.metric:nth-child(2),
+ #stage #liveStrip #luSkyMetric,#stage #liveStrip #wfForecast{
+  border-bottom:1px solid rgba(255,255,255,.16)!important;
+  text-shadow:0 1px 4px #000,0 2px 10px #000b!important;
+ }
+ #stage #liveStrip .metric:last-child{border-bottom:0!important}
+ #stage #liveStrip .metric .kicker,#stage #liveStrip #wfForecast .kicker{
+  color:rgba(255,255,255,.83)!important;
+  font:650 13.5px/1.35 system-ui,sans-serif!important;
+  letter-spacing:.09em!important;
+ }
+ #stage #liveStrip .metric .value,
+ #stage #liveStrip #wfForecast .value,
+ #stage #liveStrip #humidityValue,
+ #stage #liveStrip #moonName,
+ #stage #liveStrip #tideTitle{
+  color:#fff!important;
+  font:560 26px/1.22 system-ui,sans-serif!important;
+  letter-spacing:-.02em!important;
+ }
+ #stage #liveStrip .metric .detail,#stage #liveStrip .metric .tiny,
+ #stage #liveStrip #wind,#stage #liveStrip #wfForecast .detail{
+  color:rgba(255,255,255,.90)!important;
+  font:400 14px/1.4 system-ui,sans-serif!important;
+  text-shadow:0 1px 6px #000!important;
+  max-height:none!important;overflow:visible!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+ }
+ #stage #liveStrip.lu-collapsed,#stage.show-data #liveStrip.lu-collapsed{
+  background:rgba(0,0,0,.70)!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+ }
+}
+/* 2 · Mensajes como pequeños fragmentos de un cuaderno, sin tarjetas macizas. */
+#luxMailRecent{
+ background:linear-gradient(270deg,rgba(0,0,0,.72),
+ rgba(0,0,0,.49) 78%,rgba(0,0,0,.32))!important;
+ border:1px solid rgba(255,255,255,.25)!important;
+ box-shadow:0 8px 22px rgba(0,0,0,.20)!important;
+ backdrop-filter:none!important;
+}
+#luxRecentHead{
+ border-bottom:1px solid rgba(255,255,255,.27)!important;
+ background:rgba(0,0,0,.18)!important;
+}
+#luxRecentHead strong{font-size:11px!important;letter-spacing:.15em!important}
+#luxRecentAmount{color:rgba(255,255,255,.74)!important}
+.luxRecentItem{
+ background:transparent!important;
+ padding:14px 16px 15px!important;
+ border-bottom:1px solid rgba(255,255,255,.18)!important;
+ text-shadow:0 1px 6px rgba(0,0,0,.7);
+}
+.luxRecentItem.unread{
+ background:linear-gradient(90deg,rgba(255,255,255,.075),transparent 90%)!important;
+}
+.luxRecentKicker{
+ display:block;margin-bottom:7px;
+ font:650 10px/1.25 system-ui,sans-serif;
+ letter-spacing:.18em;color:rgba(255,255,255,.7);
+}
+.luxRecentItemHead{align-items:baseline!important}
+.luxRecentItemHead strong{
+ color:#fff!important;
+ font:650 15px/1.4 Georgia,'Times New Roman',serif!important;
+ letter-spacing:.01em;
+}
+.luxRecentItemHead time{
+ color:rgba(255,255,255,.72)!important;font-size:10px!important;
+}
+.luxRecentText{
+ margin-top:8px!important;
+ color:rgba(255,255,255,.94)!important;
+ font:400 13px/1.58 system-ui,sans-serif!important;
+ white-space:pre-wrap!important;
+ overflow-wrap:anywhere!important;
+}
+.luxRecentItem a{color:#fff!important;text-decoration-color:rgba(255,255,255,.65)!important}
+#luxRecentFoot{
+ background:transparent!important;border-color:rgba(255,255,255,.21)!important;
+ color:rgba(255,255,255,.7)!important;
+}
+
+/* 3 · Rain Radio: título por delante del estado, controles intactos. */
+#luxRadioBar{
+ background:rgba(5,6,8,.87)!important;
+ border-color:rgba(255,255,255,.26)!important;
+ box-shadow:0 5px 20px rgba(0,0,0,.28)!important;
+}
+#luxRadioNow,#luxRadioDock.open #luxRadioNow{
+ display:flex!important;align-items:center!important;gap:9px!important;
+ min-width:0!important;
+ text-shadow:0 1px 5px #000!important;
+ font-size:12px!important;
+ white-space:nowrap!important;
+}
+#luxRadioNow .luxRadioStatus{
+ flex:0 0 auto;
+ font:600 9px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace!important;
+ letter-spacing:.10em;color:rgba(255,255,255,.62)!important;
+}
+#luxRadioNow .luxRadioTrack{
+ flex:0 1 auto;min-width:0;max-width:100%;
+ font:650 12.5px/1.4 system-ui,sans-serif!important;
+ color:#fff!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#luxRadioNow .luxRadioArtist{
+ flex:0 1 auto;min-width:0;max-width:30%;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis;
+ font:400 10px/1.4 system-ui,sans-serif!important;
+ color:rgba(255,255,255,.67)!important;
+}
+#luxRadioEQ{opacity:.30!important;transform:scaleY(.75)}
+#luxRadioDock.playing #luxRadioEQ{opacity:.63!important}
+@keyframes luxRadioMeter{
+  0%{height:18%}50%{height:60%}100%{height:32%}
+}
+/* 4 · Fundidos largos y progresivos, con ligeras variaciones musicales.
+   Solo opacidad: no hay deslizamientos ni recortes añadidos a las obras. */
+#stage #filmA,#stage #filmB{
+ transition-property:opacity!important;
+ transition-duration:5.6s!important;
+ transition-timing-function:cubic-bezier(.42,0,.58,1)!important;
+}
+#stage[data-lu-music-energy="alta"] #filmA,
+#stage[data-lu-music-energy="alta"] #filmB{transition-duration:4.1s!important}
+#stage[data-lu-music-energy="baja"] #filmA,
+#stage[data-lu-music-energy="baja"] #filmB{transition-duration:7.2s!important}
+@media(max-width:720px){
+ #mobileBar,#mobileBar.lu-open,body.lu-immersive #mobileBar{
+  background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.49))!important;
+  box-shadow:none!important;border-color:rgba(255,255,255,.22)!important;
+ }
+ #mobileBar .kicker{color:rgba(255,255,255,.85)!important}
+ #mobileBar .mobvalue{color:#fff!important;font-size:15px!important;
+  text-shadow:0 1px 5px #000!important}
+ #mobileBar .mobdetail{color:rgba(255,255,255,.9)!important}
+ #luxMailRecent{background:rgba(0,0,0,.72)!important}
+ .luxRecentItem{padding:10px 11px!important}
+ .luxRecentItemHead strong{font-size:12px!important}
+ .luxRecentText{font-size:11.5px!important}
+ #luxRadioNow,#luxRadioDock.open #luxRadioNow{gap:4px!important}
+ #luxRadioNow .luxRadioStatus{font-size:8px!important}
+ #luxRadioNow .luxRadioTrack{font-size:10px!important}
+ #luxRadioNow .luxRadioArtist{display:none!important}
+ #stage #filmA,#stage #filmB{transition-duration:4.4s!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #stage #filmA,#stage #filmB,
+ #stage[data-lu-music-energy="alta"] #filmA,
+ #stage[data-lu-music-energy="alta"] #filmB,
+ #stage[data-lu-music-energy="baja"] #filmA,
+ #stage[data-lu-music-energy="baja"] #filmB{
+   transition-duration:.2s!important;
+ }
+ #luxRadioEQ i{animation:none!important}
+}
+</style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1766,4 +1943,4 @@ grade();setInterval(grade,120000);
   });
  }
 })();
-</script><script src="/casa-lux/chat.js?v=9" defer></script><script src="/casa-lux/radio.js?v=24" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=10" defer></script><script src="/casa-lux/radio.js?v=25" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
