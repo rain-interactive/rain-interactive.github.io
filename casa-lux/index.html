@@ -614,15 +614,15 @@
 }
 #topLine #clockDate{font-size:12px!important;margin-top:6px!important;color:#fff!important}
 #luxMailDock{top:122px!important}
-/* Autonomía: negro con tipografía blanca, tanto ON como OFF. */
+/* Autonomía: blanco con tipografía negra tanto ON como OFF. */
 #luAutoPower,#luAutoPower[data-enabled="on"],#luAutoPower[data-enabled="off"]{
- background:#050505!important;color:#fff!important;
- border-color:rgba(255,255,255,.75)!important;
- box-shadow:0 3px 16px rgba(0,0,0,.50)!important;
+ background:#fff!important;color:#000!important;
+ border-color:rgba(0,0,0,.8)!important;
+ box-shadow:0 3px 16px rgba(0,0,0,.35)!important;
 }
-#luAutoPower[data-enabled="on"]{border-width:2px!important;border-color:#fff!important}
-#luAutoPower[data-enabled="off"]{border-width:1px!important;border-color:rgba(255,255,255,.5)!important}
-#luAutoPower .luPowerIcon,#luAutoPowerText{color:#fff!important}
+#luAutoPower[data-enabled="on"]{border-width:2px!important;border-color:#000!important}
+#luAutoPower[data-enabled="off"]{border-width:1px!important;border-color:rgba(0,0,0,.48)!important}
+#luAutoPower .luPowerIcon,#luAutoPowerText{color:#000!important}
 @media(max-width:720px){
  /* En móviles el reloj se mantiene en el HUD inferior existente. */
  #luxMailDock{top:78px!important}
