@@ -40,3 +40,22 @@
  #luSkyMobileMap{display:block;width:min(100%,220px);height:98px;margin:3px 0}
  #luSkyMobile .mobvalue,#mHumidityCell .mobvalue{font-size:15px!important;color:white!important}
 }
+
+/* Autonomía contemplativa: menos interfaz, mismas mediciones siempre visibles. */
+body.lu-immersive #liveStrip{
+ background:transparent!important;
+ border:0!important;border-radius:0!important;
+ box-shadow:none!important;backdrop-filter:none!important;
+}
+body.lu-immersive #liveStrip .metric,
+body.lu-immersive #liveStrip #wfForecast{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ text-shadow:0 1px 5px #000,0 3px 13px #000f!important;
+}
+body.lu-immersive #liveStrip .metric .kicker,
+body.lu-immersive #liveStrip .metric .tiny{opacity:.88!important}
+body.lu-immersive #mobileBar{
+ background:linear-gradient(to top,rgba(0,0,0,.70),rgba(0,0,0,.28))!important;
+ border:0!important;box-shadow:none!important;backdrop-filter:none!important;
+}
+body.lu-immersive #mobileBar .mobcell{background:transparent!important;box-shadow:none!important;border:0!important}
