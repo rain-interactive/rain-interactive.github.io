@@ -88,7 +88,7 @@
 #mobileBar{z-index:35!important}
 @media(max-width:720px){#liveStrip{display:none!important}#mobileBar{display:block!important}#filmState{bottom:55px}}
 @media(min-width:721px) and (max-width:1190px){#liveStrip{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:9px}#liveStrip .value{font-size:17px}#liveStrip .detail{font-size:11px}}
-</style><link rel="stylesheet" href="/casa-lux/chat.css?v=4"><link rel="stylesheet" href="/casa-lux/radio.css?v=9"><link rel="stylesheet" href="/casa-lux/monocromo.css?v=3"><style>#topLine{justify-content:flex-end!important}</style><link rel="stylesheet" href="/casa-lux/windfinder.css?v=2"><style id="lux-clean-screen-v1">
+</style><link rel="stylesheet" href="/casa-lux/chat.css?v=5"><link rel="stylesheet" href="/casa-lux/radio.css?v=9"><link rel="stylesheet" href="/casa-lux/monocromo.css?v=3"><style>#topLine{justify-content:flex-end!important}</style><link rel="stylesheet" href="/casa-lux/windfinder.css?v=2"><style id="lux-clean-screen-v1">
 /* CASA DE LUX — vista limpia. No modificar iluminación, fotografías ni los datos. */
 #view{inset:0!important;overflow:hidden!important;padding:0!important;align-items:center!important;justify-content:center!important}
 #stage{box-shadow:none!important}
@@ -357,7 +357,48 @@
  #stage.lu-autonomous #filmB .film-sharp{animation:none!important;transform:none!important}
  #stage.lu-autonomous #subtitleLux{transition:none}
 }
-</style><link rel="stylesheet" href="/casa-lux/astronomia.css?v=3"></head><body><div id="backdrop"></div>
+</style><link rel="stylesheet" href="/casa-lux/astronomia.css?v=3"><style id="lu-folded-data-and-subtitles">
+/* Máxima superficie para los planos: paneles plegados, accesibles por hover o clic. */
+#luxMailLatest,#luxQuietTools,#luxArchive{display:none!important}
+#stage #liveStrip,#stage.show-data #liveStrip{
+ transform:translateY(calc(100% - 38px))!important;
+ transition:transform .42s ease!important;
+ padding-top:44px!important;
+ min-height:185px!important;max-height:240px!important;
+ background:linear-gradient(180deg,rgba(3,5,9,.93),rgba(3,5,9,.98))!important;
+ border-top:1px solid #ffffff55!important;
+ box-shadow:0 -9px 36px #0005!important;pointer-events:auto!important;
+}
+#stage #liveStrip.lu-open,#stage.show-data #liveStrip.lu-open{transform:translateY(0)!important}
+.luDataHandle{
+ position:absolute;left:50%;top:0;transform:translateX(-50%);
+ z-index:4;display:block;white-space:nowrap;min-height:37px;padding:10px 25px;
+ border:0;border-radius:0 0 8px 8px;background:#090c10;color:#fff;
+ font:600 13px/1.1 system-ui,sans-serif;letter-spacing:.13em;cursor:pointer;
+}
+.luDataHandle:hover,.luDataHandle:focus-visible{background:#292c31;outline:2px solid #fff;outline-offset:-2px}
+#stage #subtitleLux,#stage.lu-autonomous #subtitleLux{bottom:100px!important}
+@media(hover:hover) and (pointer:fine){
+ #stage #liveStrip:hover,#stage #liveStrip:focus-within,
+ #stage.show-data #liveStrip:hover,#stage.show-data #liveStrip:focus-within{transform:translateY(0)!important}
+}
+@media(max-width:720px){
+ #stage #liveStrip,#stage.show-data #liveStrip{display:none!important}
+ #mobileBar,body.lu-immersive #mobileBar{
+  display:block!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;
+  transform:translateY(calc(100% - 38px))!important;
+  transition:transform .42s ease!important;max-height:min(46dvh,360px)!important;
+  padding:49px 14px max(14px,env(safe-area-inset-bottom))!important;
+  background:linear-gradient(180deg,rgba(3,5,9,.93),rgba(3,5,9,.98))!important;
+  border-top:1px solid #ffffff55!important;
+  overflow-y:auto!important;pointer-events:auto!important;
+ }
+ #mobileBar.lu-open,body.lu-immersive #mobileBar.lu-open{transform:translateY(0)!important}
+ #mobileBar .luDataHandle{position:absolute!important;top:0!important;left:50%!important;transform:translateX(-50%)!important;margin:0!important}
+ #stage #subtitleLux,#stage.lu-autonomous #subtitleLux{bottom:145px!important}
+}
+@media(prefers-reduced-motion:reduce){#stage #liveStrip,#mobileBar{transition:none!important}}
+</style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -369,7 +410,7 @@
  <div id="filmState" aria-live="off"></div>
  <div id="poster" title="Póster de arte abstracto"></div><div id="alarmToast" role="status" aria-live="polite"><div id="alarmTitle">Clase en una hora</div><div id="alarmBody">O Raposo Púrpura</div></div>
  <header id="topLine"><div id="cornerClock"><div id="clockLarge">--:--:--</div><div id="clockDate">A Coruña</div></div></header>
- <section id="liveStrip" aria-label="Datos en directo"><div class="metric"><div class="kicker">◷ Reloj · A Coruña</div><div class="value" id="clockInfo">--:--</div><div class="detail" id="syncInfo">Sincronizando...</div></div>
+ <section id="liveStrip" aria-label="Datos en directo"><button type="button" class="luDataHandle" id="luDataHandle" aria-controls="liveStrip" aria-expanded="false">⌃ &nbsp; DATOS · ATLÁNTICO</button><div class="metric"><div class="kicker">◷ Reloj · A Coruña</div><div class="value" id="clockInfo">--:--</div><div class="detail" id="syncInfo">Sincronizando...</div></div>
  <div class="metric"><div class="kicker">◉ Tiempo</div><div class="value" id="temp">— °C</div><div class="detail" id="weatherText">Consultando...</div><div class="tiny" id="wind">A Coruña</div></div><div class="metric" id="humidityMetric" aria-label="Humedad relativa exterior en A Coruña"><div class="kicker">◌ Humedad · A Coruña</div><div class="value" id="humidityValue">— %</div><div class="detail" id="humidityDetail">Exterior · consultando…</div><div class="tiny" id="humiditySource">Open-Meteo · a 2 m del suelo</div></div>
  <div class="metric"><div class="kicker">≈ Puerto de A Coruña</div><div class="value" id="tideTitle">—</div><div class="detail" id="tideNext">Consultando mareas...</div><div class="tiny" id="tideSource">MeteoGalicia</div></div>
  <div class="metric"><div class="kicker">◑ Ciclo lunar</div><div class="phaseCell"><canvas id="moonDisc" width="150" height="150"></canvas><div><div class="value" id="moonName">—</div><div class="detail" id="nextMoon">Calculando...</div></div></div><div class="tiny">Fases: US Naval Observatory, UTC → A Coruña</div></div><div class="metric"><div class="kicker">◷ Taller · O Raposo Púrpura</div><div class="value" id="classState">—</div><div class="detail" id="classDetail">L–V · 11:00–14:00 / 17:00–20:00</div><div class="tiny" id="alarmDetail">Avisos 10:00 y 16:00 · L–V</div></div></section>
@@ -393,7 +434,7 @@
  <label>O Raposo Púrpura · avisos</label><p>Lunes a viernes, 10:00 y 16:00. Los avisos visuales son automáticos. El sonido depende de los permisos del navegador y puede requerir una interacción con la página.</p>
  <p>Fuentes: <a href="https://www.meteogalicia.gal/web/observacion/camaras" target="_blank" rel="noopener">MeteoGalicia</a> · <a href="https://open-meteo.com/en/docs/marine-weather-api" target="_blank" rel="noopener">Open-Meteo Marine</a>.</p>
  <button class="btn" id="closePanel" type="button">Cerrar información</button></aside>
- <section id="mobileBar"><h2>LUX · EL ATLÁNTICO</h2><div class="mobgrid"><div class="mobcell"><div class="kicker">Tiempo</div><div class="mobvalue" id="mWeather">—</div><div class="mobdetail" id="mWeatherD">Consultando</div></div><div class="mobcell" id="mHumidityCell"><div class="kicker">◌ Humedad exterior</div><div class="mobvalue" id="mHumidity">— %</div><div class="mobdetail" id="mHumidityD">A Coruña · consultando</div></div><div class="mobcell"><div class="kicker">Mareas</div><div class="mobvalue" id="mTide">—</div><div class="mobdetail" id="mTideD">Consultando</div></div><div class="mobcell"><div class="kicker">Luna</div><div class="mobvalue" id="mMoon">—</div><div class="mobdetail" id="mMoonD">Calculando</div></div><div class="mobcell"><div class="kicker">Hora Coruña</div><div class="mobvalue" id="mClock">--:--</div><div class="mobdetail" id="mClockD">Sincronización</div></div><div class="mobcell"><div class="kicker">Taller y alarmas</div><div class="mobvalue" id="mClass">—</div><div class="mobdetail" id="mClassD">L–V · 10:00 y 16:00</div></div></div></section>
+ <section id="mobileBar"><button type="button" class="luDataHandle" id="luDataHandleMobile" aria-controls="mobileBar" aria-expanded="false">⌃ &nbsp; DATOS · ATLÁNTICO</button><h2>LUX · EL ATLÁNTICO</h2><div class="mobgrid"><div class="mobcell"><div class="kicker">Tiempo</div><div class="mobvalue" id="mWeather">—</div><div class="mobdetail" id="mWeatherD">Consultando</div></div><div class="mobcell" id="mHumidityCell"><div class="kicker">◌ Humedad exterior</div><div class="mobvalue" id="mHumidity">— %</div><div class="mobdetail" id="mHumidityD">A Coruña · consultando</div></div><div class="mobcell"><div class="kicker">Mareas</div><div class="mobvalue" id="mTide">—</div><div class="mobdetail" id="mTideD">Consultando</div></div><div class="mobcell"><div class="kicker">Luna</div><div class="mobvalue" id="mMoon">—</div><div class="mobdetail" id="mMoonD">Calculando</div></div><div class="mobcell"><div class="kicker">Hora Coruña</div><div class="mobvalue" id="mClock">--:--</div><div class="mobdetail" id="mClockD">Sincronización</div></div><div class="mobcell"><div class="kicker">Taller y alarmas</div><div class="mobvalue" id="mClass">—</div><div class="mobdetail" id="mClassD">L–V · 10:00 y 16:00</div></div></div></section>
  <div id="dataStatus">Datos sujetos a conexión · A Coruña</div>
  <script>
 'use strict';
@@ -527,48 +568,33 @@ window.__luClimateRefresh=()=>{
 };
 chooseScene();autoBaseScene();updateMoon();clockTick();syncClock();loadWeather();setInterval(()=>{clockTick();autoBaseScene()},1000);setInterval(updateMoon,60000);setInterval(showTides,60000);setInterval(autoAtmosphere,60000);setInterval(loadWeather,15*60000);setInterval(loadTides,60*60000);setInterval(syncClock,60*60000);
 </script>
-<script>
-// Notas contemplativas — recomendaciones editoriales, NO noticias actuales.
+<script id="lu-unified-captions">
+/* Un solo canal visual: los mensajes pasan por subtítulos y el archivo vive en el buzón. */
 (()=>{
- const stage=document.getElementById('stage'),subtitle=document.getElementById('subtitleLux'),line=document.getElementById('subtitleText');
- const archive=document.getElementById('luxArchive'),list=document.getElementById('luxArchiveList');
- const dateFmt=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
- const proposals=[
-  {text:'Hoy pondría un disco de música ambiental y dejaría que el Atlántico hiciera el resto.',tag:'música',url:'https://soundcloud.com/discover'},
-  {text:'Si apetece cine contemplativo: "Paterson", de Jim Jarmusch.',tag:'cine',url:'https://www.filmaffinity.com/es/search.php?stext=Paterson'},
-  {text:'Me apetece explorar el archivo de películas y grabaciones experimentales.',tag:'archivo',url:'https://archive.org/details/movies'},
-  {text:'¿Y si hoy miramos una película de Jim Jarmusch sin mirar el móvil?',tag:'cine',url:'https://www.imdb.com/find/?q=Jim%20Jarmusch'},
-  {text:'Un rato sin hacer nada también forma parte de una obra.',tag:'reflexión',url:null},
-  {text:'La convocatoria que nos interese tendrá que dialogar con la experimentación y la videocreación.',tag:'arte',url:'https://www.cultura.gob.es/'},
- ];
- let notes=[];try{notes=JSON.parse(localStorage.getItem('lux-casa-notes-v1')||'[]');if(!Array.isArray(notes))notes=[]}catch(e){notes=[]}
- let seen=new Set();let lastDisplayed=0;
- function persist(){try{localStorage.setItem('lux-casa-notes-v1',JSON.stringify(notes.slice(-180)))}catch(e){}}
- function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
- function addNote(){const date=new Date(),pool=proposals.filter((p,i)=>!seen.has(i));if(!pool.length)seen.clear();const indices=proposals.map((_,i)=>i).filter(i=>!seen.has(i));const k=indices[Math.floor(Math.random()*indices.length)];seen.add(k);const p=proposals[k];notes.push({id:date.getTime(),date:date.toISOString(),...p,read:false});persist();showNewest();}
- function showNewest(){const p=notes.slice().reverse().find(n=>!n.read);if(!p){subtitle.classList.remove('visible');return;}line.textContent=p.text;subtitle.classList.add('visible');subtitle.dataset.luAuto='no';}
- // Acceso del director autónomo al mismo archivo de notas y subtítulos de la Casa.
+ 'use strict';
+ const subtitle=document.getElementById('subtitleLux'), line=document.getElementById('subtitleText');
+ let hideTimer=0,lastText='';
+ function show(message,origin='mail'){
+  if(typeof message!=='string'||!message.trim())return false;
+  const full=message.replace(/\s+/g,' ').trim();
+  lastText=full;
+  line.textContent=full.length>205?full.slice(0,202).trimEnd()+'…':full;
+  subtitle.classList.add('visible');
+  subtitle.dataset.luAuto=origin==='auto'?'yes':'mail';
+  clearTimeout(hideTimer);
+  hideTimer=setTimeout(()=>{subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'},Math.min(17000,Math.max(9000,full.length*100)));
+  return true;
+ }
  window.__luNotes={
-  getState:()=>({text:line.textContent||'',visible:subtitle.classList.contains('visible'),count:notes.length}),
+  getState:()=>({text:lastText,visible:subtitle.classList.contains('visible'),count:window.__luMail?.getState?.().total||0}),
+  showMessage:(message)=>show(message,'mail'),
   say:(message,tag='ambiente')=>{
-   if(typeof message!=='string'||!message.trim())return false;
-   const date=new Date();
-   const note={id:date.getTime(),date:date.toISOString(),text:message.slice(0,320),tag,read:false,url:null};
-   notes.push(note);notes=notes.slice(-180);persist();
-   line.textContent=note.text;subtitle.classList.add('visible');subtitle.dataset.luAuto='yes';
+   if(!show(message,'auto'))return false;
+   window.__luMail?.post?.('Nota de Lu',message.trim().slice(0,320),'idea','lu-note-'+Date.now()+'-'+Math.floor(Math.random()*1000000));
    return true;
   },
-  stop:()=>{if(subtitle.dataset.luAuto==='yes'){subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'}}
+  stop:()=>{if(subtitle.dataset.luAuto==='yes'){clearTimeout(hideTimer);subtitle.classList.remove('visible');subtitle.dataset.luAuto='no'}}
  };
- function render(){list.innerHTML='';for(const note of notes.slice().reverse()){const item=document.createElement('p');const t=document.createElement('small');t.textContent=`${dateFmt.format(new Date(note.date))} · ${note.tag} · ${note.read?'leído':'pendiente'}`;item.appendChild(t);item.appendChild(document.createElement('br'));item.appendChild(document.createTextNode(note.text+' '));if(note.url){const a=document.createElement('a');a.href=note.url;a.rel='noopener noreferrer';a.target='_blank';a.textContent='Ver fuente';item.appendChild(a)}const b=document.createElement('button');b.style.marginLeft='8px';b.textContent=note.read?'Leído':'Marcar leído';b.onclick=()=>{note.read=true;persist();render();showNewest()};item.appendChild(b);list.appendChild(item)} }
- document.getElementById('luxDataToggle').onclick=()=>stage.classList.toggle('show-data');
- document.getElementById('luxArchiveOpen').onclick=()=>{archive.classList.add('open');render()};
- document.getElementById('luxArchiveClose').onclick=()=>archive.classList.remove('open');
- document.getElementById('luxQuoteNew').onclick=()=>addNote();
- // Pausas largas: como mucho una nota nueva cada tres horas mientras la página está abierta.
- function considerNote(){if(document.hidden)return;const n=Date.now(),h=new Date().getHours();if(h<9||h>22)return;if(n-lastDisplayed<10800000)return;if(Math.random()>.25)return;lastDisplayed=n;addNote();}
- if(notes.length)showNewest();
- setInterval(considerNote,30*60*1000);
 })();
 </script>
 <script>
@@ -994,4 +1020,21 @@ const observer=new MutationObserver(()=>{clearTimeout(window.__luxChromaUpdate);
 ['temp','weatherText','tideTitle','tideNext','moonName'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
 grade();setInterval(grade,120000);
 })();
-</script><script src="/casa-lux/chat.js?v=5" defer></script><script src="/casa-lux/radio.js?v=16" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=12" defer></script></body></html>
+</script><script id="lu-folded-data-events">
+(()=>{
+ 'use strict';
+ for(const [panelId,buttonId] of [['liveStrip','luDataHandle'],['mobileBar','luDataHandleMobile']]){
+  const panel=document.getElementById(panelId),button=document.getElementById(buttonId);
+  if(!panel||!button)continue;
+  let pinned=false;
+  const setOpen=(open)=>{panel.classList.toggle('lu-open',open);button.setAttribute('aria-expanded',String(open));button.textContent=(open?'⌄':'⌃')+'   DATOS · ATLÁNTICO'};
+  button.addEventListener('click',()=>{pinned=!pinned;setOpen(pinned)});
+  if(panelId==='liveStrip'){
+   panel.addEventListener('mouseenter',()=>setOpen(true));
+   panel.addEventListener('mouseleave',()=>{if(!pinned)setOpen(false)});
+   panel.addEventListener('focusout',()=>{requestAnimationFrame(()=>{if(!panel.contains(document.activeElement)&&!pinned)setOpen(false)})});
+  }
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
+ }
+})();
+</script><script src="/casa-lux/chat.js?v=6" defer></script><script src="/casa-lux/radio.js?v=16" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=12" defer></script></body></html>
