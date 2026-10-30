@@ -45,8 +45,8 @@ jobs:
           subfont=ImageFont.truetype(path,20)
           numberfont=ImageFont.truetype(bold,21)
           filefont=ImageFont.truetype(path,14)
-          draw.text((left,25),'REFERENCIAS ARTISTICAS / O RAPOSO PURPURA',font=headline,fill='#ffffff')
-          draw.text((left,88),f'{len(entries)} planos  ·  dibujos y obras de arte  ·  sin retratos de Lu  ·  catálogo curado',font=subfont,fill='#b6bec9')
+          draw.text((left,25),'DIBUJOS E ILUSTRACIONES / O RAPOSO PURPURA',font=headline,fill='#ffffff')
+          draw.text((left,88),f'{len(entries)} planos  ·  solo dibujo e ilustracion  ·  sin fotografias  ·  sin Lu Roth',font=subfont,fill='#b6bec9')
           for ix,entry in enumerate(entries):
               file=base/entry['file']
               if not file.is_file():
