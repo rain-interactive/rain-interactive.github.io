@@ -135,7 +135,7 @@ let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
 let autoSessionActive=false,autoPlaybackPending=false,autoStopRequested=false;
 let visualPreference=null,visualRecent=[];
-let currentSound=null,manualPlayPending=false,soundVolume=75;
+let currentSound=null,manualPlayPending=false,compactStartup=false,soundVolume=75;
 try{const savedVolume=localStorage.getItem('lux-radio-volume-v1');if(savedVolume!==null){const n=Number(savedVolume);if(Number.isFinite(n)&&n>=0&&n<=100)soundVolume=n}}catch{}
 $('luxRadioVolume').value=String(soundVolume);
 try {
@@ -273,7 +273,7 @@ function setupWidget(){
    refreshCurrentSound();
   });
   widget.bind(api.Events.PLAY,()=>{
-   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;autoPlaybackPending=false;manualPlayPending=false;updateNow();refreshCurrentSound();window.dispatchEvent(new Event('lu-radio-rhythm-change'));
+   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;autoPlaybackPending=false;manualPlayPending=false;updateNow();refreshCurrentSound();if(compactStartup){compactStartup=false;open(false)}window.dispatchEvent(new Event('lu-radio-rhythm-change'));
    widget.getCurrentSoundIndex(index=>{
     if(Number.isInteger(index))lastTrackIndex=index;
    });
@@ -331,9 +331,9 @@ $('luxRadioPlay').addEventListener('click',()=>{
  if(musicShelfOpen)showMusicShelf(false);
  if(isPlaying){try{widget?.pause()}catch{};return}
  autoStopRequested=false;luRadioManual=true;
- if(!initialized){manualPlayPending=true;frame.loading='eager';setMix(selected,true);loadSDK()}
+ if(!initialized){manualPlayPending=true;compactStartup=true;frame.loading='eager';open(true);setMix(selected,true);loadSDK()}
  else if(widgetReady&&widget){try{widget.play()}catch{}}
- else{manualPlayPending=true;frame.loading='eager';frame.src=mixURL(mixes[selected],true);loadSDK()}
+ else{manualPlayPending=true;compactStartup=true;frame.loading='eager';open(true);frame.src=mixURL(mixes[selected],true);loadSDK()}
 });
 $('luxRadioMiniNext').addEventListener('click',()=>{
  luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;
