@@ -370,6 +370,8 @@
  box-shadow:0 -9px 36px #0005!important;pointer-events:auto!important;
 }
 #stage #liveStrip.lu-open,#stage.show-data #liveStrip.lu-open{transform:translateY(0)!important}
+/* El asa ocupa el primer hijo: el reloj original permanece oculto para no duplicarlo. */
+#stage #liveStrip>.metric:nth-child(2){display:none!important}
 .luDataHandle{
  position:absolute;left:50%;top:0;transform:translateX(-50%);
  z-index:4;display:block;white-space:nowrap;min-height:37px;padding:10px 25px;
