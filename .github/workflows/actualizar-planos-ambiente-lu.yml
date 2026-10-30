@@ -15,12 +15,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
+      - name: Instalar comprobación de resolución
+        run: python -m pip install --disable-pip-version-check pillow
       - name: Generar lista de imágenes conservando títulos existentes
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           import json,re
+          from PIL import Image
           folder=Path('casa-lux/planos-ambiente')
           dest=folder/'catalogo.json'
           try:
@@ -31,6 +34,15 @@ jobs:
           pics=sorted((f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in ('.jpg','.jpeg','.png','.webp')),key=lambda x:x.name.lower())
           items=[]
           for p in pics:
+              try:
+                  with Image.open(p) as im:
+                      width,height=im.size
+                  if width < 1920 or height < 1080:
+                      print('Excluida por baja resolución:',p.name,width,height)
+                      continue
+              except Exception as exc:
+                  print('Excluida: imagen ilegible',p.name,str(exc))
+                  continue
               name=titles.get(p.name) or re.sub(r'[-_]+',' ',p.stem).strip()
               items.append({'file':p.name,'name':name})
           dest.write_text(json.dumps({'version':1,'images':items},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
