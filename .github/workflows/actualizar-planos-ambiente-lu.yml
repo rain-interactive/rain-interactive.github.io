@@ -1,0 +1,49 @@
+name: Actualizar catálogo de planos ambiente · Casa de Lu Roth
+on:
+  push:
+    paths:
+      - 'casa-lux/planos-ambiente/**'
+      - '!casa-lux/planos-ambiente/catalogo.json'
+      - '!casa-lux/planos-ambiente/README.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  catalogo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Generar lista de imágenes conservando títulos existentes
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          folder=Path('casa-lux/planos-ambiente')
+          dest=folder/'catalogo.json'
+          try:
+              old=json.loads(dest.read_text(encoding='utf-8'))
+              titles={x['file']:x.get('name','') for x in old.get('images',[]) if isinstance(x,dict) and 'file' in x}
+          except (FileNotFoundError,ValueError,KeyError):
+              titles={}
+          pics=sorted((f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in ('.jpg','.jpeg','.png','.webp')),key=lambda x:x.name.lower())
+          items=[]
+          for p in pics:
+              name=titles.get(p.name) or re.sub(r'[-_]+',' ',p.stem).strip()
+              items.append({'file':p.name,'name':name})
+          dest.write_text(json.dumps({'version':1,'images':items},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('Planos registrados:',len(items))
+          PY
+      - name: Publicar catálogo automáticamente
+        shell: bash
+        run: |
+          git config user.name "Casa de Lu Roth"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/planos-ambiente/catalogo.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Casa Lu: registrar automáticamente los nuevos planos ambiente"
+            git pull --rebase origin main
+            git push origin main
+          fi

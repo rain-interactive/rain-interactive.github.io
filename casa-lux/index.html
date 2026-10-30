@@ -1015,21 +1015,38 @@ const nuevosPlanos=[
 ];
 // El orden debe ser fijo para que el número del catálogo siempre corresponda al plano real.
 nuevosPlanos.forEach(shot=>scenes.push({...shot,width:1920,height:1080,orig:'Plano aportado para la casa de Lux'}));
-// Catálogo ambiental: ninguna mujer ajena a Lu; solo espacios y arquitectura extraña.
-[
- ['Silos brutalistas','ambient_01_silos_brutalistas.jpg'],
- ['Ciudad deformada · 2000','ambient_02_ciudad_digital_deformada.jpg'],
- ['Escaleras rojas','ambient_03_escaleras_rojas.jpg'],
- ['Estación 125 Street','ambient_04_metro_125_street.jpg'],
- ['Lavandería turquesa','ambient_05_lavanderia_turquesa.jpg'],
- ['Televisores CRT · neón','ambient_06_crt_neon.jpg'],
- ['Habitación de monitores','ambient_07_muro_monitores.jpg']
-].forEach(([name,filename])=>{
- const s={name,group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Plano ambiental / industrial / glitch'};
- scenes.push(s);
- const image=new Image();image.onload=()=>{s.src='assets/'+filename};image.onerror=()=>{s.src=''};
- image.src='assets/'+filename;
-});
+// Los personajes femeninos de la instalación son siempre Lu Roth.
+// Planos ambientales y tecnología vintage: carpeta separada y catálogo extensible.
+const ambientalesBase=[
+ ["Silos brutalistas","ambient_01_silos_brutalistas.jpg"],
+ ["Ciudad deformada · 2000","ambient_02_ciudad_digital_deformada.jpg"],
+ ["Escaleras rojas","ambient_03_escaleras_rojas.jpg"],
+ ["Estación 125 Street","ambient_04_metro_125_street.jpg"],
+ ["Lavandería turquesa","ambient_05_lavanderia_turquesa.jpg"],
+ ["Televisores CRT · neón","ambient_06_crt_neon.jpg"],
+ ["Habitación de monitores","ambient_07_muro_monitores.jpg"]
+];
+const ambientRegistrados=new Set();
+function registrarAmbiente(name,filename){
+ if(typeof filename!=='string'||!/^[^/\\]+\.(?:jpe?g|png|webp)$/i.test(filename)||ambientRegistrados.has(filename))return;
+ ambientRegistrados.add(filename);
+ const url='planos-ambiente/'+encodeURIComponent(filename);
+ const scene={name:String(name||filename),group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Archivo ambiental, industrial / glitch / años 2000'};
+ scenes.push(scene);
+ const img=new Image();
+ img.onload=()=>{scene.src=url};
+ img.onerror=()=>{scene.src=''};
+ img.src=url;
+}
+ambientalesBase.forEach(([name,filename])=>registrarAmbiente(name,filename));
+// Los archivos adicionales entran automáticamente al publicarse catalogo.json en GitHub.
+fetch('planos-ambiente/catalogo.json',{cache:'no-store'})
+ .then(r=>{if(!r.ok)throw Error('Catálogo no disponible');return r.json()})
+ .then(data=>{
+   const entries=Array.isArray(data)?data:data.images;
+   if(!Array.isArray(entries))return;
+   entries.forEach(e=>{if(e&&typeof e.file==='string')registrarAmbiente(e.name,e.file)});
+ }).catch(()=>{});
 const $=id=>document.getElementById(id),stage=$('stage');
 const layers=[$('filmA'),$('filmB')];
 const timefmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',hour12:false});

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "images": [
+    {
+      "file": "ambient_01_silos_brutalistas.jpg",
+      "name": "Silos brutalistas"
+    },
+    {
+      "file": "ambient_02_ciudad_digital_deformada.jpg",
+      "name": "Ciudad deformada · 2000"
+    },
+    {
+      "file": "ambient_03_escaleras_rojas.jpg",
+      "name": "Escaleras rojas"
+    },
+    {
+      "file": "ambient_04_metro_125_street.jpg",
+      "name": "Estación 125 Street"
+    },
+    {
+      "file": "ambient_05_lavanderia_turquesa.jpg",
+      "name": "Lavandería turquesa"
+    },
+    {
+      "file": "ambient_06_crt_neon.jpg",
+      "name": "Televisores CRT · neón"
+    },
+    {
+      "file": "ambient_07_muro_monitores.jpg",
+      "name": "Habitación de monitores"
+    }
+  ]
+}
