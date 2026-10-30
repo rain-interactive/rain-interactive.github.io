@@ -51,6 +51,7 @@
 #filmA,#filmB{position:absolute;inset:0;z-index:8;opacity:0;pointer-events:none;transition:opacity 6.5s ease;overflow:hidden;background:#090b12}
 .film-blur,.film-sharp{position:absolute;inset:-5%;background-image:var(--shot);background-size:cover;background-position:50% 48%;background-repeat:no-repeat}
 .film-blur{filter:blur(55px) brightness(.42) saturate(.86);transform:scale(1.13)}
+#filmA.ambient-shot .film-sharp,#filmB.ambient-shot .film-sharp{background-size:100% 100%!important;background-position:center!important;animation:none!important;transform:none!important}
 .film-sharp{inset:0;background-size:cover;filter:contrast(1.02);animation:luxSlowFrame 80s ease-in-out infinite alternate}
 @keyframes luxSlowFrame {from{transform:scale(1.005)}to{transform:scale(1.045)}}
 #luxLightFx{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transition:opacity 5s;background:radial-gradient(ellipse 22% 34% at 6% 44%,rgba(251,82,47,.23),transparent 95%),radial-gradient(ellipse 17% 26% at 75% 38%,rgba(255,188,99,.14),transparent 100%)}
@@ -1014,6 +1015,21 @@ const nuevosPlanos=[
 ];
 // El orden debe ser fijo para que el número del catálogo siempre corresponda al plano real.
 nuevosPlanos.forEach(shot=>scenes.push({...shot,width:1920,height:1080,orig:'Plano aportado para la casa de Lux'}));
+// Catálogo ambiental: ninguna mujer ajena a Lu; solo espacios y arquitectura extraña.
+[
+ ['Silos brutalistas','ambient_01_silos_brutalistas.jpg'],
+ ['Ciudad deformada · 2000','ambient_02_ciudad_digital_deformada.jpg'],
+ ['Escaleras rojas','ambient_03_escaleras_rojas.jpg'],
+ ['Estación 125 Street','ambient_04_metro_125_street.jpg'],
+ ['Lavandería turquesa','ambient_05_lavanderia_turquesa.jpg'],
+ ['Televisores CRT · neón','ambient_06_crt_neon.jpg'],
+ ['Habitación de monitores','ambient_07_muro_monitores.jpg']
+].forEach(([name,filename])=>{
+ const s={name,group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Plano ambiental / industrial / glitch'};
+ scenes.push(s);
+ const image=new Image();image.onload=()=>{s.src='assets/'+filename};image.onerror=()=>{s.src=''};
+ image.src='assets/'+filename;
+});
 const $=id=>document.getElementById(id),stage=$('stage');
 const layers=[$('filmA'),$('filmB')];
 const timefmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',hour12:false});
@@ -1021,6 +1037,7 @@ const weekfmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:
 const nightGroups=['cine','descanso','musica','leer','contemplar','crear','ordenador'];
 const dayGroups=['leer','ordenador','crear','movimiento','cotidiano','contemplar','musica','descanso'];
 let shown=-2,active=0,until=0,recent=[],nextChange=0;
+let fotosDesdeAmbiente=0,espaciadoAmbiental=3+Math.floor(Math.random()*2);
 const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]=x.value);return (+v.hour%24)*60+(+v.minute)};
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const bygroup=(g,when)=>scenes.map((s,i)=>({s,i})).filter(x=>x.s.group===g&&(x.s.time==='ambos'||x.s.time===when)).map(x=>x.i);
@@ -1038,6 +1055,9 @@ const luFrameFocusByFilename={
 };
 const luFrameCache=new Map();
 function applyShotFraming(layer,src,index){
+ if(scenes[index]?.type==='ambiente'){
+  layer.style.setProperty('--lu-focus-x','50%');layer.style.setProperty('--lu-focus-y','50%');layer.style.setProperty('--lu-image-size','100%');return;
+ }
  const focus=(luFrameFocusByFilename[src.split('/').pop()]||luFocus[index]||[50,45]);
  layer.style.setProperty('--lu-focus-x',focus[0]+'%');
  layer.style.setProperty('--lu-focus-y',focus[1]+'%');
@@ -1083,22 +1103,28 @@ function display(index){
  const l=layers[1-active],src=scenes[index].src;
  l.style.setProperty('--shot',`url("${src}")`);
  l.dataset.luCurrentSrc=src;
+ l.classList.toggle('ambient-shot',scenes[index].type==='ambiente');
  applyShotFraming(l,src,index);
  const sharp=l.querySelector('.film-sharp');
  if(sharp){sharp.style.animation='none';void sharp.offsetWidth;sharp.style.animation='';}
  l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;
+ if(scenes[index].type==='ambiente'){fotosDesdeAmbiente=0;espaciadoAmbiental=3+Math.floor(Math.random()*2)}else fotosDesdeAmbiente++;
  $('filmState').textContent=scenes[index].name;
  window.__luAutonomy?.onScene?.(index,scenes);
   // La elección del plano es siempre automática.
 }
 function chooseAutomatic(){
- // En ocasiones Lu conserva la fotografía durante otra duración elegida por ella.
- if(shown>=0&&window.__luAutonomy?.shouldHold?.(shown,scenes))return shown;
+ const ambiente=scenes.map((s,i)=>({s,i})).filter(({s})=>s.type==='ambiente'&&s.src).map(({i})=>i);
+ if(ambiente.length&&fotosDesdeAmbiente>=espaciadoAmbiental){
+  const novistos=ambiente.filter(i=>!recent.includes(i));
+  const elegido=pick(novistos.length?novistos:ambiente);
+  recent.push(elegido);if(recent.length>12)recent.shift();return elegido;
+ }
  const choice=window.__luAutonomy?.choose?.(scenes,shown,recent);
- if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src){
+ if(Number.isInteger(choice)&&choice>=0&&choice<scenes.length&&choice!==shown&&scenes[choice]?.src&&scenes[choice].type!=='ambiente'){
    recent.push(choice);if(recent.length>12)recent.shift();return choice;
  }
- let candidates=scenes.map((s,i)=>({s,i})).filter(({s,i})=>s.src&&i!==shown).map(({i})=>i);
+ let candidates=scenes.map((s,i)=>({s,i})).filter(({s,i})=>s.src&&s.type!=='ambiente'&&i!==shown).map(({i})=>i);
  if(!candidates.length)return null;
  const fresh=candidates.filter(i=>!recent.includes(i));
  const sel=pick(fresh.length?fresh:candidates);
@@ -1124,11 +1150,7 @@ function applyLighting(mins){
 }
 function hold(minutes){until=Date.now()+minutes*60000;}
 const isAutonomous=()=>window.__luAutonomy?.isEnabled?.()===true;
-function planNext(index=shown){
- if(!isAutonomous())return 180000; // Modo clásico: tres minutos exactos.
- const proposed=window.__luAutonomy?.nextDelay?.(index,scenes);
- return Number.isFinite(proposed)?Math.max(45000,Math.min(900000,proposed)):180000;
-}
+function planNext(index=shown){return 180000;} // Cambio automático fijo de tres minutos.
 function advance(force=false){
  const now=Date.now();
  if(!force&&now<nextChange)return;
