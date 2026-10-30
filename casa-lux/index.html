@@ -645,7 +645,98 @@
 @media(prefers-reduced-motion:reduce){#stage #filmA,#stage #filmB{transition-duration:.2s!important}}
 </style><style id="solo-ambientes-taller-v1">
 #stage #still{display:none!important;background-image:none!important}
-</style></head><body><div id="backdrop"></div>
+</style>
+<style id="lu-radio-bottom-dock-v1">
+/* Radio Lu Roth: franja inferior compacta, monocroma, separada de los datos del Atlántico. */
+#luxRadioDock{
+ top:auto!important;bottom:142px!important;left:22px!important;right:auto!important;
+ width:min(650px,calc(100vw - 44px))!important;max-width:calc(100vw - 44px)!important;
+ z-index:92!important;filter:none!important;color:#fff!important;
+ font-family:system-ui,-apple-system,Segoe UI,sans-serif!important;
+}
+#luxRadioBar{
+ min-height:44px;display:flex;align-items:center;gap:6px;min-width:0;
+ padding:4px 7px 4px 5px;background:rgba(4,5,7,.90);
+ border:1px solid rgba(255,255,255,.35);border-radius:7px;
+ box-shadow:0 5px 24px #0009;backdrop-filter:blur(10px);
+}
+#luxRadioToggle{
+ flex:0 0 auto;display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;
+ gap:5px!important;width:auto!important;max-width:146px;min-width:0;
+ min-height:33px!important;padding:5px 7px!important;margin:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ backdrop-filter:none!important;border-radius:4px!important;
+ color:#fff!important;font-size:10px!important;letter-spacing:.06em!important;
+}
+#luxRadioToggle .luxRadioName{white-space:nowrap;font-size:10px!important;color:#fff!important}
+#luxRadioToggle .luxRadioNote{color:#fff!important;font-size:14px!important}
+#luxRadioToggle .luxRadioChevron{color:#ddd!important;font-size:11px!important}
+#luxRadioEQ{flex:0 0 18px;height:17px;display:flex;align-items:flex-end;justify-content:center;gap:2px;opacity:.52}
+#luxRadioEQ i{width:2px;height:25%;background:#fff;display:block;transform-origin:bottom center}
+#luxRadioDock.playing #luxRadioEQ{opacity:1}
+#luxRadioDock.playing #luxRadioEQ i{animation:luxRadioMeter .7s ease-in-out infinite alternate}
+#luxRadioDock.playing #luxRadioEQ i:nth-child(2){animation-delay:-.35s}
+#luxRadioDock.playing #luxRadioEQ i:nth-child(3){animation-delay:-.52s}
+#luxRadioDock.playing #luxRadioEQ i:nth-child(4){animation-delay:-.16s}
+@keyframes luxRadioMeter{0%{height:18%}50%{height:86%}100%{height:43%}}
+#luxRadioNow,#luxRadioDock.open #luxRadioNow{
+ display:block!important;flex:1 1 0!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:2px 5px!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ color:#fff!important;box-shadow:none!important;
+ font:500 10.5px/1.45 system-ui,sans-serif!important;
+ letter-spacing:.018em;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+#luxRadioMiniControls{display:flex;align-items:center;gap:3px;flex:0 0 auto}
+#luxRadioMiniControls button{
+ width:32px;height:32px;min-width:32px;display:inline-flex;align-items:center;justify-content:center;
+ border:1px solid rgba(255,255,255,.26)!important;border-radius:5px;
+ background:#0a0a0a!important;color:#fff!important;
+ font:600 13px/1 system-ui,sans-serif;cursor:pointer;
+}
+#luxRadioMiniControls button:hover{background:#262626!important;border-color:#fff!important}
+#luxRadioMiniControls button:focus-visible,#luxRadioVolume:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#luxRadioVolumeLabel{display:flex;align-items:center;gap:5px;padding:0 1px 0 4px;color:#ddd;font:600 9px/1 system-ui,sans-serif}
+#luxRadioVolume{width:65px;max-width:65px;height:18px;accent-color:#fff;cursor:pointer}
+#luxRadioPanel{
+ position:absolute!important;left:0!important;bottom:calc(100% + 7px)!important;top:auto!important;
+ margin:0!important;width:min(430px,100%)!important;
+ max-height:calc(100dvh - 235px)!important;overflow-y:auto!important;
+ border-radius:7px!important;background:#070707f5!important;
+ border:1px solid rgba(255,255,255,.55)!important;box-shadow:0 12px 35px #000b!important;
+}
+#luxRadioFrame{height:240px!important}
+#luxRadioChoices{max-height:145px!important}
+#luxRadioDock #luxRadioIntro strong{font-family:system-ui,sans-serif!important;font-size:15px!important}
+#luxRadioDock #luxRadioIntro p{font-size:10px!important}
+#luxRadioDock .luxRadioFlow{display:flex;gap:6px;flex-wrap:wrap;padding:9px 11px;border-top:1px solid #fff3}
+#luxRadioDock .luxRadioFlow button{border:1px solid #777;background:#000;color:#fff;border-radius:5px;padding:6px 9px;font-size:10px}
+#luxRadioHint{padding:0 12px;font-size:10px;color:#ccc}
+#luMusicShelf{display:none!important} /* Solo SoundCloud en la radio, sin colección Spotify. */
+@media(max-width:720px){
+ #luxRadioDock{left:10px!important;right:10px!important;width:auto!important;max-width:none!important;bottom:80px!important}
+ #luxRadioBar{min-height:42px;gap:4px;padding:4px}
+ #luxRadioToggle{width:91px!important;max-width:91px!important;padding:3px 2px!important;gap:3px!important}
+ #luxRadioToggle .luxRadioName{font-size:8.5px!important;letter-spacing:0!important}
+ #luxRadioToggle .luxRadioNote{font-size:12px!important}
+ #luxRadioToggle .luxRadioChevron{display:none!important}
+ #luxRadioEQ{display:none!important}
+ #luxRadioNow,#luxRadioDock.open #luxRadioNow{font-size:9px!important;padding:2px!important}
+ #luxRadioMiniControls{gap:2px}
+ #luxRadioMiniControls button{width:28px;height:29px;min-width:28px;font-size:11px}
+ #luxRadioVolumeLabel{gap:2px;padding:0 1px;font-size:8px}
+ #luxRadioVolume{width:35px;max-width:35px}
+ #luxRadioPanel{max-height:calc(100dvh - 180px)!important;width:100%!important}
+ #luxRadioFrame{height:190px!important}
+}
+@media(max-width:355px){
+ #luxRadioToggle{width:27px!important;max-width:27px!important}
+ #luxRadioToggle .luxRadioName{display:none!important}
+ #luxRadioVolumeLabel span{display:none}
+}
+@media(prefers-reduced-motion:reduce){#luxRadioDock #luxRadioEQ i{animation:none!important}}
+</style>
+</head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -1366,4 +1457,4 @@ grade();setInterval(grade,120000);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
  }
 })();
-</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=21" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=22" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>
