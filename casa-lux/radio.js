@@ -149,7 +149,21 @@ function updateNow(){
  const mix=mixes[selected];if(!mix)return;
  const label=musicShelfOpen?'Colección musical':(currentSound?.title?
   (currentSound.artist?currentSound.artist+' — ':'')+currentSound.title:mix.name);
- const now=$('luxRadioNow');now.textContent=(isPlaying?'ON AIR · ':hasPlayed?'PAUSA · ':'SOUNDCLOUD · ')+label;
+ const now=$('luxRadioNow');
+ const status=document.createElement('span');
+ status.className='luxRadioStatus';
+ status.textContent=isPlaying?'ON AIR':hasPlayed?'PAUSA':'SOUNDCLOUD';
+ const detail=document.createElement('span');
+ detail.className='luxRadioTrack';
+ detail.textContent=currentSound?.title&&!musicShelfOpen?currentSound.title:label;
+ now.replaceChildren(status,detail);
+ if(currentSound?.artist&&!musicShelfOpen){
+  const author=document.createElement('span');
+  author.className='luxRadioArtist';
+  author.textContent=currentSound.artist;
+  now.appendChild(author);
+ }
+ now.setAttribute('aria-label',status.textContent+' · '+label);
  now.title=label;
  const play=$('luxRadioPlay');play.textContent=isPlaying?'Ⅱ':'▶';
  play.setAttribute('aria-label',isPlaying?'Pausar radio':'Reproducir radio');
