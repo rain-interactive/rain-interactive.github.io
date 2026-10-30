@@ -175,7 +175,7 @@ function record(index,scenes){
  memory.lastMood=mood;
  cameraAndColor(p,mood);chooseRadio(mood);save();render();
 }
-let lastVisionCaption=0;
+
 function onScene(index,scenes){
  if(!memory.enabled){stage.classList.remove('lu-autonomous');return}
  record(index,scenes);
@@ -189,18 +189,7 @@ function onScene(index,scenes){
    window.__luRadio?.setVisualPreference?.(profile);
    // Las elecciones locales de Jellyfin comparten la percepción visual.
    window.__luJellyfin?.suggest?.(atmosphere(sense()),profile);
-   // Una nota visual cada cierto tiempo: observaciones de luz, no de objetos.
-   if(Date.now()-lastVisionCaption>25*60*1000&&memory.events.length%5===0){
-    const phrase=profile.tone==='oscuro'
-     ?'Esta fotografía deja más espacio a las sombras. Voy a mover la cámara despacio.'
-     :profile.tone==='luminoso'
-     ?'Hay mucha luz en este plano. Prefiero que los detalles respiren.'
-     :profile.tone==='frío'
-     ?'La imagen tiene una temperatura fría. El Atlántico también participa en el encuadre.'
-     :'Una imagen puede cambiar de sentido solo con la luz y el tiempo.';
-    window.__luNotes?.say?.('Lu Roth · '+phrase,'visión');
-    lastVisionCaption=Date.now();
-   }
+   // Lu percibe el plano sin publicar comentarios repetitivos.
    render();
   }).catch(()=>{});
  }
