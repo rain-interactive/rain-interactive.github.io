@@ -638,6 +638,11 @@
  animation:none!important;
  transform:none!important;
 }
+</style><style id="lu-ritmo-musical-v2">
+#stage #filmA,#stage #filmB{transition:opacity 4.2s ease!important}
+#stage[data-lu-music-energy="alta"] #filmA,#stage[data-lu-music-energy="alta"] #filmB{transition-duration:2.8s!important}
+#stage[data-lu-music-energy="baja"] #filmA,#stage[data-lu-music-energy="baja"] #filmB{transition-duration:6.5s!important}
+@media(prefers-reduced-motion:reduce){#stage #filmA,#stage #filmB{transition-duration:.2s!important}}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1183,7 +1188,7 @@ const timefmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-
 const weekfmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:'short'});
 const nightGroups=['cine','descanso','musica','leer','contemplar','crear','ordenador'];
 const dayGroups=['leer','ordenador','crear','movimiento','cotidiano','contemplar','musica','descanso'];
-let shown=-2,active=0,until=0,recent=[],nextChange=0;
+let shown=-2,active=0,until=0,recent=[],nextChange=0,lastSceneAt=0;
 let fotosDesdeAmbiente=0,espaciadoAmbiental=3+Math.floor(Math.random()*2);
 const toMinutes=(d)=>{let p=timefmt.formatToParts(d),v={};p.forEach(x=>v[x.type]=x.value);return (+v.hour%24)*60+(+v.minute)};
 const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -1258,7 +1263,7 @@ function display(index){
  applyShotFraming(l,src,index);
  const sharp=l.querySelector('.film-sharp');
  if(sharp){sharp.style.animation='none';void sharp.offsetWidth;sharp.style.animation='';}
- l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;
+ l.style.opacity='1';layers[active].style.opacity='0';active=1-active;shown=index;lastSceneAt=Date.now();
  if(scenes[index].type==='ambiente'){fotosDesdeAmbiente=0;espaciadoAmbiental=3+Math.floor(Math.random()*2)}else fotosDesdeAmbiente++;
  $('filmState').textContent=scenes[index].name;
  window.__luAutonomy?.onScene?.(index,scenes);
@@ -1301,7 +1306,18 @@ function applyLighting(mins){
 }
 function hold(minutes){until=Date.now()+minutes*60000;}
 const isAutonomous=()=>window.__luAutonomy?.isEnabled?.()===true;
-function planNext(index=shown){return 180000;} // Cambio automático fijo de tres minutos.
+function planNext(index=shown){
+ const radio=window.__luRadio?.getState?.();
+ const energy=radio?.playing&&!radio.collectionOpen?radio.energy:'media';
+ stage.dataset.luMusicEnergy=energy;
+ if(isAutonomous()){
+  const ms=window.__luAutonomy?.nextDelay?.(index,scenes);
+  if(Number.isFinite(ms)&&ms>=22000)return Math.round(Math.min(100000,ms));
+ }
+ const ranges={alta:[24000,42000],media:[37000,63000],baja:[60000,90000]};
+ const [low,high]=ranges[energy]||ranges.media;
+ return Math.round(low+Math.random()*(high-low));
+}
 function advance(force=false){
  const now=Date.now();
  if(!force&&now<nextChange)return;
@@ -1310,7 +1326,7 @@ function advance(force=false){
   if(next===shown)window.__luAutonomy?.onHold?.(shown,scenes);
   else display(next);
  }
- // En autonomía se recalcula tras cada elección; en clásico siempre son 180 s.
+ // El intervalo cambia tras cada plano, según el carácter de la música.
  nextChange=now+planNext(shown);
 }
 function tick(){
@@ -1319,7 +1335,7 @@ function tick(){
  advance(false);
  const txt=state.sleeping?'Descansando · luz apagada hasta las 10:00':shown<0?'Habitación tranquila':(scenes[shown]?.name||'En la habitación');
  $('filmDetail').textContent=txt+' · Luz: '+(state.on?'encendida':'apagada')+
- (isAutonomous()?' · Ritmo autónomo: Lu decide cuándo cambiar.':' · Cambio aleatorio cada 3 minutos.');
+ (isAutonomous()?' · Ritmo visual adaptado a la radio.':' · Rotación ágil de planos.');
 }
 window.__luxShowWriting=(milliseconds=14000)=>{display(2);hold(Math.max(0.2,Math.min(1.5,milliseconds/60000)));};
 window.__luHouse={
@@ -1331,6 +1347,11 @@ window.__luHouse={
   display(index);nextChange=Date.now()+planNext(shown);return true;
  }
 };
+window.addEventListener('lu-radio-rhythm-change',()=>{
+ if(shown<0)return;
+ const ms=planNext(shown);
+ nextChange=Math.max(Date.now()+3000,lastSceneAt+Math.max(22000,ms));
+});
 advance(true);setInterval(tick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
 })();
@@ -1378,4 +1399,4 @@ grade();setInterval(grade,120000);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
  }
 })();
-</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=19" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=15" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=20" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=16" defer></script></body></html>

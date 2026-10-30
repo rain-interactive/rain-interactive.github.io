@@ -193,45 +193,18 @@ function onScene(index,scenes){
  }
 }
 function nextDelay(index,scenes){
- // No hay un reloj fijo en modo autónomo. Lu elige cuánto contemplar
- // cada plano en función de la atmósfera, el grupo y su lectura visual.
- const scene=scenes?.[index],p=sense(),mood=atmosphere(p);
- const ranges={
-  'lluvia nocturna':[170,850],
-  insomnio:[45,250],
-  nocturna:[110,680],
-  lluvia:[140,650],
-  'gris atlántico':[180,740],
-  mañana:[65,440],
-  taller:[60,360],
-  atardecer:[120,690]
- };
- const [lower,upper]=ranges[mood]||[90,580];
- const profile=window.__luVision?.view?.(index,scenes);
- const intimate=/contemplar|descanso|leer/.test(scene?.group||'');
- const active=/movimiento|crear|ordenador|musica/.test(scene?.group||'');
- // La duración se decide al cambiar de plano; el detalle conocido la matiza.
- let factor=intimate?1.28:active?.78:1;
- if(profile){
-  if(profile.detail<.115)factor*=1.25;
-  else if(profile.detail>.22)factor*=.78;
-  if(profile.brightness<.3&&p.night)factor*=1.16;
- }
- if(p.rain&&intimate)factor*=1.14;
- // La posición real de la Luna puede invitar a contemplar un poco más.
- if(p.sky?.dark&&p.sky.moonAltitude>40&&intimate)factor*=1.12;
- // Cerca del amanecer/anochecer aumentan discretamente las transiciones.
- if(p.sky&&p.sky.sunAltitude>-8&&p.sky.sunAltitude<5)factor*=.88;
- // Distribución irregular; a veces una escena pasa deprisa, otras permanece.
- const r=Math.random();
- const weighted=r<.18?(r/.18)*.21:
-                r<.80?.21+((r-.18)/.62)*.60:
-                .81+((r-.80)/.20)*.19;
- const slowMoment=intimate&&Math.random()<.085;
- const seconds=slowMoment?
-  Math.round(600+Math.random()*570): // Una contemplación de 10 a 19,5 minutos.
-  Math.max(45,Math.min(900,Math.round((lower+(upper-lower)*weighted)*factor)));
- // Memoria de la intención: sin guardar títulos o contenidos privados externos.
+ // Son sesiones musicales externas: estimación por género, no análisis de la onda.
+ const scene=scenes?.[index],p=sense();
+ const energy=p.radio?.playing&&!p.radio?.collectionOpen?p.radio.energy:'media';
+ const ranges={alta:[24,42],media:[37,63],baja:[60,90]};
+ const [lower,upper]=ranges[energy]||ranges.media;
+ let seconds=lower+Math.random()*(upper-lower);
+ const category=scene?.group||'';
+ if(/contemplar|descanso|leer/.test(category))seconds*=1.08;
+ if(/movimiento|crear|ordenador|musica/.test(category))seconds*=.93;
+ if(scene?.type==='ambiente')seconds*=.96;
+ if(p.rain&&/contemplar|descanso|leer/.test(category))seconds*=1.05;
+ seconds=Math.round(Math.max(22,Math.min(100,seconds)));
  const last=memory.events.at(-1);
  if(last&&last.id==='scene-'+index){last.dwell=seconds;save()}
  return seconds*1000;
@@ -280,7 +253,7 @@ css.textContent=`
 `;document.head.appendChild(css);
 function render(){
  const p=sense(),mood=atmosphere(p);
- el('luBrainState').textContent=memory.enabled?'Encendida · Lu elige los planos y cuándo cambiarlos, sin intervalo fijo':'Apagada · modo clásico, cambio cada tres minutos';
+ el('luBrainState').textContent=memory.enabled?'Encendida · Lu elige los planos y cuándo cambiarlos, sin intervalo fijo':'Apagada · montaje visual ágil';
  el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+
  (p.outdoorHumidity!==null?' · Humedad exterior '+p.outdoorHumidity+'%':'')+
  (p.sky?' · Cielo: '+p.sky.planetCount+' planetas sobre horizonte'+(p.sky.dominantPlanet?' · '+p.sky.dominantPlanet.name+' '+Math.round(p.sky.dominantPlanet.alt)+'°':''):'')+
@@ -324,7 +297,7 @@ function setAutonomy(enabled){
   document.body.classList.remove('lu-immersive');
   window.__luRadio?.stopAutonomy?.();
   window.__luNotes?.stop?.();
-  // Al apagar: el reloj clásico vuelve a contar tres minutos exactos.
+  // Al apagar: la casa mantiene una rotación de imágenes ágil.
   house.reschedule?.();
   stage.classList.remove('lu-autonomous');
   stage.style.removeProperty('--lu-art-grade');

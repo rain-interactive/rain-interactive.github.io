@@ -166,7 +166,7 @@ function pickNext(){
 function setMix(i,play=false){
  if(!Number.isInteger(i)||!mixes[i])return;
  if(musicShelfOpen)showMusicShelf(false);
- selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;updateNow();
+ selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;updateNow();window.dispatchEvent(new Event('lu-radio-rhythm-change'));
  const mix=mixes[i];
  const active=$('luxRadioActive');
  active.replaceChildren();
@@ -238,14 +238,14 @@ function setupWidget(){
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
   });
   widget.bind(api.Events.PLAY,()=>{
-   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;autoPlaybackPending=false;updateNow();
+   hasPlayed=true;isPlaying=true;widgetReady=true;transitioning=false;autoPlaybackPending=false;updateNow();window.dispatchEvent(new Event('lu-radio-rhythm-change'));
    widget.getCurrentSoundIndex(index=>{
     if(Number.isInteger(index))lastTrackIndex=index;
    });
    widget.getSounds(sounds=>{if(Array.isArray(sounds))trackCount=Math.max(1,sounds.length)});
    $('luxRadioHint').textContent='Sonando · al acabar, '+(flow.loop?'otra sesión '+(flow.random?'aleatoria':'en orden'):'la radio se detendrá')+'.';
   });
-  widget.bind(api.Events.PAUSE,()=>{isPlaying=false;updateNow()});
+  widget.bind(api.Events.PAUSE,()=>{isPlaying=false;updateNow();window.dispatchEvent(new Event('lu-radio-rhythm-change'))});
   widget.bind(api.Events.FINISH,()=>{
    if((!flow.loop&&!autoSessionActive)||!hasPlayed||transitioning)return;
    // FINISH se emite también al terminar pistas individuales de un set.
@@ -319,12 +319,19 @@ function ambientChoices(mood){
   (Array.isArray(x.m.moods)&&x.m.moods.includes(mood))||
   filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
+function clasificarRitmo(mix){
+ if(!mix)return 'media';
+ const tags=[mix.short||'',mix.name||'',mix.desc||''].join(' ').toLowerCase();
+ if(mix.energy==='alta'||/techno|electro|jungle|drum.{0,4}bass|footwork|garage|club|ebm|industrial|punk|bass music|breakbeat|house|funk|disco|cumbia|afrobeat|hip-hop|rap|ska|italo|dance|boogie/i.test(tags))return 'alta';
+ if(/ambient|drone|downtempo|dream pop|shoegaze|cinem[aá]|paisaje|lento|musique concr[eè]te|contempla|experimental|noise|textura/i.test(tags))return 'baja';
+ return 'media';
+}
 window.__luRadio={
  // Pausa la colección musical de Spotify al volver a SoundCloud.
  pauseCollection:()=>{
   if(musicShelfFrame.src)musicShelfFrame.removeAttribute('src');
  },
- getState:()=>({title:musicShelfOpen?'Colección musical':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,silent:false,silenceUntil:0,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen}),
+ getState:()=>({title:musicShelfOpen?'Colección musical':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,silent:false,silenceUntil:0,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen,energy:clasificarRitmo(mixes[selected])}),
  openCollection:()=>showMusicShelf(true),
  // La imagen guía el próximo set, sin interrumpir jamás la sesión en marcha.
  setVisualPreference:(profile)=>{
