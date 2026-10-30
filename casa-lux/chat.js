@@ -117,6 +117,7 @@ function renderRecent(){
  for(const m of messages){
   const item=document.createElement('article');item.className='luxRecentItem'+(m.read?'':' unread');
   item.setAttribute('role','listitem');
+  txt(item,'span',(byCategory[m.category]||'Apuntes').toUpperCase(),'luxRecentKicker');
   const head=document.createElement('div');head.className='luxRecentItemHead';
   txt(head,'strong',m.subject);
   txt(head,'time',niceDate(m.date));
