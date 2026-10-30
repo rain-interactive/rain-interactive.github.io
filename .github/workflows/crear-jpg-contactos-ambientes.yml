@@ -1,0 +1,80 @@
+name: JPG de todos los planos ambiente · Casa de Lu Roth
+on:
+  push:
+    paths:
+      - '.github/workflows/crear-jpg-contactos-ambientes.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  crear-jpg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener archivo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Preparar Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Crear hoja de contactos JPEG, sin retratos de Lu
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageFont, ImageOps
+          base=Path('casa-lux/planos-ambiente')
+          data=json.loads((base/'catalogo.json').read_text(encoding='utf-8'))
+          entries=sorted(data['images'],key=lambda x:x['file'].casefold())
+          if not entries:
+              raise RuntimeError('El catálogo ambiental está vacío')
+          cols=8
+          rows=math.ceil(len(entries)/cols)
+          cell_w,cell_h=330,238
+          image_w,image_h=306,174
+          left,top,gap=28,138,13
+          width=left*2+cols*cell_w
+          height=top+rows*cell_h+60
+          sheet=Image.new('RGB',(width,height),'#090b10')
+          draw=ImageDraw.Draw(sheet)
+          path='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+          bold='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+          headline=ImageFont.truetype(bold,39)
+          subfont=ImageFont.truetype(path,20)
+          numberfont=ImageFont.truetype(bold,21)
+          filefont=ImageFont.truetype(path,14)
+          draw.text((left,25),'CASA DE LU ROTH / ARCHIVO AMBIENTAL',font=headline,fill='#ffffff')
+          draw.text((left,88),f'{len(entries)} planos  ·  solo ambientes, sin retratos  ·  numerados para revisión',font=subfont,fill='#b6bec9')
+          for ix,entry in enumerate(entries):
+              file=base/entry['file']
+              if not file.is_file():
+                  raise FileNotFoundError(f'Imagen ambiental del catálogo no encontrada: {file}')
+              x=left+(ix%cols)*cell_w
+              y=top+(ix//cols)*cell_h
+              draw.rounded_rectangle((x,y,x+cell_w-11,y+cell_h-13),radius=9,fill='#151a22',outline='#3b4656',width=1)
+              img=Image.open(file)
+              img=ImageOps.exif_transpose(img).convert('RGB')
+              thumbnail=ImageOps.contain(img,(image_w,image_h),method=Image.Resampling.LANCZOS)
+              ox=x+6+(image_w-thumbnail.width)//2
+              oy=y+7+(image_h-thumbnail.height)//2
+              sheet.paste(thumbnail,(ox,oy))
+              draw.text((x+12,y+184),f'{ix+1:02d}',font=numberfont,fill='#ffffff')
+              short=entry['file']
+              if len(short)>21:short=short[:18]+'…'
+              draw.text((x+60,y+191),short,font=filefont,fill='#9da8b8')
+          draw.text((left,height-40),'CASA LU ROTH  /  PLANOS AMBIENTE  /  CATALOGO AUTOMATICO',font=subfont,fill='#778496')
+          out=Path('casa-lux/catalogo-ambientes.jpg')
+          sheet.save(out,'JPEG',quality=86,subsampling=0,optimize=True,progressive=True)
+          print(f'Creado {out}: {width} x {height}, {len(entries)} ambientes, {out.stat().st_size} bytes')
+          PY
+      - name: Publicar JPG
+        shell: bash
+        run: |
+          git config user.name "Casa de Lu Roth"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/catalogo-ambientes.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Casa Lu: publicar JPG numerado con todos los planos ambientales"
+            git pull --rebase origin main
+            git push origin main
+          fi
