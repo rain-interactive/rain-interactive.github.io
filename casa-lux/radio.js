@@ -42,13 +42,28 @@ const mixes=[
  {"name":"DJ Diskord · Witch House","short":"Witch house","desc":"Salem, CRIM3S, Gesaffelstein y niebla digital para la Casa.","url":"https://soundcloud.com/morbidx-1/witch-housedark-trap-mix-by-dj-diskord"},
  {"name":"Doctor Jeep · De School","short":"Club / Bass","desc":"Una sesión oscura de club grabada en Ámsterdam, con ritmos de bajos muy vivos.","url":"https://soundcloud.com/drjeep/doctor-jeep-live-at-de-school"},
  {"name":"CRIM3S · selección oscura","short":"Witch / Noise","desc":"Recorrido concentrado por las canciones de CRIM3S: pulsos sucios y distorsión emocional.","url":"https://soundcloud.com/user-11160019-216054474/crim3s-mix"},
- {"name":"Boy Harsher · Machina Dark Mix","short":"Dark synth","desc":"Synth oscuro e hipnótico de Boy Harsher para una pausa breve entre sesiones.","url":"https://soundcloud.com/boy-harsher/machina-ft-mariana-saldana-1"}
+ {"name":"Boy Harsher · Machina Dark Mix","short":"Dark synth","desc":"Synth oscuro e hipnótico de Boy Harsher para una pausa breve entre sesiones.","url":"https://soundcloud.com/boy-harsher/machina-ft-mariana-saldana-1"},
+ {"name":"Ethio-jazz · Addis Abeba","short":"Ethio-jazz","desc":"Metales oblicuos, soul etíope y melodías de Addis Abeba. Un sol extraño en la habitación.","url":"https://soundcloud.com/swanndelamancha/ethio-jazz-summer-mix-25","moods":["mañana","taller","atardecer","gris atlántico"],"discovery":true},
+ {"name":"Bandas sonoras · Cine europeo","short":"Cine / 70s","desc":"Bandas sonoras francesas e italianas: jazz cinematográfico y la melancolía del cine de los setenta.","url":"https://soundcloud.com/swanndelamancha/french-italian-soundtracks-summer-mix-25","moods":["atardecer","gris atlántico","lluvia","nocturna"],"discovery":true},
+ {"name":"Brasil · Verano de vinilo","short":"Brasil","desc":"Una sesión brasileña para abrir las ventanas; movimiento, calor y música popular de otros continentes.","url":"https://soundcloud.com/swanndelamancha/brazil-summer-mix-25","moods":["mañana","taller","atardecer"],"discovery":true},
+ {"name":"Rook Radio · Highlife nigeriano","short":"Afrobeat / Highlife","desc":"Afrobeat y highlife de los setenta desde vinilos africanos: guitarras luminosas y ritmos hipnóticos.","url":"https://soundcloud.com/rookrecordsuk/rook-radio-6-70s-afrobeat-nigerian-highlife","moods":["mañana","taller","atardecer"],"discovery":true},
+ {"name":"DOROTOP · Chicha peruana","short":"Chicha / Cumbia","desc":"Cumbia amazónica psicodélica: Los Mirlos, Los Destellos y guitarras que parecen de otro planeta.","url":"https://soundcloud.com/dorotop/mix-map-chicha","moods":["mañana","taller","atardecer"],"discovery":true},
+ {"name":"Roots, ska y dub · Archivo jamaicano","short":"Dub / Reggae","desc":"Colección de mezclas de roots reggae, rocksteady, ska y dub; una pared de ecos y bajos cálidos.","url":"https://soundcloud.com/amine-laidia/sets/dub-ska-reggae-roots","moods":["lluvia","gris atlántico","mañana","atardecer"],"discovery":true},
+ {"name":"Yussef Dayes · Jazz en movimiento","short":"Jazz / Broken beat","desc":"Jazz contemporáneo, improvisación, broken beat y soul con un pulso extraordinariamente vivo.","url":"https://soundcloud.com/fabrik-tetra/sets/yussef-dayes-tracks-remixes-live-mixing-sessions","moods":["mañana","taller","lluvia","atardecer"],"discovery":true},
+ {"name":"Archivo electroacústico · Música concreta","short":"Música concreta","desc":"Una colección de música concreta y experimentación acúsmatica: máquinas, texturas y escucha radical.","url":"https://soundcloud.com/yasmine-cometa/sets/electronic-musique-concrete","moods":["insomnio","nocturna","lluvia nocturna","gris atlántico"],"discovery":true},
+ {"name":"Ambient y clásica contemporánea","short":"Neoclásica / Ambient","desc":"Texturas electrónicas, cuerdas y composiciones contemporáneas; tiempo suspendido, sin obligación de bailar.","url":"https://soundcloud.com/anthony-bro-petit-67152302/sets/ambient-electronica-modern","moods":["lluvia nocturna","insomnio","lluvia","gris atlántico","mañana"],"discovery":true},
+ {"name":"TREKKIE TRAX · Pura Pura","short":"Footwork / UK Bass","desc":"Un viaje veloz entre UK garage, bass music, Jersey club y footwork; danza sin línea recta.","url":"https://soundcloud.com/trekkie-trax/trekkie-trax-mix-012-pura-pura","moods":["taller","nocturna","atardecer","insomnio"],"discovery":true},
+ {"name":"Glitch / Gaze · Dave NULL / VOID","short":"Shoegaze / Glitch","desc":"Guitarras shoegaze atravesadas por IDM, trip-hop y distorsión digital: fragilidad y ruido.","url":"https://soundcloud.com/dave-nullvoid/glitchgaze-mix-shoegaze-dreampop","moods":["insomnio","lluvia","gris atlántico","lluvia nocturna"],"discovery":true},
+ {"name":"Tokyo Nightdrive · City Pop","short":"City Pop / Boogie","desc":"City pop japonés de los ochenta: fusión, funk, sintetizadores y el brillo de una ciudad imaginaria.","url":"https://soundcloud.com/flotonium_berlin/tokyo-nightdrive-japanese-city-pop-vinyl-mix","moods":["mañana","atardecer","taller","nocturna"],"discovery":true},
+ {"name":"Punk y grunge · DJ Greg J","short":"Punk / Grunge","desc":"Punk rock reciente con guitarras urgentes y grunge. Una sacudida cuando la Casa esté demasiado tranquila.","url":"https://soundcloud.com/djgregj/new-punk-mix-2023-2025","moods":["taller","nocturna","insomnio"],"discovery":true},
+ {"name":"PSEUDO AG · Ambient / IDM","short":"IDM / Lo-fi","desc":"Electrónica de pensamiento, ambient, experimental, lo-fi y fragmentos de techno oblicuo.","url":"https://soundcloud.com/pseudo-ag/experimental-ambient-idm-multi","moods":["lluvia nocturna","insomnio","lluvia","gris atlántico","nocturna"],"discovery":true},
+ {"name":"Craig · Footwork Connection","short":"Juke / Chicago","desc":"Footwork y juke de Chicago, ritmos veloces, swing artificial y una energía casi imposible.","url":"https://soundcloud.com/craig/mix-for-footwork-connection-1252026","moods":["taller","nocturna","atardecer"],"discovery":true}
 ];
 
 /* Sonido continuo: empieza tras pulsar Play y después enlaza sesiones en orden aleatorio. */
 const dock=document.createElement('aside');
 dock.id='luxRadioDock';dock.setAttribute('aria-label','Radio Lu Roth · SoundCloud NTS Radio');
-dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">RADIO LU ROTH</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><div id="luxRadioNow" role="status" aria-live="polite"></div><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>NTS Radio: soul, funk, disco, house, rock y descubrimientos. Reproducción continua, con orden aleatorio.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
+dock.innerHTML='<button id="luxRadioToggle" type="button" aria-expanded="false" aria-controls="luxRadioPanel"><span class="luxRadioNote" aria-hidden="true">♫</span><span class="luxRadioName">RADIO LU ROTH</span><span class="luxRadioChevron" aria-hidden="true">⌄</span></button><div id="luxRadioNow" role="status" aria-live="polite"></div><section id="luxRadioPanel" aria-label="Sesiones de música"><div id="luxRadioIntro"><strong>La música de la casa</strong><p>Radio Lu Roth · SoundCloud: jazz, punk, dub, cumbia, afrobeat, cine, música concreta y electrónica. Una sola colección en mutación.</p></div><nav id="luxRadioChoices" aria-label="Elegir sesión"></nav><div id="luxRadioActive" aria-live="polite"></div><iframe id="luxRadioFrame" title="SoundCloud: reproductor seleccionado" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="luxRadioFlow" role="group" aria-label="Opciones de reproducción"><button id="luxRadioLoop" type="button" aria-pressed="true">↻ Bucle: sí</button><button id="luxRadioRandom" type="button" aria-pressed="true">⤨ Aleatorio: sí</button><button id="luxRadioNext" type="button">⏭ Siguiente</button></div><p id="luxRadioHint" aria-live="polite">El primer play se hace dentro de SoundCloud. Después se cambian automáticamente las sesiones.</p><div id="luxRadioFooter"><a id="luxRadioOriginal" href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">Abrir en SoundCloud</a><div>Las pistas disponibles y el permiso de reproducción automática dependen de SoundCloud y del navegador.</div></div></section>';
 document.body.appendChild(dock);
 
 // Las fuentes conviven bajo Radio Lu Roth, sin créditos ni divisiones por autor.
@@ -150,13 +165,20 @@ function goNext(){
  transitioning=true;
  const mood=document.getElementById('stage')?.dataset.luMood||'';
  let candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
- if(autoSessionActive&&!luRadioManual&&visualPreference){
+ // Lu reserva un margen de descubrimiento para escapar de sus propios filtros.
+ // Únicamente al acabar el set; no interrumpe ninguna canción en curso.
+ if(autoSessionActive&&!luRadioManual&&Math.random()<.36){
+  const unexplored=mixes.map((m,i)=>({m,i}))
+   .filter(x=>x.m.discovery&&x.i!==selected&&!visualRecent.includes(x.i));
+  if(unexplored.length)candidates=unexplored;
+ }
+ if(autoSessionActive&&!luRadioManual&&visualPreference&&Math.random()<.55){
   const visualFilters={
-   oscuro:/dark|ambient|industrial|drone|techno|post.punk|witch|experimental|demdike|skee|helena/i,
-   luminoso:/disco|funk|soul|boogie|house|jazz|groove/i,
-   frío:/electr|ambient|idm|wave|dub|jungle|techno|experimental/i,
-   cálido:/soul|boogie|downtempo|disco|groove|indie|funk/i,
-   neutro:/experimental|explor|indie|ambient|house/i
+   oscuro:/dark|ambient|industrial|drone|techno|post.punk|witch|concreta|acúsm|shoegaze|glitch|punk/i,
+   luminoso:/disco|funk|soul|boogie|house|jazz|groove|afrobeat|highlife|cumbia|brasil|city pop/i,
+   frío:/electr|ambient|idm|wave|dub|jungle|techno|concreta|glitch|shoegaze/i,
+   cálido:/soul|boogie|downtempo|disco|groove|indie|funk|ethio|cumbia|brasil|reggae|jazz/i,
+   neutro:/experimental|explor|indie|ambient|house|jazz|cine|chicha|afrobeat|concreta|punk/i
   };
   const rx=visualFilters[visualPreference.tone]||visualFilters.neutro;
   const visual=Array.from({length:mixes.length},(_,i)=>({m:mixes[i],i}))
@@ -260,7 +282,9 @@ function ambientChoices(mood){
   atardecer:/synth|indie|new wave|downtempo|disco/i
  };
  const filter=filters[mood]||filters.taller;
- return mixes.map((m,i)=>({m,i})).filter(x=>filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
+ return mixes.map((m,i)=>({m,i})).filter(x=>
+  (Array.isArray(x.m.moods)&&x.m.moods.includes(mood))||
+  filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
 window.__luRadio={
  // Evita reproducir Spotify y Jellyfin simultáneamente.
@@ -281,7 +305,9 @@ window.__luRadio={
   if(musicShelfOpen)showMusicShelf(false);
   autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;visualRecent=[];
   const candidates=ambientChoices(mood);
-  const choice=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:{i:selected};
+  // También el primer tema puede ser un descubrimiento fuera del estilo esperado.
+  const pool=Math.random()<.22?mixes.map((m,i)=>({m,i})).filter(x=>x.m.discovery):candidates;
+  const choice=pool.length?pool[Math.floor(Math.random()*pool.length)]:{i:selected};
   frame.loading='eager';
   open(true);
   setMix(choice.i,true);
