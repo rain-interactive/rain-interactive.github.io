@@ -1,0 +1,103 @@
+name: Instalar cuatro planos Lu Roth 54-57
+on:
+  push:
+    paths:
+      - '.github/workflows/instalar-cuatro-planos-54-57.yml'
+      - 'casa-lux/Casa_Lu_Roth_Cuatro_Planos_FHD.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar biblioteca de imágenes
+        run: python -m pip install Pillow
+      - name: Extraer JPG, verificar y ampliar el catálogo de la casa
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, hashlib, io, re
+          from zipfile import ZipFile
+          from pathlib import Path
+          from PIL import Image
+          root=Path('casa-lux')
+          pkg=root/'Casa_Lu_Roth_Cuatro_Planos_FHD.zip'
+          assert pkg.is_file(), 'No se encontró el paquete ZIP'
+          with ZipFile(pkg) as z:
+              rows=json.loads(z.read('nuevos_planos.json').decode('utf-8'))
+              assert len(rows)==4, 'Se esperaban cuatro imágenes'
+              for row in rows:
+                  rel=Path(row['src'])
+                  assert str(rel).startswith('assets/') and rel.suffix=='.jpg', rel
+                  data=z.read('casa-lux/'+rel.as_posix())
+                  assert hashlib.sha256(data).hexdigest()==row['sha256'], rel
+                  with Image.open(io.BytesIO(data)) as im:
+                      assert im.size==(1920,1080) and im.format=='JPEG',(rel,im.size,im.format)
+                  target=root/rel
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(data)
+                  print('JPG verificado:',target,len(data))
+          htmlfile=root/'index.html'
+          html=htmlfile.read_text(encoding='utf-8')
+          start=html.find('const nuevosPlanos=[')
+          marker='\n];\n// El orden debe ser fijo para que el número del catálogo siempre corresponda al plano real.'
+          end=html.find(marker,start)
+          assert start>=0 and end>start,'No se encuentra catálogo nuevosPlanos'
+          block=html[start:end]
+          added=0
+          for row in rows:
+              if row['src'] in block:
+                  continue
+              entry=(' {name:'+json.dumps(row['name'],ensure_ascii=False)
+                  +',group:'+json.dumps(row['group'],ensure_ascii=False)
+                  +',time:'+json.dumps(row['time'],ensure_ascii=False)
+                  +',src:'+json.dumps(row['src'],ensure_ascii=False)+'}')
+              block=block.rstrip()
+              if not block.endswith(','): block+=','
+              block+='\n'+entry
+              added+=1
+          html=html[:start]+block+html[end:]
+          htmlfile.write_text(html,encoding='utf-8')
+          assert all(row['src'] in html for row in rows)
+          print('Escenas nuevas:',added)
+          catalog=root/'generar_catalogo_cine.py'
+          source=catalog.read_text(encoding='utf-8')
+          anchor='("Lu Roth · Baño turquesa", "assets/lu_roth_53_bano_turquesa.jpg")'
+          if 'assets/lu_roth_54_gravedad_pintura.jpg' not in source:
+              assert source.count(anchor)==1,'El catálogo base ha cambiado'
+              extras=',\n'+',\n'.join('    ('+json.dumps(r['name'],ensure_ascii=False)+', '+json.dumps(r['src'],ensure_ascii=False)+')' for r in rows)
+              source=source.replace(anchor,anchor+extras)
+              assert 'assert len(scenes) == 31 and len(independent) == 12 and len(focus) == 43' in source
+              source=source.replace('assert len(scenes) == 31 and len(independent) == 12 and len(focus) == 43',
+                                    'assert len(scenes) == 31 and len(independent) == 16 and len(focus) == 47')
+              old='assert len(scenes) == 31 and len(independent) == 16 and len(focus) == 47'
+              source=source.replace(old,'focus.extend([[50,50],[50,50],[52,48],[52,43]])\n'+old)
+              source=source.replace('"43 planos · zoom a pantalla completa · selección automática cada tres minutos"',
+                                    'f"{len(focus)} planos · zoom a pantalla completa · selección automática cada tres minutos"')
+              catalog.write_text(source,encoding='utf-8')
+          print('Catálogo preparado para',len(rows),'fotografías nuevas')
+          PY
+      - name: Generar catálogo de planos actualizado
+        run: python casa-lux/generar_catalogo_cine.py
+      - name: Publicar cuatro JPG y HTML en la rama principal
+        shell: bash
+        run: |
+          git config user.name "Casa de Lu Roth"
+          git config user.email "actions@users.noreply.github.com"
+          git add casa-lux/index.html casa-lux/generar_catalogo_cine.py casa-lux/catalogo_encuadres_cine.jpg \
+            casa-lux/assets/lu_roth_54_gravedad_pintura.jpg \
+            casa-lux/assets/lu_roth_55_mala_postura_ceramica.jpg \
+            casa-lux/assets/lu_roth_56_televisor_estatica.jpg \
+            casa-lux/assets/lu_roth_57_tienda_nocturna.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Casa Lu: publicar cuatro nuevos planos 54-57 y actualizar catálogo"
+            git pull --rebase origin main
+            git push origin main
+          fi
