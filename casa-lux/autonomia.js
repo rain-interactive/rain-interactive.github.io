@@ -190,7 +190,7 @@ function onScene(index,scenes){
    // Las elecciones locales de Jellyfin comparten la percepción visual.
    window.__luJellyfin?.suggest?.(atmosphere(sense()),profile);
    // Una nota visual cada cierto tiempo: observaciones de luz, no de objetos.
-   if(Date.now()-lastVisionCaption>8*60*1000&&memory.events.length%3===0){
+   if(Date.now()-lastVisionCaption>25*60*1000&&memory.events.length%5===0){
     const phrase=profile.tone==='oscuro'
      ?'Esta fotografía deja más espacio a las sombras. Voy a mover la cámara despacio.'
      :profile.tone==='luminoso'
@@ -274,7 +274,7 @@ function reflect(force=false){
  if(!force&&fingerprint===lastPerception)return;
  lastPerception=fingerprint;
  cameraAndColor(p,mood);
- const timeOkay=Date.now()-lastCaptionAt>20*60*1000;
+ const timeOkay=Date.now()-lastCaptionAt>35*60*1000;
  if(force||timeOkay){
   const description=[];
   if(p.rain)description.push('Llueve sobre el Atlántico.');
@@ -349,6 +349,7 @@ function setAutonomy(enabled){
  if(memory.enabled===enabled){render();return}
  memory.enabled=enabled;save();
  if(!enabled){
+  document.body.classList.remove('lu-immersive');
   window.__luRadio?.stopAutonomy?.();
   window.__luJellyfin?.stop?.();
   window.__luNotes?.stop?.();
@@ -364,6 +365,8 @@ function setAutonomy(enabled){
   render();
   return;
  }
+ // La fotografía adquiere más presencia; los datos siguen accesibles y visibles.
+ document.body.classList.add('lu-immersive');
  // Los ojos comienzan a catalogar fotografías locales, sin subir ninguna imagen.
  window.__luVision?.begin?.(house.getScenes());
  // Comienza el audio directamente en el gesto ON (permiso sujeto a SoundCloud/navegador).
