@@ -43,7 +43,7 @@
 #luxRadioNow{margin-top:5px;padding:8px 11px;min-height:31px;background:#111a21e9;border:1px solid #a2c8bd59;border-radius:9px;color:#d4f3e9;font:11px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px #0008}
 #luxRadioDock.open #luxRadioNow{display:none}
 
-/* Radio Lu Roth · archivo integrado, sin divisiones por autor. */
+/* Rain Radio · archivo integrado, sin divisiones por autor. */
 #luMusicShelf{padding:8px 12px 12px;border-top:1px solid #ffffff20}
 #luMusicShelf .luMusicShelfNav{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 #luMusicShelf .luMusicShelfNav button,
@@ -61,7 +61,7 @@
 #luxRadioDock.has-lu-collection .luxRadioFlow{display:none!important}
 @media(max-width:720px){#luMusicSpotifyFrame{height:240px}}
 
-/* Archivo privado de Radio Lu Roth: la sesión no se guarda en la web. */
+/* Archivo privado de Rain Radio: la sesión no se guarda en la web. */
 #luPrivateMedia{margin-top:11px;border-top:1px solid #ffffff30;padding:11px 2px 3px;color:#f8f8f8}
 #luPrivateMedia button,#luPrivateMedia input{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
 #luMediaConnect{background:#111!important;color:#fff!important;border:1px solid #ffffff6b!important;border-radius:20px!important;padding:9px 11px!important;font-size:11px!important}
