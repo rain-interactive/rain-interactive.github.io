@@ -50,7 +50,10 @@ function sense(){
  const mail=window.__luMail?.getState?.()||null;
  const subtitle=window.__luNotes?.getState?.()||{text:txt('subtitleText'),visible:!!el('subtitleLux')?.classList.contains('visible')};
  const wind=txt('wind'),nextMoon=txt('nextMoon'),atlantico=txt('atlanticoStatus'),workshop=txt('classStatus');
- return {mail,subtitle,wind,nextMoon,atlantico,workshop,hour,night:hour<10||hour>=20,weather,moon,tide,temp:Number.isFinite(tmp)?tmp:null,
+ const sky=window.__luSky?.getState?.()||null;
+ const humidity=Number((txt('humidityValue').match(/\d+(?:[.,]\d+)?/)||[])[0]);
+ const outdoorHumidity=Number.isFinite(humidity)?humidity:null;
+ return {mail,subtitle,wind,nextMoon,atlantico,workshop,sky,outdoorHumidity,hour,night:hour<10||hour>=20,weather,moon,tide,temp:Number.isFinite(tmp)?tmp:null,
   cloudy:/nub|cubiert|cloud|overcast|niebla|fog|bruma/.test(weather),
   rain:/lluv|rain|torment|storm|chubasco/.test(weather),
   rising:/sub|crec|plea|flood/.test(tide),
@@ -94,6 +97,14 @@ function choose(scenes,shown,recent){
   if(tail.includes(id)||recent.includes(index))w*=.035;
   w/=Math.sqrt(1+(Number(memory.counts[id])||0)*.45);
   w*=window.__luVision?.score?.(index,s,mood,shown,scenes)||1;
+  // La posición astronómica real matiza ligeramente el criterio artístico.
+  if(p.sky?.dark){
+   const planets=p.sky.planetsAbove||[];
+   if(p.sky.moonAltitude>35&&/contemplar|descanso/.test(s.group))w*=1.17;
+   if(planets.includes('Júpiter')&&/leer|contemplar|crear/.test(s.group))w*=1.09;
+   if(planets.includes('Saturno')&&/cine|contemplar/.test(s.group))w*=1.09;
+   if(planets.length>=3&&s.group==='musica')w*=1.12;
+  }
   if(w>0)pool.push({index,weight:w});
  }
  return pool.length?weightedChoice(pool):null;
@@ -109,7 +120,8 @@ function cameraAndColor(p,mood){
   taller:'saturate(1.05) contrast(1.02)',
   atardecer:'saturate(1.04) contrast(1.04)'
  };
- stage.classList.add('lu-autonomous');stage.style.setProperty('--lu-art-grade',palette[mood]||'saturate(1)');
+ const astronomical=p.sky?.dark?(p.sky?.moonAltitude>35?' brightness(1.018)':' brightness(.995)'):'';
+ stage.classList.add('lu-autonomous');stage.style.setProperty('--lu-art-grade',(palette[mood]||'saturate(1)')+astronomical);
  stage.dataset.luMood=mood;
  const active=house.getState()?.active;
  const sharp=(active===0?el('filmA'):el('filmB'))?.querySelector('.film-sharp');
@@ -193,6 +205,10 @@ function nextDelay(index,scenes){
   if(profile.brightness<.3&&p.night)factor*=1.16;
  }
  if(p.rain&&intimate)factor*=1.14;
+ // La posición real de la Luna puede invitar a contemplar un poco más.
+ if(p.sky?.dark&&p.sky.moonAltitude>40&&intimate)factor*=1.12;
+ // Cerca del amanecer/anochecer aumentan discretamente las transiciones.
+ if(p.sky&&p.sky.sunAltitude>-8&&p.sky.sunAltitude<5)factor*=.88;
  // Distribución irregular; a veces una escena pasa deprisa, otras permanece.
  const r=Math.random();
  const weighted=r<.18?(r/.18)*.21:
@@ -222,7 +238,7 @@ let lastPerception='',lastCaptionAt=0;
 function reflect(force=false){
  if(!memory.enabled||document.hidden)return;
  const p=sense(),mood=atmosphere(p);
- const fingerprint=[p.hour,p.weather,p.tide,p.moon,p.wind,p.nextMoon,p.atlantico,
+ const fingerprint=[p.hour,p.weather,p.tide,p.moon,p.wind,p.nextMoon,p.atlantico,p.outdoorHumidity,p.sky?.fingerprint||'',
    p.mail?.latest?.subject||'',p.subtitle?.text||''].join('|');
  if(!force&&fingerprint===lastPerception)return;
  lastPerception=fingerprint;
@@ -262,7 +278,10 @@ css.textContent=`
 function render(){
  const p=sense(),mood=atmosphere(p);
  el('luBrainState').textContent=memory.enabled?'Encendida · Lu elige los planos y cuándo cambiarlos, sin intervalo fijo':'Apagada · modo clásico, cambio cada tres minutos';
- el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+' · Atmósfera: '+mood;
+ el('luBrainSense').textContent='Percibe: '+(p.night?'noche':'día')+' · '+(p.weather||'tiempo no disponible')+' · '+(p.tide||'mareas no disponibles')+' · Luna: '+(p.moon||'sin datos')+
+ (p.outdoorHumidity!==null?' · Humedad exterior '+p.outdoorHumidity+'%':'')+
+ (p.sky?' · Cielo: '+p.sky.planetCount+' planetas sobre horizonte'+(p.sky.dominantPlanet?' · '+p.sky.dominantPlanet.name+' '+Math.round(p.sky.dominantPlanet.alt)+'°':''):'')+
+ ' · Atmósfera: '+mood;
  const mailInfo=p.mail?'Mensajes: '+p.mail.total+' · '+(p.mail.latest?.subject||'sin asunto'):'Buzón: esperando datos';
  const audioInfo=p.radio?.playing?'Radio: sonando · '+p.radio.title:p.radio?.autoPlaybackPending?'Radio: intentando reproducir · '+p.radio.title:'Radio: '+(p.radio?.title||'sin sesión');
  el('luBrainState').textContent+=(memory.enabled?' · '+audioInfo:'');
@@ -352,10 +371,11 @@ if(typeof MutationObserver==='function'){
   reflectionTimer=setTimeout(()=>reflect(false),900);
  });
  for(const id of ['temp','weatherText','wind','tideTitle','tideNext','moonName','nextMoon','atlanticoStatus',
-                   'luxMailLatestSubject','luxMailLatestExcerpt','subtitleText']){
+                   'luxMailLatestSubject','luxMailLatestExcerpt','subtitleText','humidityValue','luSkyHeadline']){
   const node=el(id);
   if(node)observer.observe(node,{childList:true,subtree:true,characterData:true});
  }
 }
+window.addEventListener('lu:sky-update',()=>{if(memory.enabled){reflect(false);render()}});
 setInterval(()=>{if(!document.hidden){reflect(false);render()}},60000);
 })();
