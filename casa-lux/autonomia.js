@@ -187,8 +187,6 @@ function onScene(index,scenes){
    if(!profile||!memory.enabled||house.getState()?.index!==index)return;
    // El color de esta fotografía orienta el siguiente set; no se corta el actual.
    window.__luRadio?.setVisualPreference?.(profile);
-   // Las elecciones locales de Jellyfin comparten la percepción visual.
-   window.__luJellyfin?.suggest?.(atmosphere(sense()),profile);
    // Lu percibe el plano sin publicar comentarios repetitivos.
    render();
   }).catch(()=>{});
@@ -325,7 +323,6 @@ function setAutonomy(enabled){
  if(!enabled){
   document.body.classList.remove('lu-immersive');
   window.__luRadio?.stopAutonomy?.();
-  window.__luJellyfin?.stop?.();
   window.__luNotes?.stop?.();
   // Al apagar: el reloj clásico vuelve a contar tres minutos exactos.
   house.reschedule?.();
@@ -345,9 +342,7 @@ function setAutonomy(enabled){
  window.__luVision?.begin?.(house.getScenes());
  // Comienza el audio directamente en el gesto ON (permiso sujeto a SoundCloud/navegador).
  const initialPerception=sense();
- const privateRadio=window.__luJellyfin?.status?.();
- if(privateRadio?.connected&&privateRadio?.auto)window.__luJellyfin?.resume?.();
- else window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
+ window.__luRadio?.startAutonomy?.(atmosphere(initialPerception));
  // Las lecturas del Atlántico se refrescan y los nuevos datos alimentan el motor.
  window.__luClimateRefresh?.();
  // ON inicia una escena nueva; a partir de ahí Lu elige las duraciones.

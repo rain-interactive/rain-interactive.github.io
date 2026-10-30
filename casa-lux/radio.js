@@ -83,7 +83,7 @@ document.body.appendChild(dock);
 // La playlist publicada de Rain utiliza el reproductor oficial de Spotify.
 const luMusicShelf=document.createElement('div');
 luMusicShelf.id='luMusicShelf';
-luMusicShelf.innerHTML='<div class="luMusicShelfNav"><button id="luMusicPlaylist" type="button" aria-expanded="false" aria-controls="luMusicPlaylistPanel">Colección musical</button><a href="https://desktop-0qpstrv.tailae0643.ts.net/web/" target="_blank" rel="noopener noreferrer" title="Abrir la biblioteca privada en Jellyfin">Archivo audiovisual</a></div><div id="luMusicPlaylistPanel" hidden><p>Una colección más de Radio Lu Roth. Spotify puede pedir que inicies sesión para escucharla completa.</p><iframe id="luMusicSpotifyFrame" title="Radio Lu Roth · colección musical" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>';
+luMusicShelf.innerHTML='<div class="luMusicShelfNav"><button id="luMusicPlaylist" type="button" aria-expanded="false" aria-controls="luMusicPlaylistPanel">Colección musical</button></div><div id="luMusicPlaylistPanel" hidden><p>Una colección más de Radio Lu Roth. Spotify puede pedir que inicies sesión para escucharla completa.</p><iframe id="luMusicSpotifyFrame" title="Radio Lu Roth · colección musical" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>';
 dock.querySelector('#luxRadioPanel').insertBefore(luMusicShelf,dock.querySelector('#luxRadioActive'));
 const musicShelfButton=luMusicShelf.querySelector('#luMusicPlaylist');
 const musicShelfPanel=luMusicShelf.querySelector('#luMusicPlaylistPanel');
@@ -98,7 +98,6 @@ function showMusicShelf(show){
  musicShelfPanel.hidden=!musicShelfOpen;
  musicShelfButton.setAttribute('aria-expanded',String(musicShelfOpen));
  if(musicShelfOpen){
-  window.__luJellyfin?.stop?.();
   if(!musicShelfFrame.src)musicShelfFrame.src=musicShelfURL;
   // No se oyen dos reproductores simultáneos.
   try{widget?.pause()}catch{}
@@ -321,7 +320,7 @@ function ambientChoices(mood){
   filter.test(x.m.name+' '+x.m.short+' '+x.m.desc));
 }
 window.__luRadio={
- // Evita reproducir Spotify y Jellyfin simultáneamente.
+ // Pausa la colección musical de Spotify al volver a SoundCloud.
  pauseCollection:()=>{
   if(musicShelfFrame.src)musicShelfFrame.removeAttribute('src');
  },

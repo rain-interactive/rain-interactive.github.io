@@ -599,6 +599,34 @@
  #luxMailDock{top:78px!important;right:12px!important}
  #luxMailToggle{height:36px!important;min-height:36px!important;padding:7px 10px!important}
 }
+</style><style id="lu-clock-black-autonomy-v2">
+/* La hora destaca ligeramente más con un marco negro; los planos permanecen visibles. */
+#topLine #cornerClock{
+ min-width:0!important;padding:11px 16px 12px!important;
+ background:rgba(0,0,0,.94)!important;color:#fff!important;
+ border:1px solid rgba(255,255,255,.26)!important;
+ border-radius:7px!important;box-shadow:0 6px 28px rgba(0,0,0,.54)!important;
+ backdrop-filter:none!important;text-align:right!important;
+}
+#topLine #clockLarge{
+ font-size:40px!important;font-weight:400!important;
+ line-height:1.05!important;letter-spacing:.06em!important;color:#fff!important;
+}
+#topLine #clockDate{font-size:12px!important;margin-top:6px!important;color:#fff!important}
+#luxMailDock{top:122px!important}
+/* Autonomía: negro con tipografía blanca, tanto ON como OFF. */
+#luAutoPower,#luAutoPower[data-enabled="on"],#luAutoPower[data-enabled="off"]{
+ background:#050505!important;color:#fff!important;
+ border-color:rgba(255,255,255,.75)!important;
+ box-shadow:0 3px 16px rgba(0,0,0,.50)!important;
+}
+#luAutoPower[data-enabled="on"]{border-width:2px!important;border-color:#fff!important}
+#luAutoPower[data-enabled="off"]{border-width:1px!important;border-color:rgba(255,255,255,.5)!important}
+#luAutoPower .luPowerIcon,#luAutoPowerText{color:#fff!important}
+@media(max-width:720px){
+ /* En móviles el reloj se mantiene en el HUD inferior existente. */
+ #luxMailDock{top:78px!important}
+}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1303,4 +1331,4 @@ grade();setInterval(grade,120000);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;setOpen(false)}});
  }
 })();
-</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=18" defer></script><script src="/casa-lux/jellyfin-local.js?v=2" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=14" defer></script></body></html>
+</script><script src="/casa-lux/chat.js?v=7" defer></script><script src="/casa-lux/radio.js?v=19" defer></script><script src="/casa-lux/windfinder.js?v=3" defer></script><script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js" defer crossorigin="anonymous"></script><script src="/casa-lux/astronomia.js?v=1" defer></script><script src="/casa-lux/vision.js?v=3" defer></script><script src="/casa-lux/autonomia.js?v=15" defer></script></body></html>
