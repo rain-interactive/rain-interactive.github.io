@@ -85,6 +85,7 @@ function showMusicShelf(show){
  musicShelfPanel.hidden=!musicShelfOpen;
  musicShelfButton.setAttribute('aria-expanded',String(musicShelfOpen));
  if(musicShelfOpen){
+  cancelSilence();
   window.__luJellyfin?.stop?.();
   if(!musicShelfFrame.src)musicShelfFrame.src=musicShelfURL;
   // No se oyen dos reproductores simultáneos.
@@ -107,6 +108,7 @@ let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=fal
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
 let autoSessionActive=false,autoPlaybackPending=false,autoStopRequested=false;
+let silenceTimer=null,silenceUntil=0;
 let visualPreference=null,visualRecent=[];
 try {
  const prev=Number(localStorage.getItem(memKey));
@@ -115,7 +117,35 @@ try {
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow=saved;
 } catch {}
 function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow))}catch{}}
-function updateNow(){const mix=mixes[selected];if(!mix)return;$('luxRadioNow').textContent=musicShelfOpen?'♫ Colección musical · Radio Lu Roth':(isPlaying?'♫ Sonando · ':hasPlayed?'Pausada · ':'Playlist · ')+mix.name;}
+function updateNow(){
+ const mix=mixes[selected];if(!mix)return;
+ $('luxRadioNow').textContent=musicShelfOpen?'♫ Colección musical · Radio Lu Roth':
+   silenceUntil>Date.now()?'♫ En silencio · Radio Lu Roth':
+   (isPlaying?'♫ Sonando · ':hasPlayed?'Pausada · ':'Playlist · ')+mix.name;
+}
+function cancelSilence(){
+ if(silenceTimer!==null)clearTimeout(silenceTimer);
+ silenceTimer=null;silenceUntil=0;
+}
+function beginSilence(mood){
+ // Silencio deliberado solo en autonomía: jamás interrumpe música elegida a mano.
+ if(!autoSessionActive||luRadioManual||autoStopRequested||musicShelfOpen)return false;
+ cancelSilence();
+ const delay=(180+Math.floor(Math.random()*540))*1000; // 3–12 minutos.
+ silenceUntil=Date.now()+delay;
+ autoPlaybackPending=false;isPlaying=false;transitioning=false;
+ try{widget?.pause()}catch{}
+ $('luxRadioHint').textContent='Silencio elegido por Lu. La música regresará después, si el navegador lo permite.';
+ updateNow();
+ silenceTimer=setTimeout(()=>{
+  silenceTimer=null;silenceUntil=0;
+  if(!autoSessionActive||luRadioManual||autoStopRequested||musicShelfOpen)return;
+  const pool=ambientChoices(document.getElementById('stage')?.dataset.luMood||mood).filter(x=>x.i!==selected);
+  const choice=pool.length?pool[Math.floor(Math.random()*pool.length)].i:pickNext();
+  setMix(choice,true);loadSDK();updateNow();
+ },delay);
+ return true;
+}
 function mixURL(mix,play){
  return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(mix.url)+
    '&auto_play='+Boolean(play)+'&color=%23ffffff&show_artwork=true&show_comments=false&show_user=true'+
@@ -161,9 +191,11 @@ function setMix(i,play=false){
  $('luxRadioHint').textContent=play?'Siguiente sesión: '+mix.name:'Pulsa Play en SoundCloud para iniciar la radio.';
 }
 function goNext(){
- if(transitioning)return;
- transitioning=true;
+ if(transitioning||silenceUntil>Date.now())return;
  const mood=document.getElementById('stage')?.dataset.luMood||'';
+ // Una sesión termina: a veces la próxima elección es no poner música.
+ if(autoSessionActive&&!luRadioManual&&Math.random()<.28&&beginSilence(mood))return;
+ transitioning=true;
  let candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
  // Lu reserva un margen de descubrimiento para escapar de sus propios filtros.
  // Únicamente al acabar el set; no interrumpe ninguna canción en curso.
@@ -251,7 +283,7 @@ mixes.forEach((mix,i)=>{
  button.type='button';button.dataset.index=String(i);button.textContent=mix.short;
  button.setAttribute('aria-pressed',String(i===selected));button.title=mix.desc;
  button.addEventListener('click',()=>{
-  luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;
+  cancelSilence();luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;
   shuffleBag=shuffleBag.filter(x=>x!==i);
   if(!initialized)open(true);
   setMix(i,true);
@@ -265,7 +297,7 @@ $('luxRadioLoop').addEventListener('click',()=>{
 $('luxRadioRandom').addEventListener('click',()=>{
  flow.random=!flow.random;shuffleBag=[];updateControls();save();
 });
-$('luxRadioNext').addEventListener('click',()=>{luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;open(true);goNext()});
+$('luxRadioNext').addEventListener('click',()=>{cancelSilence();luRadioManual=true;autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=false;open(true);goNext()});
 toggle.addEventListener('click',()=>open(!dock.classList.contains('open')));
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&dock.classList.contains('open'))open(false);
@@ -291,7 +323,7 @@ window.__luRadio={
  pauseCollection:()=>{
   if(musicShelfFrame.src)musicShelfFrame.removeAttribute('src');
  },
- getState:()=>({title:musicShelfOpen?'Colección musical':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen}),
+ getState:()=>({title:musicShelfOpen?'Colección musical':silenceUntil>Date.now()?'Silencio':mixes[selected]?.name||'',playing:isPlaying,hasPlayed,silent:silenceUntil>Date.now(),silenceUntil,manual:luRadioManual,autoSessionActive,autoPlaybackPending,visualTone:visualPreference?.tone||null,collectionOpen:musicShelfOpen}),
  openCollection:()=>showMusicShelf(true),
  // La imagen guía el próximo set, sin interrumpir jamás la sesión en marcha.
  setVisualPreference:(profile)=>{
@@ -303,7 +335,11 @@ window.__luRadio={
  // intentar reproducir SoundCloud; no podemos garantizar permisos del navegador.
  startAutonomy:(mood)=>{
   if(musicShelfOpen)showMusicShelf(false);
-  autoSessionActive=true;autoPlaybackPending=true;autoStopRequested=false;luRadioManual=false;visualRecent=[];
+  cancelSilence();
+  autoSessionActive=true;autoPlaybackPending=false;autoStopRequested=false;luRadioManual=false;visualRecent=[];
+  // También es una elección empezar escuchando únicamente la Casa.
+  if(Math.random()<.18&&beginSilence(mood))return 'Silencio';
+  autoPlaybackPending=true;
   const candidates=ambientChoices(mood);
   // También el primer tema puede ser un descubrimiento fuera del estilo esperado.
   const pool=Math.random()<.22?mixes.map((m,i)=>({m,i})).filter(x=>x.m.discovery):candidates;
@@ -318,6 +354,7 @@ window.__luRadio={
  },
  stopAutonomy:()=>{
   const wasAuto=autoSessionActive;
+  cancelSilence();
   autoSessionActive=false;autoPlaybackPending=false;autoStopRequested=true;
   if(!wasAuto)return;
   if(widget){try{widget.pause()}catch{}}
