@@ -1,9 +1,11 @@
 # Planos ambiente — Casa de Lu Roth
 
-Esta carpeta reúne las imágenes sin personajes de la Casa: arquitectura industrial y brutalista, espacios extraños, fotografía digital de los 2000, glitches y televisores CRT.
+Archivo de ambientes sin personajes: arquitectura industrial, lugares abandonados, brutalismo, fotografías de los 2000, CRT y errores digitales.
 
-**Cómo añadir nuevos planos:** arrastra aquí archivos **JPG, PNG o WebP** directamente en GitHub. Un flujo de GitHub Actions actualizará automáticamente `catalogo.json`, y la Casa los incorporará a la rotación sin cambiar su código.
+**Resolución mínima: 700 píxeles de ancho y 700 píxeles de alto.** Si cualquiera de las dimensiones es inferior a 700 píxeles, el archivo se elimina automáticamente con GitHub Actions al subirlo. Las imágenes que cumplen el mínimo se conservan, aunque no lleguen a Full HD.
 
-La Casa intercala aproximadamente un plano ambiental entre cada tres o cuatro fotografías de Lu Roth. Las imágenes de chicas deben seguir siendo de Lu Roth y van en su colección, no en esta carpeta.
+Para añadir planos, sube JPG, PNG o WebP directamente a esta carpeta. El catálogo se actualiza automáticamente y la Casa los intercala con las fotografías de Lu Roth (aproximadamente una imagen ambiental por cada tres o cuatro retratos).
 
-**Resolución mínima para entrar en la rotación:** 1920 píxeles de anchura y 1080 píxeles de altura. La Casa recorta respetando las proporciones originales, sin deformar las fotografías. El catálogo automático excluye imágenes más pequeñas (aunque estas permanezcan en GitHub hasta su revisión). Evita ampliar previamente una imagen pequeña: eso no añade detalle real.
+Las imágenes se muestran **sin deformación**: la Casa recorta el encuadre para llenar la pantalla. Si un archivo ya contiene bandas negras incorporadas, el visor las elimina visualmente mediante un zoom proporcional sin alterar la fotografía original. En los planos que incluyen mujeres, debe aparecer siempre Lu Roth.
+
+En las imágenes con menos resolución, ampliar para llenar la pantalla puede reducir la nitidez; el límite de 700 píxeles es el criterio acordado para conservar o retirar archivos.

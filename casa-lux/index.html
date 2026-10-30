@@ -627,6 +627,17 @@
  /* En móviles el reloj se mantiene en el HUD inferior existente. */
  #luxMailDock{top:78px!important}
 }
+</style><style id="lu-ambiente-crop-700-v3">
+/* Llenar la televisión sin deformar: cover natural o zoom proporcional
+   de las fotografías antiguas que ya traían bandas negras dentro del JPG. */
+#stage #filmA.ambient-shot .film-sharp,
+#stage #filmB.ambient-shot .film-sharp {
+ background-size:var(--lu-ambient-size,cover)!important;
+ background-position:var(--lu-focus-x,50%) var(--lu-focus-y,50%)!important;
+ background-repeat:no-repeat!important;
+ animation:none!important;
+ transform:none!important;
+}
 </style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1110,6 +1121,35 @@ function elegirFocoAmbiental(image){
   return vertical?[50,Math.round(100*best)]:[Math.round(100*best),50];
  }catch{return [50,50]}
 }
+function detectarBandasAmbiente(img){
+ // Algunos JPG panorámicos viejos contienen bandas negras grabadas en el archivo:
+ // las recortamos visualmente, sin alterar los píxeles ni deformar la fotografía.
+ try{
+  if(!img.naturalWidth||!img.naturalHeight||Math.abs(img.naturalWidth/img.naturalHeight-16/9)>.055)return null;
+  const w=300,h=169,c=document.createElement('canvas');
+  c.width=w;c.height=h;
+  const ctx=c.getContext('2d',{willReadFrequently:true});
+  if(!ctx)return null;
+  ctx.drawImage(img,0,0,w,h);
+  const d=ctx.getImageData(0,0,w,h).data;
+  function negro(x){
+   let n=0,total=0;
+   for(let y=15;y<h-15;y+=6){
+    const j=4*(y*w+x);total++;
+    if(Math.max(d[j],d[j+1],d[j+2])<=18)n++;
+   }
+   return n/Math.max(1,total)>=.96;
+  }
+  let left=0,right=0;
+  while(left<110&&negro(left))left++;
+  while(right<110&&negro(w-1-right))right++;
+  if(left<30||right<30||Math.abs(left-right)>35||w-left-right<55)return null;
+  const available=w-left-right,zoom=Math.min(4.5,(w/available)*1.025);
+  const center=(left+available/2)/w;
+  const focusX=Math.max(0,Math.min(100,100*(zoom*center-.5)/(zoom-1)));
+  return {size:(100*zoom).toFixed(2)+'% auto',focus:[focusX,50]};
+ }catch{return null}
+}
 const ambientRegistrados=new Set();
 function registrarAmbiente(name,filename){
  if(typeof filename!=='string'||!/^[^/\\]+\.(?:jpe?g|png|webp)$/i.test(filename)||ambientRegistrados.has(filename))return;
@@ -1118,7 +1158,13 @@ function registrarAmbiente(name,filename){
  const scene={name:String(name||filename),group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Archivo ambiental, industrial / glitch / años 2000'};
  scenes.push(scene);
  const img=new Image();
- img.onload=()=>{scene.focus=elegirFocoAmbiental(img);scene.src=url};
+ img.onload=()=>{
+  if(img.naturalWidth<700||img.naturalHeight<700){scene.src='';return}
+  const black=detectarBandasAmbiente(img);
+  scene.focus=black?.focus||elegirFocoAmbiental(img);
+  scene.ambientSize=black?.size||'cover';
+  scene.src=url;
+ };
  img.onerror=()=>{scene.src=''};
  img.src=url;
 }
@@ -1157,9 +1203,10 @@ const luFrameFocusByFilename={
 const luFrameCache=new Map();
 function applyShotFraming(layer,src,index){
  if(scenes[index]?.type==='ambiente'){
-  const focus=scenes[index].focus||[50,50];
+  const scene=scenes[index],focus=scene.focus||[50,50];
   layer.style.setProperty('--lu-focus-x',focus[0]+'%');
   layer.style.setProperty('--lu-focus-y',focus[1]+'%');
+  layer.style.setProperty('--lu-ambient-size',scene.ambientSize||'cover');
   return;
  }
  const focus=(luFrameFocusByFilename[src.split('/').pop()]||luFocus[index]||[50,45]);
