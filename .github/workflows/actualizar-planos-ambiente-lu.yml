@@ -32,8 +32,17 @@ jobs:
           except (FileNotFoundError,ValueError,KeyError):
               titles={}
           pics=sorted((f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in ('.jpg','.jpeg','.png','.webp')),key=lambda x:x.name.lower())
+          # Excluir fotografías de esculturas del catálogo gráfico. Conservamos
+          # los originales en GitHub, pero nunca se muestran en la Casa.
+          editorial_excluded={
+              '2194f46524bd59c39a1a75f82560abb9.jpg',
+              'd0e470a1f36d212ce4a8afa1647f1739.jpg',
+          }
           items=[]
           for p in pics:
+              if p.name in editorial_excluded:
+                  print('Se omite fotografía de escultura:',p.name)
+                  continue
               try:
                   with Image.open(p) as im:
                       width,height=im.size
