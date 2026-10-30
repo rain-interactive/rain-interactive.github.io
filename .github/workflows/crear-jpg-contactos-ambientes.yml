@@ -4,7 +4,7 @@ on:
     paths:
       - '.github/workflows/crear-jpg-contactos-ambientes.yml'
       - 'casa-lux/planos-ambiente/catalogo.json'
-  # Refrescar la hoja de contactos al publicar nuevos ambientes aprobados.
+  # Refrescar el JPG al aceptar el nuevo lote: 94 obras de ambiente revisadas por resolución.
   workflow_dispatch:
 permissions:
   contents: write
