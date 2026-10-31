@@ -348,7 +348,7 @@ btn.addEventListener('click',function(){state.expanded=!state.expanded;render()}
 function render(){var query=input.value.trim().toLocaleLowerCase(),total=0;
 states.forEach(function(st){var hits=0;st.cards.forEach(function(card,idx){var found=!query||card.textContent.toLocaleLowerCase().includes(query);if(found)hits++;card.classList.toggle('catalog-hidden',!found||(!query&&!st.expanded&&idx>=4))});
 st.sec.hidden=!!query&&hits===0;st.btn.hidden=!!query||st.cards.length<=4;st.btn.textContent=st.expanded?'Ver menos':'Ver todos ('+st.cards.length+')';st.btn.setAttribute('aria-expanded',String(st.expanded));total+=hits;
-});count.textContent=query?total+' resultado'+(total===1?'':'s'):'18 entradas · 6 colecciones';
+});count.textContent=query?total+' resultado'+(total===1?'':'s'):'19 entradas · 6 colecciones';
 }
 input.addEventListener('input',render);render();
 }
