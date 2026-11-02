@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b09">
+<title>GAME BOY CAMERA ARCHIVE — RAIN INTERACTIVE</title>
+<meta name="description" content="Archivo experimental de fotografía con Game Boy Camera. Un mosaico de imágenes que nunca termina.">
+<style>
+:root{color-scheme:dark;--bg:#080b09;--ink:#d5e2cf;--dim:#89978c;--line:#26312a;--accent:#b9dcc0}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink)}
+body{font-family:"Courier New",monospace;display:flex;flex-direction:column}
+a{color:inherit}.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 24px;border-bottom:1px solid var(--line);flex:0 0 auto}
+.back{color:var(--dim);font-size:11px;font-weight:bold;letter-spacing:.13em;text-decoration:none}.back:hover{color:var(--accent)}
+.stamp{font-size:10px;letter-spacing:.15em;color:var(--dim);text-align:right}
+.hero{padding:24px 24px 20px;flex:0 0 auto}.overline{font-weight:bold;color:#a7c4ac;font-size:10px;letter-spacing:.23em}
+h1{font-family:Arial,sans-serif;letter-spacing:-.065em;line-height:.83;font-size:clamp(37px,7vw,90px);margin:12px 0 13px}
+.description{font-size:11px;color:var(--dim);line-height:1.5;letter-spacing:.02em;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.description strong{color:var(--ink)}.viewer{position:relative;flex:1;min-height:0;border-top:1px solid var(--line)}
+.scroller{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#48614f var(--bg);scrollbar-width:thin}
+.cycle{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:4px 7px 3px}
+.frame{position:relative;display:block;padding:0;appearance:none;border:1px solid #344137;background:#17241c;aspect-ratio:128/112;cursor:zoom-in;overflow:hidden}
+.frame:focus-visible{outline:2px solid #d6ffcd;outline-offset:2px;z-index:2}
+.frame img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;filter:contrast(1.11);display:block}
+.frame:after{content:attr(data-n);position:absolute;bottom:6px;left:7px;padding:3px 5px;font-size:9px;background:#071007bf;color:#e0ecd9;opacity:0;transition:opacity .15s}
+.frame:hover:after,.frame:focus-visible:after{opacity:1}
+.frame:hover img{filter:contrast(1.2) brightness(1.13)}
+.viewer:after{pointer-events:none;content:"";position:absolute;left:0;right:0;bottom:0;height:32px;background:linear-gradient(transparent,var(--bg))}
+.footer{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:10px 24px;border-top:1px solid var(--line);font-size:10px;letter-spacing:.12em;color:var(--dim);flex:0 0 auto}
+.live{display:inline-flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:50%;background:#b8dcb5}
+.overlay[hidden]{display:none}.overlay{position:fixed;inset:0;z-index:50;background:#030403f2;display:grid;place-items:center;padding:28px}
+.modal{position:relative;display:flex;flex-direction:column;align-items:center;gap:13px;max-height:95vh}
+.modal img{max-width:min(90vw,720px);max-height:72vh;aspect-ratio:128/112;object-fit:contain;image-rendering:pixelated;box-shadow:0 0 0 1px #405044;background:#101b13}
+.modal small{font-size:11px;color:var(--dim);letter-spacing:.2em}
+.close{position:fixed;right:24px;top:22px;border:1px solid #66776d;background:#111c15;color:var(--ink);padding:12px 17px;cursor:pointer;font:700 11px "Courier New",monospace}
+.arrows{display:flex;gap:10px}.arrows button{border:1px solid #425647;background:transparent;color:var(--ink);font:700 14px "Courier New",monospace;padding:10px 18px;cursor:pointer}
+@media(max-width:800px){.cycle{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:3px 5px 2px}.hero{padding:20px 14px 15px}.bar{padding:14px}.footer{padding:9px 14px}.stamp{display:none}}
+@media(max-width:440px){.cycle{grid-template-columns:repeat(2,minmax(0,1fr))}.description{font-size:10px}.hero h1{font-size:clamp(35px,12vw,56px)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="bar"><a class="back" href="/#experiment">← RAIN INTERACTIVE / EXPERIMENTS</a><span class="stamp">EST. 1998 → ∞ · NO PRINTS · ONLY PIXELS</span></header>
+<section class="hero"><div class="overline">R-020 / PHOTOGRAPHIC EXPERIMENT / VOL. 001</div><h1>GAME BOY<br>CAMERA ARCHIVE</h1><div class="description"><span>Archivo vivo de imágenes capturadas con una cámara de 1998.<br>Un carrete que no tiene final.</span><span><strong id="counter">02 FOTOS</strong> · PULSA UNA IMAGEN PARA AMPLIARLA</span></div></section>
+<main class="viewer"><div class="scroller" id="scroller" tabindex="0" aria-label="Galería fotográfica de desplazamiento infinito"><div id="gallery"></div></div></main>
+<footer class="footer"><span class="live"><span class="dot"></span>ENDLESS CONTACT SHEET</span><span>128 × 112 PIXELS · RAIN INTERACTIVE</span></footer>
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Fotografía ampliada" hidden><button class="close" id="close">CERRAR ×</button><div class="modal"><img id="large" alt="Fotografía Game Boy Camera ampliada"><small id="photoName"></small><div class="arrows"><button id="prev" aria-label="Fotografía anterior">←</button><button id="next" aria-label="Fotografía siguiente">→</button></div></div></div>
+<script>
+"use strict";
+/* Primeras dos piezas: recuperadas de fotos de la pantalla. Cuando se extraigan las originales,
+   sustituir sus src por rutas a imágenes originales, o agregar nuevas entradas en photos.json. */
+const originals = [
+ {title:"PHOTO 001",src:"data:image/webp;base64,UklGRtwEAABXRUJQVlA4INAEAABQHgCdASpwAGIAPvVoqVCqpaOir7Nb0VAeiWkXwADQ+8NK3h+kTvXcJ2hTboCCx7J31PeM9Q5HD7OcJNMGPaK4VKgo1LblcZnsTnsopoLP92ZP7lkp5T/daiiijR3gezq/wjUmPtSViMiErtEwiFyYmbIWBTkOskqcf/iN4jnJXwXrJeg7V1fPboUzXXXLUPwxPRhARvTO4FOtqk1tnNlIbvzKgOueKJGDNG3d4cB8uKMiQhP+77p1wmJWorMAeoin4AKSNsQBA830+tUF5t476GrS/KoHB+qq3/Ahn5BjbFTokZGsVVo0t6ZORFWisrP7RpwyIRT972rbcAD+2eNVqMZGAXf2KZenrOAHhHbCZkSE7RNXR9dxYnG10EkGeCDeM93lFyfVpTSWVaSlP4yK552Zzi1hVJmDxq9kVPQ/B+PFf6vh99Fodh+k91bM/ewKK30zyhC2E/XdKLVlNAibT+1vPrZzfGx+4E5zv00cank4AsS6j3C+hXIFh7ZmohEXLtG0OsnGAGo44G6QhUlAR0mt0flHNmhpf9Gt6cciuGGNFAqla4+GrpeKTyrTnEgYmjWgpKFCMrT/ihvPS1/PKQoxJqo19XJUrpYoItPBXNm6qd59OKmmq5vJmUGl8l5Bj6cfciyVCxOhSrzV5meWTVPBi2KYwxtki8ZuUlQJW+W8JLO8ne/O8lwFRkkYVi7cOGcUA5QwZnpBO2KfUUe4F9x27D27Q8St74U4bxf/LhuCdbOBuoSnZGZVdb7gCpznpckSM0W7Lz4WGfWSA/4vY24Q+9I6MsRaINQJofQ/A2yGx2n97rGmtvulW/hixsY6Jh5KSfklDZJg8ezYCEEqFXWAF0W3R9VHy0InUqPNthQuFXxvU6p9vmvw0/BvKYKXUHMK+9Vc6jmt3q6mVpvxTBBhH9jUt7boih000bnrvqbozW3WpQANiMv7vlj+eKMY8y2sy0c9tkYvrjH1yLZbHaGbvHZ0Ra42q42UIFr0HOPaViMFmGjiXCiCFWIGs5D+ujYOSJMl7LbGwAvMyVobBAOnpWj9pfEdVBn52D42OqZe4Lgh3OWipoTpn3sa5EAP5sPP39JVyR3L0CSqwt9SKO4lrgQ4q/wuljaM4Ye7vV7bB8lGu5CzUlTkd77uaL2RJrBr9WkHvFkzuo3VNwAcGNCt60LaU/XDW/b1QLj7zAhDhTUBniZrDUvtqOtLevyBhTHe++fsikiMkdxYBTbPXW8RcysKcd80tS3CB7t6qZ3AO8ljncwpdE4S9JBBfdeDo+vtWLCrb8C1Swn3uybaMbxq4jZhsAlJObzo5r/QZt/0sEh+nPxwXdzQ15qdsEqXJsA9So/fhM47srOZdzxls56/sVJhXfAEfUyZhq1jbxlGjPjaLKmKTvHeNp+DLLOJCTA9P6vuzsIPZ5wnLrRpLldjh4t5+AjSllVsbDFM5iUWz11TWvPdv0ct0QMmolBKbeGoonNqyZblcKr8W2DDL6pF4Whd6EbYcRJINWGJmhiNS/Cg4UgI0REjG0B7mMQjerFZJkOnIGx4VQD4+i7wFa2QD9lYuyRnLbLWa7fo/3yI8Dp7j5b23gs/9dHGzjMf+Y/ux03vs4HOjSfGY3y83IGCGu1uBJOUawK5a0AAAA=="},
+ {title:"PHOTO 002",src:"data:image/webp;base64,UklGRm4EAABXRUJQVlA4IGIEAAAQGwCdASpwAGIAPvVsq1AqpiOirxLLYVAeiWdpU+gWDpqTte2ZO2p7R0oVsT65J8RBLd9IvwW6Ei9J5ujeld64uYbFa3CW0tVfo0K5Ax/BYKM/MU2CYWmNWpXqLw5TkksIzpUdhJRd1bp+ezaP6ZODZI63No2+VF5WD+BqQvT/L84rU4KfRySaJ6imzNXVhDk9JoB2jJsbk7bXFLZvsV0Q6vetG5Xc9Jw4gxNvlJGqCciSv/cODUdGWYb0WDu545VGV9Fl0hamtwQ+syLqipuED7ws5PZvxjmTIraxAit/GUAA/u/hh4JjjvtJ2exrYbX72EdK5Nz7kf46CVod/zJXvhivMZvcmztpDMhFxlMhC8tz7CkUlFpy4HIXeNkTcPo94vuqqtfjTLRleoQWEe0HpDL19zXUGlrJYqwh5PyL1mgk1tQV0E6uvgyQZM5f0Y+uXT2ZQJiydZq2dWPZ5kjfY7IxduV037qlLHUCX16x+hq5GD3JSYlgzSrWMPgR5zTyNH1h1ecm20CjBECqR9Er5/OjImuORbjFaEPV+ig3KOIB37/I5I3qbDKLFamCRxUH0Rin17194Nx45io9A94ytHw49CRyMAQilYRm2Emn+IG8fhEudeJ/q037RoFXx31kq4q5e28un4gnVsNmEuw3qPFR3eZzc4de+lATt8NU/yW1sp3/4pXaSmwed36L0FZuPF23X2EY2uP73N2qYDoSgJOQmwrPNtlvNgdmmUfhOBQfSaE8TAk/VC8225HS3PL5+jgTDjXpd1wSNZJTFjVl2EJ6BfTi5j1nQIUZakrAzompEj5WgPlci9gTBrrXx6/EDtTEQTCiS2YkJvTf2UtNSNiYLCYZRHgIGIyW2hLd+rGHbEYB/+BiJLNpVEx9vlwxnNiGJVpDL1+ECQcpHooXOMMFS65fiDLwzO/m4TTMq5Bwt+QmJn4Z/6maPQ/QBWVfgvNMq+Fgl5jzg4kFYH0Z2C9OI1MW68V8xpfgmuZCb6EGKbDcOg3ZoSo+LDHRkIAvyo6c79VfDL8po0kb5x0WRSgSAIFLGKFlVu73lZkLG/Yg9fGplyg8A0NRlCga57tDi9Xbu1kvzUYjDAdARkMSnT4MQ5LBnGS4bGv+byWna7MxhoQqtSOFCaXRfs0Lo/L+9L8L3sGXtcO2ydYXCBZEfjqtiI68LkMALyuVEYmBj1HX/A0RYVL5yjIwbF/PmD30KRFPYbSyRkLhAiuf3++0QaTeUwarq1yUZP8z0jRGdo3pcOXE11GXH0o549yB5Lmskx1GFmaXjfMxTuo2XyVivKqxw1P8BJ8HvdmY8juZIJfq4IZfhWMvYelmJjf2ZKBjuqb2Gblwg76H+MjSRX2kLJmiTOdy0XK1Sa6QzbX1sY10tqOA9MXt9yaatuxeUlBJSGUiVux51RAS7/VI1xkRZHwygcymOsrpDQRh9mOYXLD0C8284jcqpNHAWI5q4oNETnh66EDIAm6mgif23UWVAAA="}
+];
+let photos=originals.slice(),selected=0;
+const gallery=document.getElementById("gallery"), scroller=document.getElementById("scroller"), counter=document.getElementById("counter");
+const overlay=document.getElementById("overlay"), large=document.getElementById("large"), name=document.getElementById("photoName");
+const perCycle=30; let cycleHeight=0, adjusting=false;
+function tile(index){const p=photos[index%photos.length];const button=document.createElement("button");button.className="frame";button.type="button";button.dataset.n=p.title||("PHOTO "+String(index%photos.length+1).padStart(3,"0"));button.setAttribute("aria-label","Ampliar "+button.dataset.n);const img=document.createElement("img");img.src=p.src;img.alt=p.title||"Imagen de Game Boy Camera";img.loading="lazy";img.decoding="async";button.appendChild(img);button.addEventListener("click",()=>show(index%photos.length));return button}
+function render(){gallery.replaceChildren();for(let c=0;c<5;c++){const block=document.createElement("div");block.className="cycle";for(let i=0;i<Math.max(perCycle,photos.length);i++)block.appendChild(tile(i));gallery.appendChild(block)}
+ counter.textContent=String(photos.length).padStart(2,"0")+" FOTOS";requestAnimationFrame(()=>{cycleHeight=gallery.firstElementChild?.offsetHeight||1;scroller.scrollTop=cycleHeight*2})}
+scroller.addEventListener("scroll",()=>{if(adjusting||cycleHeight<1)return;const y=scroller.scrollTop;if(y<cycleHeight||y>cycleHeight*3){adjusting=true;scroller.scrollTop=y+(y<cycleHeight?cycleHeight:-cycleHeight);adjusting=false}},{passive:true});
+function show(i){selected=(i+photos.length)%photos.length;const p=photos[selected];large.src=p.src;large.alt=p.title||"Foto ampliada";name.textContent=p.title||"PHOTO "+String(selected+1).padStart(3,"0");overlay.hidden=false;document.getElementById("close").focus()}
+function hide(){overlay.hidden=true;scroller.focus({preventScroll:true})}
+document.getElementById("close").onclick=hide;
+document.getElementById("prev").onclick=()=>show(selected-1);
+document.getElementById("next").onclick=()=>show(selected+1);
+overlay.addEventListener("click",e=>{if(e.target===overlay)hide()});
+document.addEventListener("keydown",e=>{if(overlay.hidden)return;if(e.key==="Escape")hide();if(e.key==="ArrowLeft")show(selected-1);if(e.key==="ArrowRight")show(selected+1)});
+window.addEventListener("resize",()=>{const first=gallery.firstElementChild;if(!first)return;cycleHeight=first.offsetHeight;scroller.scrollTop=cycleHeight*2});
+render();
+/* Optional manifest: ["photos/003.png",...] or [{"src":"photos/003.png","title":"PHOTO 003"}]. */
+fetch("./photos.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(list=>{if(!Array.isArray(list)||!list.length)return;const extra=list.map((x,i)=>typeof x==="string"?{src:x,title:"PHOTO "+String(i+3).padStart(3,"0")}:x).filter(x=>x&&typeof x.src==="string");if(extra.length){photos=originals.concat(extra);render()}}).catch(()=>{});
+</script>
+</body>
+</html>
