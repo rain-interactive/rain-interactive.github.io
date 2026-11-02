@@ -1,1 +1,207 @@
-<!doctype html><html lang="es"><meta charset="utf-8"><title>Véspera — prototipo</title><body><h1>VÉSPERA</h1><p>Prototipo en construcción.</p></body></html>
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09060d"><title>VÉSPERA · Rain Interactive · 0.1</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08050a;color:#f8e8ec;font-family:Arial,Helvetica,sans-serif}button,input,select{font:inherit}canvas{position:fixed;inset:0;display:block;touch-action:none}
+#vignette{pointer-events:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 48%,transparent 26%,#09020b88 100%)}
+#ui{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:15px;gap:10px}
+#ui>*{pointer-events:auto}.top,.bottom{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.bottom{align-items:flex-end}
+.box{background:#0d0814d9;backdrop-filter:blur(12px);border:1px solid #6c43577a;border-radius:8px;box-shadow:0 15px 55px #0009;padding:13px}
+h1{font:normal 32px Georgia,serif;letter-spacing:.19em;margin:0}.sub{font:10px monospace;letter-spacing:.16em;color:#ff859d;margin-top:4px}.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font:11px monospace;color:#cdb7c1}.stats b{color:#fff}
+#thought{width:230px;max-width:47vw;font:12px/1.5 Arial}#thought b{color:#fbd1df}#thought p{color:#c0aeba;margin:6px 0 0}.hint{font:10px/1.5 monospace;color:#a88e9c;margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:6px;max-width:720px}
+button,select{cursor:pointer;color:#fce9ef;background:#241623;border:1px solid #7d5269;border-radius:5px;padding:10px 12px;font-size:12px}
+button:hover,button.active{background:#78334e;border-color:#f5a1b5}button:disabled{opacity:.5}
+.zoom{display:flex;gap:5px}.zoom button{min-width:38px}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:10;font:11px/1.45 monospace;background:#140b19e8;border:1px solid #764961;color:#f6d1df;border-radius:30px;padding:8px 14px;text-align:center;max-width:90vw;opacity:0;transition:opacity .3s;pointer-events:none}#toast.show{opacity:1}
+#lock{position:fixed;z-index:99;inset:0;background:radial-gradient(circle,#351122 0%,#0a070c 70%);display:grid;place-items:center;padding:18px}
+.gate{width:min(420px,100%);background:linear-gradient(150deg,#2e1520,#0b0810);border:1px solid #9f4968;padding:38px 28px;text-align:center;box-shadow:0 0 100px #9b26443c}
+.sigil{font:56px Georgia,serif;color:#ef789e}.gate h2{font:46px Georgia,serif;letter-spacing:.2em;margin:10px 0}.gate p{font-size:13px;color:#ccb1bf;line-height:1.55}.gate input{width:100%;background:#0e0912;border:1px solid #80556a;text-align:center;color:white;padding:14px;margin:10px 0 8px;border-radius:4px;outline:none}.gate button{width:100%;padding:13px;background:#772e4b}.gate small{display:block;min-height:17px;color:#fca2b8;margin:12px 0;font:12px monospace}.gate .foot{font:10px monospace;letter-spacing:.12em;color:#856c79}
+.hidden{display:none!important}
+@media(max-width:700px){#ui{padding:8px}.box{padding:9px}h1{font-size:23px}.sub{font-size:8px}.stats{font-size:10px;gap:7px;margin-top:6px}#thought{width:155px;font-size:10px}.bottom{display:flex;flex-direction:column;align-items:stretch;gap:5px}.controls{max-width:none}.controls>*{flex:1;padding:9px 5px;font-size:11px}.zoom{align-self:end}.zoom button{padding:6px 10px}#toast{bottom:151px;font-size:10px}.hint{font-size:9px}}
+</style></head>
+<body><canvas id="scene"></canvas><div id="vignette"></div>
+<div id="ui" class="hidden">
+<div class="top"><div class="box"><h1>VÉSPERA</h1><div class="sub">RAIN INTERACTIVE / MAZMORRA 0.1</div><div class="stats"><span>ORO <b id="gold">120</b></span><span>ÓRDENES <b id="orders">0</b></span><span>DIABLILLOS <b>2</b></span><span>SALAS <b id="rooms">0</b></span></div></div><div class="box" id="thought"><b id="mood">Véspera · Observando</b><p id="voice">La Reina gobierna con sus propias rutinas. Tú decides cómo construir el reino.</p></div></div>
+<div class="bottom"><div class="box"><div class="controls">
+<button data-tool="dig" class="active">⛏ Picar</button><button data-tool="room">▦ Construir</button>
+<select id="roomType" aria-label="Seleccionar habitación"><option value="2">Cubil · 12</option><option value="3">Tesorería · 12</option></select>
+<button data-tool="cancel">× Cancelar</button><button id="follow">◉ Seguir a Véspera</button></div>
+<div class="hint">Toca roca para marcar excavación · Los diablillos trabajan solos · Q/E girar · Rueda zoom</div></div><div class="box zoom"><button id="rotateL" title="Girar a izquierda">↶</button><button id="zoomOut">−</button><button id="zoomIn">+</button><button id="rotateR" title="Girar a derecha">↷</button></div></div>
+</div>
+<div id="toast"></div>
+<div id="lock"><form class="gate" id="login"><div class="sigil">♛</div><h2>VÉSPERA</h2><p>La Reina de las Tinieblas aguarda.<br>Prototipo de desarrollo de Rain Interactive.</p><input type="password" id="password" placeholder="Contraseña" aria-label="Contraseña" required autocomplete="off"><button type="submit">ENTRAR EN LA MAZMORRA</button><small id="error"></small><div class="foot">REINO EN CONSTRUCCIÓN · 0.1</div></form></div>
+<script>
+document.getElementById('login').addEventListener('submit',async function(e){
+ e.preventDefault();const input=document.getElementById('password').value;
+ const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input));
+ const hex=Array.from(new Uint8Array(digest)).map(c=>c.toString(16).padStart(2,'0')).join('');
+ if(hex!=='a0f56c7f833c1e7dc3b2d6c73d06c035e8a3ff48e41683febce75aed439bc7fd'){document.getElementById('error').textContent='Contraseña incorrecta';return;}
+ document.getElementById('lock').classList.add('hidden');document.getElementById('ui').classList.remove('hidden');window.__vesperaUnlocked=true;dispatchEvent(new Event('vespera-unlock'));
+});
+</script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+const $=id=>document.getElementById(id);
+const N=21,S=2.3,M=10,idx=(x,z)=>z*N+x,ok=(x,z)=>x>=0&&z>=0&&x<N&&z<N,px=x=>(x-M)*S,pz=z=>(z-M)*S;
+const terrain=new Uint8Array(N*N),mesh=new Array(N*N),roomObjects=new Array(N*N),waterObjects=[],jobs=new Set(),marked=new Map(),claimed=new Set();
+let gold=120,tool='dig',follow=false,az=Math.PI/4,zoom=39,elapsed=0,lastMessage=0,live=false;
+const stage=new THREE.Scene();stage.background=new THREE.Color('#09070d');stage.fog=new THREE.FogExp2('#0b0810',.013);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
+const render=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,powerPreference:'high-performance'});
+render.setPixelRatio(Math.min(devicePixelRatio||1,1.4));render.setSize(innerWidth,innerHeight);render.outputColorSpace=THREE.SRGBColorSpace;render.toneMapping=THREE.ACESFilmicToneMapping;render.toneMappingExposure=1.33;render.shadowMap.enabled=true;render.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.add(new THREE.HemisphereLight(0x8f89bd,0x22101e,1.65));
+const sun=new THREE.DirectionalLight(0xb7a8d4,1.2);sun.position.set(-12,25,20);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-28;sun.shadow.camera.right=28;sun.shadow.camera.top=28;sun.shadow.camera.bottom=-28;sun.shadow.normalBias=.03;stage.add(sun);
+function makeStone(){
+ const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#504750';ctx.fillRect(0,0,96,96);
+ let seed=1601;function rnd(){seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;}
+ for(let n=0;n<1800;n++){const v=25+rnd()*66;ctx.fillStyle='rgba('+v+','+(v*.88)+','+v+','+(rnd()*.36)+')';ctx.fillRect(rnd()*96,rnd()*96,1+rnd()*8,1+rnd()*3);}
+ const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;return map;
+}
+const stone=makeStone(),rockG=new THREE.BoxGeometry(S-.025,2.6,S-.025),floorG=new THREE.BoxGeometry(S-.03,.2,S-.03);
+const rocks=[.78,.92,1.07].map(n=>new THREE.MeshStandardMaterial({map:stone,color:new THREE.Color(n,n*.96,n),roughness:.98}));
+const floors={1:new THREE.MeshStandardMaterial({map:stone,color:0x77707a,roughness:.9}),2:new THREE.MeshStandardMaterial({map:stone,color:0x74405d,roughness:.91}),3:new THREE.MeshStandardMaterial({map:stone,color:0xae8551,roughness:.78}),4:new THREE.MeshStandardMaterial({map:stone,color:0x3b6877,roughness:.55})};
+const dark=new THREE.MeshStandardMaterial({color:0x140e1a,metalness:.45,roughness:.48}),plum=new THREE.MeshStandardMaterial({color:0x37213b,metalness:.46,roughness:.4}),silver=new THREE.MeshStandardMaterial({color:0x827887,metalness:.82,roughness:.27}),skin=new THREE.MeshStandardMaterial({color:0xc8aeb1,roughness:.8}),hair=new THREE.MeshStandardMaterial({color:0x0a080d}),red=new THREE.MeshStandardMaterial({color:0x63213d,side:THREE.DoubleSide}),goldMaterial=new THREE.MeshStandardMaterial({color:0xf0ad48,metalness:.85,roughness:.3,emissive:0x301807});
+const collection=new THREE.Group();stage.add(collection);
+function tile(x,z){
+ const id=idx(x,z);if(mesh[id])collection.remove(mesh[id]);if(roomObjects[id]){collection.remove(roomObjects[id]);roomObjects[id]=null;}if(waterObjects[id]){collection.remove(waterObjects[id]);waterObjects[id]=null;}
+ const t=terrain[id],rock=t===0;
+ const block=new THREE.Mesh(rock?rockG:floorG,rock?rocks[(x*19+z*37)%3]:floors[t]);block.position.set(px(x),rock?1.23:-.21,pz(z));block.castShadow=rock;block.receiveShadow=true;block.userData.id=id;collection.add(block);mesh[id]=block;
+ if(t===2||t===3){let g=new THREE.Group();g.position.set(px(x),0,pz(z));collection.add(g);roomObjects[id]=g;
+  if(t===2){const bed=new THREE.Mesh(new THREE.BoxGeometry(.95,.18,1.35),plum);bed.position.y=.02;g.add(bed);const pillow=new THREE.Mesh(new THREE.BoxGeometry(.76,.1,.3),skin);pillow.position.set(0,.15,-.35);g.add(pillow);}
+  else{for(let a=0;a<4;a++){const coin=new THREE.Mesh(new THREE.CylinderGeometry(.25,.26,.15,10),goldMaterial);coin.position.set((a%2-.5)*.5,.04,Math.floor(a/2)*.43-.2);g.add(coin);}}
+ }
+ if(t===4){const w=new THREE.Mesh(new THREE.PlaneGeometry(S-.08,S-.08,7,7),new THREE.MeshStandardMaterial({color:0x237688,roughness:.15,metalness:.64,emissive:0x123341,emissiveIntensity:.55,transparent:true,opacity:.82,side:THREE.DoubleSide}));w.rotation.x=-Math.PI/2;w.position.set(px(x),-.05,pz(z));collection.add(w);waterObjects[id]=w;}
+}
+for(let z=0;z<N;z++)for(let x=0;x<N;x++)if(x>=7&&x<=13&&z>=7&&z<=13)terrain[idx(x,z)]=1;
+terrain[idx(8,12)]=4;terrain[idx(9,12)]=4;
+for(let z=0;z<N;z++)for(let x=0;x<N;x++)tile(x,z);
+// The throne is decorative. It does not interfere with player construction.
+const throne=new THREE.Group();throne.position.set(px(10),0,pz(10));stage.add(throne);
+function shape(geometry,material,x,y,z,parent=throne){const o=new THREE.Mesh(geometry,material);o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o;}
+shape(new THREE.CylinderGeometry(.82,1.1,.28,8),dark,0,.04,0);
+shape(new THREE.BoxGeometry(.95,.26,.7),plum,0,.47,0);shape(new THREE.BoxGeometry(1,1.85,.2),dark,0,1.32,-.34);
+for(const s of [-1,1]){shape(new THREE.ConeGeometry(.16,.72,5),silver,s*.41,2.57,-.34);shape(new THREE.BoxGeometry(.15,.78,.72),dark,s*.55,.9,0);}
+const torches=[];
+function torch(x,z){
+ const g=new THREE.Group();g.position.set(px(x),0,pz(z));stage.add(g);
+ shape(new THREE.CylinderGeometry(.06,.08,1.2,7),silver,0,.6,0,g);shape(new THREE.CylinderGeometry(.22,.13,.23,8),goldMaterial,0,1.28,0,g);
+ const flame=shape(new THREE.ConeGeometry(.14,.43,8),new THREE.MeshBasicMaterial({color:0xff8a37}),0,1.59,0,g);
+ const light=new THREE.PointLight(0xff6b39,12,12,2);light.position.y=1.6;g.add(light);torches.push({x:px(x),z:pz(z),flame,light});
+}
+torch(7,7);torch(13,7);torch(7,13);torch(13,13);
+function particleField(count,isSmoke){
+ const p=new Float32Array(count*3),sizes=new Float32Array(count),alpha=new Float32Array(count),col=new Float32Array(count*3),seeds=[];
+ for(let i=0;i<count;i++){seeds.push({age:Math.random(),speed:(isSmoke?.15:.9)+Math.random()*(isSmoke?.16:.35),angle:Math.random()*Math.PI*2,radius:Math.random()*.2,k:i%torches.length});const c=new THREE.Color(isSmoke?0x9c91ab:0xff9b4c);col.set([c.r,c.g,c.b],i*3);}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setAttribute('size',new THREE.BufferAttribute(sizes,1));g.setAttribute('fade',new THREE.BufferAttribute(alpha,1));
+ const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:isSmoke?THREE.NormalBlending:THREE.AdditiveBlending,
+ vertexShader:'attribute float size;attribute float fade;attribute vec3 color;varying vec3 vCol;varying float vFade;void main(){vCol=color;vFade=fade;vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;gl_PointSize=min(55.,size*250./max(1.,-mv.z));}',
+ fragmentShader:'varying vec3 vCol;varying float vFade;void main(){float d=length(gl_PointCoord-vec2(.5))*2.;float a=1.-smoothstep(.3,1.,d);gl_FragColor=vec4(vCol,a*vFade);}'});
+ const obj=new THREE.Points(g,material);obj.frustumCulled=false;stage.add(obj);
+ return function(dt,t){for(let i=0;i<count;i++){const a=seeds[i];a.age+=dt*a.speed;if(a.age>1)a.age-=1;const q=torches[a.k],radius=a.radius*(1+a.age*2);p[3*i]=q.x+Math.cos(a.angle+t*.22)*radius;p[3*i+1]=1.45+a.age*(isSmoke?4.4:1);p[3*i+2]=q.z+Math.sin(a.angle+t*.19)*radius;sizes[i]=(isSmoke?.55:.24)*(1+a.age*1.6);alpha[i]=(1-a.age)*(isSmoke?.23:.8);}
+ g.attributes.position.needsUpdate=true;g.attributes.size.needsUpdate=true;g.attributes.fade.needsUpdate=true;};
+}
+const tickSmoke=particleField(180,true),tickFire=particleField(100,false);
+function buildQueen(){
+ const g=new THREE.Group();
+ function add(geo,mat,x,y,z){return shape(geo,mat,x,y,z,g);}
+ add(new THREE.CylinderGeometry(.24,.55,1.16,10),plum,0,.77,0);
+ add(new THREE.CylinderGeometry(.29,.22,.7,9),dark,0,1.62,0);
+ add(new THREE.BoxGeometry(.55,.14,.24),silver,0,1.83,-.07);
+ add(new THREE.CylinderGeometry(.1,.11,.21,7),skin,0,2.07,0);
+ add(new THREE.SphereGeometry(.27,14,12),skin,0,2.39,0);
+ const crownHair=add(new THREE.SphereGeometry(.31,12,10),hair,0,2.57,.04);crownHair.scale.set(1.08,.8,1.05);
+ for(let i=-1;i<=1;i++)add(new THREE.ConeGeometry(.12,.3,6),hair,i*.14,2.4,-.23);
+ for(const s of [-1,1]){
+  add(new THREE.SphereGeometry(.035,7,5),hair,s*.10,2.43,-.246);
+  add(new THREE.SphereGeometry(.2,9,8),silver,s*.34,1.76,0);
+  const arm=new THREE.Group();arm.position.set(s*.36,1.65,0);g.add(arm);
+  shape(new THREE.CylinderGeometry(.085,.07,.72,7),dark,0,-.34,0,arm);g.userData[s<0?'left':'right']=arm;
+  add(new THREE.BoxGeometry(.22,.34,.32),hair,s*.18,.16,-.08);
+ }
+ const cape=add(new THREE.ConeGeometry(.70,1.65,10,1,true),red,0,1.1,.2);cape.rotation.x=-.13;
+ const circlet=add(new THREE.TorusGeometry(.21,.035,5,9),silver,0,2.77,0);circlet.rotation.x=Math.PI/2;
+ return g;
+}
+const queen=buildQueen();queen.position.set(px(10),0,pz(11));stage.add(queen);
+function imp(){
+ const g=new THREE.Group(),body=shape(new THREE.SphereGeometry(.29,9,7),new THREE.MeshStandardMaterial({color:0x78515c}),0,.55,0,g);
+ for(let s of [-1,1]){let h=shape(new THREE.ConeGeometry(.12,.35,6),silver,s*.22,.97,0,g);h.rotation.z=s*.35;shape(new THREE.SphereGeometry(.06,6,5),new THREE.MeshBasicMaterial({color:0xffbb82}),s*.12,.6,-.28,g);}
+ return g;
+}
+const imps=[];
+for(let a=0;a<2;a++){const g=imp(),pos=[9+a*2,9];g.position.set(px(pos[0]),0,pz(pos[1]));stage.add(g);imps.push({g,cell:pos,path:[],job:null,working:0,wander:0});}
+const accessible=(x,z)=>ok(x,z)&&terrain[idx(x,z)]!==0&&terrain[idx(x,z)]!==4;
+function findPath(start,end){
+ const from=idx(...start),goal=idx(...end),queue=[from],previous=new Int16Array(N*N);previous.fill(-1);previous[from]=from;
+ for(let k=0;k<queue.length;k++){const v=queue[k];if(v===goal)break;const x=v%N,z=Math.floor(v/N);
+  for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,nz=z+b;if(accessible(nx,nz)&&previous[idx(nx,nz)]<0){previous[idx(nx,nz)]=v;queue.push(idx(nx,nz));}}
+ }
+ if(previous[goal]<0)return null;const out=[];let id=goal;while(id!==from){out.unshift([id%N,Math.floor(id/N)]);id=previous[id];}return out;
+}
+function destinations(){const res=[];for(let z=0;z<N;z++)for(let x=0;x<N;x++)if(accessible(x,z))res.push([x,z]);return res;}
+function navigate(actor,dt,speed){
+ if(!actor.path.length)return false;const pt=actor.path[0],tx=px(pt[0]),tz=pz(pt[1]);let dx=tx-actor.g.position.x,dz=tz-actor.g.position.z,d=Math.hypot(dx,dz);
+ if(d<.065){actor.g.position.x=tx;actor.g.position.z=tz;actor.cell=pt;actor.path.shift();return true;}
+ const step=Math.min(d,dt*speed);actor.g.position.x+=step*dx/d;actor.g.position.z+=step*dz/d;actor.g.rotation.y=Math.atan2(-dx,-dz);return true;
+}
+const monarch={g:queen,cell:[10,11],path:[],delay:1.7,state:'Observando'};
+function queenTick(dt){
+ if(navigate(monarch,dt,1.85)){queen.position.y=Math.sin(elapsed*9)*.025;queen.userData.left.rotation.x=Math.sin(elapsed*7)*.18;queen.userData.right.rotation.x=-Math.sin(elapsed*7)*.18;}
+ else{queen.position.y=0;queen.userData.left.rotation.x=queen.userData.right.rotation.x=0;monarch.delay-=dt;
+  if(monarch.delay<=0){const places=destinations();const target=Math.random()<.24?[10,10]:places[Math.floor(Math.random()*places.length)];monarch.path=findPath(monarch.cell,target)||[];monarch.delay=1+Math.random()*4;monarch.state=Math.random()<.3?'Inspeccionando':'Patrullando';$('mood').textContent='Véspera · '+monarch.state;}}
+}
+function workOrder(impObj){
+ for(const job of jobs){if(claimed.has(job))continue;const x=job%N,z=Math.floor(job/N);let best=null,min=1000;
+  for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,nz=z+dz;if(!accessible(nx,nz))continue;const route=findPath(impObj.cell,[nx,nz]);if(route&&route.length<min){min=route.length;best=route;}}
+  if(best){impObj.job=job;impObj.path=best;claimed.add(job);return;}
+ }
+}
+function impTick(dt){
+ for(const w of imps){
+  if(w.job!==null){if(w.path.length){navigate(w,dt,2.95);continue;}
+   w.working+=dt;w.g.rotation.z=.14*Math.sin(elapsed*22);
+   if(w.working>1.6){const id=w.job;if(jobs.has(id)){jobs.delete(id);terrain[id]=1;tile(id%N,Math.floor(id/N));removeMarker(id);gold+=4;refresh();message('Roca excavada · +4 oro');}claimed.delete(id);w.job=null;w.working=0;w.g.rotation.z=0;}
+  }else{workOrder(w);if(w.job===null){w.wander-=dt;if(w.wander<0){const all=destinations();w.path=findPath(w.cell,all[Math.floor(Math.random()*all.length)])||[];w.wander=4+Math.random()*5;}navigate(w,dt,1.35);}}
+ }
+}
+const markerG=new THREE.PlaneGeometry(S*.74,S*.74),markerM=new THREE.MeshBasicMaterial({color:0xffa36a,transparent:true,opacity:.6,side:THREE.DoubleSide,depthWrite:false});
+function mark(id){if(marked.has(id))return;const x=id%N,z=Math.floor(id/N),m=new THREE.Mesh(markerG,markerM);m.rotation.x=-Math.PI/2;m.position.set(px(x),2.57,pz(z));stage.add(m);marked.set(id,m);}
+function removeMarker(id){if(marked.has(id)){stage.remove(marked.get(id));marked.delete(id);}}
+function refresh(){$('gold').textContent=gold;$('orders').textContent=jobs.size;$('rooms').textContent=1+terrain.filter(v=>v===2||v===3).length;}
+function message(str){$('toast').textContent=str;$('toast').classList.add('show');lastMessage=4;}
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),canvas=$('scene');let pointerStart=null;
+function clickWorld(e){
+ if(follow)return;const b=canvas.getBoundingClientRect();pointer.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);raycaster.setFromCamera(pointer,camera);
+ const hit=raycaster.intersectObjects(mesh.filter(Boolean),false)[0];if(!hit)return;const id=hit.object.userData.id;
+ if(tool==='dig'){
+ if(terrain[id]!==0){message('Selecciona un bloque de roca.');return;}
+ if(jobs.has(id)){jobs.delete(id);removeMarker(id);}else{jobs.add(id);mark(id);}refresh();
+ }else if(tool==='cancel'){jobs.delete(id);removeMarker(id);refresh();}
+ else if(tool==='room'){if(terrain[id]!==1){message('Construye sobre suelo ya excavado.');return;}if(gold<12){message('Necesitas 12 de oro.');return;}terrain[id]=Number($('roomType').value);gold-=12;tile(id%N,Math.floor(id/N));refresh();message('Nueva sala construida.');}
+}
+canvas.addEventListener('pointerdown',e=>{pointerStart=[e.clientX,e.clientY];});
+canvas.addEventListener('pointerup',e=>{if(pointerStart&&Math.hypot(e.clientX-pointerStart[0],e.clientY-pointerStart[1])<12)clickWorld(e);pointerStart=null;});
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('[data-tool]').forEach(x=>x.classList.toggle('active',x===b));});
+$('follow').onclick=()=>{follow=!follow;$('follow').textContent=follow?'◉ Vista estratégica':'◉ Seguir a Véspera';message(follow?'Siguiendo a Véspera.':'Vista de gestión.');};
+$('rotateL').onclick=()=>az-=.22;$('rotateR').onclick=()=>az+=.22;$('zoomIn').onclick=()=>zoom=Math.max(14,zoom-5);$('zoomOut').onclick=()=>zoom=Math.min(64,zoom+5);
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=THREE.MathUtils.clamp(zoom+e.deltaY*.027,14,64);},{passive:false});
+window.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key.toLowerCase()==='q')az-=.16;if(e.key.toLowerCase()==='e')az+=.16;});
+function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();render.setSize(innerWidth,innerHeight);}addEventListener('resize',resize);
+let gameClock,target=new THREE.Vector3();
+function frame(){
+ if(!live)return;requestAnimationFrame(frame);const dt=Math.min(.05,gameClock.getDelta());elapsed+=dt;
+ impTick(dt);queenTick(dt);tickSmoke(dt,elapsed);tickFire(dt,elapsed);
+ torches.forEach((v,i)=>{v.light.intensity=11+2*Math.sin(elapsed*11+i*3)+Math.sin(elapsed*23+i*7);v.flame.scale.y=.88+.14*Math.sin(elapsed*17+i);});
+ waterObjects.forEach(w=>{if(!w)return;const a=w.geometry.attributes.position;for(let i=0;i<a.count;i++){a.setZ(i,.037*Math.sin(elapsed*2.3+a.getX(i)*3+a.getY(i)*1.7));}a.needsUpdate=true;});
+ target.lerp(follow?new THREE.Vector3(queen.position.x,0,queen.position.z):new THREE.Vector3(),Math.min(1,dt*3));
+ const distance=follow?Math.min(zoom,19):zoom;
+ camera.position.set(target.x+Math.cos(az)*distance,follow?10.5:distance*.79,target.z+Math.sin(az)*distance);
+ camera.lookAt(target.x,follow?1.25:0,target.z);
+ if(lastMessage>0){lastMessage-=dt;if(lastMessage<=0)$('toast').classList.remove('show');}
+ render.render(stage,camera);
+}
+function start(){if(live)return;live=true;gameClock=new THREE.Clock();refresh();message('Marca roca y deja que los diablillos excaven.');frame();}
+addEventListener('vespera-unlock',start);if(window.__vesperaUnlocked)start();
+</script></body></html>
