@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CASA DE LUX · CRT 2000</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#f2f0eb;font:14px/1.35 Arial,Helvetica,sans-serif}
+button{font:inherit;cursor:pointer;background:#0b0e18;color:#fff;border:1px solid #989ca8;border-radius:2px;padding:7px 9px}
+button:focus-visible{outline:2px solid #9fffd2;outline-offset:1px}
+button:hover{background:#282c37}
+#screen{position:absolute;inset:0;margin:auto;width:min(100vw,133.3333vh);height:min(100vh,75vw);background:#070810;overflow:hidden}
+#picture{position:absolute;inset:0;background:linear-gradient(135deg,#101528,#432c4b 54%,#142b3c)}
+#slide{width:100%;height:100%;object-fit:cover;display:block;opacity:1;transition:opacity .18s linear}
+#logo{position:absolute;top:9px;left:12px;letter-spacing:.09em;background:rgba(0,0,0,.9);padding:7px 9px;line-height:1.1;font-weight:800;font-size:16px}
+#logo small{font-size:9px;display:block;color:#a4bac5;font-weight:400;letter-spacing:.21em;margin-top:3px}
+#tools{position:absolute;top:9px;right:10px;display:flex;gap:5px}
+#tools button{padding:7px 8px;font-size:12px;min-height:31px;background:rgba(0,0,0,.92)}
+#status{position:absolute;top:52px;right:10px;background:rgba(0,0,0,.9);padding:6px 8px;color:#d0e6d7;font-size:10px;max-width:45%;text-align:right}
+#footer{position:absolute;bottom:0;left:0;right:0;background:#050608;color:#eee;border-top:1px solid #777;min-height:100px;padding:8px 12px}
+#bottom{display:grid;grid-template-columns:minmax(140px,1fr) minmax(248px,1.25fr);gap:10px}
+#clock{font:700 19px/1.2 monospace;letter-spacing:.08em}
+#date{font-size:10px;color:#c6c6ca;margin-top:1px}
+#conditions{font-size:11px;margin-top:6px;color:#b9d5d6}
+#caption{position:absolute;left:12px;bottom:108px;background:rgba(0,0,0,.88);padding:5px 8px;color:#e3e7ed;max-width:65%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
+#radio{min-width:0}
+#radioLine{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+#radioLine button{font-size:10px;white-space:nowrap;padding:4px 6px;min-height:26px}
+#radioLabel{font:700 11px Arial,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1;color:#f0d2ec}
+#radioPlayer{height:65px;overflow:hidden;background:#0b0d11}
+#radioPlayer iframe{display:block;width:100%;height:65px;border:0;background:#0b0d11}
+#info{display:none;position:absolute;top:46px;left:10px;right:10px;background:#080a12;color:#fff;border:1px solid #bfc2c6;z-index:5;padding:12px;font-size:13px;max-width:520px}
+#info.open{display:block}
+#info p{margin:6px 0}
+@media(max-width:450px){#logo{font-size:12px}#footer{padding:4px 6px}#bottom{grid-template-columns:1fr 1.55fr;gap:5px}#clock{font-size:13px}#radioLabel{font-size:9px}#radioPlayer,#radioPlayer iframe{height:52px}#footer{min-height:86px}#caption{bottom:90px}}
+@media(prefers-reduced-motion:reduce){#slide{transition:none}}
+</style>
+</head>
+<body>
+<main id="screen" aria-label="Casa de Lux optimizada para los tres Trinitron, 4:3">
+ <div id="picture"><img id="slide" alt="Ilustración del archivo de Rain Interactive"></div>
+ <div id="logo">RAIN <small>INTERACTIVE · CRT 2000</small></div>
+ <nav id="tools" aria-label="Controles de la casa"><button id="infoButton" type="button" title="Información">ⓘ</button><button id="normalButton" type="button" title="Volver a la versión normal">HD</button><button id="fullButton" type="button" title="Pantalla completa">⛶</button></nav>
+ <div id="status">CRT · 640 × 480 · Cargando archivo</div>
+ <div id="caption">Rain Interactive</div>
+ <section id="info" aria-label="Información del modo CRT">
+ <b>CASA DE LUX · MODO CRT</b>
+ <p>Diseñado para los tres Sony Trinitron: 4:3, fotografías adaptadas a 640 × 480, un único plano en memoria, sin animaciones ni paneles externos.</p>
+ <p>Las ilustraciones cambian aproximadamente cada minuto. Los originales permanecen en la versión HD.</p>
+ <p>La radio usa el reproductor oficial de SoundCloud. Si el navegador bloquea el inicio automático, pulsa SONIDO.</p>
+ <button type="button" id="closeInfo">Cerrar</button>
+ </section>
+ <footer id="footer">
+  <div id="bottom">
+   <section aria-label="Hora y datos del Atlántico"><div id="clock">--:--</div><div id="date">A CORUÑA</div><div id="conditions">Atlántico · esperando datos</div></section>
+   <section id="radio" aria-label="Rain Radio">
+    <div id="radioLine"><button id="autoButton" type="button" aria-pressed="true">AUTO ON</button><button id="musicButton" type="button">▶ SONIDO</button><button id="nextButton" type="button">≫</button><span id="radioLabel">RAIN RADIO · SOUNDCLOUD</span></div>
+    <div id="radioPlayer"><div style="font-size:10px;color:#b7acba;padding:13px 6px">Pulsa ▶ SONIDO para empezar la radio.</div></div>
+   </section>
+  </div>
+ </footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const mixes=[{"name":"Sasha Crush · disco y funk","url":"https://soundcloud.com/user-643553014/sasha-crush-110724"},{"name":"Moxie · NTS 2026","url":"https://soundcloud.com/djmoxie/sets/moxie-nts-radio-playlist-2026"},{"name":"Cheb Mimo · downtempo y raï","url":"https://soundcloud.com/scenenoise/mimo-select"},{"name":"NTS · CC:Disco! (2024)","url":"https://soundcloud.com/user-643553014/cc-disco-131124"},{"name":"NTS · SlothBoogie","url":"https://soundcloud.com/user-643553014/ldldn-w-slothboogie-010723"},{"name":"NTS · GiGi FM Production Mix","url":"https://soundcloud.com/gigi-fm/nts-radio-gigi-fm-production-mix-21052025"},{"name":"NTS · Orpheu The Wizard","url":"https://soundcloud.com/user-643553014/orpheu-the-wizard-140624"},{"name":"Vox Sinistra · Samo Mix 85","url":"https://soundcloud.com/samorecords/samo-mix-85-vox-sinistra"},{"name":"Arnaud Rebotini · EBM Selection","url":"https://soundcloud.com/arnaudrebotini/a-modern-ebm-and-techno-selection-fevrier-2025-mix"},{"name":"Local Suicide · Blank Wave","url":"https://soundcloud.com/shialabiff/blank-wave-guest-mix-117-local-suicide"},{"name":"Buttechno · NTS enero 2026","url":"https://soundcloud.com/buttechno/nts-12012026"},{"name":"Minimal Schlager · TANK Mix","url":"https://soundcloud.com/tank-magazine/tank-mix-minimal-schlager"},{"name":"Ellen Allien · SECTION London","url":"https://soundcloud.com/ellen-allien/ellen-alien-section-london-june-2025"},{"name":"Helena Hauff · The Cover Mix","url":"https://soundcloud.com/mixmag-1/the-cover-mix-helena-hauff"},{"name":"Ethio-jazz · Addis Abeba","url":"https://soundcloud.com/swanndelamancha/ethio-jazz-summer-mix-25"},{"name":"Bandas sonoras · Cine europeo","url":"https://soundcloud.com/swanndelamancha/french-italian-soundtracks-summer-mix-25"},{"name":"Roots, ska y dub · Archivo jamaicano","url":"https://soundcloud.com/amine-laidia/sets/dub-ska-reggae-roots"},{"name":"Glitch / Gaze · Dave NULL / VOID","url":"https://soundcloud.com/dave-nullvoid/glitchgaze-mix-shoegaze-dreampop"},{"name":"Xander Milne · French Touch en cinta","url":"https://soundcloud.com/xandermilne/french-house-dj-mix-on-tape-daft-punk-roule-cassius-french-touch"},{"name":"DJ Q · UK Garage","url":"https://soundcloud.com/djqmusic/dj-q-2022-uk-garage-mix"},{"name":"DJ Nate · Carnaval 2025","url":"https://soundcloud.com/djnate/carnival2025"},{"name":"OK.DJ · Jungle a 160","url":"https://soundcloud.com/ok_dj/jungle-160-mini-mix"},{"name":"Nina Azucar · Armada Fania","url":"https://soundcloud.com/ninavicious/nina-azucar-armada-fania-mix-remastered"},{"name":"AJACENT · Baile Funk y Jersey Club","url":"https://soundcloud.com/dj-ajacent/live-set-spring-summer-2025-mix-hip-hop-baile-funk-jersey-club"},{"name":"DJ BMF · Latin Jazzy Mix","url":"https://soundcloud.com/dj-bmf/latinjazzymix"},{"name":"NTS · Star Eyes + Bianca Oblivion","url":"https://soundcloud.com/stareyes/club-aerobics-on-nts-radio-star-eyes-bianca-oblivion-mix-july-7-2021"}];
+let scenes=[],index=-1,autonomy=true,lastShot=null,playerLoaded=false,mixIndex=0;
+const timefmt=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit'});
+const datefmt=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',weekday:'short',day:'numeric',month:'short'});
+function clock(){
+ const now=new Date();
+ $('clock').textContent=timefmt.format(now);
+ $('date').textContent=datefmt.format(now).toUpperCase()+' · A CORUÑA';
+}
+clock();setInterval(clock,10000);
+async function weather(){
+ try{
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),5000);
+  const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.3623&longitude=-8.4115&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe%2FMadrid',{signal:controller.signal});
+  clearTimeout(timeout);
+  if(!res.ok)throw Error('sin datos');
+  const c=(await res.json()).current;
+  $('conditions').textContent=Math.round(c.temperature_2m)+'°C · Viento '+Math.round(c.wind_speed_10m)+' km/h · Humedad '+Math.round(c.relative_humidity_2m)+'%';
+ }catch{$('conditions').textContent='ATLÁNTICO · DATOS NO DISPONIBLES'}
+}
+weather();setInterval(weather,30*60*1000);
+function showNext(){
+ if(!scenes.length||document.hidden)return;
+ let n=Math.floor(Math.random()*scenes.length);
+ if(scenes.length>1&&n===index)n=(n+1)%scenes.length;
+ const art=scenes[n];
+ const fresh=new Image();
+ fresh.decoding='async';
+ fresh.onload=()=>{
+  const el=$('slide');
+  el.src=fresh.src;
+  el.alt=art.name;
+  $('caption').textContent=art.name;
+  $('status').textContent='CRT · 640 × 480 · '+scenes.length+' obras';
+  index=n;
+ };
+ fresh.onerror=()=>{$('status').textContent='CRT · error de imagen'};
+ fresh.src='crt-assets/'+encodeURIComponent(art.file);
+}
+async function loadGallery(){
+ try{
+  const result=await fetch('crt-assets/manifest.json',{cache:'no-store'});
+  if(!result.ok)throw Error('No hay miniaturas CRT todavía');
+  const data=await result.json();
+  scenes=Array.isArray(data.images)?data.images.filter(x=>/^[a-z0-9_-]+\.jpg$/i.test(x.file)):[];
+  if(!scenes.length)throw Error('Archivo vacío');
+  showNext();
+ }catch{
+  $('status').textContent='CRT · Preparando las imágenes optimizadas';
+  // La preparación inicial se publica en GitHub; esperar sin cargar imágenes FHD.
+  setTimeout(loadGallery,45000);
+ }
+}
+loadGallery();
+setInterval(()=>{if(autonomy)showNext()},65000);
+$('autoButton').onclick=()=>{
+ autonomy=!autonomy;
+ $('autoButton').textContent=autonomy?'AUTO ON':'AUTO OFF';
+ $('autoButton').setAttribute('aria-pressed',String(autonomy));
+ if(autonomy&&index<0)showNext();
+ if(autonomy&&!playerLoaded)startRadio();
+};
+function playerUrl(url){
+ return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&color=%23d8cbdc';
+}
+function startRadio(){
+ const m=mixes[mixIndex%mixes.length];
+ if(!m)return;
+ $('radioLabel').textContent=m.name;
+ const iframe=document.createElement('iframe');
+ iframe.title='Rain Radio · '+m.name;
+ iframe.allow='autoplay';
+ iframe.src=playerUrl(m.url);
+ const host=$('radioPlayer');
+ host.replaceChildren(iframe);
+ playerLoaded=true;
+ $('musicButton').textContent='♫ RADIO';
+}
+$('musicButton').onclick=()=>{
+ if(!playerLoaded)startRadio();
+ else $('radioPlayer iframe')?.contentWindow?.focus();
+};
+$('nextButton').onclick=()=>{mixIndex=(mixIndex+1)%mixes.length;startRadio()};
+$('infoButton').onclick=()=>{$('info').classList.toggle('open')};
+$('closeInfo').onclick=()=>{$('info').classList.remove('open')};
+$('normalButton').onclick=()=>{location.href='/casa-lux/'};
+$('fullButton').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.()};
+</script>
+</body>
+</html>
