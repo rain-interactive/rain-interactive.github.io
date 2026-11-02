@@ -1215,6 +1215,7 @@
 #stage #filmA::after,#stage #filmB::after{transition:none!important}
 #stage *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #stage #luxRadioEQ i{animation:none!important}
+#controlsBar #crtBtn{font-size:12px!important;font-weight:800!important;letter-spacing:.04em;min-width:45px!important}
 </style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
@@ -1240,7 +1241,7 @@
  <button id="luAutoPower" type="button" disabled aria-pressed="false" aria-label="Activar autonomía de Lu Roth" title="Conectando autonomía">
  <span class="luPowerIcon" aria-hidden="true">⏻</span><span id="luAutoPowerText">AUTONOMÍA · …</span>
 </button>
- <nav id="controlsBar" aria-label="Información y pantalla"><button class="ctrl" id="infoBtn" title="Ver estado automático">ⓘ</button><button class="ctrl" id="fullBtn" title="Pantalla completa">⛶</button></nav>
+ <nav id="controlsBar" aria-label="Información, modos y pantalla"><button class="ctrl" id="infoBtn" title="Ver estado automático">ⓘ</button><button class="ctrl" id="crtBtn" title="Activar modo CRT: versión ligera 4:3">CRT</button><button class="ctrl" id="fullBtn" title="Pantalla completa">⛶</button></nav>
  <aside id="panel" aria-label="Estado de la instalación"><h2>Casa de Lux · en automático</h2>
  <p>Instalación cinematográfica · planos en formato 1920 × 1080. Sin selector de escenas: la cámara cambia según las rutinas y las horas de A Coruña, con transiciones lentas y pausas.</p>
  <p><strong>Rutina:</strong> descanso de madrugada; despierta a las 10:00. Luz programada como la de la tortuga: se apaga a las 20:00, descansa hasta las 10:00 y se enciende a las 10:00.</p>
@@ -1316,6 +1317,7 @@ function chooseScene(){ $('still').style.backgroundImage='none';$('windowCut').s
 function fit(){let stage=$('stage'),outer=$('view');let scale=Math.max(outer.clientWidth/1920,outer.clientHeight/1080);stage.style.transform=`scale(${scale})`;}window.addEventListener('resize',fit);fit();
 function setSea(mode){seaMode=mode;let active=mode!=='photo';$('sky').style.display=active?'block':'none';$('windowCut').style.opacity=active?'1':'0';$('still').style.opacity=active?'0':'1';if(active){$('seaVideo').style.display=mode==='video'?'block':'none';if(mode==='video')$('seaVideo').play().catch(()=>{});else $('seaVideo').pause();if(mode==='demo')requestAnimationFrame(animateSea);}else $('seaVideo').pause();}
 $('infoBtn').onclick=()=>{$('panel').classList.toggle('open')};
+ $('crtBtn').onclick=()=>{window.location.href='/casa-lux/crt.html'};
 $('closePanel').onclick=()=>{$('panel').classList.remove('open')};
 $('fullBtn').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.()};
 // Paisaje y paleta cromática quedan preestablecidos; no se ofrecen modos manuales.
