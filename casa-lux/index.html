@@ -1207,6 +1207,15 @@
  #luxRadioEQ i{animation:none!important}
 }
 </style>
+<style id="lu-trex2000-lite-v1">
+/* La capa nítida ocupa toda la pantalla; el desenfoque duplicado no aporta imagen visible. */
+#stage .film-blur{display:none!important}
+/* Evitar repintados y filtros costosos sobre imágenes FHD, conservando gradación y fundidos. */
+#stage .film-sharp{animation:none!important;transition:none!important;transform:none!important}
+#stage #filmA::after,#stage #filmB::after{transition:none!important}
+#stage *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#stage #luxRadioEQ i{animation:none!important}
+</style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
@@ -1266,7 +1275,7 @@ const shortHour=new Intl.DateTimeFormat('es-ES',{timeZone:TZ,hour:'2-digit',minu
 const partFmt=new Intl.DateTimeFormat('en-GB',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hour12:false});
 function madridParts(date){const parts=partFmt.formatToParts(date).reduce((a,p)=>(a[p.type]=p.value,a),{});return {y:+parts.year,m:+parts.month,d:+parts.day,h:+parts.hour};}
 function madridDay(date){const p=madridParts(date);return `${p.y}-${String(p.m).padStart(2,'0')}-${String(p.d).padStart(2,'0')}`}
-function setCopy(key,value){$(key).textContent=value}
+function setCopy(key,value){const node=$(key);if(node&&node.textContent!==value)node.textContent=value}
 function now(){return new Date(Date.now()+clockSkew)}
 async function syncClock(){try{let before=Date.now();let ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),6500);let response=await fetch('https://worldtime.timezone.io/api/timezone/Europe/Madrid',{signal:ctl.signal,cache:'no-store'});clearTimeout(to);if(!response.ok)throw Error('HTTP');let obj=await response.json();if(!Number.isFinite(+obj.unixtime))throw Error('fecha');const after=Date.now();clockSkew=(+obj.unixtime*1000+(after-before)/2)-after;clockOnline=true;}catch(e){clockOnline=false;clockSkew=0;}setCopy('syncInfo',clockOnline?'Hora cotejada con Internet':'Hora del dispositivo · sin sincronización');setCopy('mClockD',clockOnline?'Sincronizada':'Hora del dispositivo');}
 function clockTick(){let n=now(),hours=hourFmt.format(n);setCopy('clockLarge',hours);setCopy('clockInfo',hours.slice(0,5));setCopy('clockDate',dayFmt.format(n));setCopy('mClock',hours.slice(0,5));const day=madridDay(n);if(day!==dayKey){dayKey=day;updateMoon();loadTides();}updateClassSchedule(n);checkAlarms(n);}
@@ -1305,7 +1314,7 @@ async function loadTides(){const d=now(),a=encodeURIComponent(shiftDate(d,-1)),b
 function showTides(){if(tideEvents.length<2)return;const n=now(),idx=tideEvents.findIndex(e=>e.when>n);let prev=idx>0?tideEvents[idx-1]:null,next=idx>=0?tideEvents[idx]:null;let state=prev&&next?(next.high?'Subiendo ↑':'Bajando ↓'):'Cambio de marea';let time=next?`${next.high?'Pleamar':'Bajamar'} ${shortHour.format(next.when)}`:'Sin próximas mareas';let height=next?.height!=null?` · ${next.height.toFixed(2).replace('.',',')} m`:'';setCopy('tideTitle',state);setCopy('tideNext',time+height);setCopy('mTide',state);setCopy('mTideD',time+height);}
 function chooseScene(){ $('still').style.backgroundImage='none';$('windowCut').style.backgroundImage='none'; } // Sin retratos de fondo
 function fit(){let stage=$('stage'),outer=$('view');let scale=Math.max(outer.clientWidth/1920,outer.clientHeight/1080);stage.style.transform=`scale(${scale})`;}window.addEventListener('resize',fit);fit();
-function setSea(mode){seaMode=mode;let active=mode!=='photo';$('sky').style.display=active?'block':'none';$('windowCut').style.opacity=active?'1':'0';$('still').style.opacity=active?'0':'1';if(active){$('seaVideo').style.display=mode==='video'?'block':'none';if(mode==='video')$('seaVideo').play().catch(()=>{});else $('seaVideo').pause();}else $('seaVideo').pause();}
+function setSea(mode){seaMode=mode;let active=mode!=='photo';$('sky').style.display=active?'block':'none';$('windowCut').style.opacity=active?'1':'0';$('still').style.opacity=active?'0':'1';if(active){$('seaVideo').style.display=mode==='video'?'block':'none';if(mode==='video')$('seaVideo').play().catch(()=>{});else $('seaVideo').pause();if(mode==='demo')requestAnimationFrame(animateSea);}else $('seaVideo').pause();}
 $('infoBtn').onclick=()=>{$('panel').classList.toggle('open')};
 $('closePanel').onclick=()=>{$('panel').classList.remove('open')};
 $('fullBtn').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.()};
@@ -1365,8 +1374,8 @@ function checkAlarms(n){
 // Illustrative ocean, used ONLY when enabled by the user. Not a camera feed or live footage.
 const c=$('seaCanvas'),ctx=c.getContext('2d');let phase=0;
 function animateSea(){if(seaMode==='demo'){const w=1920,h=1080;phase+=.012;let sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#31415b');sky.addColorStop(.4,'#d29183');sky.addColorStop(.50,'#eec3a7');sky.addColorStop(.51,'#24516b');sky.addColorStop(1,'#07172a');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);for(let i=0;i<105;i++){let y=600+i*4.9,amp=(i/105)*8,alpha=.05+(i/105)*.18;ctx.beginPath();ctx.strokeStyle=`rgba(238,202,186,${alpha})`;ctx.lineWidth=.7+i/75;for(let x=0;x<=w;x+=24){let yy=y+Math.sin(x*.019+phase*(1+i*.024))*amp;if(x===0)ctx.moveTo(x,yy);else ctx.lineTo(x,yy)}ctx.stroke()}}
- requestAnimationFrame(animateSea)}animateSea();
-let drops=[];for(let i=0;i<150;i++)drops.push({x:Math.random()*1920,y:Math.random()*1080,v:9+Math.random()*12,len:8+Math.random()*12});const rainCtx=$('rain').getContext('2d');function rainLoop(){rainCtx.clearRect(0,0,1920,1080);if($('rain').style.opacity!=='0'){rainCtx.strokeStyle='#b8d4e688';rainCtx.lineWidth=1.4;for(let d of drops){rainCtx.beginPath();rainCtx.moveTo(d.x,d.y);rainCtx.lineTo(d.x-7,d.y+d.len);rainCtx.stroke();d.y+=d.v;d.x-=2;if(d.y>1080){d.y=-10;d.x=Math.random()*1920}}}requestAnimationFrame(rainLoop)}rainLoop();
+ if(seaMode==='demo'&&!document.hidden)requestAnimationFrame(animateSea)}
+let drops=[];for(let i=0;i<150;i++)drops.push({x:Math.random()*1920,y:Math.random()*1080,v:9+Math.random()*12,len:8+Math.random()*12});const rainCtx=$('rain').getContext('2d');function rainLoop(){if(document.hidden||$('rain').style.opacity==='0'||$('filmA').style.opacity==='1'||$('filmB').style.opacity==='1')return;rainCtx.clearRect(0,0,1920,1080);if($('rain').style.opacity!=='0'){rainCtx.strokeStyle='#b8d4e688';rainCtx.lineWidth=1.4;for(let d of drops){rainCtx.beginPath();rainCtx.moveTo(d.x,d.y);rainCtx.lineTo(d.x-7,d.y+d.len);rainCtx.stroke();d.y+=d.v;d.x-=2;if(d.y>1080){d.y=-10;d.x=Math.random()*1920}}}}setInterval(rainLoop,125);
 // Permite que el botón ON refresque las lecturas disponibles sin recargar la página.
 let lastLuClimateRefresh=0;
 window.__luClimateRefresh=()=>{
@@ -1546,7 +1555,7 @@ window.__luNotes={
   ctx.save();ctx.shadowBlur=halo;ctx.shadowColor=color;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore();
  }
  let tick=0;
- function frame(ts){if(ts-nextFrame<1000/20){requestAnimationFrame(frame);return}nextFrame=ts;
+ function frame(ts){if(document.hidden||document.getElementById('filmA')?.style.opacity==='1'||document.getElementById('filmB')?.style.opacity==='1')return;nextFrame=ts;
   const date=new Date(),S=sun(date),M=moon(date),base=fallbackColors(date,S),light=getSkyLight();
   const pal=cameraPalette?{sky:fade(base.sky,cameraPalette.sky,.90),sea:fade(base.sea,cameraPalette.sea,.90)}:base;
    if(ts%1200<70){stage.style.setProperty('--lux-sky-color',rgb(pal.sky));stage.style.setProperty('--lux-sea-color',rgb(pal.sea));stage.dataset.luxPaletteSource=cameraPalette?'cámara':'modelo';}
@@ -1579,11 +1588,10 @@ window.__luNotes={
   }else if(M.alt>4){const x=clamp(1270+Math.sin((M.az-180)*rad)*175,1265,1405),y=clamp(337-M.alt*4.5,90,360);
    ctx.save();poly(windows[2]);ctx.clip();drawBody(x,y,8,'rgba(226,231,242,.72)',20);ctx.restore();
   }
-  requestAnimationFrame(frame);
  }
  async function refresh(){stamp('Actualizando…');await Promise.all([loadCameras(),loadMarine()]);stamp('Actualizado '+new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit'}).format(new Date()));}
   window.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
- requestAnimationFrame(frame);refresh();setInterval(refresh,15*60_000);
+ setInterval(()=>frame(performance.now()),200);refresh();setInterval(refresh,15*60_000);
 })();
 
 </script>
@@ -1688,7 +1696,19 @@ function detectarBandasAmbiente(img){
   return {size:(100*zoom).toFixed(2)+'% auto',focus:[focusX,50]};
  }catch{return null}
 }
-const ambientRegistrados=new Set();
+// T-Rex 2000: procesa una ilustración cada vez para evitar picos de RAM/CPU.
+const ambientRegistrados=new Set(),ambientLoadQueue=[];
+let ambientLoading=false;
+function nextAmbientLoad(){
+ if(ambientLoading||document.hidden||!ambientLoadQueue.length)return;
+ ambientLoading=true;
+ ambientLoadQueue.shift()();
+}
+function finishAmbientLoad(){
+ ambientLoading=false;
+ setTimeout(nextAmbientLoad,1200);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)nextAmbientLoad()});
 function registrarAmbiente(name,filename){
  if(typeof filename!=='string'||!/^[^/\\]+\.(?:jpe?g|png|webp)$/i.test(filename)||ambientRegistrados.has(filename))return;
  ambientRegistrados.add(filename);
@@ -1696,19 +1716,22 @@ function registrarAmbiente(name,filename){
  const scene={name:String(name||filename),group:'ambiente',type:'ambiente',time:'ambos',src:'',width:1920,height:1080,orig:'Archivo ambiental, industrial / glitch / años 2000'};
  scenes.push(scene);
  const img=new Image();
+ img.decoding='async';
  img.onload=()=>{
-  if(img.naturalWidth<700||img.naturalHeight<700){scene.src='';return}
-  const black=detectarBandasAmbiente(img);
-  scene.focus=black?.focus||elegirFocoAmbiental(img);
-  scene.ambientSize=black?.size||'cover';
-  scene.src=url;
-   // El primer ambiente se presenta inmediatamente sin mostrar retratos.
-   if(window.__luHouse?.getState?.()?.index<0){
-    window.__luHouse.show(scenes.indexOf(scene));
-   }
+  try{
+   if(img.naturalWidth<700||img.naturalHeight<700){scene.src='';return}
+   const black=detectarBandasAmbiente(img);
+   scene.focus=black?.focus||elegirFocoAmbiental(img);
+   scene.ambientSize=black?.size||'cover';
+   scene.src=url;
+   // Primera imagen validada: iniciar el pase, sin retratos.
+   if(window.__luHouse?.getState?.()?.index<0)window.__luHouse.show(scenes.indexOf(scene));
+  }catch(err){scene.src=''}
+  finally{finishAmbientLoad()}
  };
- img.onerror=()=>{scene.src=''};
- img.src=url;
+ img.onerror=()=>{scene.src='';finishAmbientLoad()};
+ ambientLoadQueue.push(()=>{img.src=url});
+ nextAmbientLoad();
 }
 ambientalesBase.forEach(([name,filename])=>registrarAmbiente(name,filename));
 // Los archivos adicionales entran automáticamente al publicarse catalogo.json en GitHub.
@@ -1881,7 +1904,7 @@ window.addEventListener('lu-radio-rhythm-change',()=>{
  const ms=planNext(shown);
  nextChange=Math.max(Date.now()+3000,lastSceneAt+Math.max(22000,ms));
 });
-advance(true);setInterval(tick,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
+advance(true);setInterval(tick,5000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('panel').classList.remove('open');$('luxArchive')?.classList.remove('open')}});
 })();
 </script>
