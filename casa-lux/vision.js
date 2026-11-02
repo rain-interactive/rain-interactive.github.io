@@ -122,14 +122,15 @@ function inspect(i,scene){
 }
 function warmup(){
  if(working||!queue.length)return;
- if(document.hidden){setTimeout(warmup,2500);return}
+ // Evitar picos de CPU durante SoundCloud: el plano actual se analiza al presentarse.
+ if(document.hidden||window.__luRadio?.getState?.()?.playing){setTimeout(warmup,15000);return}
  working=true;
  const item=queue.shift();
  inspect(item.i,item.scene).then(()=>{
   scanned=Math.max(scanned,profiles.size);
  }).finally(()=>{
   working=false;
-  setTimeout(warmup,650);
+  setTimeout(warmup,15000);
  });
 }
 function begin(scenes){
@@ -142,7 +143,7 @@ function begin(scenes){
   .filter(x=>x.scene?.src&&!get(x.i,x.scene))
   .sort((a,b)=>Math.abs(a.i-current)-Math.abs(b.i-current));
  scanned=total-queue.length;
- warmup();
+ setTimeout(warmup,15000);
 }
 function profile(index,scene){return get(index,scene)}
 function score(index,scene,mood,previousIndex,scenes){
