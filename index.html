@@ -316,6 +316,31 @@ main section{scroll-margin-top:16px}
 #read .card-aton .artwork-original picture{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-width:0!important}
 #read .card-aton .artwork-original img{height:100%!important;width:auto!important;max-height:100%!important;max-width:100%!important;object-fit:contain!important}
 </style>
+
+<!-- Rain Interactive / visual refresh: noir + original turquoise; structure and content untouched -->
+<style id="rain-noir-turquoise-2026">
+:root{--bg:#030607;--fg:#f0f3f2;--muted:#839397;--mint:#37d3b0;--line:#233235}
+body{background:#030607;color:var(--fg);font-family:Arial,Helvetica,sans-serif;background-image:radial-gradient(ellipse at 90% 0%,rgba(55,211,176,.045),transparent 48%)}
+header{border-bottom-color:#2a3b3e}
+.brand{letter-spacing:.24em}
+.nav a{color:#a7b5b6;transition:color .2s ease}
+.nav a:hover,.nav a:focus-visible{color:var(--mint)}
+.hero p{color:#c2ced0}
+.manifest,.section-head span{color:#819195}
+.mode{border-color:#304144;color:#c4cdce;background:rgba(9,19,21,.55)}
+section{border-bottom-color:#243235}
+.card{background:#080d0e;border-color:#273638;transition:border-color .22s ease,transform .22s ease}
+.card:hover{border-color:var(--mint);transform:translateY(-2px)}
+.card .copy{background:linear-gradient(140deg,rgba(8,15,16,.96),rgba(3,7,8,.96))}
+.card .thumb img{filter:none}
+.card .type{color:#9bafb0}
+.card p,.feature-info p{color:#b1bfc0}
+.card .n{background:#061012e8;border-color:#365053}
+.cta{border-bottom-color:#3d6d6a}
+.support a{border-color:#304144}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.card,.nav a{transition:none}.card:hover{transform:none}}
+</style>
 </head>
 <body>
 <header>
