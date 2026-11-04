@@ -1220,7 +1220,7 @@
 
 <style id="rain-radio-clean-view-20261105">
 /* Rain Radio: interfaz dedicada a la música, sin buzón ni panel ambiental. */
-#luxMailDock,#luxMailLatest,#liveStrip,#luDataHandle,#luxQuietTools,#luxArchive,#subtitleLux{display:none!important}
+#stage #liveStrip,#stage.show-data #liveStrip,#liveStrip,#luDataHandle,#luxDataToggle,#luxMailDock,#luxMailLatest,#luxQuietTools,#luxArchive,#subtitleLux{display:none!important;visibility:hidden!important}
 </style>
 </head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
@@ -1234,7 +1234,7 @@
  <div id="filmState" aria-live="off"></div>
  <div id="poster" title="Póster de arte abstracto"></div><div id="alarmToast" role="status" aria-live="polite"><div id="alarmTitle">Clase en una hora</div><div id="alarmBody">O Raposo Púrpura</div></div>
  <header id="topLine"><div id="cornerClock"><div id="clockLarge">--:--:--</div><div id="clockDate">A Coruña</div></div></header>
- <section id="liveStrip" aria-label="Datos en directo"><button type="button" class="luDataHandle" id="luDataHandle" aria-controls="liveStrip" aria-expanded="false">⌃ &nbsp; DATOS · ATLÁNTICO</button><div class="metric"><div class="kicker">◷ Reloj · A Coruña</div><div class="value" id="clockInfo">--:--</div><div class="detail" id="syncInfo">Sincronizando...</div></div>
+ <section id="liveStrip" aria-label="Datos en directo" hidden style="display:none!important;visibility:hidden!important"><button type="button" class="luDataHandle" id="luDataHandle" aria-controls="liveStrip" aria-expanded="false"></button><div class="metric"><div class="kicker">◷ Reloj · A Coruña</div><div class="value" id="clockInfo">--:--</div><div class="detail" id="syncInfo">Sincronizando...</div></div>
  <div class="metric"><div class="kicker">◉ Tiempo</div><div class="value" id="temp">— °C</div><div class="detail" id="weatherText">Consultando...</div><div class="tiny" id="wind">A Coruña</div></div><div class="metric" id="humidityMetric" aria-label="Humedad relativa exterior en A Coruña"><div class="kicker">◌ Humedad · A Coruña</div><div class="value" id="humidityValue">— %</div><div class="detail" id="humidityDetail">Exterior · consultando…</div><div class="tiny" id="humiditySource">Open-Meteo · a 2 m del suelo</div></div>
  <div class="metric"><div class="kicker">≈ Puerto de A Coruña</div><div class="value" id="tideTitle">—</div><div class="detail" id="tideNext">Consultando mareas...</div><div class="tiny" id="tideSource">MeteoGalicia</div></div>
  <div class="metric"><div class="kicker">◑ Ciclo lunar</div><div class="phaseCell"><canvas id="moonDisc" width="150" height="150"></canvas><div><div class="value" id="moonName">—</div><div class="detail" id="nextMoon">Calculando...</div></div></div><div class="tiny">Fases: US Naval Observatory, UTC → A Coruña</div></div><div class="metric"><div class="kicker">◷ Taller · O Raposo Púrpura</div><div class="value" id="classState">—</div><div class="detail" id="classDetail">L–V · 11:00–14:00 / 17:00–20:00</div><div class="tiny" id="alarmDetail">Avisos 10:00 y 16:00 · L–V</div></div></section>
