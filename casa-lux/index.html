@@ -1222,7 +1222,7 @@
 /* Rain Radio: interfaz dedicada a la música, sin buzón ni panel ambiental. */
 #stage #liveStrip,#stage.show-data #liveStrip,#liveStrip,#luDataHandle,#luxDataToggle,#luxMailDock,#luxMailLatest,#luxQuietTools,#luxArchive,#subtitleLux{display:none!important;visibility:hidden!important}
 </style>
-<style id="rain-radio-no-data-panel-final">#liveStrip,#luDataHandle,#luxDataToggle,.luDataHandle,.luDataPanel,#luxMailDock,#luxMailLatest,#luxQuietTools,#luxArchive,#subtitleLux{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}</style></head><body><div id="backdrop"></div>
+<style id="rain-radio-no-data-panel-final">#liveStrip,#mobileBar,#luDataHandleMobile,#luDataHandle,#luxDataToggle,.luDataHandle,.luDataPanel,#luxMailDock,#luxMailLatest,#luxQuietTools,#luxArchive,#subtitleLux{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}</style></head><body><div id="backdrop"></div>
 <div id="view"><main id="stage" aria-label="Casa de Lux con vistas al Atlántico">
  <div id="sky"><canvas id="seaCanvas" width="1920" height="1080"></canvas><video id="seaVideo" muted loop playsinline></video></div>
  <div class="photo" id="still"></div><div class="photo" id="windowCut"></div><canvas id="atmoCanvas" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -1255,7 +1255,7 @@
  <label>O Raposo Púrpura · avisos</label><p>Lunes a viernes, 10:00 y 16:00. Los avisos visuales son automáticos. El sonido depende de los permisos del navegador y puede requerir una interacción con la página.</p>
  <p>Fuentes: <a href="https://www.meteogalicia.gal/web/observacion/camaras" target="_blank" rel="noopener">MeteoGalicia</a> · <a href="https://open-meteo.com/en/docs/marine-weather-api" target="_blank" rel="noopener">Open-Meteo Marine</a>.</p>
  <button class="btn" id="closePanel" type="button">Cerrar información</button></aside>
- <section id="mobileBar"><button type="button" class="luDataHandle" id="luDataHandleMobile" aria-controls="mobileBar" aria-expanded="false">⌃ &nbsp; DATOS · ATLÁNTICO</button><h2>LUX · EL ATLÁNTICO</h2><div class="mobgrid"><div class="mobcell"><div class="kicker">Tiempo</div><div class="mobvalue" id="mWeather">—</div><div class="mobdetail" id="mWeatherD">Consultando</div></div><div class="mobcell" id="mHumidityCell"><div class="kicker">◌ Humedad exterior</div><div class="mobvalue" id="mHumidity">— %</div><div class="mobdetail" id="mHumidityD">A Coruña · consultando</div></div><div class="mobcell"><div class="kicker">Mareas</div><div class="mobvalue" id="mTide">—</div><div class="mobdetail" id="mTideD">Consultando</div></div><div class="mobcell"><div class="kicker">Luna</div><div class="mobvalue" id="mMoon">—</div><div class="mobdetail" id="mMoonD">Calculando</div></div><div class="mobcell"><div class="kicker">Hora Coruña</div><div class="mobvalue" id="mClock">--:--</div><div class="mobdetail" id="mClockD">Sincronización</div></div><div class="mobcell"><div class="kicker">Taller y alarmas</div><div class="mobvalue" id="mClass">—</div><div class="mobdetail" id="mClassD">L–V · 10:00 y 16:00</div></div></div></section>
+ <section id="mobileBar" hidden aria-hidden="true" style="display:none!important"></section>
  <div id="dataStatus">Datos sujetos a conexión · A Coruña</div>
  <script>
 'use strict';
@@ -1944,7 +1944,7 @@ grade();setInterval(grade,120000);
  // Independientes de Rain Radio y del buzón. Estado persistente por navegador.
  let expanded=true;
  try{expanded=localStorage.getItem('lu-datos-open-v3')!=='0'}catch{}
- const panels=[['liveStrip','luDataHandle'],['mobileBar','luDataHandleMobile']];
+ const panels=[['liveStrip','mobileBar','luDataHandleMobile','luDataHandle'],['mobileBar','luDataHandleMobile']];
  for(const [panelId,buttonId] of panels){
   const panel=document.getElementById(panelId),button=document.getElementById(buttonId);
   if(!panel||!button)continue;
