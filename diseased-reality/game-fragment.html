@@ -86,14 +86,44 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let seed=13
 const dust=Array.from({length:34},()=>({x:rand()*400,y:rand()*300,s:rand(),v:rand()*8+3}));
 const texture=document.createElement('canvas');texture.width=64;texture.height=64;const tx=texture.getContext('2d');for(let i=0;i<1800;i++){tx.fillStyle=i%2?'#d77bff24':'#08021942';tx.fillRect(Math.floor(rand()*64),Math.floor(rand()*64),1+Math.floor(rand()*2),1)}const stonePattern=ctx.createPattern(texture,'repeat');
 const faces=[];function project(v){let dx=v[0]-player.x,dz=v[2]-player.z,cs=Math.cos(player.yaw),sn=Math.sin(player.yaw);let depth=dz*cs+dx*sn;return {x:200+(dx*cs-dz*sn)*235/depth,y:155-(v[1]-1.55)*235/depth,z:depth}}
-function face(points,color){const p=points.map(project);if(p.some(v=>v.z<.13))return;const depth=p.reduce((s,v)=>s+v.z,0)/p.length;faces.push({p,color,depth})}
+function face(points,color){const p=points.map(project);if(p.some(v=>v.z<.13))return;const depth=p.reduce((s,v)=>s+v.z,0)/p.length;if(p.every(v=>v.x<0)||p.every(v=>v.x>400)||p.every(v=>v.y<0)||p.every(v=>v.y>300))return;faces.push({p,color,depth})}
 function box(x,y,z,w,h,d,color){const a=[x-w/2,y,z-d/2],b=[x+w/2,y,z-d/2],c=[x+w/2,y,z+d/2],e=[x-w/2,y,z+d/2];const top=v=>[v[0],v[1]+h,v[2]];face([a,b,top(b),top(a)],color);face([b,c,top(c),top(b)],color.map(v=>v*.72));face([c,e,top(e),top(c)],color.map(v=>v*.8));face([e,a,top(a),top(e)],color.map(v=>v*.6));face([top(a),top(b),top(c),top(e)],color.map(v=>v*1.1))}
-function tomb(x,z,h,special=false,taken=false){box(x,0,z,1,.16,1.7,[40,43,43]);box(x,.1,z+.3,.75,h,.24,special?(taken?[82,66,85]:[125,77,145]):[67,72,88]);box(x,.3+h,z+.3,.92,.13,.3,special?[110,76,131]:[64,68,82]);if(special){box(x,.6,z+.14,.1,.45,.05,[190,152,191]);box(x,.81,z+.13,.34,.08,.05,[190,152,191])}}
+// Funerary silhouettes inspired by the supplied engraved memorials.
+function tomb(x,z,h,special=false,taken=false){
+ const type=special?0:Math.abs(Math.round(x*7+z))%4, stone=special?(taken?[82,66,85]:[125,77,145]):[91,96,114], ink=[39,31,56], bone=special?[214,169,225]:[157,165,161];
+ box(x,0,z,1.2,.15,1.9,[49,53,58]);box(x,.15,z,1.04,.12,1.72,[72,76,87]);
+ const front=z+.12,mark=(pts,c=bone)=>face(pts.map(([u,v])=>[x+u,v,front-.025]),c);
+ if(type===2){box(x,.27,z+.3,.2,h+.4,.25,stone);box(x,.7+h*.5,z+.3,.95,.2,.25,stone)}
+ else {
+ box(x,.27,z+.3,.94,h*.72,.28,stone);
+ const arch=[[-.47,.27+h*.72],[-.43,.27+h*.9],[-.28,.27+h*1.1],[0,.27+h*1.18],[.28,.27+h*1.1],[.43,.27+h*.9],[.47,.27+h*.72]];
+ for(const dz of [0,.28])face(arch.map(([u,v])=>[x+u,v,front+dz]),stone);
+ for(let i=0;i<arch.length-1;i++)face([[x+arch[i][0],arch[i][1],front],[x+arch[i+1][0],arch[i+1][1],front],[x+arch[i+1][0],arch[i+1][1],front+.28],[x+arch[i][0],arch[i][1],front+.28]],stone.map(v=>v*.7));
+ for(const side of [-1,1])box(x+side*.42,.31,z+.09,.055,h*.68,.035,bone);
+ if(type===1){mark([[-.06,.48],[.06,.48],[.06,.94],[-.06,.94]]);mark([[-.24,.76],[.24,.76],[.24,.85],[-.24,.85]])}
+ else {const y=.43+h*.65;mark([[-.16,y],[.16,y],[.2,y+.18],[.12,y+.31],[-.12,y+.31],[-.2,y+.18]]);for(const u of [-.085,.085])mark([[u-.045,y+.13],[u+.045,y+.13],[u+.045,y+.21],[u-.045,y+.21]],ink);mark([[-.035,y+.055],[.035,y+.055],[0,y+.12]],ink);
+ for(const dir of [-1,1])mark([[-.29,y-.06+dir*.07],[.29,y-.06-dir*.07],[.29,y-.09-dir*.07],[-.29,y-.09+dir*.07]]);}
+ for(let i=0;i<3;i++){const y=.38+i*.1,w=.23-i*.035;mark([[-w,y],[w,y],[w,y+.022],[-w,y+.022]],ink)}
+ }
+ // Coffin-shaped ledger and a mossy foot stone.
+ face([[x-.3,.285,z-.7],[x+.3,.285,z-.7],[x+.42,.285,z-.35],[x+.28,.285,z+.02],[x-.28,.285,z+.02],[x-.42,.285,z-.35]],[58,57,76]);
+ box(x-.37,.28,z-.65,.19,.035,.26,[63,83,61]);
+}
+const vegetation=[];for(let i=0;i<550;i++){const x=rand()*26-13,z=rand()*40-19;if(Math.abs(x)<2.2||Math.abs(x)<3.3&&z>12)continue;vegetation.push({x,z,h:.16+rand()*.42,s:rand()*6})}
+const branches=[];function grow(x,y,z,angle,len,width,depth,sign){const nx=x+Math.sin(angle)*len,ny=y+Math.cos(angle)*len,nz=z+Math.sin(angle*3)*.3;branches.push({a:[x,y,z],b:[nx,ny,nz],w:width});if(depth){grow(nx,ny,nz,angle-sign*.35,len*.72,width*.63,depth-1,-sign);grow(nx,ny,nz,angle+sign*.85,len*.58,width*.53,depth-1,sign)}}
+for(let z=-16;z<=22;z+=7)for(const x of [-12.8,12.8])grow(x,0,z,Math.sin(z)*.17,2.8,.48,4,x<0?1:-1);
+function landscape(t){
+ for(const g of vegetation){if(Math.hypot(g.x-player.x,g.z-player.z)>23)continue;const sway=Math.sin(t*.0014+g.s)*.06;for(let j=-1;j<=1;j++)face([[g.x+j*.07,0,g.z],[g.x+j*.12+sway,g.h*(j? .7:1),g.z+.035],[g.x+j*.07+.05,0,g.z]],[49+j*7,69+j*10,54+j*8])}
+ for(const b of branches){const [x,y,z]=b.a,[u,v,w]=b.b;face([[x-b.w,y,z],[x+b.w,y,z],[u+b.w*.35,v,w],[u-b.w*.35,v,w]],[27,24,39]);face([[x,y,z-b.w],[x,y,z+b.w],[u,v,w+b.w*.35],[u,v,w-b.w*.35]],[36,28,46]);}
+ // World-space bat flock, occluded by the trees and chapel.
+ for(let i=0;i<13;i++){const phase=t*.00028+i*2.4,x=Math.sin(phase)*9,z=3+Math.cos(phase*.73+i)*13,y=3.5+(i%4)*.7+Math.sin(phase*2)*.35,flap=Math.sin(t*.012+i)*.25;
+ for(const side of [-1,1])face([[x,y,z],[x+side*.18,y+.1,z],[x+side*.62,y+flap,z+.08],[x+side*.38,y-.13,z],[x+side*.23,y-.05,z],[x+side*.1,y-.19,z]],[17,9,27]);box(x,y-.1,z,.09,.22,.08,[28,13,38]);}
+}
 function draw(t){if(reduced)t=0;ctx.imageSmoothingEnabled=false;ctx.fillStyle='#360c21';ctx.fillRect(0,0,400,300);for(let i=0;i<12;i++){ctx.fillStyle=`rgb(${114-i*5},${6+i},${55+i*2})`;ctx.fillRect(0,i*13,400,14)}stars.forEach(([x,y,s])=>{ctx.fillStyle=s>.7?'#ae5678':'#6f2a49';ctx.fillRect((x-player.yaw*150%400+800)%400,y,1,1)});ctx.fillStyle='#15151b';ctx.fillRect(0,155,400,145);faces.length=0;
 for(let z=-20;z<22;z+=2)for(let x=-14;x<14;x+=2){let path=Math.abs(x)<2;let v=((x*17+z*31+4000)%13);face([[x,0,z],[x+2,0,z],[x+2,0,z+2],[x,0,z+2]],path?[65+v,30+v,80+v]:[29+v/2,27+v,53+v])}
 graves.forEach(g=>tomb(g.x,g.z,g.h));relics.forEach((r,i)=>tomb(r.x,r.z,1.7,true,found.has(i)));
 box(0,0,16,5,5,5,[53,57,77]);box(0,5,17,2.2,3,2.2,[61,62,83]);face([[-3,5,13.5],[3,5,13.5],[0,7.5,13.5]],[71,57,78]);face([[-1.3,8,15.7],[1.3,8,15.7],[0,11,16.8]],[50,35,59]);box(0,8,16.8,.13,4,.13,[78,66,83]);box(0,10.7,16.8,1,.12,.12,[78,66,83]);box(0,0,13.46,1.6,2.8,.06,[5,4,11]);face([[-.8,2.8,13.4],[.8,2.8,13.4],[0,3.6,13.4]],[5,4,11]);box(0,3.8,13.4,.6,.6,.08,[121,25,59]);
-for(let z=-18;z<23;z+=5)for(let x of [-13,13]){box(x,0,z,.45,5,.45,[28,24,34]);face([[x,2,z],[x-2,6,z],[x-.6,4,z]],[26,20,30]);face([[x,3,z],[x+1.9,7,z+.2],[x+.5,4.4,z]],[31,22,35])}
+landscape(t);
 box(-14,0,0,.4,2,42,[39,35,48]);box(14,0,0,.4,2,42,[39,35,48]);box(0,0,21,28,2,.4,[39,35,48]);
 npcs.forEach((n,i)=>{const bob=n.cell===2?Math.sin(t*.0014+i)*.18:0,p=project([n.x,bob,n.z]);if(p.z>.4)faces.push({npc:n,p,depth:p.z})});
 faces.sort((a,b)=>b.depth-a.depth);for(const f of faces){if(f.npc){const n=f.npc,im=images.souls;if(im.complete&&im.naturalWidth){const size=n.h*235/f.depth;ctx.save();ctx.imageSmoothingEnabled=false;ctx.globalAlpha=n.cell===2?.82+.12*Math.sin(t*.0015+n.z):1;ctx.filter=n.hue?'hue-rotate('+n.hue+'deg)':'none';if(n.cell===2){ctx.shadowColor='#a8ff24';ctx.shadowBlur=5}ctx.drawImage(im,im.naturalWidth*n.cell/3,0,im.naturalWidth/3,im.naturalHeight,Math.round(f.p.x-size/2),Math.round(f.p.y-size),Math.round(size),Math.round(size));ctx.restore()}continue}let fog=Math.min(.84,Math.max(0,(f.depth-4)/34));const c=f.color.map((v,i)=>Math.round(v*(1-fog)+[36,18,39][i]*fog));ctx.fillStyle=`rgb(${c})`;ctx.beginPath();f.p.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.save();ctx.clip();ctx.globalAlpha=.65;ctx.fillStyle=stonePattern;ctx.fillRect(0,0,400,300);ctx.restore()}
