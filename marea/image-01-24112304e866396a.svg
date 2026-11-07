@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1100 640" role="img" aria-labelledby="clubIslandTitle clubIslandDesc">
+  <title id="clubIslandTitle">Marea Club Surf House</title>
+  <desc id="clubIslandDesc">Un pequeño islote rodeado de espuma, con palmeras, una caseta de madera turquesa, tejado violeta y las tablas Coral, Neón, Abisal y Sol. El nombre está pintado en blanco con sombra rosa en la fachada.</desc>
+  <defs>
+    <linearGradient id="sand" x1="0" y1="0" x2=".3" y2="1"><stop stop-color="#f2d6b5"/><stop offset=".55" stop-color="#dcb893"/><stop offset="1" stop-color="#b77c76"/></linearGradient>
+    <linearGradient id="reef" x2="0" y2="1"><stop stop-color="#a17781"/><stop offset="1" stop-color="#345967"/></linearGradient>
+    <linearGradient id="front" x2=".3" y2="1"><stop stop-color="#64cbc0"/><stop offset=".5" stop-color="#36a9a6"/><stop offset="1" stop-color="#237b88"/></linearGradient>
+    <linearGradient id="side" x2="1" y2="1"><stop stop-color="#318e9c"/><stop offset="1" stop-color="#255774"/></linearGradient>
+    <linearGradient id="roof" x2=".3" y2="1"><stop stop-color="#a18bd0"/><stop offset=".55" stop-color="#7767b2"/><stop offset="1" stop-color="#514378"/></linearGradient>
+    <linearGradient id="roofSide" x2="1" y2="1"><stop stop-color="#8973ba"/><stop offset="1" stop-color="#4c487b"/></linearGradient>
+    <linearGradient id="trunk" x2="1" y2=".3"><stop stop-color="#755767"/><stop offset=".45" stop-color="#bd937e"/><stop offset="1" stop-color="#cfa783"/></linearGradient>
+    <linearGradient id="leaves" x2=".5" y2="1"><stop stop-color="#aed9ac"/><stop offset=".5" stop-color="#54ad98"/><stop offset="1" stop-color="#326a76"/></linearGradient>
+    <linearGradient id="porch" x2=".2" y2="1"><stop stop-color="#ccafa0"/><stop offset="1" stop-color="#8b727d"/></linearGradient>
+    <linearGradient id="glass" x2=".7" y2="1"><stop stop-color="#bdd6d0"/><stop offset=".45" stop-color="#638f9e"/><stop offset="1" stop-color="#243f60"/></linearGradient>
+    <g id="palmCrown" fill="url(#leaves)">
+      <path d="M0 5C-24-34-78-56-126-32C-77-43-41-18-9 15Z"/><path d="M-2 3C-39-23-108-8-132 30C-87 3-43 8-8 15Z"/>
+      <path d="M-4 8C-47 7-91 45-95 87C-70 44-38 31 1 17Z"/><path d="M-2 7C-9-29 1-68 39-93C15-53 13-20 10 10Z"/>
+      <path d="M2 7C39-27 99-40 137-5C88-25 55-7 8 18Z"/><path d="M5 9C54-5 107 25 120 67C88 31 52 23 7 21Z"/>
+      <path d="M4 10C29 29 43 61 36 96C20 62 10 39-4 18Z"/><path d="M0 8C-7-35-36-71-76-76C-45-51-28-27-9 11Z"/>
+      <g fill="none" stroke="#c3dab4" stroke-width="1.3" opacity=".55"><path d="M0 10Q-58-41-121-32M0 12Q-77-7-128 29M0 13Q-63 32-93 85M5 8Q5-45 38-91M5 14Q80-27 134-5M6 16Q86 12 118 65M1 12Q-32-52-74-76M4 18Q28 53 35 94"/></g>
+      <g fill="none" stroke="#3e7e7b" stroke-width="1" opacity=".6"><path d="M-32-14L-36-27M-53-25L-62-38M-72-31L-86-42M-41 7L-48-3M-64 10L-72 2M-48 32L-63 27M-66 49L-78 46M21-63L33-63M11-39L25-44M34-9L31-23M61-17L60-31M91-15L94-27M40 22L51 13M66 32L80 29M84 45L99 45M22 48L36 48M29 68L40 72"/></g>
+      <circle cx="-3" cy="20" r="8" fill="#97766d"/><circle cx="9" cy="22" r="7" fill="#775f68"/><circle cx="-9" cy="28" r="6" fill="#b9947c"/>
+    </g>
+    </defs>
+  <!-- The shoreline is open water rather than the edge of a rectangular card. -->
+  <g class="island-water">
+    <ellipse cx="551" cy="527" rx="469" ry="75" fill="#285d72" opacity=".19"/>
+    <ellipse cx="557" cy="524" rx="427" ry="54" fill="#82d8c5" opacity=".16"/>
+    <path d="M98 518C169 559 354 597 548 591C788 596 953 566 1005 528" fill="none" stroke="#c6ecdc" stroke-width="3" opacity=".65"/>
+    <path d="M135 499C221 534 393 554 558 552C757 549 904 532 969 501" fill="none" stroke="#dff6e7" stroke-width="5" opacity=".8"/>
+    <path d="M33 525Q89 537 132 526M939 581Q1014 590 1066 571M94 586Q147 593 192 586M652 611Q720 616 766 608" fill="none" stroke="#90c3c3" stroke-width="2" opacity=".5"/>
+  </g>
+  <path d="M159 493C153 531 253 560 367 571L450 566L515 582L631 575L697 583L778 565C886 557 953 532 946 498Z" fill="url(#reef)"/>
+  <path d="M186 510L215 537L264 548L248 519M381 540L406 565L450 564L478 550M667 547L697 580L741 564M839 529L859 550L908 533" fill="#625a76" opacity=".38"/>
+  <path d="M164 476C184 447 263 425 338 434C384 412 459 423 494 432C620 408 720 430 768 436C872 435 917 456 940 483C963 518 865 539 781 546C709 559 647 550 605 558C533 551 461 559 405 548C300 558 191 535 163 512C147 500 150 489 164 476Z" fill="url(#sand)"/>
+  <path d="M172 484C284 511 352 502 426 515C558 522 726 503 849 509C891 506 922 498 938 484" fill="none" stroke="#ffe4c3" stroke-width="4" opacity=".63"/>
+  <path d="M206 527Q277 541 331 537M738 551Q816 548 864 535M417 551Q505 567 582 563" fill="none" stroke="#f3d4bd" stroke-width="2" opacity=".55"/>
+  <!-- Tall palms behind the house have tapered, curved trunks and feathered fronds. -->
+  <g class="island-palms">
+    <ellipse cx="277" cy="464" rx="91" ry="11" fill="#8c7c7a" opacity=".22" transform="rotate(8 277 464)"/>
+    <path d="M254 467C267 370 250 274 225 175L214 178C239 298 247 373 236 464Z" fill="url(#trunk)"/>
+    <path d="M248 451L236 448M251 429L239 425M254 406L241 402M255 383L242 379M254 358L241 354M251 333L238 329M246 308L233 304M241 281L229 278M235 255L224 253M231 231L221 229M225 207L215 206" stroke="#6d5d6c" stroke-width="3" opacity=".55"/>
+    <path d="M252 456C265 354 240 241 220 180" stroke="#e0bd91" stroke-width="3" fill="none" opacity=".45"/>
+    <use xlink:href="#palmCrown" transform="translate(220 170) rotate(-8) scale(1.09)"/>
+    <ellipse cx="807" cy="454" rx="72" ry="11" fill="#8c7c7a" opacity=".25"/>
+    <path d="M788 458C794 371 836 285 839 183L825 182C825 291 778 357 773 454Z" fill="url(#trunk)"/>
+    <path d="M785 438L773 435M789 415L778 410M795 391L784 385M803 367L792 361M813 343L801 337M821 318L809 313M828 294L816 289M833 268L821 265M836 243L824 241M837 218L825 216" stroke="#655e72" stroke-width="3" opacity=".58"/>
+    <use xlink:href="#palmCrown" transform="translate(832 174) rotate(12) scale(.96)"/>
+    <path d="M279 457Q315 348 301 265L291 265Q302 355 266 454Z" fill="url(#trunk)"/>
+    <use xlink:href="#palmCrown" transform="translate(296 262) rotate(-21) scale(.67)"/>
+  </g>
+  <path d="M314 475L483 431L793 460L845 492L658 521L331 508Z" fill="#645876" opacity=".26"/>
+  <!-- A visible side, porch and pitched roof give the timber house real depth. -->
+  <path d="M335 277H695V487H335Z" fill="url(#front)"/>
+  <path d="M695 277L794 245V458L695 487Z" fill="url(#side)"/>
+  <g fill="none" stroke="#236e7e" stroke-width="2" opacity=".65"><path d="M338 312H693M338 336H693M338 360H693M338 384H693M338 408H693M338 432H693M338 456H693M696 312L792 280M696 337L792 305M696 362L792 330M696 387L792 355M696 412L792 380M696 437L792 405M696 462L792 430"/></g>
+  <g fill="none" stroke="#b5e1c9" stroke-width="1" opacity=".35"><path d="M345 316H682M345 340H682M345 364H682M345 388H682M345 412H682M345 436H682M345 460H682"/></g>
+  <path d="M338 277L338 482M692 277L692 482" stroke="#79c4b7" stroke-width="11"/>
+  <path d="M343 281V481M695 280V481" stroke="#c0dfc6" stroke-width="2" opacity=".65"/>
+  <path d="M332 291H696V327H332Z" fill="#287f8d" opacity=".5"/>
+  <path d="M514 146L626 125L815 249L709 282Z" fill="url(#roofSide)"/>
+  <g stroke="#544979" stroke-width="2" opacity=".48"><path d="M539 162L651 141M562 178L676 157M585 194L699 173M608 210L722 189M631 226L745 205M655 242L769 221M679 258L792 237"/></g>
+  <path d="M306 282L514 146L712 282Z" fill="url(#roof)"/>
+  <path d="M338 267L514 159L683 267" fill="none" stroke="#c0a5d2" stroke-width="2" opacity=".54"/>
+  <path d="M350 254H673M379 235H645M408 216H616M437 197H588M466 178H559" fill="none" stroke="#584b83" stroke-width="2" opacity=".4"/>
+  <path d="M302 286L514 143L716 286M515 142L628 123L819 250L714 285" fill="none" stroke="#383759" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M309 279L514 142L711 279M518 141L627 121L815 244" fill="none" stroke="#d0afd5" stroke-width="3" stroke-linecap="round"/>
+  <path d="M318 286H706" stroke="#3b3f67" stroke-width="9"/>
+  <path d="M316 279H708" stroke="#b193c4" stroke-width="3"/>
+  <!-- The same heavy, slanted lettering as the in-game MAREA logo, painted on wood. -->
+  <g class="club-facade-sign" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-weight="900" font-style="italic" stroke-linejoin="round">
+    <g transform="rotate(-2 514 233)" font-size="52" letter-spacing="-2">
+      <text x="519" y="266" fill="#f38bb6" stroke="#f38bb6" stroke-width="2">MAREA</text>
+      <text x="514" y="261" fill="#fff7ef" stroke="#fff7ef" stroke-width="1.7">MAREA</text>
+      <path d="M414 256L429 254M599 257L614 255M463 223L470 222" fill="none" stroke="#fff7ef" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g data-ui-font="Marea Miami" transform="rotate(-1 514 317)"><g transform="translate(344 320) scale(0.028833333333333332 -0.028833333333333332)" fill="#ee83ad"><path d="M250 0V125H125V500H250V625H625V500H750V375H500V500H375V125H500V250H750V125H625V0ZM1000 0V625H1250V125H1500V0ZM1875 0V125H1750V625H2000V125H2125V625H2375V125H2250V0ZM2625 0V625H3125V500H3250V125H3125V0ZM2875 375H2995V500H2875ZM2875 125H2995V250H2875ZM4000 0V125H4375V250H4125V375H4000V500H4125V625H4625V500H4250V375H4500V250H4625V125H4500V0ZM5000 0V125H4875V625H5125V125H5250V625H5500V125H5375V0ZM5750 0V625H6250V500H6375V375H6250V125H6375V0H6125V125H6000V0ZM6000 375H6125V500H6000ZM6625 0V625H7125V500H6875V375H7125V250H6875V0ZM7875 0V625H8125V375H8250V625H8500V0H8250V250H8125V0ZM8875 0V125H8750V500H8875V625H9250V500H9375V125H9250V0ZM9000 130H9125V495H9000ZM9750 0V125H9625V625H9875V125H10000V625H10250V125H10125V0ZM10500 0V125H10875V250H10625V375H10500V500H10625V625H11125V500H10750V375H11000V250H11125V125H11000V0ZM11375 0V625H11875V500H11625V375H11875V250H11625V125H11875V0Z"/></g><g transform="translate(341 317) scale(0.028833333333333332 -0.028833333333333332)" fill="#fff7ef"><path d="M250 0V125H125V500H250V625H625V500H750V375H500V500H375V125H500V250H750V125H625V0ZM1000 0V625H1250V125H1500V0ZM1875 0V125H1750V625H2000V125H2125V625H2375V125H2250V0ZM2625 0V625H3125V500H3250V125H3125V0ZM2875 375H2995V500H2875ZM2875 125H2995V250H2875ZM4000 0V125H4375V250H4125V375H4000V500H4125V625H4625V500H4250V375H4500V250H4625V125H4500V0ZM5000 0V125H4875V625H5125V125H5250V625H5500V125H5375V0ZM5750 0V625H6250V500H6375V375H6250V125H6375V0H6125V125H6000V0ZM6000 375H6125V500H6000ZM6625 0V625H7125V500H6875V375H7125V250H6875V0ZM7875 0V625H8125V375H8250V625H8500V0H8250V250H8125V0ZM8875 0V125H8750V500H8875V625H9250V500H9375V125H9250V0ZM9000 130H9125V495H9000ZM9750 0V125H9625V625H9875V125H10000V625H10250V125H10125V0ZM10500 0V125H10875V250H10625V375H10500V500H10625V625H11125V500H10750V375H11000V250H11125V125H11000V0ZM11375 0V625H11875V500H11625V375H11875V250H11625V125H11875V0Z"/></g></g>
+  </g>
+  <path d="M458 347H565V488H458Z" fill="#18394f"/>
+  <path d="M466 355H557V483H466Z" fill="#204d5e"/>
+  <path d="M466 355L493 362V483H466Z" fill="#112d43"/>
+  <path d="M505 370H550V425H505Z" fill="#63858e" opacity=".58"/>
+  <path d="M457 347H565M461 349V481M562 349V481" stroke="#aad7c2" stroke-width="6" fill="none"/>
+  <circle cx="547" cy="442" r="4" fill="#efc49b"/>
+  <path d="M366 351H439V416H366Z" fill="#214b60" stroke="#b5d8c3" stroke-width="6"/>
+  <path d="M374 359H431V408H374Z" fill="url(#glass)"/>
+  <path d="M403 358V410M374 384H431" stroke="#b9d6c3" stroke-width="3"/>
+  <path d="M351 348L363 354V415L351 419ZM442 354L453 349V419L442 414Z" fill="#75bdb3"/>
+  <path d="M584 351H657V416H584Z" fill="#214b60" stroke="#b5d8c3" stroke-width="6"/>
+  <path d="M592 359H649V408H592Z" fill="url(#glass)"/>
+  <path d="M620 358V410M592 384H649" stroke="#b9d6c3" stroke-width="3"/>
+  <path d="M697 333L735 320V368L697 381Z" fill="#1d435c" stroke="#76b8b1" stroke-width="4"/>
+  <path d="M702 338L730 329V364L702 374Z" fill="#587e91"/>
+  <path d="M331 473H696L798 444V471L696 503H331Z" fill="#4b576a"/>
+  <path d="M325 482H699L808 451L800 461L700 517H322Z" fill="url(#porch)"/>
+  <path d="M326 490H699L800 460M329 500H700L768 465" fill="none" stroke="#645568" stroke-width="2"/>
+  <path d="M339 481L361 509M379 481L401 513M419 481L441 514M459 481L481 515M499 481L521 515M539 481L561 515M579 481L601 515M619 481L641 515M659 481L681 515" stroke="#bda198" stroke-width="2"/>
+  <path d="M469 515H562L578 529H453Z" fill="#9f8587"/><path d="M453 529H578L589 539H441Z" fill="#b99a91"/>
+  <path d="M351 434V478M648 434V478M704 423V486M781 410V461" stroke="#9abfb0" stroke-width="7"/>
+  <path d="M349 438H445M576 438H649M703 432L784 406" stroke="#cfdbbf" stroke-width="5"/>
+  <path d="M435 333Q447 328 447 344" fill="none" stroke="#203e53" stroke-width="3"/><path d="M438 340H451L453 358H436Z" fill="#ffe1ac" stroke="#425b67" stroke-width="2"/><path d="M439 344H451" stroke="#a98d89" stroke-width="2"/>
+  <!-- Actual original board palettes, curved noses and swallow tails. -->
+  <g class="club-board-rack" stroke-linejoin="round">
+    <path d="M272 481V394M356 481V403M267 443H358M269 473H362" stroke="#6d6679" stroke-width="7"/>
+    <g data-board="coral" transform="translate(280 483) rotate(-13) scale(.81)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#bb283d" stroke="#51d7db" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#f1eee1" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <g data-board="neon" transform="translate(317 489) rotate(-8) scale(.84)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#512c87" stroke="#f1eddf" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#35ccd4" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <path d="M676 491V398M767 477V387M675 439L766 418M674 478L767 456" stroke="#516678" stroke-width="7"/>
+    <g data-board="abisal" transform="translate(709 490) rotate(12) scale(.9)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#285fbd" stroke="#69bbec" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#d6eaf4" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <g data-board="sol" transform="translate(746 483) rotate(18) scale(.86)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#edbd38" stroke="#fff4de" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#087f88" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <g transform="translate(289 512) rotate(-85) scale(.40 .9)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#285fbd" stroke="#69bbec" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#d6eaf4" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <g transform="translate(286 503) rotate(-86) scale(.40 .9)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#bb283d" stroke="#51d7db" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#f1eee1" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+    <g transform="translate(283 494) rotate(-84) scale(.40 .9)"><path d="M0-160C-15-151-23-120-24-79L-22-13L-16 9L0-1L16 9L22-13L24-79C23-120 15-151 0-160Z" fill="#edbd38" stroke="#fff4de" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0-150C-5-113-5-41 0-7" stroke="#087f88" stroke-width="7" fill="none" opacity=".9"/>
+      <path d="M-17-118Q-23-63-15-16" stroke="#fff9e6" stroke-width="1.5" opacity=".38" fill="none"/>
+      <path d="M9-18L9-32M-9-18L-9-32" stroke="#123449" stroke-width="2.5" opacity=".5"/>
+    </g>
+  </g>
+  <!-- Beach plants, stones, worn paint and restrained details anchor the island. -->
+  <g fill="#689e92"><path d="M199 478Q172 436 157 448Q177 449 191 480Q182 443 195 424Q200 451 200 478Q211 448 231 448Q215 461 202 480Z"/><path d="M832 494Q814 455 803 467Q820 472 829 495Q832 461 846 449Q844 476 835 496Q853 472 871 479Q852 483 835 498Z"/></g>
+  <g fill="#997d8a"><path d="M846 514L861 494L882 501L890 516Z"/><path d="M889 516L899 503L914 507L921 518Z"/><path d="M206 515L217 506L230 508L236 519Z"/></g>
+  <g stroke="#e3d8b6" stroke-width="2" fill="none" opacity=".45"><path d="M366 443L379 446M578 336L595 337M658 462L667 458M343 365L351 362M700 392L708 390"/></g>
+  <g fill="#977679" opacity=".33"><ellipse cx="405" cy="525" rx="6" ry="2" transform="rotate(-18 405 525)"/><ellipse cx="416" cy="519" rx="6" ry="2" transform="rotate(18 416 519)"/><ellipse cx="396" cy="533" rx="6" ry="2" transform="rotate(-18 396 533)"/><ellipse cx="385" cy="539" rx="6" ry="2" transform="rotate(18 385 539)"/></g>
+  <path d="M153 510Q167 533 207 538M852 542Q922 533 948 509M463 565Q513 571 554 568" fill="none" stroke="#e8f1dc" stroke-width="3.5" stroke-linecap="round" opacity=".87"/>
+</svg>
