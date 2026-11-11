@@ -87,7 +87,20 @@ const mixes=[
  {"name":"NTS · Foreigner · Blow Your Head","short":"Soca / Kuduro / Gqom","desc":"Ritmos de Trinidad, Jamaica, Angola y Sudáfrica; contagioso, imprevisible y muy bailable.","url":"https://soundcloud.com/foreignerrrrr/foreignerblowyourhead","energy":"alta","moods":["mañana","taller","atardecer","nocturna"],"discovery":true},
  {"name":"NTS · Tim Reaper · Future Retro","short":"Jungle / Future Retro","desc":"Recorrido acelerado por jungle contemporáneo y breaks con mirada a la rave de los noventa.","url":"https://soundcloud.com/tim-reaper/tim-reaper-on-nts-radio-22nd-october-2025-future-retro-london-2020-2025","energy":"alta","moods":["taller","nocturna","atardecer"],"discovery":true},
  {"name":"NTS · CORIN · Archivo radio","short":"Digital / Experimental","desc":"Archivo de emisiones de CORIN: electrónica digital, imaginarios tecnológicos y música de ficción especulativa.","url":"https://soundcloud.com/corinmusic/sets/nts-radio-mixes","moods":["lluvia nocturna","insomnio","gris atlántico","nocturna"],"discovery":true},
- {"name":"NTS · Circadian Rhythms · Archivo","short":"Bass / Exploraciones","desc":"Varios programas de Circadian Rhythms: sonidos de club y electrónica oblicua para descubrir artistas nuevos.","url":"https://soundcloud.com/cr_label/sets/nts-radio","moods":["taller","nocturna","insomnio"],"discovery":true}
+ {"name":"NTS · Circadian Rhythms · Archivo","short":"Bass / Exploraciones","desc":"Varios programas de Circadian Rhythms: sonidos de club y electrónica oblicua para descubrir artistas nuevos.","url":"https://soundcloud.com/cr_label/sets/nts-radio","moods":["taller","nocturna","insomnio"],"discovery":true},
+ {"name":"Thom Yorke · NTS 210623","short":"Thom Yorke / NTS","desc":"Dos horas de hallazgos extraños y música sin etiquetas, seleccionadas por Thom Yorke.","url":"https://soundcloud.com/user-637448757/thom-yorke-210623","moods":["lluvia","nocturna","taller"]},
+ {"name":"Floating Points · Sunflower Gala","short":"Jazz / Disco","desc":"Jazz, soul, rare groove y disco elegante desde su sesión para GALA.","url":"https://soundcloud.com/user-643553014/floating-points-sunflower-gala","moods":["mañana","taller","atardecer"],"energy":"alta"},
+ {"name":"Floating Points · Glastonbury 2025","short":"FP / Glastonbury","desc":"Una selección rítmica, cálida y bailable desde Sunflower Sound System.","url":"https://soundcloud.com/user-643553014/floating-points-opening-set","moods":["mañana","taller","atardecer"],"energy":"alta"},
+ {"name":"Floating Points · NTS diciembre 2024","short":"Floating Points","desc":"La radio como exploración: jazz, soul y música de club sin ruta fija.","url":"https://soundcloud.com/user-643553014/floating-points-161224","moods":["taller","atardecer","nocturna"]},
+ {"name":"The Avalanches + DJ Koze · NTS","short":"Collage / Avalanches","desc":"Collage musical, hallazgos y rarezas de la colección de The Avalanches.","url":"https://soundcloud.com/user-643553014/the-recording-angel-w-the-2","moods":["taller","atardecer","nocturna"],"discovery":true},
+ {"name":"The Avalanches + Vegyn · NTS","short":"Avalanches / Vegyn","desc":"Mezcla caleidoscópica de canciones, samples y piezas inesperadas.","url":"https://soundcloud.com/user-643553014/the-recording-angel-w-vegyn-x","moods":["atardecer","nocturna","taller"],"discovery":true},
+ {"name":"The Avalanches + Debit · NTS","short":"Cumbia rebajada","desc":"Cumbia rebajada y canciones ralentizadas: una sesión oblicua y hermosa.","url":"https://soundcloud.com/user-202286394-991268468/the-recording-angel-w-the","moods":["taller","atardecer","nocturna"],"discovery":true},
+ {"name":"Coco María · Club Coco","short":"Jazz latino / Tropical","desc":"Jazz, fusión, pop internacional y rarezas latinas de su colección de vinilos.","url":"https://soundcloud.com/user-643553014/club-coco-w-coco-maria-230924","moods":["mañana","taller","atardecer"],"energy":"alta"},
+ {"name":"Coco María · Dust & Grooves","short":"Tropical / Vinilos","desc":"Viaje cálido entre soul, jazz y discos de otros continentes.","url":"https://soundcloud.com/user-643553014/club-coco-w-dust-grooves","moods":["mañana","taller","atardecer"],"energy":"alta"},
+ {"name":"Andy Stott · Modern Love Takeover","short":"Dub / Experimental","desc":"Una hora de variaciones electrónicas sobre Voodoo Ray, con sello Andy Stott.","url":"https://soundcloud.com/user-202286394-991268468/modern-love-takeover-andy","moods":["lluvia nocturna","nocturna","insomnio"],"discovery":true},
+ {"name":"Madlib · homenaje de PRO-V","short":"Hip-hop / Madlib","desc":"Un viaje por Madlib, MF DOOM, J Dilla y el hip-hop de sampleo aventurero.","url":"https://soundcloud.com/pro-v-2/madlib-tribute","moods":["taller","atardecer","nocturna"]},
+ {"name":"Hessle Audio · Ben UFO y Yumi","short":"Bass / Ben UFO","desc":"Bass británico, dub, percusiones raras y electrónica inquieta.","url":"https://soundcloud.com/rinsefm/hessleaudio050525","moods":["taller","nocturna","insomnio"],"energy":"alta"},
+ {"name":"Photay · Solid Steel / Ninja Tune","short":"Photay / Leftfield","desc":"Clark, Todd Terje, Squarepusher y Marlena Shaw cruzados en una sesión de Photay.","url":"https://soundcloud.com/ninja-tune/solid-steel-radio-show-31102014-part-3-4-photay","moods":["taller","atardecer","nocturna"],"discovery":true}
 ];
 
 /* Autonomía ON: música continua, sin pausas deliberadas. */
@@ -139,7 +152,7 @@ musicShelfButton.addEventListener('click',()=>showMusicShelf(!musicShelfOpen));
 
 const $=id=>document.getElementById(id);
 const toggle=$('luxRadioToggle'),choices=$('luxRadioChoices'),frame=$('luxRadioFrame');
-const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1';
+const memKey='casa-lux-soundcloud-choice-v1',settingsKey='casa-lux-radio-flujo-v1',queueKey='casa-lux-radio-pendientes-v2';
 let selected=0,initialized=false,widget=null,widgetReady=false,transitioning=false;
 let lastTrackIndex=0,trackCount=1,shuffleBag=[];
 let flow={loop:true,random:true},hasPlayed=false,isPlaying=false,luRadioManual=false;
@@ -153,8 +166,10 @@ try {
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
  const saved=JSON.parse(localStorage.getItem(settingsKey)||'null');
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow=saved;
+ const pendientes=JSON.parse(localStorage.getItem(queueKey)||'null');
+ if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected);
 } catch {}
-function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow))}catch{}}
+function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow));localStorage.setItem(queueKey,JSON.stringify(shuffleBag))}catch{}}
 function updateNow(){
  const mix=mixes[selected];if(!mix)return;
  const label=musicShelfOpen?'Colección musical':(currentSound?.title?
@@ -217,12 +232,13 @@ function pickNext(){
   for(let i=shuffleBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffleBag[i],shuffleBag[j]]=[shuffleBag[j],shuffleBag[i]]}
  }
  const i=shuffleBag.shift();
+ save();
  return Number.isInteger(i)?i:(selected+1)%mixes.length;
 }
 function setMix(i,play=false){
  if(!Number.isInteger(i)||!mixes[i])return;
  if(musicShelfOpen)showMusicShelf(false);
- selected=i;lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;currentSound=null;updateNow();window.dispatchEvent(new Event('lu-radio-rhythm-change'));
+ selected=i;shuffleBag=shuffleBag.filter(n=>n!==i);lastTrackIndex=0;trackCount=1;transitioning=false;isPlaying=false;currentSound=null;updateNow();window.dispatchEvent(new Event('lu-radio-rhythm-change'));
  const mix=mixes[i];
  const active=$('luxRadioActive');
  active.replaceChildren();
@@ -243,41 +259,14 @@ function setMix(i,play=false){
  frame.title='SoundCloud · '+mix.name;
  $('luxRadioHint').textContent=play?'Siguiente sesión: '+mix.name:'Pulsa Play en SoundCloud para iniciar la radio.';
 }
+// Todas las sesiones están en una única cola aleatoria sin repeticiones por vuelta.
+// La cola pendiente se guarda para sobrevivir a recargas del navegador.
 function goNext(){
  if(transitioning)return;
- const mood=document.getElementById('stage')?.dataset.luMood||'';
- // En autonomía enlazar otra sesión inmediatamente, sin silencio deliberado.
  transitioning=true;
- let candidates=autoSessionActive&&!luRadioManual?ambientChoices(mood).filter(x=>x.i!==selected):[];
- // Lu reserva un margen de descubrimiento para escapar de sus propios filtros.
- // Únicamente al acabar el set; no interrumpe ninguna canción en curso.
- if(autoSessionActive&&!luRadioManual&&Math.random()<.36){
-  const unexplored=mixes.map((m,i)=>({m,i}))
-   .filter(x=>x.m.discovery&&x.i!==selected&&!visualRecent.includes(x.i));
-  if(unexplored.length)candidates=unexplored;
- }
- if(autoSessionActive&&!luRadioManual&&visualPreference&&Math.random()<.55){
-  const visualFilters={
-   oscuro:/dark|ambient|industrial|drone|techno|post.punk|witch|concreta|acúsm|shoegaze|glitch|punk/i,
-   luminoso:/disco|funk|soul|boogie|house|jazz|groove|afrobeat|highlife|cumbia|brasil|city pop/i,
-   frío:/electr|ambient|idm|wave|dub|jungle|techno|concreta|glitch|shoegaze/i,
-   cálido:/soul|boogie|downtempo|disco|groove|indie|funk|ethio|cumbia|brasil|reggae|jazz/i,
-   neutro:/experimental|explor|indie|ambient|house|jazz|cine|chicha|afrobeat|concreta|punk/i
-  };
-  const rx=visualFilters[visualPreference.tone]||visualFilters.neutro;
-  const visual=Array.from({length:mixes.length},(_,i)=>({m:mixes[i],i}))
-   .filter(x=>x.i!==selected&&!visualRecent.includes(x.i)&&rx.test(x.m.name+' '+x.m.short+' '+x.m.desc));
-  if(visual.length)candidates=visual;
- }
- // Cuatro de cada cinco cambios favorecen música rítmica, incluso de noche.
- if((autoSessionActive||flow.random)&&Math.random()<.82){
-  const lively=upbeatChoices();
-  if(lively.length)candidates=lively;
- }
- const next=candidates.length?candidates[Math.floor(Math.random()*candidates.length)].i:pickNext();
+ const next=pickNext();
  visualRecent.push(next);visualRecent=visualRecent.slice(-8);
  setMix(next,true);
- // SoundCloud termina primero el set actual; las preferencias visuales guían el siguiente.
 }
 function setupWidget(){
  if(widget||!window.SC||typeof window.SC.Widget!=='function')return;
@@ -426,22 +415,15 @@ window.__luRadio={
    frame.loading='eager';open(true);
    if(!isPlaying){
     autoPlaybackPending=true;
-    const lively=upbeatChoices();
-    if(lively.length&&Math.random()<.85){
-     const choice=lively[Math.floor(Math.random()*lively.length)];
-     setMix(choice.i,true);
-    }else{try{widget.play()}catch{}}
+    // Elegir de la cola pendiente, no repetir siempre el mismo estilo.
+    setMix(pickNext(),true);
    }
    $('luxRadioHint').textContent='Autonomía ON: música continua, sin pausas programadas.';
    updateNow();return mixes[selected]?.name||'';
   }
   autoPlaybackPending=true;
-  const candidates=ambientChoices(mood);
-  // Al arrancar, la mayor parte de las veces elegimos un set enérgico.
-  const lively=upbeatChoices();
-  const pool=(lively.length&&Math.random()<.85)?lively:
-   (Math.random()<.22?mixes.map((m,i)=>({m,i})).filter(x=>x.m.discovery):candidates);
-  const choice=pool.length?pool[Math.floor(Math.random()*pool.length)]:{i:selected};
+  // Toda la selección, antigua y nueva, tiene la misma oportunidad de sonar.
+  const choice={i:pickNext()};
   frame.loading='eager';
   open(true);
   setMix(choice.i,true);
