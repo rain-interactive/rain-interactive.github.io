@@ -1,6 +1,12 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"DJ Stingray + 6SISS · Zone 313","short":"Detroit Electro","desc":"Electro futurista y máquinas afiladas.","url":"https://soundcloud.com/rinsefm/djstingray230326"},
+ {"name":"CASE · Rinse mayo 2026","short":"Electro","desc":"Una sesión electro de Rinse FM.","url":"https://soundcloud.com/rinsefm/case020526"},
+ {"name":"HIDE THE JUNK · Rinse FM","short":"UK Club / Breaks","desc":"Colección de sesiones de club con invitados.","url":"https://soundcloud.com/hide-the-junk/sets/x-club-presents-htj-rinse-fm"},
+ {"name":"Melanie Havens · Mechanical Breakdown KEXP","short":"Italo / EBM / Post-punk","desc":"Italo, electroclash, EBM y postpunk para máquinas antiguas.","url":"https://soundcloud.com/sharlese/melanie-havens-guest-mix-for-mechanical-breakdown-on-kexp"},
+ {"name":"SAFESX · Kool FM DnB Down Under","short":"Drum & Bass","desc":"Sesión de drum & bass emitida en Kool FM.","url":"https://soundcloud.com/safesx/safesx-kool-show-on-rinse-fm"},
+ {"name":"DJ Breakart · BreaksBox","short":"Breakbeat / DnB","desc":"Colección de mezclas breakbeat, drum & bass y house.","url":"https://soundcloud.com/djbreakart"},
  {"name":"DJ Sprinter · Rinse mayo 2026","short":"Breakbeat / Club","desc":"Breakbeats enérgicos y mezclas rápidas.","url":"https://soundcloud.com/rinsefm/djsprinter010526"},
  {"name":"Bombie · Fortcast 031","short":"Jungle / Footwork","desc":"Electro, jungle psicodélico y ritmos rotos.","url":"https://soundcloud.com/qilla/fortcast031-bombie"},
  {"name":"Mala Junta + J.Catriel · NTS","short":"Trance / Club","desc":"Trance noventero y bajos acelerados.","url":"https://soundcloud.com/user-202286394-991268468/mala-junta-w-j-catriel-160326"},
