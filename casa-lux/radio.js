@@ -1,6 +1,17 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"DJ Sprinter · Rinse mayo 2026","short":"Breakbeat / Club","desc":"Breakbeats enérgicos y mezclas rápidas.","url":"https://soundcloud.com/rinsefm/djsprinter010526"},
+ {"name":"Bombie · Fortcast 031","short":"Jungle / Footwork","desc":"Electro, jungle psicodélico y ritmos rotos.","url":"https://soundcloud.com/qilla/fortcast031-bombie"},
+ {"name":"Mala Junta + J.Catriel · NTS","short":"Trance / Club","desc":"Trance noventero y bajos acelerados.","url":"https://soundcloud.com/user-202286394-991268468/mala-junta-w-j-catriel-160326"},
+ {"name":"PRVAIL · Rinse FM","short":"Drum & Bass","desc":"Jungle y drum & bass con producciones propias.","url":"https://soundcloud.com/prvail/prvail-guest-mix-for-rinse-fm"},
+ {"name":"heavyweight · Circuit Sounds","short":"Jungle / Breaks","desc":"Jungle de alta energía grabado en Londres.","url":"https://soundcloud.com/heavyweightdj/circuit-sounds-selects-heavyweight-jungle-mix"},
+ {"name":"Braga Circuit · Rinse mayo 2026","short":"House / Groove","desc":"House de club con mezclas imprevisibles.","url":"https://soundcloud.com/rinsefm/bragacircuit110526"},
+ {"name":"I. JORDAN · Production Mix 2026","short":"House / Club","desc":"Una sesión de producciones propias, ritmo y energía.","url":"https://soundcloud.com/rinsefm/ijordan240426"},
+ {"name":"Ryota · Liquid DnB & Jazz Step","short":"Jazz Step / DnB","desc":"Breakbeats fluidos y jazz step.","url":"https://soundcloud.com/rinsefm/ryota120226"},
+ {"name":"Soul On 10 · End Times Love","short":"Jazzy Jungle / Footwork","desc":"Jungle, jazz y footwork de carácter cálido.","url":"https://soundcloud.com/soulon10/end-times-love-soulful-jazzy-jungle-dnb-mix-6-155-bpm"},
+ {"name":"JAGUAR · Electro Mix","short":"Electro / UK Garage","desc":"Electro, bass, house y garage.","url":"https://soundcloud.com/jaguarworldwide/electro-bass-mix"},
+ {"name":"DAZZLE · Juke Rave 2025","short":"Juke / Footwork","desc":"Juke, jungle, techno y club acelerado.","url":"https://soundcloud.com/dazzlempls/juke-rave-nov-29-2025"},
  {"name":"Not Waving + COSMO · La Fonte del Futuro","short":"Post-punk / Electrónica","desc":"Electrónica mutante y ritmos de post-punk.","url":"https://soundcloud.com/user-202286394-991268468/not-waving-w-cosmo-la-fonte"},
  {"name":"GiGi FM · F_LORAL (sesión alternativa)","short":"Techno / Hipnótico","desc":"Texturas y electrónica espacial.","url":"https://soundcloud.com/user-202286394-991268468/gigi-fm-presents-f_loral"},
  {"name":"Main Phase · sesiones","short":"UK Garage / Breaks","desc":"Colección de mezclas con garage y bajos rítmicos.","url":"https://soundcloud.com/mainphase001/sets/mixes"},
