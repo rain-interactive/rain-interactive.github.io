@@ -1,6 +1,10 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Harmony · Unreleased 90s Dubplate NTS Mix","short":"Jungle / Dubplates","desc":"Jungle de los noventa y dubplates inéditos en una sesión para NTS.","url":"https://soundcloud.com/dubplates-vinyls/harmony-unreleased-90s"},
+ {"name":"Diesel x NTS · HYPOESTES","short":"Club / Experimental","desc":"Sesión de la serie TRACKS de NTS, publicada en abril de 2026.","url":"https://soundcloud.com/user-936255521/diesel-x-nts-mix-by-hypoestes"},
+ {"name":"Diesel x NTS · DRAGMOTHER","short":"Club / Experimental","desc":"Sesión de la serie TRACKS de NTS, publicada en febrero de 2026.","url":"https://soundcloud.com/user-936255521/diesel-x-nts-mix-by-dragmother"},
+ {"name":"Diesel x NTS · DEYLIN UNIVERSE","short":"Club / Experimental","desc":"Sesión de la serie TRACKS de NTS, publicada en enero de 2026.","url":"https://soundcloud.com/user-936255521/diesel-x-nts-mix-by-deylin-universe"},
  {"name":"NTS Guide To · Footwork 2026","short":"Footwork / Chicago","desc":"Una hora de footwork actual con DJ Manny, Traxman y más.","url":"https://soundcloud.com/user-202286394-991268468/nts-guide-to-footwork-2026"},
  {"name":"NTS · Bodywork con Nana XOXO","short":"Club / Collage","desc":"Voces recortadas, texturas y ritmos fragmentados.","url":"https://soundcloud.com/user-202286394-991268468/bodywork-w-nana-xoxo-090526"},
  {"name":"NTS · United In Flames con nthng y Malibu","short":"Ambient / Electrónica","desc":"Electrónica etérea y paisajes sintéticos.","url":"https://soundcloud.com/user-202286394-991268468/united-in-flames-w-nthng"},
