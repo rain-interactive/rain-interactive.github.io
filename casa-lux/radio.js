@@ -1,6 +1,11 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"NTS Guide To · Footwork 2026","short":"Footwork / Chicago","desc":"Una hora de footwork actual con DJ Manny, Traxman y más.","url":"https://soundcloud.com/user-202286394-991268468/nts-guide-to-footwork-2026"},
+ {"name":"NTS · Bodywork con Nana XOXO","short":"Club / Collage","desc":"Voces recortadas, texturas y ritmos fragmentados.","url":"https://soundcloud.com/user-202286394-991268468/bodywork-w-nana-xoxo-090526"},
+ {"name":"NTS · United In Flames con nthng y Malibu","short":"Ambient / Electrónica","desc":"Electrónica etérea y paisajes sintéticos.","url":"https://soundcloud.com/user-202286394-991268468/united-in-flames-w-nthng"},
+ {"name":"NTS · GiGi FM con Prieste5s","short":"Psicodelia / Ambient","desc":"Texturas orgánicas y psicodelia electrónica.","url":"https://soundcloud.com/gigi-fm/nts-radio-gigi-fm-presents-prieste5s-03122025"},
+ {"name":"NTS · Abby Imperial febrero 2026","short":"NTS / Radio","desc":"Sesión mensual de Abby Imperial.","url":"https://soundcloud.com/abby_imperial"},
  {"name":"Jacques Greene · Rinse 12 marzo 2026","short":"House / UK Bass","desc":"Sesión de Rinse FM con house y electrónica de club.","url":"https://soundcloud.com/rinsefm/jacquesgreene120326"},
  {"name":"Pene · NTS abril 2026","short":"Psicodelia / Videojuegos","desc":"Ruf Dug presenta bandas sonoras de videojuegos, electrónica analógica y balearic.","url":"https://soundcloud.com/user-202286394-991268468/pene-170426"},
  {"name":"ALBA Radio + COFFEEBLACK · NTS","short":"Hip-hop / R&B","desc":"Una hora de rap, hip-hop y R&B con selección de ALBA Radio.","url":"https://soundcloud.com/user-202286394-991268468/alba-radio-w-coffeeblack"},
