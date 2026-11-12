@@ -1,6 +1,11 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Not Waving + COSMO · La Fonte del Futuro","short":"Post-punk / Electrónica","desc":"Electrónica mutante y ritmos de post-punk.","url":"https://soundcloud.com/user-202286394-991268468/not-waving-w-cosmo-la-fonte"},
+ {"name":"GiGi FM · F_LORAL (sesión alternativa)","short":"Techno / Hipnótico","desc":"Texturas y electrónica espacial.","url":"https://soundcloud.com/user-202286394-991268468/gigi-fm-presents-f_loral"},
+ {"name":"Main Phase · sesiones","short":"UK Garage / Breaks","desc":"Colección de mezclas con garage y bajos rítmicos.","url":"https://soundcloud.com/mainphase001/sets/mixes"},
+ {"name":"Analog Dakar Club · sesiones","short":"Groove / Psicodelia","desc":"Selecciones de vinilo, ritmos africanos y psicodelia.","url":"https://soundcloud.com/AnalogDakarClub"},
+ {"name":"Use Knife · sesiones","short":"Industrial / Electrónica","desc":"Percusión y electrónica experimental con carácter.","url":"https://soundcloud.com/useknifeofficial/tracks"},
  {name:'Sasha Crush · disco y funk',short:'Disco / Funk',desc:'Soul, synth-pop, disco, funk y algo de freestyle. Para escuchar mientras trabajas.',url:'https://soundcloud.com/user-643553014/sasha-crush-110724'},
  {name:'Moxie · The Travel Episode',short:'Suave / Soul',desc:'Una sesión de NTS tranquila: Sault, Khruangbin, Björk, Cleo Sol y Can.',url:'https://soundcloud.com/djmoxie/moxie-on-nts-radio-home-broadcast-22-travel-episode-pt-2-160920'},
  {name:'Moxie · NTS 2026',short:'House / DJ',desc:'La selección de sesiones de Moxie en NTS durante 2026: house, groove y descubrimientos.',url:'https://soundcloud.com/djmoxie/sets/moxie-nts-radio-playlist-2026'},
@@ -165,7 +170,7 @@ try {
  const prev=Number(localStorage.getItem(memKey));
  if(Number.isInteger(prev)&&prev>=0&&prev<mixes.length)selected=prev;
  const saved=JSON.parse(localStorage.getItem(settingsKey)||'null');
- if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow=saved;
+ if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow={...saved,random:true};
  const pendientes=JSON.parse(localStorage.getItem(queueKey)||'null');
  if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected);
 } catch {}
