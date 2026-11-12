@@ -1,6 +1,14 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Icon Roller · New Jungle Mix (abril 2026)","short":"Jungle / Breakbeat","desc":"Jungle noventero y ritmos rotos con Tim Reaper y Kid Lib.","url":"https://soundcloud.com/icon-roller/new-jungle-mix-april-2026"},
+ {"name":"Deep Jungle Records · Harmony 2026","short":"Jungle / Drum & Bass","desc":"Nuevos cortes del sello mezclados por Harmony.","url":"https://soundcloud.com/dubplates-vinyls/deepjungle2026mix"},
+ {"name":"Fracture · Rinse FM 2024","short":"Jungle / Footwork","desc":"Jungle, electro y footwork en una sesión de Fracture.","url":"https://soundcloud.com/rinsefm/fracture14032024"},
+ {"name":"FLUCC · MIXES","short":"Electro / Gabber","desc":"Colección de sesiones industriales y electro berlinés.","url":"https://soundcloud.com/flucc/sets/podcasts-sets"},
+ {"name":"Gollden · Jungle Sessions","short":"Dub / Minimal","desc":"Ambient, dub y minimal techno en una sesión envolvente.","url":"https://soundcloud.com/gollden-music/gollden-dj-set-ambient-minimal"},
+ {"name":"Meech · UKG to Jungle","short":"UK Garage / Jungle","desc":"Media hora de garage y jungle.","url":"https://soundcloud.com/user-730310030/ukg-to-jungle-mix"},
+ {"name":"Gomezs · Lost in the Jungle","short":"Minimal / Deep Tech","desc":"Percusión hipnótica y grooves minimalistas.","url":"https://soundcloud.com/gomezs-vst/gomezs-lost-in-the-jungle-2026"},
+ {"name":"HighCess · Tech & Bass House 2026","short":"Bass House","desc":"Mezcla de electro, tech y bass house.","url":"https://soundcloud.com/highcess/tech-bass-house-live-dj-mix"},
  {"name":"DJ Stingray + 6SISS · Zone 313","short":"Detroit Electro","desc":"Electro futurista y máquinas afiladas.","url":"https://soundcloud.com/rinsefm/djstingray230326"},
  {"name":"CASE · Rinse mayo 2026","short":"Electro","desc":"Una sesión electro de Rinse FM.","url":"https://soundcloud.com/rinsefm/case020526"},
  {"name":"HIDE THE JUNK · Rinse FM","short":"UK Club / Breaks","desc":"Colección de sesiones de club con invitados.","url":"https://soundcloud.com/hide-the-junk/sets/x-club-presents-htj-rinse-fm"},
