@@ -1,6 +1,15 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Elena Colombi B2B Lena Willikens · Lux Fragil","short":"Post-punk / EBM","desc":"Sesión en directo con techno oblicuo, EBM y postpunk.","url":"https://soundcloud.com/user-202286394-991268468/elena-colombi-b2b-lena"},
+ {"name":"Elena Colombi · NTS enero 2026","short":"Minimal Synth / Industrial","desc":"Una hora de electrónica, industrial y wave.","url":"https://soundcloud.com/user-202286394-991268468/elena-colombi-060126"},
+ {"name":"Mala Junta w/ Decoder · NTS","short":"Electro / Trance","desc":"Electro acelerado y bajos de los noventa.","url":"https://soundcloud.com/user-202286394-991268468/mala-junta-w-decoder-110526"},
+ {"name":"Breakage B2B Tim Reaper · NTS","short":"Jungle","desc":"Jungle y dubplates en una sesión conjunta.","url":"https://soundcloud.com/tim-reaper/breakage-b2b-tim-reaper-on-nts"},
+ {"name":"fnkd · untitled 909 podcast 272","short":"Dub / Bass / Techno","desc":"Grabación de dos horas en Corsica Studios.","url":"https://soundcloud.com/untitled909/untitled-909-podcast-fnkd-live"},
+ {"name":"Bapari & Sevyn 0000 · Puffy Radio 060","short":"Experimental / Jungle","desc":"Club experimental, techno, jungle y trance.","url":"https://soundcloud.com/bapari/puffy-radio-on-nts-060"},
+ {"name":"Bapari & Via App · Puffy Radio 062","short":"Breaks / Industrial","desc":"Electrónica, breaks y shoegaze mezclados.","url":"https://soundcloud.com/bapari/puffy-radio-on-nts-062"},
+ {"name":"Bapari & Nick Leon · Puffy Radio 039","short":"Jersey Club / Gabber","desc":"House, gabber y club de alto voltaje.","url":"https://soundcloud.com/bapari/puffy-radio-on-nts-039"},
+ {"name":"Bapari · Puffy Radio 048","short":"Industrial / Jungle","desc":"Techno, jungle y hardcore de club.","url":"https://soundcloud.com/bapari/puffy-radio-on-nts-048"},
  {"name":"Icon Roller · New Jungle Mix (abril 2026)","short":"Jungle / Breakbeat","desc":"Jungle noventero y ritmos rotos con Tim Reaper y Kid Lib.","url":"https://soundcloud.com/icon-roller/new-jungle-mix-april-2026"},
  {"name":"Deep Jungle Records · Harmony 2026","short":"Jungle / Drum & Bass","desc":"Nuevos cortes del sello mezclados por Harmony.","url":"https://soundcloud.com/dubplates-vinyls/deepjungle2026mix"},
  {"name":"Fracture · Rinse FM 2024","short":"Jungle / Footwork","desc":"Jungle, electro y footwork en una sesión de Fracture.","url":"https://soundcloud.com/rinsefm/fracture14032024"},
