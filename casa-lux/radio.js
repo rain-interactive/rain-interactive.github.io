@@ -218,7 +218,7 @@ try {
  const saved=JSON.parse(localStorage.getItem(settingsKey)||'null');
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow={...saved,random:true};
  const pendientes=JSON.parse(localStorage.getItem(queueKey)||'null');
- if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected);
+ if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected&&isPlayableCandidate(mixes[i]));
 } catch {}
 function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow));localStorage.setItem(queueKey,JSON.stringify(shuffleBag))}catch{}}
 function updateNow(){
@@ -276,10 +276,22 @@ function upbeatChoices(exclude=selected){
   return bright.test(label)&&!mournful.test(label);
  });
 }
+// Las páginas de perfil o de listados no son sesiones reproducibles de forma fiable.
+// Se conservan en el catálogo, pero no entran en la cola automática.
+function isPlayableCandidate(mix){
+ try{
+  const u=new URL(mix.url);
+  if(u.hostname!=='soundcloud.com'&&u.hostname!=='www.soundcloud.com')return false;
+  const parts=u.pathname.split('/').filter(Boolean);
+  if(parts.length<2)return false;
+  if(['tracks','likes','popular-tracks','reposts','albums','spotlight'].includes(parts[1]))return false;
+  return parts[1]!=='sets'||parts.length>=3;
+ }catch{return false}
+}
 function pickNext(){
- if(!flow.random)return (selected+1)%mixes.length;
+ if(!flow.random){for(let n=1;n<=mixes.length;n++){const i=(selected+n)%mixes.length;if(isPlayableCandidate(mixes[i]))return i}return selected;}
  if(!shuffleBag.length){
-  shuffleBag=Array.from({length:mixes.length},(_,i)=>i).filter(i=>i!==selected);
+  shuffleBag=Array.from({length:mixes.length},(_,i)=>i).filter(i=>i!==selected&&isPlayableCandidate(mixes[i]));
   for(let i=shuffleBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffleBag[i],shuffleBag[j]]=[shuffleBag[j],shuffleBag[i]]}
  }
  const i=shuffleBag.shift();
