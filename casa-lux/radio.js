@@ -287,7 +287,7 @@ function upbeatChoices(exclude=selected){
 function pickNext(){
  if(!flow.random)return (selected+1)%mixes.length;
  if(!shuffleBag.length){
-  shuffleBag=Array.from({length:mixes.length},(_,i)=>i).filter(i=>i!==selected&&isPlayableCandidate(mixes[i]));
+  shuffleBag=Array.from({length:mixes.length},(_,i)=>i).filter(i=>i!==selected);
   for(let i=shuffleBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffleBag[i],shuffleBag[j]]=[shuffleBag[j],shuffleBag[i]]}
  }
  const i=shuffleBag.shift();
