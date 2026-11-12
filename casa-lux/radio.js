@@ -1,6 +1,14 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Martelo · NTS septiembre 2026","short":"Bass / UK Funky","desc":"Sesión NTS de septiembre con bajos, kuduro y ritmos rotos.","url":"https://soundcloud.com/user-202286394-991268468/martelo-090926"},
+ {"name":"Prosumer · NTS marzo 2026","short":"Disco / Electro","desc":"Dos horas de disco, electro, synth y selecciones inesperadas.","url":"https://soundcloud.com/user-202286394-991268468/prosumer-170326"},
+ {"name":"Prosumer · NTS abril 2026","short":"House / Detroit","desc":"Dos horas de house, electro y techno de Detroit.","url":"https://soundcloud.com/user-202286394-991268468/prosumer-140426"},
+ {"name":"Martelo · NTS junio 2026","short":"UK Garage / Bass","desc":"Dubstep, garage, techno y percusión de club.","url":"https://soundcloud.com/user-202286394-991268468/martelo-030626"},
+ {"name":"Martelo · NTS febrero 2026","short":"Electro / Bass","desc":"Electro y bass de club con UK garage.","url":"https://soundcloud.com/user-202286394-991268468/martelo-250226"},
+ {"name":"GRRL · NTS junio 2026","short":"Experimental / Techno","desc":"Electrónica mutante, techno y sonidos industriales.","url":"https://soundcloud.com/user-202286394-991268468/grrl-040626"},
+ {"name":"GRRL · NTS febrero 2026","short":"House / Electrónica","desc":"House hipnótico y electrónica atmosférica.","url":"https://soundcloud.com/user-202286394-991268468/grrl-120226"},
+ {"name":"Cormac · Rinse octubre 2025","short":"House / Disco","desc":"Sesión bailable de Cormac en Rinse FM.","url":"https://soundcloud.com/rinsefm/cormac181025"},
  {"name":"Harmony · Unreleased 90s Dubplate NTS Mix","short":"Jungle / Dubplates","desc":"Jungle de los noventa y dubplates inéditos en una sesión para NTS.","url":"https://soundcloud.com/dubplates-vinyls/harmony-unreleased-90s"},
  {"name":"Diesel x NTS · HYPOESTES","short":"Club / Experimental","desc":"Sesión de la serie TRACKS de NTS, publicada en abril de 2026.","url":"https://soundcloud.com/user-936255521/diesel-x-nts-mix-by-hypoestes"},
  {"name":"Diesel x NTS · DRAGMOTHER","short":"Club / Experimental","desc":"Sesión de la serie TRACKS de NTS, publicada en febrero de 2026.","url":"https://soundcloud.com/user-936255521/diesel-x-nts-mix-by-dragmother"},
@@ -218,7 +226,7 @@ try {
  const saved=JSON.parse(localStorage.getItem(settingsKey)||'null');
  if(saved && typeof saved.loop==='boolean' && typeof saved.random==='boolean')flow={...saved,random:true};
  const pendientes=JSON.parse(localStorage.getItem(queueKey)||'null');
- if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected&&isPlayableCandidate(mixes[i]));
+ if(Array.isArray(pendientes))shuffleBag=[...new Set(pendientes)].filter(i=>Number.isInteger(i)&&i>=0&&i<mixes.length&&i!==selected);
 } catch {}
 function save(){try{localStorage.setItem(memKey,String(selected));localStorage.setItem(settingsKey,JSON.stringify(flow));localStorage.setItem(queueKey,JSON.stringify(shuffleBag))}catch{}}
 function updateNow(){
@@ -276,20 +284,8 @@ function upbeatChoices(exclude=selected){
   return bright.test(label)&&!mournful.test(label);
  });
 }
-// Las páginas de perfil o de listados no son sesiones reproducibles de forma fiable.
-// Se conservan en el catálogo, pero no entran en la cola automática.
-function isPlayableCandidate(mix){
- try{
-  const u=new URL(mix.url);
-  if(u.hostname!=='soundcloud.com'&&u.hostname!=='www.soundcloud.com')return false;
-  const parts=u.pathname.split('/').filter(Boolean);
-  if(parts.length<2)return false;
-  if(['tracks','likes','popular-tracks','reposts','albums','spotlight'].includes(parts[1]))return false;
-  return parts[1]!=='sets'||parts.length>=3;
- }catch{return false}
-}
 function pickNext(){
- if(!flow.random){for(let n=1;n<=mixes.length;n++){const i=(selected+n)%mixes.length;if(isPlayableCandidate(mixes[i]))return i}return selected;}
+ if(!flow.random)return (selected+1)%mixes.length;
  if(!shuffleBag.length){
   shuffleBag=Array.from({length:mixes.length},(_,i)=>i).filter(i=>i!==selected&&isPlayableCandidate(mixes[i]));
   for(let i=shuffleBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffleBag[i],shuffleBag[j]]=[shuffleBag[j],shuffleBag[i]]}
