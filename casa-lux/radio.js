@@ -1,6 +1,10 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Aural Displeasure","short":"Post-punk / No wave","desc":"Post-punk experimental, no wave y punk noise, con espíritu DIY.","url":"https://soundcloud.com/josiewreck"},
+ {"name":"Haunt Me","short":"Post-punk / Darkwave","desc":"Post-punk oscuro y darkwave; citan a Bauhaus, Joy Division y The Cure.","url":"https://soundcloud.com/hauntmeofficial"},
+ {"name":"Dangerbirdz","short":"Post-punk / Noise rock","desc":"Post-punk con improvisación y muros de ruido; mencionan a Pixies y Sonic Youth.","url":"https://soundcloud.com/dangerbirdz"},
+ {"name":"Pronoise","short":"Post-punk / EBM","desc":"Grupo valenciano de post-punk, darkwave, EBM e industrial.","url":"https://soundcloud.com/pronoiseoficial"},
  {"name":"Martelo · NTS septiembre 2026","short":"Bass / UK Funky","desc":"Sesión NTS de septiembre con bajos, kuduro y ritmos rotos.","url":"https://soundcloud.com/user-202286394-991268468/martelo-090926"},
  {"name":"Prosumer · NTS marzo 2026","short":"Disco / Electro","desc":"Dos horas de disco, electro, synth y selecciones inesperadas.","url":"https://soundcloud.com/user-202286394-991268468/prosumer-170326"},
  {"name":"Prosumer · NTS abril 2026","short":"House / Detroit","desc":"Dos horas de house, electro y techno de Detroit.","url":"https://soundcloud.com/user-202286394-991268468/prosumer-140426"},
