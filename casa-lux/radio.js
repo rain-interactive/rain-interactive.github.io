@@ -1,6 +1,9 @@
 /* Reproductor oficial SoundCloud: no aloja ni copia el audio. */
 (()=>{'use strict';
 const mixes=[
+ {"name":"Jacques Greene · Rinse 12 marzo 2026","short":"House / UK Bass","desc":"Sesión de Rinse FM con house y electrónica de club.","url":"https://soundcloud.com/rinsefm/jacquesgreene120326"},
+ {"name":"Pene · NTS abril 2026","short":"Psicodelia / Videojuegos","desc":"Ruf Dug presenta bandas sonoras de videojuegos, electrónica analógica y balearic.","url":"https://soundcloud.com/user-202286394-991268468/pene-170426"},
+ {"name":"ALBA Radio + COFFEEBLACK · NTS","short":"Hip-hop / R&B","desc":"Una hora de rap, hip-hop y R&B con selección de ALBA Radio.","url":"https://soundcloud.com/user-202286394-991268468/alba-radio-w-coffeeblack"},
  {"name":"Elena Colombi B2B Lena Willikens · Lux Fragil","short":"Post-punk / EBM","desc":"Sesión en directo con techno oblicuo, EBM y postpunk.","url":"https://soundcloud.com/user-202286394-991268468/elena-colombi-b2b-lena"},
  {"name":"Elena Colombi · NTS enero 2026","short":"Minimal Synth / Industrial","desc":"Una hora de electrónica, industrial y wave.","url":"https://soundcloud.com/user-202286394-991268468/elena-colombi-060126"},
  {"name":"Mala Junta w/ Decoder · NTS","short":"Electro / Trance","desc":"Electro acelerado y bajos de los noventa.","url":"https://soundcloud.com/user-202286394-991268468/mala-junta-w-decoder-110526"},
