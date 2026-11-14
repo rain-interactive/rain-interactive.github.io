@@ -505,7 +505,7 @@ section{border-bottom-color:#243235}
 <nav class="rain-section-jumps" aria-label="Ir a una sección de la página"><a href="#featured-live">Destacado</a><a href="#play">Arcade</a>
 <a href="#read">Archive</a><a href="#experiment">Experiments</a><a href="#coruna">A Coruña</a><a href="#listen">Media</a></nav></div>
 
-<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">Destacado</h2><span>LUX / TRANSMISIÓN EN DIRECTO</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);display:grid;place-items:center;overflow:hidden"><div id="rain-live-offline" role="status" aria-live="polite" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);font-family:monospace"><span style="color:#f04b57;letter-spacing:.24em;font-size:12px">● LUX // OFF AIR</span><strong style="color:#fff;font-size:clamp(20px,4vw,42px);letter-spacing:.08em">WE'LL BE BACK LATER</strong><span style="color:#999;font-size:11px;letter-spacing:.13em">TRANSMISSION TEMPORARILY OFFLINE</span></div><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" src="https://thorough-ladies-strange-tyler.trycloudflare.com/embed/video" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · Transmisión independiente desde Owncast. La dirección es provisional y puede dejar de funcionar si se reinicia el túnel de Cloudflare.</p></div></section>
+<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">Destacado</h2><span>LUX / TRANSMISIÓN EN DIRECTO</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);display:grid;place-items:center;overflow:hidden"><div id="rain-live-offline" role="status" aria-live="polite" style="position:absolute;inset:0;z-index:999;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);font-family:monospace"><span style="color:#f04b57;letter-spacing:.24em;font-size:12px">● LUX // OFF AIR</span><strong style="color:#fff;font-size:clamp(20px,4vw,42px);letter-spacing:.08em">WE'LL BE BACK LATER</strong><span style="color:#999;font-size:11px;letter-spacing:.13em">TRANSMISSION TEMPORARILY OFFLINE</span></div><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" src="https://thorough-ladies-strange-tyler.trycloudflare.com/embed/video" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0;visibility:hidden"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · Transmisión independiente desde Owncast. La dirección es provisional y puede dejar de funcionar si se reinicia el túnel de Cloudflare.</p></div></section>
 <script>
 (()=>{'use strict';
 const base='https://thorough-ladies-strange-tyler.trycloudflare.com';
@@ -515,17 +515,17 @@ if(!frame||!offline)return;
 let failures=0;
 async function checkLive(){
   try{
-    const response=await fetch(base+'/api/status',{cache:'no-store',signal:AbortSignal.timeout(7000)});
+    const response=await fetch(base+'/api/status',{cache:'no-store',});
     if(!response.ok)throw Error('status unavailable');
     const data=await response.json();
     const live=data.online===true||data.online===1;
-    offline.style.display=live?'none':'flex';
+    offline.style.setProperty('display',live?'none':'flex','important');
     frame.style.visibility=live?'visible':'hidden';
     failures=0;
   }catch(e){
     // Do not falsely claim offline on a transient network/CORS failure.
     failures++;
-    if(failures>=2){offline.style.display='flex';frame.style.visibility='hidden';}
+    if(failures>=2){offline.style.setProperty('display','flex','important');frame.style.visibility='hidden';}
   }
 }
 checkLive();
