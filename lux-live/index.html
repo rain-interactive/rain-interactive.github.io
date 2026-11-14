@@ -2,17 +2,26 @@
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505"><title>LUX LIVE // Rain Interactive</title>
 <style>
 :root{color-scheme:dark;--red:#f04747;--green:#46dfb7}*{box-sizing:border-box}body{margin:0;background:#050505;color:#eee;font-family:"Courier New",monospace;background-image:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff05 3px 4px)}.wrap{max-width:1180px;margin:auto;padding:26px 18px 60px}header{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #363030;padding-bottom:20px}a{color:inherit}header a{text-decoration:none;font-size:12px;letter-spacing:.13em}header a:hover{color:var(--green)}.id{color:var(--red);font-size:11px;letter-spacing:.15em}h1{font:900 clamp(52px,11vw,128px)/.85 Arial,sans-serif;letter-spacing:-.075em;margin:48px 0 14px}.sub{color:#aaa;max-width:680px;line-height:1.6;font-size:13px;margin-bottom:30px}.stage{border:1px solid #692b2b;background:#080607;box-shadow:0 0 55px #6a101019;position:relative}.stage:before{content:"";height:4px;display:block;background:linear-gradient(90deg,var(--red),#210707)}.screen{aspect-ratio:16/9;display:grid;place-items:center;position:relative;overflow:hidden}.screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}.placeholder{text-align:center;padding:25px}.symbol{font-size:clamp(45px,9vw,110px);font-weight:900;color:var(--red);text-shadow:0 0 36px #d9202050;letter-spacing:-.08em}.placeholder p{font-size:12px;letter-spacing:.16em;color:#b8a7a7}.status{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid #432424;padding:14px 18px;color:#a7a0a0;font-size:11px;letter-spacing:.12em}.dot{color:#888}.foot{font-size:11px;color:#777;margin-top:26px;line-height:1.8}.foot strong{color:#aaa}button{font:inherit;cursor:pointer}.watch{background:transparent;color:var(--green);border:1px solid #365f53;padding:10px 15px;margin-top:18px}.watch:hover{background:#123229}#player[hidden],#launch[hidden]{display:none}@media(max-width:600px){h1{margin-top:36px}.status{font-size:10px}.screen{min-height:240px}}
-</style></head><body><div class="wrap"><header><a href="/">← RAIN INTERACTIVE</a><span class="id">MEDIA / TRANSMISIÓN 001</span></header><main><h1>LUX <span style="color:var(--red)">LIVE</span></h1><p class="sub">Una ventana al sistema LUX. Imagen, sonido y actividad de la interfaz local, transmitidos en tiempo real cuando la estación está conectada.</p><div class="stage"><div class="screen"><div class="placeholder" id="standby"><div class="symbol">LUX_</div><p id="state">SEÑAL NO CONFIGURADA</p><button class="watch" id="launch" hidden>ABRIR TRANSMISIÓN ↗</button></div><iframe id="player" title="Emisión en directo de LUX" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="no-referrer" hidden></iframe></div><div class="status"><span><span class="dot">●</span> <span id="signal">ESPERANDO SEÑAL</span></span><span>OWNCAST / RAIN INTERACTIVE</span></div></div><p class="foot"><strong>NOTA:</strong> La emisión depende de que el ordenador, Owncast y el túnel estén funcionando. Si no hay conexión, vuelve a intentarlo más tarde.</p></main></div>
+</style></head><body><div class="wrap"><header><a href="/">← RAIN INTERACTIVE</a><span class="id">MEDIA / TRANSMISIÓN 001</span></header><main><h1>LUX <span style="color:var(--red)">LIVE</span></h1><p class="sub">Una ventana al sistema LUX. Imagen, sonido y actividad de la interfaz local, transmitidos en tiempo real cuando la estación está conectada.</p><div class="stage"><div class="screen"><div class="placeholder" id="standby"><div class="symbol" style="font-size:clamp(24px,5vw,58px)">LUX // OFF AIR</div><p id="state" style="font-size:clamp(18px,3vw,32px);color:white;font-weight:bold">WE'LL BE BACK LATER</p><p>TRANSMISSION TEMPORARILY OFFLINE</p><button class="watch" id="launch" hidden>ABRIR TRANSMISIÓN ↗</button></div><iframe id="player" title="Emisión en directo de LUX" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="no-referrer" hidden></iframe></div><div class="status"><span><span class="dot">●</span> <span id="signal">ESPERANDO SEÑAL</span></span><span>OWNCAST / RAIN INTERACTIVE</span></div></div><p class="foot"><strong>NOTA:</strong> La emisión depende de que el ordenador, Owncast y el túnel estén funcionando. Si no hay conexión, vuelve a intentarlo más tarde.</p></main></div>
 <script>
-/* Sustituir por una URL HTTPS pública y estable de Owncast; nunca usar localhost aquí. */
-const OWNCAST_PUBLIC_URL = "";
-const url = OWNCAST_PUBLIC_URL.trim();
-if(/^https:\/\/[a-z0-9.-]+(?::\d+)?(?:\/.*)?$/i.test(url)){
- const watch=document.getElementById('launch');
- const frame=document.getElementById('player');
- document.getElementById('state').textContent='TRANSMISIÓN DISPONIBLE';
- document.getElementById('signal').textContent='ENLACE DISPONIBLE';
- watch.hidden=false;
- watch.onclick=()=>{frame.src=url;frame.hidden=false;document.getElementById('standby').hidden=true;};
+const url='https://thorough-ladies-strange-tyler.trycloudflare.com';
+const frame=document.getElementById('player');
+const standby=document.getElementById('standby');
+const signal=document.getElementById('signal');
+async function refresh(){
+ try{
+  const response=await fetch(url+'/api/status',{cache:'no-store'});
+  if(!response.ok)throw Error('unavailable');
+  const status=await response.json();
+  if(status.online===true){
+   if(!frame.src.endsWith('/embed/video'))frame.src=url+'/embed/video';
+   frame.hidden=false;standby.hidden=true;signal.textContent='EN DIRECTO';
+  }else{
+   frame.hidden=true;standby.hidden=false;signal.textContent='ESPERANDO SEÑAL';
+  }
+ }catch(error){
+  frame.hidden=true;standby.hidden=false;signal.textContent='ESPERANDO SEÑAL';
+ }
 }
+refresh();setInterval(refresh,30000);
 </script></body></html>
