@@ -505,7 +505,33 @@ section{border-bottom-color:#243235}
 <nav class="rain-section-jumps" aria-label="Ir a una sección de la página"><a href="#featured-live">Destacado</a><a href="#play">Arcade</a>
 <a href="#read">Archive</a><a href="#experiment">Experiments</a><a href="#coruna">A Coruña</a><a href="#listen">Media</a></nav></div>
 
-<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">Destacado</h2><span>LUX / TRANSMISIÓN EN DIRECTO</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);display:grid;place-items:center;overflow:hidden"><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" src="https://thorough-ladies-strange-tyler.trycloudflare.com/embed/video" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · Transmisión independiente desde Owncast. La dirección es provisional y puede dejar de funcionar si se reinicia el túnel de Cloudflare.</p></div></section>
+<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">Destacado</h2><span>LUX / TRANSMISIÓN EN DIRECTO</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);display:grid;place-items:center;overflow:hidden"><div id="rain-live-offline" role="status" aria-live="polite" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);font-family:monospace"><span style="color:#f04b57;letter-spacing:.24em;font-size:12px">● LUX // OFF AIR</span><strong style="color:#fff;font-size:clamp(20px,4vw,42px);letter-spacing:.08em">WE'LL BE BACK LATER</strong><span style="color:#999;font-size:11px;letter-spacing:.13em">TRANSMISSION TEMPORARILY OFFLINE</span></div><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" src="https://thorough-ladies-strange-tyler.trycloudflare.com/embed/video" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · Transmisión independiente desde Owncast. La dirección es provisional y puede dejar de funcionar si se reinicia el túnel de Cloudflare.</p></div></section>
+<script>
+(()=>{'use strict';
+const base='https://thorough-ladies-strange-tyler.trycloudflare.com';
+const frame=document.getElementById('rain-live-player');
+const offline=document.getElementById('rain-live-offline');
+if(!frame||!offline)return;
+let failures=0;
+async function checkLive(){
+  try{
+    const response=await fetch(base+'/api/status',{cache:'no-store',signal:AbortSignal.timeout(7000)});
+    if(!response.ok)throw Error('status unavailable');
+    const data=await response.json();
+    const live=data.online===true||data.online===1;
+    offline.style.display=live?'none':'flex';
+    frame.style.visibility=live?'visible':'hidden';
+    failures=0;
+  }catch(e){
+    // Do not falsely claim offline on a transient network/CORS failure.
+    failures++;
+    if(failures>=2){offline.style.display='flex';frame.style.visibility='hidden';}
+  }
+}
+checkLive();
+setInterval(checkLive,30000);
+})();
+</script>
 <section id="play"><div class="wrap"><div class="section-head"><h2>Arcade</h2><span>Videojuegos / mundos jugables</span></div><div class="grid"><a class="card card-art card-diseased-reality" href="/diseased-reality/" aria-label="Diseased Reality, en desarrollo, acceso privado"><div class="artwork-original" style="aspect-ratio:16/10;position:relative;overflow:hidden!important;background:#170620!important"><img src="/diseased-reality/assets/cover-cemetery-v2.webp" alt="Cementerio con el heraldo de la guillotina, el animal de rostro humano y almas fluorescentes" loading="lazy" style="display:block!important;width:100%!important;height:100%!important;object-fit:cover!important"><span class="n" style="position:absolute;left:10px;bottom:10px;top:auto;z-index:2;background:#0b0717eb;color:#f2d2ef;padding:7px 10px;font-size:10px;letter-spacing:.06em">EN DESARROLLO · ACCESO PRIVADO</span></div><div class="copy"><div><div class="type">En desarrollo · Acceso privado · Exploración 3D</div><h3>Diseased Reality</h3><p>Un cementerio de almas perdidas, recuerdos y presagios. Pixel art de 1995, niebla púrpura y voces que reconocen tu muerte.</p></div><span class="cta">Acceso privado ↗</span></div></a>
 <a class="card card-art card-marea" href="/marea/"><div class="artwork-original"><span class="n">R-002</span><img src="/rain-interactive/assets/marea-caratula.webp?v=v12" alt="Marea"></div><div class="copy"><div><div class="type">Game · Surf · Versión 3.32</div><h3>Marea</h3><p>Surf, olas, fauna y movimiento. Versión 3.32 para Android.</p></div><span class="cta">Enter ↗</span></div></a>
 <a class="card card-art card-boxer" href="/boxer-life/"><div class="artwork-original"><span class="n">R-001</span><img src="/assets/boxer-life-cover.webp?v=v12" alt="Boxer Life"></div><div class="copy"><div><div class="type">Game · Boxing</div><h3>Boxer Life</h3><p>Tres decisiones al mes. Una carrera dentro y fuera del ring.</p></div><span class="cta">Play ↗</span></div></a>
