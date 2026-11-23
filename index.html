@@ -535,12 +535,20 @@ body.catalog-page .catalog-more:hover{border-color:#ddd}
 @media(max-width:760px){.wrap{width:calc(100% - 28px)}header{min-height:0;padding-bottom:36px}.hero{margin-top:38px}.obscura-logo-wrap{margin:6px 0 25px}.section-head{padding-bottom:18px}section{padding:46px 0}}
 @media(prefers-reduced-motion:reduce){.card,.directory-tile{transition:none}}
 </style>
+<style id="obscura-live-standby-v1">
+/* OBSCURA identity / LUX signal: compact standby, full player when live. */
+#featured-live .rain-live-frame{transition:aspect-ratio .3s ease,border-color .3s ease}
+#featured-live:has(#rain-live-offline:not([style*="display: none"])) .rain-live-frame{aspect-ratio:auto!important;min-height:154px;max-height:210px}
+#featured-live:has(#rain-live-offline:not([style*="display: none"])) #rain-live-offline{padding:18px!important;gap:8px!important}
+#featured-live:has(#rain-live-offline:not([style*="display: none"])) #rain-live-offline strong{font-size:clamp(16px,3vw,25px)!important}
+@media(max-width:520px){#featured-live:has(#rain-live-offline:not([style*="display: none"])) .rain-live-frame{min-height:150px}}
+</style>
 </head>
 <body>
 <header>
   <div class="wrap top">
     <div class="brand">OBSCURA CORPORATION</div>
-    <nav class="nav" aria-label="Navegación principal"><a href="#featured-live">Destacado</a><a href="#play">Arcade</a><a href="#read">Archive</a><a href="#experiment">Experiments</a><a href="#coruna">A Coruña</a><a href="#listen">Media</a></nav>
+    <nav class="nav" aria-label="Navegación principal"><a href="#featured-live">LUX LIVE</a><a href="#play">Arcade</a><a href="#read">Archive</a><a href="#experiment">Experiments</a><a href="#coruna">A Coruña</a><a href="#listen">Media</a></nav>
   </div>
   <div class="wrap hero">
     <div class="kicker">Laboratorio digital independiente · 2026</div>
@@ -554,10 +562,10 @@ body.catalog-page .catalog-more:hover{border-color:#ddd}
 <div class="wrap rain-longform-intro" id="explorar">
 <div class="section-head"><h2>Explora OBSCURA</h2><span>Todas las colecciones / desplazamiento continuo</span></div>
 <p class="archive-note">Juegos, archivos, arte digital y experimentos. Todo está aquí, a continuación, sin abrir otras páginas.</p>
-<nav class="rain-section-jumps" aria-label="Ir a una sección de la página"><a href="#featured-live">Destacado</a><a href="#play">Arcade</a>
+<nav class="rain-section-jumps" aria-label="Ir a una sección de la página"><a href="#featured-live">LUX LIVE</a><a href="#play">Arcade</a>
 <a href="#read">Archive</a><a href="#experiment">Experiments</a><a href="#coruna">A Coruña</a><a href="#listen">Media</a></nav></div>
 
-<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">LUX LIVE</h2><span>TRANSMISIÓN / ESTADO DE SEÑAL</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:#050505;overflow:hidden"><div id="rain-live-offline" role="status" aria-live="polite" style="position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);font-family:monospace"><span style="color:#f04b57;letter-spacing:.24em;font-size:12px">● LUX // OFF AIR</span><strong style="color:#fff;font-size:clamp(20px,4vw,42px);letter-spacing:.08em">WE'LL BE BACK LATER</strong><span style="color:#999;font-size:11px;letter-spacing:.13em">TRANSMISSION TEMPORARILY OFFLINE</span></div><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · La emisión depende de que Owncast y su enlace público estén disponibles.</p></div></section>
+<section id="featured-live" aria-labelledby="featured-live-title"><div class="wrap"><div class="section-head"><h2 id="featured-live-title">LUX LIVE</h2><span>TRANSMISIÓN / ESTADO DE SEÑAL</span></div><div class="rain-live-frame" style="aspect-ratio:16/9;position:relative;border:1px solid #772c36;background:#050505;overflow:hidden"><div id="rain-live-offline" role="status" aria-live="polite" style="position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#20101b,#050505 75%);font-family:monospace"><span style="color:#f04b57;letter-spacing:.24em;font-size:12px">● LUX // OFF AIR</span><strong style="color:#fff;font-size:clamp(20px,4vw,42px);letter-spacing:.08em">WE'LL BE BACK LATER</strong><span style="color:#999;font-size:11px;letter-spacing:.13em">TRANSMISSION TEMPORARILY OFFLINE</span></div><iframe id="rain-live-player" title="LUX LIVE — emisión en directo" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div><p class="archive-note" style="margin-top:14px">LUX LIVE · Emisión experimental. Disponible cuando la señal está activa.</p></div></section>
 <script>
 (()=>{
 const base='https://thorough-ladies-strange-tyler.trycloudflare.com';
