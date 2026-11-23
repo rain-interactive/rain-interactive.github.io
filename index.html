@@ -696,6 +696,15 @@ body.obscura-portal-section #obscura-portal-back{background:#000!important;color
  background:#101316!important;border-color:#f4f7f9!important;
  box-shadow:inset 0 0 0 1px #d1d9df,0 0 12px #9ba9b444!important;
 }
+</style><style id="obscura-bizum-v1">
+#obscura-support-panel{background:#000f!important}
+#obscura-support-panel .obscura-support-inner{background:#050505!important;border:1px solid #aeb6bd!important;box-shadow:0 0 0 4px #0b0b0b,0 0 0 5px #424a50!important}
+#obscura-support-panel .obscura-support-inner h2{background:linear-gradient(180deg,#fff,#aab2ba 38%,#fff 53%,#7e8993 78%,#e9edf0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#obscura-support-panel .obscura-bizum-only{display:flex;flex-direction:column;align-items:center;gap:12px}
+#obscura-support-panel .obscura-bizum-label{font-size:12px;letter-spacing:.18em;color:#c5cdd4;font-weight:800}
+#obscura-support-panel .obscura-bizum-number{font-size:clamp(22px,5.4vw,36px);font-weight:900;letter-spacing:.025em;color:#fff;white-space:nowrap}
+#obscura-support-panel .obscura-bizum-copy{cursor:pointer;border:1px solid #bbc4cb;background:#111;color:#e9edf0;padding:12px 22px;font-weight:800;letter-spacing:.09em}
+#obscura-support-panel .obscura-bizum-only p{max-width:360px;color:#bfc6cc;font-size:13px;line-height:1.5;margin:0}
 </style></head>
 <body>
 
@@ -717,7 +726,7 @@ body.obscura-portal-section #obscura-portal-back{background:#000!important;color
  </nav>
  <div class="obscura-portal-bottom"><span>OBSCURA CORPORATION © 2026</span><a href="#support">Independent projects. Made possible by your support.</a></div>
  <div id="obscura-support-panel" role="dialog" aria-modal="true" aria-labelledby="obscura-support-title">
-  <div class="obscura-support-inner"><div class="obscura-portal-tag" style="text-align:center;max-width:none">INDEPENDENT CREATION</div><h2 id="obscura-support-title">SUPPORT OBSCURA</h2><p>Juegos, archivos y experimentos digitales independientes. Tu apoyo ayuda a mantenerlos vivos y a desarrollar los siguientes.</p><p><strong>Independent projects. Made possible by your support.</strong></p><div class="obscura-support-links"><a href="https://www.paypal.com/ncp/payment/UMGRDCW4PXS26" target="_blank" rel="noopener noreferrer">PAYPAL ↗</a><a href="https://patreon.com/RainInteractive" target="_blank" rel="noopener noreferrer">PATREON ↗</a></div><button class="obscura-support-back" type="button" id="obscura-support-close">← VOLVER AL MENÚ</button></div>
+  <div class="obscura-support-inner"><div class="obscura-portal-tag" style="text-align:center;max-width:none">INDEPENDENT CREATION</div><h2 id="obscura-support-title">SUPPORT OBSCURA</h2><p>Juegos, archivos y experimentos digitales independientes. Tu apoyo ayuda a mantenerlos vivos y a desarrollar los siguientes.</p><p><strong>Independent projects. Made possible by your support.</strong></p><div class="obscura-support-links obscura-bizum-only"><div class="obscura-bizum-label">DONATIVOS POR BIZUM</div><div class="obscura-bizum-number">+34 666 550 380</div><button type="button" class="obscura-bizum-copy" id="obscura-bizum-copy">COPIAR NÚMERO</button><p>Abre Bizum en tu aplicación bancaria y envía el donativo a este número.</p></div><button class="obscura-support-back" type="button" id="obscura-support-close">← VOLVER AL MENÚ</button></div>
  </div>
 </div>
 <button id="obscura-portal-back" type="button" aria-label="Volver al menú principal">← OBSCURA / MENÚ</button>
@@ -815,8 +824,7 @@ checkLive();setInterval(checkLive,30000);
   <div class="wrap">
     <div class="footerline"><span>OBSCURA CORPORATION · 2026</span><span>Laboratorio digital independiente</span></div>
     <div class="support">
-      <a href="https://www.paypal.com/ncp/payment/UMGRDCW4PXS26" target="_blank" rel="noopener">Support · PayPal</a>
-      <a href="https://patreon.com/RainInteractive" target="_blank" rel="noopener">Support · Patreon</a>
+      <a href="#support">Support · Bizum (+34 666 550 380)</a>
       <a href="https://www.instagram.com/obscura.corporation/" target="_blank" rel="noopener">@obscura.corporation</a>
     </div>
   </div>
@@ -893,6 +901,6 @@ document.querySelectorAll('img').forEach(function(img){
  render();
 })();
 </script>
-</body>
+<script id="obscura-bizum-copy-script">document.getElementById('obscura-bizum-copy')?.addEventListener('click',async function(){try{await navigator.clipboard.writeText('666550380');this.textContent='NÚMERO COPIADO ✓'}catch(e){this.textContent='COPIA EL NÚMERO DE ARRIBA'}});</script></body>
 </html>
 
