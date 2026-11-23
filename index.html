@@ -656,6 +656,23 @@ html,body{background:#000!important}
 }
 #obscura-portal .obscura-portal-tile.support-tile:hover,
 #obscura-portal .obscura-portal-tile.support-tile:focus-visible{border-color:#ffe09a!important;box-shadow:inset 0 0 0 5px #080706,inset 0 0 0 7px #b99348,0 0 18px #e5b94c77!important}
+</style><style id="obscura-interior-chrome-v1">
+/* Interior pages retain the original dark layout; silver chrome is applied only to typography. */
+body.obscura-portal-section{background:#000!important;color:#d7dce1!important}
+body.obscura-portal-section>header,
+body.obscura-portal-section>main,
+body.obscura-portal-section>footer{background-color:#000!important;color:#d7dce1!important}
+body.obscura-portal-section :is(h1,h2,h3,h4,h5,h6,.section-head h2,.brand,.kicker){
+ color:#dce2e7!important;
+ background-image:linear-gradient(180deg,#ffffff 0%,#c2c9cf 35%,#f8fafb 48%,#8d969f 72%,#e2e7eb 100%)!important;
+ background-clip:text!important;-webkit-background-clip:text!important;
+ -webkit-text-fill-color:transparent!important;
+}
+body.obscura-portal-section :is(p,li,dt,dd,figcaption,blockquote,label,small,.archive-note,.section-head span){color:#c4cbd1!important}
+body.obscura-portal-section :is(a:not(.obscura-portal-tile),button:not(#obscura-portal-back)){color:#e3e8ed}
+body.obscura-portal-section :is(.nav a,.rain-section-jumps a){color:#dce2e7!important}
+body.obscura-portal-section :is(.nav a,.rain-section-jumps a):hover{color:#fff!important}
+body.obscura-portal-section #obscura-portal-back{background:#000!important;color:#e5e9ed!important;border-color:#9aa3ab!important}
 </style></head>
 <body>
 
