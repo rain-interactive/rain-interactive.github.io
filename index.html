@@ -543,8 +543,84 @@ body.catalog-page .catalog-more:hover{border-color:#ddd}
 #featured-live:has(#rain-live-offline:not([style*="display: none"])) #rain-live-offline strong{font-size:clamp(16px,3vw,25px)!important}
 @media(max-width:520px){#featured-live:has(#rain-live-offline:not([style*="display: none"])) .rain-live-frame{min-height:150px}}
 </style>
+
+<style id="obscura-portal-v1">
+/* OBSCURA PORTAL — one-screen navigation. Original sections remain intact. */
+#obscura-portal{display:none}
+body.obscura-portal-home{overflow:hidden}
+body.obscura-portal-home>header,body.obscura-portal-home>main,body.obscura-portal-home>footer{display:none!important}
+body.obscura-portal-home #obscura-portal{display:flex}
+#obscura-portal{height:100vh;height:100dvh;min-height:0;flex-direction:column;gap:clamp(8px,1.6vh,18px);padding:clamp(12px,2vh,22px) clamp(12px,3vw,32px);overflow:hidden;background:radial-gradient(ellipse at 50% -15%,#36322e 0,transparent 58%),#050505;color:#e9e5df;isolation:isolate}
+.obscura-portal-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:0 0 auto;min-height:0}
+.obscura-portal-brand{display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none}
+.obscura-portal-brand img{width:clamp(155px,29vw,320px);height:clamp(42px,10vh,92px);object-fit:contain;object-position:left center}
+.obscura-portal-tag{font:700 clamp(8px,1.2vw,11px)/1.5 "Courier New",monospace;letter-spacing:.17em;text-transform:uppercase;color:#a7a09a;text-align:right}
+.obscura-portal-visual{flex:0 1 22%;min-height:60px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #46413b;background:radial-gradient(ellipse at 50% 90%,#39312c 0%,#0a0909 54%,#030303 100%)}
+.obscura-portal-visual:before{content:"";position:absolute;width:min(30vh,200px);height:min(30vh,200px);border:1px solid #a69a7e66;border-radius:50%;box-shadow:0 0 0 17px #9a8d6b0b,0 0 0 40px #9a8d6b08;transform:rotate(-23deg)}
+.obscura-portal-visual:after{content:"";position:absolute;width:1px;height:180%;background:linear-gradient(transparent,#b0a18388,transparent);transform:rotate(45deg)}
+.obscura-portal-visual strong{z-index:1;font:900 clamp(19px,4vw,50px)/.9 Arial,sans-serif;letter-spacing:.24em;text-align:center;text-shadow:0 3px 18px #000}
+.obscura-portal-visual small{z-index:1;position:absolute;bottom:8px;left:12px;font:700 9px monospace;letter-spacing:.18em;color:#a9a19a}
+.obscura-portal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:clamp(5px,1.1vh,12px);flex:1 1 auto;min-height:0}
+.obscura-portal-tile{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;min-height:0;min-width:0;overflow:hidden;text-align:center;text-decoration:none;padding:5px;border:1px solid #4e4944;background:linear-gradient(145deg,#37332e 0%,#1c1a18 46%,#090909 100%);box-shadow:inset 0 1px #ffffff18,0 2px 9px #0009;transition:border-color .2s,background .2s}
+.obscura-portal-tile:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 5px,#ffffff08 6px 7px);opacity:.6}
+.obscura-portal-tile span{position:relative;font:900 clamp(11px,2.5vw,27px)/1.05 Arial,Helvetica,sans-serif;letter-spacing:.055em;text-transform:uppercase;text-shadow:0 2px 1px #000}
+.obscura-portal-tile small{position:relative;font:700 clamp(7px,1vw,10px)/1.2 "Courier New",monospace;letter-spacing:.09em;text-transform:uppercase;color:#aaa39c}
+.obscura-portal-tile:hover,.obscura-portal-tile:focus-visible{border-color:#ded2b9;background:linear-gradient(145deg,#544b41,#1d1b19 70%)}
+.obscura-portal-tile.support-tile{border:2px solid #cbb58b;background:radial-gradient(ellipse at 50% 20%,#7d6643 0%,#3e3020 48%,#17120d 100%);box-shadow:inset 0 0 28px #c9aa6022,0 0 18px #a58a4633}
+.obscura-portal-tile.support-tile span{color:#fff0cb}
+.obscura-portal-tile.support-tile small{color:#e1c79b}
+.obscura-portal-bottom{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;font:700 9px/1.2 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase;color:#8f8982}
+.obscura-portal-bottom a{color:#d8c4a0;text-decoration:none}
+#obscura-support-panel{display:none;position:absolute;inset:0;z-index:5;align-items:center;justify-content:center;padding:18px;background:#050505f2}
+body.obscura-support-open #obscura-support-panel{display:flex}
+.obscura-support-inner{width:min(100%,580px);border:1px solid #b39b71;background:radial-gradient(ellipse at top,#342a20,#0a0908 70%);padding:clamp(20px,5vw,44px);text-align:center}
+.obscura-support-inner h2{font-size:clamp(28px,6vw,55px);line-height:.95;letter-spacing:-.045em;margin:10px 0 18px}
+.obscura-support-inner p{font-size:clamp(13px,2.1vw,17px);line-height:1.5;color:#c5bdb0}
+.obscura-support-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:26px 0}
+.obscura-support-links a{border:1px solid #c9ae7a;padding:15px 24px;color:#f6e4be;text-decoration:none;font:900 14px Arial,sans-serif;letter-spacing:.1em}
+.obscura-support-back{cursor:pointer;border:0;background:transparent;color:#bfb4a5;font:700 12px monospace;padding:12px}
+#obscura-portal-back{display:none;position:fixed;z-index:9998;bottom:14px;left:14px;padding:12px 16px;border:1px solid #ae9671;background:#080808ed;color:#eee2cc;font:700 11px "Courier New",monospace;letter-spacing:.08em;cursor:pointer}
+body.obscura-portal-section #obscura-portal-back{display:block}
+@media(max-width:600px){
+ #obscura-portal{gap:8px;padding:10px}
+ .obscura-portal-brand img{width:min(49vw,210px);height:54px}
+ .obscura-portal-tag{font-size:8px;max-width:42%}
+ .obscura-portal-visual{flex-basis:19%;min-height:56px}
+ .obscura-portal-visual strong{font-size:clamp(16px,5vw,28px);letter-spacing:.14em}
+ .obscura-portal-tile span{font-size:clamp(11px,3.6vw,19px);overflow-wrap:anywhere}
+ .obscura-portal-tile small{font-size:7px;letter-spacing:0}
+ .obscura-portal-bottom{font-size:8px}
+}
+@media(max-height:620px){.obscura-portal-visual{flex-basis:15%;min-height:35px}.obscura-portal-brand img{height:35px}.obscura-portal-tile small{display:none}}
+@media(prefers-reduced-motion:reduce){.obscura-portal-tile{transition:none}}
+</style>
 </head>
 <body>
+
+<div id="obscura-portal" aria-label="OBSCURA CORPORATION — portada">
+ <div class="obscura-portal-top">
+  <a class="obscura-portal-brand" href="#inicio" aria-label="OBSCURA CORPORATION — Inicio"><img src="/file_000000006e4881f4a42b4b604a97ffa5.png" alt="OBSCURA CORPORATION"></a>
+  <div class="obscura-portal-tag">Independent digital laboratory<br>Est. 2026</div>
+ </div>
+ <div class="obscura-portal-visual" aria-hidden="true"><strong>ENTER OBSCURA</strong><small>SELECT A TRANSMISSION / 01—09</small></div>
+ <nav class="obscura-portal-grid" aria-label="Secciones de OBSCURA">
+  <a class="obscura-portal-tile" href="#play"><span>ARCADE</span><small>Play / Games</small></a>
+  <a class="obscura-portal-tile" href="#read"><span>ARCHIVE</span><small>Art / History</small></a>
+  <a class="obscura-portal-tile" href="#experiment"><span>EXPERIMENTS</span><small>Digital / Systems</small></a>
+  <a class="obscura-portal-tile" href="#featured-live"><span>LUX LIVE</span><small>Signal / Broadcast</small></a>
+  <a class="obscura-portal-tile support-tile" href="#support"><span>SUPPORT<br>OBSCURA</span><small>Keep us independent</small></a>
+  <a class="obscura-portal-tile" href="#listen"><span>MEDIA</span><small>Sound / Film</small></a>
+  <a class="obscura-portal-tile" href="#coruna"><span>A CORUÑA</span><small>Local / Culture</small></a>
+  <a class="obscura-portal-tile" href="#wallpapers"><span>WALLPAPERS</span><small>Visual / Download</small></a>
+  <a class="obscura-portal-tile" href="#contact"><span>CONTACT</span><small>Connect / Follow</small></a>
+ </nav>
+ <div class="obscura-portal-bottom"><span>OBSCURA CORPORATION © 2026</span><a href="#support">Independent projects. Made possible by your support.</a></div>
+ <div id="obscura-support-panel" role="dialog" aria-modal="true" aria-labelledby="obscura-support-title">
+  <div class="obscura-support-inner"><div class="obscura-portal-tag" style="text-align:center;max-width:none">INDEPENDENT CREATION</div><h2 id="obscura-support-title">SUPPORT OBSCURA</h2><p>Juegos, archivos y experimentos digitales independientes. Tu apoyo ayuda a mantenerlos vivos y a desarrollar los siguientes.</p><p><strong>Independent projects. Made possible by your support.</strong></p><div class="obscura-support-links"><a href="https://www.paypal.com/ncp/payment/UMGRDCW4PXS26" target="_blank" rel="noopener noreferrer">PAYPAL ↗</a><a href="https://patreon.com/RainInteractive" target="_blank" rel="noopener noreferrer">PATREON ↗</a></div><button class="obscura-support-back" type="button" id="obscura-support-close">← VOLVER AL MENÚ</button></div>
+ </div>
+</div>
+<button id="obscura-portal-back" type="button" aria-label="Volver al menú principal">← OBSCURA / MENÚ</button>
+
 <header>
   <div class="wrap top">
     <div class="brand">OBSCURA CORPORATION</div>
@@ -686,6 +762,34 @@ document.querySelectorAll('img').forEach(function(img){
       location.assign(PRIVATE_URL);
     }
   });
+})();
+</script>
+
+<script id="obscura-portal-router-v1">
+(function(){
+ const home=document.getElementById('obscura-portal');
+ const back=document.getElementById('obscura-portal-back');
+ const close=document.getElementById('obscura-support-close');
+ const sections=new Set(['featured-live','play','read','experiment','coruna','listen','wallpapers']);
+ if(!home||!back||!close)return;
+ function render(){
+  const hash=decodeURIComponent(location.hash.slice(1));
+  const isSupport=hash==='support';
+  const isContact=hash==='contact';
+  const isSection=sections.has(hash);
+  const showHome=!isSection&&!isContact;
+  document.body.classList.toggle('obscura-portal-home',showHome);
+  document.body.classList.toggle('obscura-portal-section',isSection||isContact);
+  document.body.classList.toggle('obscura-support-open',isSupport);
+  if(isSection){requestAnimationFrame(()=>document.getElementById(hash)?.scrollIntoView({block:'start'}));}
+  if(isContact){requestAnimationFrame(()=>document.querySelector('footer')?.scrollIntoView({block:'start'}));}
+  if(showHome){window.scrollTo(0,0);}
+ }
+ back.addEventListener('click',()=>{location.hash='inicio';});
+ close.addEventListener('click',()=>{location.hash='inicio';});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('obscura-support-open'))location.hash='inicio';});
+ window.addEventListener('hashchange',render);
+ render();
 })();
 </script>
 </body>
