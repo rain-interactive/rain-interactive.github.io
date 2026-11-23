@@ -594,7 +594,14 @@ body.obscura-portal-section #obscura-portal-back{display:block}
 @media(max-height:620px){.obscura-portal-visual{flex-basis:15%;min-height:35px}.obscura-portal-brand img{height:35px}.obscura-portal-tile small{display:none}}
 @media(prefers-reduced-motion:reduce){.obscura-portal-tile{transition:none}}
 </style>
-<style id="obscura-hero-logo-v1">.obscura-portal-visual .obscura-portal-hero-logo{position:relative;z-index:2;display:block;width:min(76%,620px);height:calc(100% - 24px);max-height:100%;object-fit:contain;filter:drop-shadow(0 4px 16px #000)}.obscura-portal-visual:before,.obscura-portal-visual:after{opacity:.28}.obscura-portal-visual small{z-index:3}@media(max-width:600px){.obscura-portal-visual .obscura-portal-hero-logo{width:80%;height:calc(100% - 20px)}}</style></head>
+<style id="obscura-hero-logo-v1">.obscura-portal-visual .obscura-portal-hero-logo{position:relative;z-index:2;display:block;width:min(76%,620px);height:calc(100% - 24px);max-height:100%;object-fit:contain;filter:drop-shadow(0 4px 16px #000)}.obscura-portal-visual:before,.obscura-portal-visual:after{opacity:.28}.obscura-portal-visual small{z-index:3}@media(max-width:600px){.obscura-portal-visual .obscura-portal-hero-logo{width:80%;height:calc(100% - 20px)}}</style><style id="obscura-logo-layout-v2">
+/* Make the existing original chrome logo the actual hero artwork. */
+.obscura-portal-visual{background:#000!important}
+.obscura-portal-visual:before,.obscura-portal-visual:after{display:none!important}
+.obscura-portal-visual .obscura-portal-hero-logo{width:min(92%,780px)!important;height:calc(100% - 18px)!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;filter:none!important}
+.obscura-portal-visual small{bottom:4px!important;font-size:8px!important;opacity:.65}
+@media(max-width:600px){.obscura-portal-top .obscura-portal-brand img{max-width:42vw!important}.obscura-portal-visual .obscura-portal-hero-logo{width:96%!important}}
+</style></head>
 <body>
 
 <div id="obscura-portal" aria-label="OBSCURA CORPORATION — portada">
